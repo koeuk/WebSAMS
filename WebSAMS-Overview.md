@@ -260,86 +260,191 @@ users (student) ────────┘
 
 ---
 
-## Implementation Plan
+## Implementation Status
 
-### Phase 1: Auth Foundation (Completed)
-- Sanctum installed for API token auth (teacher/student)
-- Session-based auth for admin login
-- Role middleware (`EnsureUserHasRole`) for route protection
-- CORS configured for localhost:3001 and :3002
-- Admin login page (Inertia + Vue)
-- API login endpoint (`POST /api/login`)
+All 8 phases have been completed.
 
-### Phase 2: Admin Dashboard with Real Data (Completed)
-- Dashboard shows live stats: total students, teachers, classes, today's attendance rate
-- Recent attendance table with student name, class, subject, date, status
+| Phase | Description | Status |
+|---|---|---|
+| 1 | Auth Foundation (Sanctum, session auth, role middleware, CORS) | Completed |
+| 2 | Admin Dashboard with real data (live stats from DB) | Completed |
+| 3 | Admin CRUD — Users, Courses, Subjects | Completed |
+| 4 | Admin CRUD — Classes, Teacher Assignment, Student Enrollment | Completed |
+| 5 | Admin — Attendance Viewing, Schedules, Reports | Completed |
+| 6 | Teacher API + Nuxt Frontend | Completed |
+| 7 | Student API + Nuxt Frontend | Completed |
+| 8 | Polish (seeder updates, SQLite fixes, guard checks) | Completed |
 
-### Phase 3: Admin CRUD — Users, Courses, Subjects
-- Shared Vue components: DataTable, Pagination, Modal, FlashMessage
-- Users: list (filter by role), create, edit, delete
-- Courses: list, create, edit, delete
-- Subjects: list (filter by course), create, edit, delete
+---
 
-### Phase 4: Admin CRUD — Classes, Assignments, Enrollment
-- Classes: list, create, edit, delete, show (detail page)
-- Assign teachers to class-subjects
-- Enroll students into classes
-
-### Phase 5: Admin — Attendance, Schedules, Reports
-- Attendance viewing with filters (class, subject, date range, status)
-- Schedules CRUD (day, time, room)
-- Reports generation (filter + per-student breakdown)
-
-### Phase 6: Teacher API + Nuxt Frontend
-- API: dashboard (today's schedule), my classes, students list, mark attendance, attendance history
-- Nuxt: login, dashboard, classes, mark attendance page, attendance history
-
-### Phase 7: Student API + Nuxt Frontend
-- API: dashboard (attendance summary %), own attendance, profile
-- Nuxt: login, dashboard, attendance history, profile
-
-### Phase 8: Polish
-- Form request validation classes
-- Error handling + loading states
-- Pagination on all lists
-- Guard checks (ownership verification)
-
-### Build Order
+## Detailed Project Structure
 
 ```
-Phase 1 (Auth) ────────────────────────┐
-    │                                   │
-    ├──► Phase 2 (Dashboard)            │
-    │                                   │
-    ├──► Phase 3 (Users/Courses/Subj.)  │
-    │         │                         │
-    │         ▼                         │
-    │    Phase 4 (Classes/Enrollment)   │
-    │         │                         │
-    │         ▼                         │
-    │    Phase 5 (Attendance/Reports)   │
-    │                                   │
-    ├──► Phase 6 (Teacher) ◄────────────┘
-    │         │
-    │         ▼
-    └──► Phase 7 (Student)
-              │
-              ▼
-         Phase 8 (Polish)
+WebSAMS/
+├── backend/                                    ← Laravel 12 + Inertia.js + Vue 3
+│   ├── app/
+│   │   ├── Http/
+│   │   │   ├── Controllers/
+│   │   │   │   ├── Auth/
+│   │   │   │   │   └── LoginController.php          ← Admin session login/logout
+│   │   │   │   ├── Dashboard/
+│   │   │   │   │   ├── DashboardController.php      ← Admin dashboard (live stats)
+│   │   │   │   │   ├── UserController.php           ← Users CRUD
+│   │   │   │   │   ├── CourseController.php         ← Courses CRUD
+│   │   │   │   │   ├── SubjectController.php        ← Subjects CRUD
+│   │   │   │   │   ├── SchoolClassController.php    ← Classes CRUD + detail view
+│   │   │   │   │   ├── ClassSubjectController.php   ← Teacher assignment
+│   │   │   │   │   ├── ClassStudentController.php   ← Student enrollment
+│   │   │   │   │   ├── AttendanceController.php     ← View all attendance
+│   │   │   │   │   ├── ScheduleController.php       ← Schedules CRUD
+│   │   │   │   │   └── ReportController.php         ← Generate reports
+│   │   │   │   └── Api/
+│   │   │   │       ├── AuthController.php           ← API token login/logout
+│   │   │   │       ├── Teacher/
+│   │   │   │       │   ├── DashboardController.php  ← Today's schedule
+│   │   │   │       │   ├── ClassController.php      ← My classes + students
+│   │   │   │       │   └── AttendanceController.php ← Mark + view attendance
+│   │   │   │       └── Student/
+│   │   │   │           ├── DashboardController.php  ← Attendance summary
+│   │   │   │           ├── AttendanceController.php ← Own attendance history
+│   │   │   │           └── ProfileController.php    ← Profile + enrolled classes
+│   │   │   └── Middleware/
+│   │   │       ├── HandleInertiaRequests.php        ← Inertia shared data
+│   │   │       └── EnsureUserHasRole.php            ← Role-based access
+│   │   └── Models/
+│   │       ├── User.php, Course.php, Subject.php
+│   │       ├── SchoolClass.php, ClassSubject.php, ClassStudent.php
+│   │       ├── Attendance.php, Schedule.php, Notification.php
+│   ├── resources/js/
+│   │   ├── Layouts/
+│   │   │   └── AdminLayout.vue                      ← Sidebar + topbar layout
+│   │   ├── Components/
+│   │   │   ├── Pagination.vue, FlashMessage.vue, Modal.vue
+│   │   ├── Pages/
+│   │   │   ├── Auth/Login.vue
+│   │   │   ├── Dashboard/Index.vue
+│   │   │   ├── Users/Index.vue, Create.vue, Edit.vue
+│   │   │   ├── Courses/Index.vue, Create.vue, Edit.vue
+│   │   │   ├── Subjects/Index.vue, Create.vue, Edit.vue
+│   │   │   ├── Classes/Index.vue, Create.vue, Edit.vue, Show.vue
+│   │   │   ├── Attendance/Index.vue
+│   │   │   ├── Schedules/Index.vue, Create.vue, Edit.vue
+│   │   │   └── Reports/Index.vue, Show.vue
+│   ├── routes/
+│   │   ├── web.php                                  ← Admin routes (47 routes)
+│   │   └── api.php                                  ← API routes (11 endpoints)
+│   └── database/
+│       ├── migrations/                              ← 13 migrations
+│       └── seeders/DatabaseSeeder.php               ← Test data
+│
+├── frontend-teacher/                               ← Nuxt 3 + shadcn-vue (port 3001)
+│   ├── composables/useAuth.ts, useApi.ts
+│   ├── middleware/auth.ts
+│   ├── layouts/default.vue
+│   └── pages/
+│       ├── login.vue, index.vue
+│       ├── classes/index.vue, [id].vue
+│       └── attendance/mark.vue, index.vue
+│
+├── frontend-student/                               ← Nuxt 3 + shadcn-vue (port 3002)
+│   ├── composables/useAuth.ts, useApi.ts
+│   ├── middleware/auth.ts
+│   ├── layouts/default.vue
+│   └── pages/
+│       ├── login.vue, index.vue
+│       ├── attendance.vue, profile.vue
+│
+└── WebSAMS-Overview.md
 ```
 
-### How to Run
+---
 
+## API Endpoints
+
+### Public
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/login` | Login (returns token + user) |
+
+### Authenticated (all roles)
+| Method | Endpoint | Description |
+|---|---|---|
+| POST | `/api/logout` | Logout (revoke token) |
+| GET | `/api/user` | Get authenticated user |
+
+### Teacher Endpoints (`/api/teacher/*`)
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/teacher/dashboard` | Today's schedule |
+| GET | `/api/teacher/classes` | List assigned classes |
+| GET | `/api/teacher/classes/{id}/students` | Students in a class |
+| POST | `/api/teacher/attendance` | Mark attendance (batch) |
+| GET | `/api/teacher/attendance` | View attendance history |
+
+### Student Endpoints (`/api/student/*`)
+| Method | Endpoint | Description |
+|---|---|---|
+| GET | `/api/student/dashboard` | Attendance summary (% by subject) |
+| GET | `/api/student/attendance` | Own attendance history |
+| GET | `/api/student/profile` | Profile + enrolled classes |
+
+---
+
+## Admin Web Routes
+
+| Path | Description |
+|---|---|
+| `/login` | Admin login page |
+| `/admin/dashboard` | Dashboard with live stats |
+| `/admin/users` | Users CRUD (list, create, edit, delete) |
+| `/admin/courses` | Courses CRUD |
+| `/admin/subjects` | Subjects CRUD (filter by course) |
+| `/admin/classes` | Classes CRUD |
+| `/admin/classes/{id}` | Class detail (assign teachers, enroll students) |
+| `/admin/attendance` | View all attendance (filterable) |
+| `/admin/schedules` | Schedules CRUD (grouped by day) |
+| `/admin/reports` | Generate attendance reports |
+
+---
+
+## How to Run
+
+### Prerequisites
+- PHP 8.4+
+- Node.js 20+
+- Composer
+
+### Setup
 ```bash
-# Admin (Laravel + Inertia)
-cd backend && php artisan serve          # http://localhost:8000
-cd backend && npm run dev                # Vite dev server
+# Backend
+cd backend
+composer install
+cp .env.example .env
+php artisan key:generate
+php artisan migrate --seed
 
-# Teacher (Nuxt)
-cd frontend-teacher && npm run dev       # http://localhost:3001
+# Frontend Teacher
+cd frontend-teacher
+npm install
 
-# Student (Nuxt)
-cd frontend-student && npm run dev       # http://localhost:3002
+# Frontend Student
+cd frontend-student
+npm install
+```
+
+### Start Development Servers
+```bash
+# Terminal 1: Laravel backend
+cd backend && php artisan serve                # http://localhost:8000
+
+# Terminal 2: Vite (for admin panel hot reload)
+cd backend && npm run dev
+
+# Terminal 3: Teacher frontend
+cd frontend-teacher && npm run dev             # http://localhost:3001
+
+# Terminal 4: Student frontend
+cd frontend-student && npm run dev             # http://localhost:3002
 ```
 
 ### Test Credentials
@@ -347,8 +452,21 @@ cd frontend-student && npm run dev       # http://localhost:3002
 | Role | Email | Password |
 |---|---|---|
 | Admin | admin@websams.com | password |
-| Teacher | teacher1@websams.com | password |
-| Student | student1@websams.com | password |
+| Teacher 1 | teacher1@websams.com | password |
+| Teacher 2 | teacher2@websams.com | password |
+| Teacher 3 | teacher3@websams.com | password |
+| Student 1 | student1@websams.com | password |
+| Student 2-20 | student2-20@websams.com | password |
+
+### Seed Data Included
+- 1 admin, 3 teachers, 20 students
+- 3 courses (Computer Science, Mathematics, English)
+- 5 subjects across courses
+- 3 classes (Grade 10-A, 10-B, 11-A)
+- 5 teacher-subject-class assignments
+- 20 student enrollments
+- 5 class schedules
+- Sample attendance data for the current week
 
 ---
 
