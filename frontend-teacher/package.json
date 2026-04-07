@@ -1,0 +1,31 @@
+{
+  "name": "websams-teacher",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxtjs/color-mode": "^4.0.0",
+    "nuxt": "^3.16.0",
+    "reka-ui": "^2.9.4",
+    "vue": "^3.5.0",
+    "vue-router": "^4.5.0"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "^6.13.0",
+    "@vueuse/core": "^12.8.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.0",
+    "lucide-vue-next": "^0.468.0",
+    "radix-vue": "^1.9.0",
+    "shadcn-nuxt": "^0.11.0",
+    "tailwind-merge": "^2.6.0",
+    "tailwindcss-animate": "^1.0.7",
+    "typescript": "^5.7.0"
+  }
+}
