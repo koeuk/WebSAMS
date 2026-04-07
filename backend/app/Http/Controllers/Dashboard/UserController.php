@@ -23,15 +23,24 @@ class UserController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                  ->orWhere('email', 'like', "%{$search}%")
+                  ->orWhere('id_number', 'like', "%{$search}%");
             });
+        }
+
+        if ($request->filled('year_level')) {
+            $query->where('year_level', $request->year_level);
+        }
+
+        if ($request->filled('status')) {
+            $query->where('status', $request->status);
         }
 
         $users = $query->latest()->paginate(15)->withQueryString();
 
         return Inertia::render('Users/Index', [
             'users' => $users,
-            'filters' => $request->only(['role', 'search']),
+            'filters' => $request->only(['role', 'search', 'year_level', 'status']),
         ]);
     }
 
@@ -48,6 +57,18 @@ class UserController extends Controller
             'password' => 'required|string|min:6',
             'role' => 'required|in:admin,teacher,student',
             'phone' => 'nullable|string|max:20',
+            'year_level' => 'nullable|integer|min:1|max:4',
+            'id_number' => 'nullable|string|max:50|unique:users,id_number',
+            'gender' => 'nullable|in:male,female',
+            'date_of_birth' => 'nullable|date',
+            'address' => 'nullable|string',
+            'status' => 'nullable|in:active,inactive,graduated,suspended',
+            'guardian_name' => 'nullable|string|max:255',
+            'guardian_phone' => 'nullable|string|max:20',
+            'enrollment_date' => 'nullable|date',
+            'department' => 'nullable|string|max:255',
+            'qualification' => 'nullable|string|max:255',
+            'hire_date' => 'nullable|date',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
@@ -55,6 +76,13 @@ class UserController extends Controller
         User::create($validated);
 
         return redirect()->route('admin.users.index')->with('success', 'User created successfully.');
+    }
+
+    public function show(User $user)
+    {
+        return Inertia::render('Users/Show', [
+            'user' => $user,
+        ]);
     }
 
     public function edit(User $user)
@@ -72,6 +100,18 @@ class UserController extends Controller
             'password' => 'nullable|string|min:6',
             'role' => 'required|in:admin,teacher,student',
             'phone' => 'nullable|string|max:20',
+            'year_level' => 'nullable|integer|min:1|max:4',
+            'id_number' => ['nullable', 'string', 'max:50', Rule::unique('users', 'id_number')->ignore($user->id)],
+            'gender' => 'nullable|in:male,female',
+            'date_of_birth' => 'nullable|date',
+            'address' => 'nullable|string',
+            'status' => 'nullable|in:active,inactive,graduated,suspended',
+            'guardian_name' => 'nullable|string|max:255',
+            'guardian_phone' => 'nullable|string|max:20',
+            'enrollment_date' => 'nullable|date',
+            'department' => 'nullable|string|max:255',
+            'qualification' => 'nullable|string|max:255',
+            'hire_date' => 'nullable|date',
         ]);
 
         if ($validated['password']) {

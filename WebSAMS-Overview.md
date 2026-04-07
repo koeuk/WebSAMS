@@ -140,6 +140,19 @@ WebSAMS/
 | password | VARCHAR | Hashed |
 | role | ENUM | `admin`, `teacher`, `student` (default: `student`) |
 | phone | VARCHAR | Nullable |
+| year_level | TINYINT | Nullable, 1-4 (students only) |
+| id_number | VARCHAR | Nullable, Unique (e.g. "STU-2025-001", "TCH-001") |
+| gender | ENUM | Nullable, `male`, `female` |
+| date_of_birth | DATE | Nullable |
+| address | TEXT | Nullable |
+| profile_photo | VARCHAR | Nullable, file path |
+| status | ENUM | `active`, `inactive`, `graduated`, `suspended` (default: `active`) |
+| guardian_name | VARCHAR | Nullable (students only) |
+| guardian_phone | VARCHAR | Nullable (students only) |
+| enrollment_date | DATE | Nullable (students only) |
+| department | VARCHAR | Nullable (teachers only, e.g. "Computer Science") |
+| qualification | VARCHAR | Nullable (teachers only, e.g. "Master in CS") |
+| hire_date | DATE | Nullable (teachers only) |
 | remember_token | VARCHAR | Nullable |
 | created_at | TIMESTAMP | |
 | updated_at | TIMESTAMP | |
@@ -206,13 +219,14 @@ WebSAMS/
 | class_subject_id | BIGINT | FK → class_subject.id (CASCADE DELETE) |
 | student_id | BIGINT | FK → users.id (CASCADE DELETE) |
 | date | DATE | Attendance date |
+| time_slot_id | BIGINT | FK → time_slots.id (CASCADE DELETE) |
 | status | ENUM | `present`, `absent`, `late`, `excused` |
 | remarks | TEXT | Nullable |
 | recorded_by | BIGINT | FK → users.id (teacher who marked) |
 | created_at | TIMESTAMP | |
 | updated_at | TIMESTAMP | |
 
-**Unique constraint:** (class_subject_id, student_id, date) — prevents duplicate attendance per student per session per day.
+**Unique constraint:** (class_subject_id, student_id, date, time_slot_id) — prevents duplicate attendance per student per session per time slot per day.
 
 ### 8. schedules
 
@@ -220,14 +234,35 @@ WebSAMS/
 |---|---|---|
 | id | BIGINT | Primary Key, Auto Increment |
 | class_subject_id | BIGINT | FK → class_subject.id (CASCADE DELETE) |
-| day_of_week | ENUM | `mon`, `tue`, `wed`, `thu`, `fri` |
-| start_time | TIME | e.g. "08:00" |
-| end_time | TIME | e.g. "09:30" |
+| time_slot_id | BIGINT | FK → time_slots.id (CASCADE DELETE) |
+| day_of_week | VARCHAR | `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun` |
 | room | VARCHAR | Nullable, e.g. "Room 201" |
 | created_at | TIMESTAMP | |
 | updated_at | TIMESTAMP | |
 
-### 9. notifications
+### 9. time_slots
+
+| Field | Type | Notes |
+|---|---|---|
+| id | BIGINT | Primary Key, Auto Increment |
+| name | VARCHAR | e.g. "Morning 1", "Evening 2" |
+| start_time | TIME | e.g. "08:00" |
+| end_time | TIME | e.g. "09:30" |
+| type | ENUM | `morning`, `evening`, `afternoon` |
+| created_at | TIMESTAMP | |
+| updated_at | TIMESTAMP | |
+
+**Predefined time slots:**
+| Name | Time | Type |
+|---|---|---|
+| Morning 1 | 08:00 - 09:30 | morning |
+| Morning 2 | 10:00 - 11:30 | morning |
+| Afternoon 1 | 13:00 - 14:30 | afternoon |
+| Afternoon 2 | 15:00 - 17:00 | afternoon |
+| Evening 1 | 17:30 - 19:00 | evening |
+| Evening 2 | 19:30 - 20:30 | evening |
+
+### 10. notifications
 
 | Field | Type | Notes |
 |---|---|---|
@@ -237,6 +272,18 @@ WebSAMS/
 | message | TEXT | Notification content |
 | type | ENUM | `absence`, `late`, `general` (default: `general`) |
 | is_read | BOOLEAN | Default: false |
+| created_at | TIMESTAMP | |
+| updated_at | TIMESTAMP | |
+
+### 11. semesters
+
+| Field | Type | Notes |
+|---|---|---|
+| id | BIGINT | Primary Key, Auto Increment |
+| name | VARCHAR | e.g. "Semester 1" |
+| academic_year | VARCHAR | e.g. "2025-2026" |
+| start_date | DATE | e.g. 2025-09-01 |
+| end_date | DATE | e.g. 2026-01-31 |
 | created_at | TIMESTAMP | |
 | updated_at | TIMESTAMP | |
 

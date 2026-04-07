@@ -85,34 +85,47 @@ const roleBadgeClass = (role) => ({
             <table class="w-full">
                 <thead>
                     <tr class="border-b border-gray-200 bg-gray-50">
+                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">ID</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Name</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Email</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Role</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Phone</th>
+                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Gender</th>
+                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
                         <th class="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-for="user in users.data" :key="user.id" class="border-b border-gray-100">
-                        <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ user.name }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-600">{{ user.id_number || '-' }}</td>
+                        <td class="px-6 py-3 text-sm font-medium text-gray-900">
+                            <Link :href="`/admin/users/${user.id}`" class="hover:text-blue-600">{{ user.name }}</Link>
+                        </td>
                         <td class="px-6 py-3 text-sm text-gray-600">{{ user.email }}</td>
                         <td class="px-6 py-3">
                             <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full" :class="roleBadgeClass(user.role)">
                                 {{ user.role }}
                             </span>
                         </td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ user.phone || '-' }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-600 capitalize">{{ user.gender || '-' }}</td>
+                        <td class="px-6 py-3">
+                            <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full"
+                                :class="{
+                                    'bg-green-100 text-green-800': user.status === 'active',
+                                    'bg-gray-100 text-gray-800': user.status === 'inactive',
+                                    'bg-blue-100 text-blue-800': user.status === 'graduated',
+                                    'bg-red-100 text-red-800': user.status === 'suspended',
+                                }">
+                                {{ user.status || 'active' }}
+                            </span>
+                        </td>
                         <td class="px-6 py-3 text-right">
-                            <Link :href="`/admin/users/${user.id}/edit`" class="text-sm text-blue-600 hover:text-blue-800 mr-3">
-                                Edit
-                            </Link>
-                            <button @click="confirmDelete(user)" class="text-sm text-red-600 hover:text-red-800">
-                                Delete
-                            </button>
+                            <Link :href="`/admin/users/${user.id}`" class="text-sm text-gray-600 hover:text-gray-800 mr-2">View</Link>
+                            <Link :href="`/admin/users/${user.id}/edit`" class="text-sm text-blue-600 hover:text-blue-800 mr-2">Edit</Link>
+                            <button @click="confirmDelete(user)" class="text-sm text-red-600 hover:text-red-800">Delete</button>
                         </td>
                     </tr>
                     <tr v-if="!users.data?.length">
-                        <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">No users found.</td>
+                        <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">No users found.</td>
                     </tr>
                 </tbody>
             </table>

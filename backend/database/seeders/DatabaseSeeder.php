@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         // Admin
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@email.com',
+            'email' => 'admin@websams.com',
             'password' => Hash::make('12345678'),
             'role' => 'admin',
         ]);
@@ -46,7 +46,7 @@ class DatabaseSeeder extends Seeder
         foreach (['Mr. John Smith', 'Ms. Sarah Lee', 'Mr. David Chen'] as $i => $name) {
             $teachers[] = User::create([
                 'name' => $name,
-                'email' => 'teacher' . ($i + 1) . '@email.com',
+                'email' => 'teacher' . ($i + 1) . '@websams.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'teacher',
             ]);
@@ -64,7 +64,7 @@ class DatabaseSeeder extends Seeder
         foreach ($studentNames as $i => $name) {
             $students[] = User::create([
                 'name' => $name,
-                'email' => 'student' . ($i + 1) . '@email.com',
+                'email' => 'student' . ($i + 1) . '@websams.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'student',
                 'year_level' => ($i % 4) + 1, // Year 1-4
