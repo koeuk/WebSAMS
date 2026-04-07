@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\ClassStudent;
 use App\Models\ClassSubject;
 use App\Models\Course;
+use App\Models\Schedule;
 use App\Models\SchoolClass;
 use App\Models\Subject;
 use App\Models\User;
@@ -90,6 +91,19 @@ class DatabaseSeeder extends Seeder
         }
         foreach (array_slice($students, 14, 6) as $student) {
             ClassStudent::create(['school_class_id' => $class11A->id, 'student_id' => $student->id]);
+        }
+
+        // Schedules
+        $days = ['mon', 'tue', 'wed', 'thu', 'fri'];
+        $times = [['08:00', '09:30'], ['09:45', '11:15'], ['13:00', '14:30']];
+        foreach ($classSubjects as $i => $cs) {
+            Schedule::create([
+                'class_subject_id' => $cs->id,
+                'day_of_week' => $days[$i % 5],
+                'start_time' => $times[$i % 3][0],
+                'end_time' => $times[$i % 3][1],
+                'room' => 'Room ' . (201 + $i),
+            ]);
         }
 
         // Sample attendance for this week

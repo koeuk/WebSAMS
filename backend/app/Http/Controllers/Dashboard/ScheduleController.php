@@ -12,11 +12,12 @@ class ScheduleController extends Controller
 {
     public function index()
     {
+        $dayOrder = ['mon', 'tue', 'wed', 'thu', 'fri'];
         $schedules = Schedule::with(['classSubject.schoolClass', 'classSubject.subject', 'classSubject.teacher'])
-            ->orderByRaw("FIELD(day_of_week, 'mon', 'tue', 'wed', 'thu', 'fri')")
             ->orderBy('start_time')
             ->get()
-            ->groupBy('day_of_week');
+            ->groupBy('day_of_week')
+            ->sortBy(fn ($items, $key) => array_search($key, $dayOrder));
 
         return Inertia::render('Schedules/Index', [
             'schedules' => $schedules,

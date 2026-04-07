@@ -28,6 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Student routes
     Route::prefix('student')->middleware('role:student')->group(function () {
-        // TODO: Phase 7
+        Route::get('/dashboard', [StudentDashboardController::class, 'index']);
+        Route::get('/attendance', [StudentAttendanceController::class, 'index']);
+        Route::get('/profile', [StudentProfileController::class, 'show']);
     });
 });
