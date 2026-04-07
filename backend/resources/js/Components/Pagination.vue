@@ -14,7 +14,7 @@ defineProps({
                 :href="link.url"
                 class="px-3 py-1 text-sm rounded-md border transition-colors"
                 :class="link.active
-                    ? 'bg-gray-900 text-white border-gray-900'
+                    ? 'bg-beltei text-white border-beltei'
                     : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'"
                 v-html="link.label"
                 preserve-scroll

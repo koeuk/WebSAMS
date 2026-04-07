@@ -20,6 +20,14 @@ module.exports = {
     },
     extend: {
       colors: {
+        beltei: {
+          DEFAULT: '#1e3a6e',
+          dark: '#162d56',
+        },
+        'beltei-gold': {
+          DEFAULT: '#c8a415',
+          dark: '#b08f12',
+        },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
         ring: 'hsl(var(--ring))',

@@ -2,6 +2,12 @@ export default defineNuxtConfig({
   compatibilityDate: '2024-11-01',
   devtools: { enabled: true },
   devServer: { port: 3001 },
+  app: {
+    head: {
+      title: 'BELTEI - WebSAMS Teacher',
+      link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }],
+    },
+  },
   modules: [
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',

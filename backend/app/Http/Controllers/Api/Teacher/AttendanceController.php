@@ -14,6 +14,7 @@ class AttendanceController extends Controller
         $validated = $request->validate([
             'class_subject_id' => 'required|exists:class_subject,id',
             'date' => 'required|date',
+            'time_slot_id' => 'required|exists:time_slots,id',
             'attendances' => 'required|array|min:1',
             'attendances.*.student_id' => 'required|exists:users,id',
             'attendances.*.status' => 'required|in:present,absent,late,excused',
@@ -32,6 +33,7 @@ class AttendanceController extends Controller
                     'class_subject_id' => $validated['class_subject_id'],
                     'student_id' => $record['student_id'],
                     'date' => $validated['date'],
+                    'time_slot_id' => $validated['time_slot_id'],
                 ],
                 [
                     'status' => $record['status'],
@@ -46,7 +48,7 @@ class AttendanceController extends Controller
 
     public function index(Request $request)
     {
-        $query = Attendance::with(['student', 'classSubject.subject', 'classSubject.schoolClass'])
+        $query = Attendance::with(['student', 'classSubject.subject', 'classSubject.schoolClass', 'timeSlot'])
             ->whereHas('classSubject', fn ($q) => $q->where('teacher_id', $request->user()->id));
 
         if ($request->filled('class_subject_id')) {

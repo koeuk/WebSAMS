@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Teacher\DashboardController as TeacherDashboardCont
 use App\Http\Controllers\Api\Student\AttendanceController as StudentAttendanceController;
 use App\Http\Controllers\Api\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Api\Student\ProfileController as StudentProfileController;
+use App\Models\TimeSlot;
 use Illuminate\Support\Facades\Route;
 
 // Public
@@ -22,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/dashboard', [TeacherDashboardController::class, 'index']);
         Route::get('/classes', [TeacherClassController::class, 'index']);
         Route::get('/classes/{classSubject}/students', [TeacherClassController::class, 'students']);
+        Route::get('/time-slots', fn () => response()->json(TimeSlot::all()));
         Route::post('/attendance', [TeacherAttendanceController::class, 'store']);
         Route::get('/attendance', [TeacherAttendanceController::class, 'index']);
     });

@@ -161,15 +161,24 @@ class StudentTrackingController extends Controller
         ];
 
         // Recent records
-        $recentRecords = $records->take(20)->map(fn ($r) => [
-            'id' => $r->id,
-            'date' => $r->date,
-            'subject' => $r->classSubject?->subject?->name,
-            'class' => $r->classSubject?->schoolClass?->name,
-            'course' => $r->classSubject?->subject?->course?->name,
-            'status' => $r->status,
-            'remarks' => $r->remarks,
-        ]);
+        $allSemesters = Semester::all();
+        $recentRecords = $records->take(20)->map(function ($r) use ($student, $allSemesters) {
+            $recordDate = $r->date;
+            $matchedSemester = $allSemesters->first(fn ($s) => $recordDate >= $s->start_date && $recordDate <= $s->end_date);
+
+            return [
+                'id' => $r->id,
+                'date' => $r->date,
+                'student_name' => $student->name,
+                'subject' => $r->classSubject?->subject?->name,
+                'class' => $r->classSubject?->schoolClass?->name,
+                'academic_year' => $r->classSubject?->schoolClass?->academic_year,
+                'course' => $r->classSubject?->subject?->course?->name,
+                'semester' => $matchedSemester?->name,
+                'status' => $r->status,
+                'remarks' => $r->remarks,
+            ];
+        });
 
         $semester = $request->filled('semester_id') ? Semester::find($request->semester_id) : null;
 

@@ -22,8 +22,9 @@ const navigation = [
     <div class="min-h-screen bg-gray-100">
         <!-- Sidebar -->
         <aside class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200">
-            <div class="flex items-center h-16 px-6 border-b border-gray-200">
-                <h1 class="text-xl font-bold text-gray-900">WebSAMS Admin</h1>
+            <div class="flex items-center gap-3 h-16 px-6 border-b-2 border-beltei-gold bg-beltei text-white">
+                <img src="/logo.png" alt="BELTEI" class="h-10" />
+                <h1 class="text-xl font-bold">WebSAMS</h1>
             </div>
             <nav class="p-4 space-y-1">
                 <Link
@@ -33,7 +34,7 @@ const navigation = [
                     class="flex items-center px-4 py-2 text-sm font-medium rounded-md transition-colors"
                     :class="
                         $page.url.startsWith(item.href)
-                            ? 'bg-gray-900 text-white'
+                            ? 'bg-beltei text-white'
                             : 'text-gray-600 hover:bg-gray-100'
                     "
                 >

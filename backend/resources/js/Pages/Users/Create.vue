@@ -8,6 +8,7 @@ const form = useForm({
     password: '',
     role: 'student',
     phone: '',
+    year_level: '',
 });
 
 const submit = () => {
@@ -52,6 +53,16 @@ const submit = () => {
                     <p v-if="form.errors.role" class="text-sm text-red-600 mt-1">{{ form.errors.role }}</p>
                 </div>
 
+                <div v-if="form.role === 'student'">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Year Level</label>
+                    <select v-model="form.year_level" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                        <option value="">Select Year</option>
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                        <option value="4">Year 4</option>
+                    </select>
+                </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                     <input v-model="form.phone" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" />
@@ -60,7 +71,7 @@ const submit = () => {
                 <button
                     type="submit"
                     :disabled="form.processing"
-                    class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 disabled:opacity-50"
+                    class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50"
                 >
                     {{ form.processing ? 'Creating...' : 'Create User' }}
                 </button>

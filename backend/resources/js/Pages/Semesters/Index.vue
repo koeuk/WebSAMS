@@ -24,7 +24,7 @@ const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'n
     <AdminLayout>
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold text-gray-900">Semesters</h2>
-            <Link href="/admin/semesters/create" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800">Create Semester</Link>
+            <Link href="/admin/semesters/create" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark">Create Semester</Link>
         </div>
 
         <FlashMessage />

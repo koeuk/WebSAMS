@@ -8,6 +8,7 @@ use App\Models\ClassSubject;
 use App\Models\Course;
 use App\Models\SchoolClass;
 use App\Models\Subject;
+use App\Models\TimeSlot;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -16,7 +17,7 @@ class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Attendance::with(['student', 'classSubject.subject.course', 'classSubject.schoolClass', 'recorder']);
+        $query = Attendance::with(['student', 'classSubject.subject.course', 'classSubject.schoolClass', 'recorder', 'timeSlot']);
 
         if ($request->filled('course_id')) {
             $query->whereHas('classSubject.subject', fn ($q) => $q->where('course_id', $request->course_id));
@@ -54,6 +55,7 @@ class AttendanceController extends Controller
             'courses' => Course::all(['id', 'name', 'code']),
             'classes' => SchoolClass::all(['id', 'name']),
             'subjects' => $subjectsQuery->get(['id', 'name', 'code']),
+            'timeSlots' => TimeSlot::all(),
             'filters' => $request->only(['course_id', 'class_id', 'subject_id', 'status', 'date_from', 'date_to']),
         ]);
     }
@@ -63,6 +65,7 @@ class AttendanceController extends Controller
         return Inertia::render('Attendance/Create', [
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
             'students' => User::where('role', 'student')->get(['id', 'name', 'email']),
+            'timeSlots' => TimeSlot::all(),
         ]);
     }
 
@@ -72,6 +75,7 @@ class AttendanceController extends Controller
             'class_subject_id' => 'required|exists:class_subject,id',
             'student_id' => 'required|exists:users,id',
             'date' => 'required|date',
+            'time_slot_id' => 'required|exists:time_slots,id',
             'status' => 'required|in:present,absent,late,excused',
             'remarks' => 'nullable|string',
         ]);
@@ -83,6 +87,7 @@ class AttendanceController extends Controller
                 'class_subject_id' => $validated['class_subject_id'],
                 'student_id' => $validated['student_id'],
                 'date' => $validated['date'],
+                'time_slot_id' => $validated['time_slot_id'],
             ],
             [
                 'status' => $validated['status'],
@@ -96,7 +101,7 @@ class AttendanceController extends Controller
 
     public function show(Attendance $attendance)
     {
-        $attendance->load(['student', 'classSubject.subject.course', 'classSubject.schoolClass', 'recorder']);
+        $attendance->load(['student', 'classSubject.subject.course', 'classSubject.schoolClass', 'recorder', 'timeSlot']);
 
         return Inertia::render('Attendance/Show', [
             'record' => $attendance,
@@ -105,12 +110,13 @@ class AttendanceController extends Controller
 
     public function edit(Attendance $attendance)
     {
-        $attendance->load(['student', 'classSubject.subject', 'classSubject.schoolClass']);
+        $attendance->load(['student', 'classSubject.subject', 'classSubject.schoolClass', 'timeSlot']);
 
         return Inertia::render('Attendance/Edit', [
             'record' => $attendance,
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
             'students' => User::where('role', 'student')->get(['id', 'name', 'email']),
+            'timeSlots' => TimeSlot::all(),
         ]);
     }
 
@@ -120,6 +126,7 @@ class AttendanceController extends Controller
             'class_subject_id' => 'required|exists:class_subject,id',
             'student_id' => 'required|exists:users,id',
             'date' => 'required|date',
+            'time_slot_id' => 'required|exists:time_slots,id',
             'status' => 'required|in:present,absent,late,excused',
             'remarks' => 'nullable|string',
         ]);

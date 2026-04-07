@@ -18,6 +18,7 @@ const submit = () => {
         <div class="w-full max-w-md">
             <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-8">
                 <div class="text-center mb-8">
+                    <img src="/logo.png" alt="BELTEI International University" class="h-20 mx-auto mb-3" />
                     <h1 class="text-2xl font-bold text-gray-900">WebSAMS</h1>
                     <p class="text-sm text-gray-600 mt-1">Admin Panel</p>
                 </div>
@@ -33,7 +34,7 @@ const submit = () => {
                             type="email"
                             required
                             autofocus
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-beltei focus:border-transparent"
                             placeholder="admin@websams.com"
                         />
                         <p v-if="form.errors.email" class="text-sm text-red-600 mt-1">
@@ -50,7 +51,7 @@ const submit = () => {
                             v-model="form.password"
                             type="password"
                             required
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-beltei focus:border-transparent"
                             placeholder="••••••••"
                         />
                     </div>
@@ -58,7 +59,7 @@ const submit = () => {
                     <button
                         type="submit"
                         :disabled="form.processing"
-                        class="w-full bg-gray-900 text-white py-2 px-4 rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 disabled:opacity-50 transition-colors"
+                        class="w-full bg-beltei text-white py-2 px-4 rounded-md hover:bg-beltei-dark focus:outline-none focus:ring-2 focus:ring-beltei focus:ring-offset-2 disabled:opacity-50 transition-colors"
                     >
                         {{ form.processing ? 'Signing in...' : 'Sign In' }}
                     </button>

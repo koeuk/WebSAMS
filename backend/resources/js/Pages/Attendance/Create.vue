@@ -2,12 +2,13 @@
 import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 
-const props = defineProps({ classSubjects: Array, students: Array });
+const props = defineProps({ classSubjects: Array, students: Array, timeSlots: Array });
 
 const form = useForm({
     class_subject_id: '',
     student_id: '',
     date: new Date().toISOString().split('T')[0],
+    time_slot_id: '',
     status: 'present',
     remarks: '',
 });
@@ -47,6 +48,14 @@ const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.te
                     <p v-if="form.errors.date" class="text-sm text-red-600 mt-1">{{ form.errors.date }}</p>
                 </div>
                 <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
+                    <select v-model="form.time_slot_id" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                        <option value="" disabled>Select Time Slot</option>
+                        <option v-for="ts in timeSlots" :key="ts.id" :value="ts.id">{{ ts.name }} ({{ ts.start_time?.slice(0,5) }} - {{ ts.end_time?.slice(0,5) }})</option>
+                    </select>
+                    <p v-if="form.errors.time_slot_id" class="text-sm text-red-600 mt-1">{{ form.errors.time_slot_id }}</p>
+                </div>
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
                     <select v-model="form.status" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
                         <option value="present">Present</option>
@@ -59,7 +68,7 @@ const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.te
                     <label class="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
                     <textarea v-model="form.remarks" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" placeholder="Optional" />
                 </div>
-                <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 disabled:opacity-50">
+                <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50">
                     {{ form.processing ? 'Saving...' : 'Create Attendance' }}
                 </button>
             </form>

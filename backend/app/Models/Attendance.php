@@ -11,6 +11,7 @@ class Attendance extends Model
         'class_subject_id',
         'student_id',
         'date',
+        'time_slot_id',
         'status',
         'remarks',
         'recorded_by',
@@ -36,5 +37,10 @@ class Attendance extends Model
     public function recorder(): BelongsTo
     {
         return $this->belongsTo(User::class, 'recorded_by');
+    }
+
+    public function timeSlot(): BelongsTo
+    {
+        return $this->belongsTo(TimeSlot::class);
     }
 }

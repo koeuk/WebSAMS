@@ -25,7 +25,7 @@ const statusClass = (status) => ({
                 <Link href="/admin/attendance" class="text-sm text-gray-600 hover:text-gray-900">&larr; Back</Link>
                 <h2 class="text-2xl font-bold text-gray-900">Attendance Detail</h2>
             </div>
-            <Link :href="`/admin/attendance/${record.id}/edit`" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800">
+            <Link :href="`/admin/attendance/${record.id}/edit`" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark">
                 Edit
             </Link>
         </div>
@@ -40,6 +40,16 @@ const statusClass = (status) => ({
                     <div>
                         <p class="text-sm text-gray-500">Date</p>
                         <p class="text-sm font-medium text-gray-900">{{ formatDate(record.date) }}</p>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-500">Time Slot</p>
+                        <p class="text-sm font-medium text-gray-900">{{ record.time_slot?.name }} ({{ record.time_slot?.start_time?.slice(0,5) }} - {{ record.time_slot?.end_time?.slice(0,5) }})</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">Year Level</p>
+                        <p class="text-sm font-medium text-gray-900">{{ record.student?.year_level ? 'Year ' + record.student.year_level : '-' }}</p>
                     </div>
                 </div>
                 <div class="grid grid-cols-2 gap-4">

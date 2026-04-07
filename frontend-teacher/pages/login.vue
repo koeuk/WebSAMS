@@ -27,6 +27,7 @@ const submit = async () => {
     <div class="w-full max-w-md">
       <div class="bg-white rounded-lg border border-gray-200 shadow-sm p-8">
         <div class="text-center mb-8">
+          <img src="/logo.png" alt="BELTEI International University" class="h-20 mx-auto mb-3" />
           <h1 class="text-2xl font-bold text-gray-900">WebSAMS</h1>
           <p class="text-sm text-gray-600 mt-1">Teacher Portal</p>
         </div>
@@ -44,7 +45,7 @@ const submit = async () => {
             <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
             <input v-model="password" type="password" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" />
           </div>
-          <button type="submit" :disabled="loading" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:opacity-50 text-sm font-medium">
+          <button type="submit" :disabled="loading" class="w-full bg-beltei text-white py-2 px-4 rounded-md hover:bg-beltei-dark disabled:opacity-50 text-sm font-medium">
             {{ loading ? 'Signing in...' : 'Sign In' }}
           </button>
         </form>

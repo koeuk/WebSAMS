@@ -7,7 +7,7 @@ import Modal from '@/Components/Modal.vue';
 
 const props = defineProps({ schedules: Object });
 
-const days = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday' };
+const days = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
 
 const showDeleteModal = ref(false);
 const scheduleToDelete = ref(null);
@@ -23,7 +23,7 @@ const deleteSchedule = () => {
     <AdminLayout>
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold text-gray-900">Schedules</h2>
-            <Link href="/admin/schedules/create" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800">Create Schedule</Link>
+            <Link href="/admin/schedules/create" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark">Create Schedule</Link>
         </div>
 
         <FlashMessage />
@@ -44,7 +44,7 @@ const deleteSchedule = () => {
                     </thead>
                     <tbody>
                         <tr v-for="s in daySchedules" :key="s.id" class="border-b border-gray-100">
-                            <td class="px-6 py-3 text-sm text-gray-900">{{ s.start_time?.slice(0,5) }} - {{ s.end_time?.slice(0,5) }}</td>
+                            <td class="px-6 py-3 text-sm text-gray-900">{{ s.time_slot?.name }} ({{ s.time_slot?.start_time?.slice(0,5) }} - {{ s.time_slot?.end_time?.slice(0,5) }})</td>
                             <td class="px-6 py-3 text-sm text-gray-600">{{ s.class_subject?.school_class?.name }}</td>
                             <td class="px-6 py-3 text-sm text-gray-600">{{ s.class_subject?.subject?.name }}</td>
                             <td class="px-6 py-3 text-sm text-gray-600">{{ s.class_subject?.teacher?.name }}</td>

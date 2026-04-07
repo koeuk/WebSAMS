@@ -2,18 +2,16 @@
 import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 
-const props = defineProps({ classSubjects: Array });
+const props = defineProps({ classSubjects: Array, timeSlots: Array });
 
 const form = useForm({
     class_subject_id: '',
+    time_slot_id: '',
     day_of_week: '',
-    start_time: '',
-    end_time: '',
     room: '',
 });
 
 const submit = () => { form.post('/admin/schedules'); };
-
 const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.teacher?.name})`;
 </script>
 
@@ -35,6 +33,14 @@ const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.te
                     <p v-if="form.errors.class_subject_id" class="text-sm text-red-600 mt-1">{{ form.errors.class_subject_id }}</p>
                 </div>
                 <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Time Slot</label>
+                    <select v-model="form.time_slot_id" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                        <option value="" disabled>Select Time Slot</option>
+                        <option v-for="ts in timeSlots" :key="ts.id" :value="ts.id">{{ ts.name }} ({{ ts.start_time?.slice(0,5) }} - {{ ts.end_time?.slice(0,5) }})</option>
+                    </select>
+                    <p v-if="form.errors.time_slot_id" class="text-sm text-red-600 mt-1">{{ form.errors.time_slot_id }}</p>
+                </div>
+                <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Day</label>
                     <select v-model="form.day_of_week" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
                         <option value="" disabled>Select Day</option>
@@ -43,26 +49,16 @@ const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.te
                         <option value="wed">Wednesday</option>
                         <option value="thu">Thursday</option>
                         <option value="fri">Friday</option>
+                        <option value="sat">Saturday</option>
+                        <option value="sun">Sunday</option>
                     </select>
                     <p v-if="form.errors.day_of_week" class="text-sm text-red-600 mt-1">{{ form.errors.day_of_week }}</p>
-                </div>
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Start Time</label>
-                        <input v-model="form.start_time" type="time" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" />
-                        <p v-if="form.errors.start_time" class="text-sm text-red-600 mt-1">{{ form.errors.start_time }}</p>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">End Time</label>
-                        <input v-model="form.end_time" type="time" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" />
-                        <p v-if="form.errors.end_time" class="text-sm text-red-600 mt-1">{{ form.errors.end_time }}</p>
-                    </div>
                 </div>
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-1">Room</label>
                     <input v-model="form.room" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" placeholder="e.g. Room 201" />
                 </div>
-                <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 disabled:opacity-50">
+                <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50">
                     {{ form.processing ? 'Creating...' : 'Create Schedule' }}
                 </button>
             </form>

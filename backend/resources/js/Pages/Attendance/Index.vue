@@ -11,6 +11,7 @@ const props = defineProps({
     courses: Array,
     classes: Array,
     subjects: Array,
+    timeSlots: Array,
     filters: Object,
 });
 
@@ -60,7 +61,7 @@ const deleteRecord = () => {
     <AdminLayout>
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold text-gray-900">Attendance Records</h2>
-            <Link href="/admin/attendance/create" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800">
+            <Link href="/admin/attendance/create" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark">
                 Create Attendance
             </Link>
         </div>
@@ -97,7 +98,9 @@ const deleteRecord = () => {
                 <thead>
                     <tr class="border-b border-gray-200 bg-gray-50">
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Date</th>
+                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Time Slot</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Student</th>
+                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Year</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Class</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Course</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Subject</th>
@@ -108,8 +111,10 @@ const deleteRecord = () => {
                 </thead>
                 <tbody>
                     <tr v-for="record in attendance.data" :key="record.id" class="border-b border-gray-100">
-                        <td class="px-6 py-3 text-sm text-gray-900">{{ formatDate(record.date) }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-900 whitespace-nowrap">{{ formatDate(record.date) }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-600 whitespace-nowrap">{{ record.time_slot?.name || '-' }}</td>
                         <td class="px-6 py-3 text-sm text-gray-900">{{ record.student?.name }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-600">{{ record.student?.year_level ? 'Year ' + record.student.year_level : '-' }}</td>
                         <td class="px-6 py-3 text-sm text-gray-600">{{ record.class_subject?.school_class?.name }}</td>
                         <td class="px-6 py-3 text-sm text-gray-600">{{ record.class_subject?.subject?.course?.name }}</td>
                         <td class="px-6 py-3 text-sm text-gray-600">{{ record.class_subject?.subject?.name }}</td>
@@ -124,7 +129,7 @@ const deleteRecord = () => {
                         </td>
                     </tr>
                     <tr v-if="!attendance.data?.length">
-                        <td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">No attendance records found.</td>
+                        <td colspan="10" class="px-6 py-8 text-center text-sm text-gray-500">No attendance records found.</td>
                     </tr>
                 </tbody>
             </table>

@@ -4,8 +4,10 @@ definePageMeta({ middleware: 'auth' })
 const { apiFetch } = useApi()
 
 const classes = ref<any[]>([])
+const timeSlots = ref<any[]>([])
 const students = ref<any[]>([])
 const selectedClass = ref('')
+const selectedTimeSlot = ref('')
 const selectedDate = ref(new Date().toISOString().split('T')[0])
 const attendances = ref<Record<number, { status: string; remarks: string }>>({})
 const loading = ref(true)
@@ -16,6 +18,7 @@ const error = ref('')
 onMounted(async () => {
   try {
     classes.value = await apiFetch('/teacher/classes')
+    timeSlots.value = await apiFetch('/teacher/time-slots')
   } catch {}
   loading.value = false
 })
@@ -46,6 +49,7 @@ const submit = async () => {
     const payload = {
       class_subject_id: Number(selectedClass.value),
       date: selectedDate.value,
+      time_slot_id: Number(selectedTimeSlot.value),
       attendances: Object.entries(attendances.value).map(([studentId, data]) => ({
         student_id: Number(studentId),
         status: data.status,
@@ -68,12 +72,18 @@ const submit = async () => {
     <div v-if="success" class="mb-4 px-4 py-3 rounded-md bg-green-50 border border-green-200 text-sm text-green-800">{{ success }}</div>
     <div v-if="error" class="mb-4 px-4 py-3 rounded-md bg-red-50 border border-red-200 text-sm text-red-800">{{ error }}</div>
 
-    <!-- Select class and date -->
-    <div class="flex gap-4 mb-6">
+    <!-- Select class, time slot, and date -->
+    <div class="flex flex-wrap gap-4 mb-6">
       <select v-model="selectedClass" @change="loadStudents" class="px-3 py-2 border border-gray-300 rounded-md text-sm">
         <option value="" disabled>Select Class - Subject</option>
         <option v-for="c in classes" :key="c.id" :value="c.id">
           {{ c.school_class?.name }} - {{ c.subject?.name }}
+        </option>
+      </select>
+      <select v-model="selectedTimeSlot" class="px-3 py-2 border border-gray-300 rounded-md text-sm">
+        <option value="" disabled>Select Time Slot</option>
+        <option v-for="ts in timeSlots" :key="ts.id" :value="ts.id">
+          {{ ts.name }} ({{ ts.start_time?.slice(0,5) }} - {{ ts.end_time?.slice(0,5) }})
         </option>
       </select>
       <input v-model="selectedDate" type="date" class="px-3 py-2 border border-gray-300 rounded-md text-sm" />
@@ -118,7 +128,7 @@ const submit = async () => {
       </table>
 
       <div class="px-6 py-4 border-t border-gray-200">
-        <button @click="submit" :disabled="submitting" class="px-6 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 disabled:opacity-50">
+        <button @click="submit" :disabled="submitting" class="px-6 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50">
           {{ submitting ? 'Submitting...' : 'Submit Attendance' }}
         </button>
       </div>

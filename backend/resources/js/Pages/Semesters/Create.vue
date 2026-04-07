@@ -37,7 +37,7 @@ const submit = () => { form.post('/admin/semesters'); };
                         <p v-if="form.errors.end_date" class="text-sm text-red-600 mt-1">{{ form.errors.end_date }}</p>
                     </div>
                 </div>
-                <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 disabled:opacity-50">
+                <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50">
                     {{ form.processing ? 'Creating...' : 'Create Semester' }}
                 </button>
             </form>

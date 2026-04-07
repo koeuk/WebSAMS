@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\ClassSubject;
 use App\Models\Schedule;
+use App\Models\TimeSlot;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -12,10 +13,10 @@ class ScheduleController extends Controller
 {
     public function index()
     {
-        $dayOrder = ['mon', 'tue', 'wed', 'thu', 'fri'];
-        $schedules = Schedule::with(['classSubject.schoolClass', 'classSubject.subject', 'classSubject.teacher'])
-            ->orderBy('start_time')
+        $dayOrder = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+        $schedules = Schedule::with(['classSubject.schoolClass', 'classSubject.subject', 'classSubject.teacher', 'timeSlot'])
             ->get()
+            ->sortBy(fn ($s) => $s->timeSlot?->start_time)
             ->groupBy('day_of_week')
             ->sortBy(fn ($items, $key) => array_search($key, $dayOrder));
 
@@ -28,6 +29,7 @@ class ScheduleController extends Controller
     {
         return Inertia::render('Schedules/Create', [
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
+            'timeSlots' => TimeSlot::all(),
         ]);
     }
 
@@ -35,9 +37,8 @@ class ScheduleController extends Controller
     {
         $validated = $request->validate([
             'class_subject_id' => 'required|exists:class_subject,id',
-            'day_of_week' => 'required|in:mon,tue,wed,thu,fri',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'time_slot_id' => 'required|exists:time_slots,id',
+            'day_of_week' => 'required|in:mon,tue,wed,thu,fri,sat,sun',
             'room' => 'nullable|string|max:50',
         ]);
 
@@ -49,8 +50,9 @@ class ScheduleController extends Controller
     public function edit(Schedule $schedule)
     {
         return Inertia::render('Schedules/Edit', [
-            'schedule' => $schedule->load('classSubject'),
+            'schedule' => $schedule->load(['classSubject', 'timeSlot']),
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
+            'timeSlots' => TimeSlot::all(),
         ]);
     }
 
@@ -58,9 +60,8 @@ class ScheduleController extends Controller
     {
         $validated = $request->validate([
             'class_subject_id' => 'required|exists:class_subject,id',
-            'day_of_week' => 'required|in:mon,tue,wed,thu,fri',
-            'start_time' => 'required|date_format:H:i',
-            'end_time' => 'required|date_format:H:i|after:start_time',
+            'time_slot_id' => 'required|exists:time_slots,id',
+            'day_of_week' => 'required|in:mon,tue,wed,thu,fri,sat,sun',
             'room' => 'nullable|string|max:50',
         ]);
 

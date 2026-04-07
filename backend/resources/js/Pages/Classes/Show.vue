@@ -91,7 +91,7 @@ const executeDelete = () => {
                             <option value="" disabled>Select Teacher</option>
                             <option v-for="t in availableTeachers" :key="t.id" :value="t.id">{{ t.name }}</option>
                         </select>
-                        <button type="submit" :disabled="subjectForm.processing" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 disabled:opacity-50 whitespace-nowrap">
+                        <button type="submit" :disabled="subjectForm.processing" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50 whitespace-nowrap">
                             Assign
                         </button>
                     </form>
@@ -133,7 +133,7 @@ const executeDelete = () => {
                             <option value="" disabled>Select Student</option>
                             <option v-for="s in availableStudents" :key="s.id" :value="s.id">{{ s.name }} ({{ s.email }})</option>
                         </select>
-                        <button type="submit" :disabled="studentForm.processing" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 disabled:opacity-50 whitespace-nowrap">
+                        <button type="submit" :disabled="studentForm.processing" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50 whitespace-nowrap">
                             Enroll
                         </button>
                     </form>

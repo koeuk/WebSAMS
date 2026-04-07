@@ -37,7 +37,7 @@ const deleteSubject = () => {
     <AdminLayout>
         <div class="flex items-center justify-between mb-6">
             <h2 class="text-2xl font-bold text-gray-900">Subjects</h2>
-            <Link href="/admin/subjects/create" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800">Create Subject</Link>
+            <Link href="/admin/subjects/create" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark">Create Subject</Link>
         </div>
 
         <FlashMessage />

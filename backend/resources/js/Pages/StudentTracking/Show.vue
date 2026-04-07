@@ -143,10 +143,14 @@ const statusClass = (status) => ({
             <div class="px-6 py-4 border-b border-gray-200">
                 <h3 class="text-lg font-semibold text-gray-900">Recent Attendance Records</h3>
             </div>
+            <div class="overflow-x-auto">
             <table class="w-full">
                 <thead>
                     <tr class="border-b border-gray-200 bg-gray-50">
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Date</th>
+                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Student</th>
+                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Academic Year</th>
+                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Semester</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Course</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Subject</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Class</th>
@@ -156,7 +160,10 @@ const statusClass = (status) => ({
                 </thead>
                 <tbody>
                     <tr v-for="r in recentRecords" :key="r.id" class="border-b border-gray-100">
-                        <td class="px-6 py-3 text-sm text-gray-900">{{ formatDate(r.date) }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-900 whitespace-nowrap">{{ formatDate(r.date) }}</td>
+                        <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ r.student_name }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-600">{{ r.academic_year || '-' }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-600">{{ r.semester || '-' }}</td>
                         <td class="px-6 py-3 text-sm text-gray-600">{{ r.course }}</td>
                         <td class="px-6 py-3 text-sm text-gray-600">{{ r.subject }}</td>
                         <td class="px-6 py-3 text-sm text-gray-600">{{ r.class }}</td>
@@ -166,10 +173,11 @@ const statusClass = (status) => ({
                         <td class="px-6 py-3 text-sm text-gray-600">{{ r.remarks || '-' }}</td>
                     </tr>
                     <tr v-if="!recentRecords?.length">
-                        <td colspan="6" class="px-6 py-6 text-center text-sm text-gray-500">No records.</td>
+                        <td colspan="9" class="px-6 py-6 text-center text-sm text-gray-500">No records.</td>
                     </tr>
                 </tbody>
             </table>
+            </div>
         </div>
     </AdminLayout>
 </template>

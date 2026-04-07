@@ -29,7 +29,7 @@ const submit = () => { form.post('/admin/classes'); };
                     <input v-model="form.academic_year" type="text" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" placeholder="e.g. 2025-2026" />
                     <p v-if="form.errors.academic_year" class="text-sm text-red-600 mt-1">{{ form.errors.academic_year }}</p>
                 </div>
-                <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 disabled:opacity-50">
+                <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50">
                     {{ form.processing ? 'Creating...' : 'Create Class' }}
                 </button>
             </form>
