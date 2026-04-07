@@ -13,6 +13,7 @@ const navigation = [
     { name: 'Semesters', href: '/admin/semesters' },
     { name: 'Attendance', href: '/admin/attendance' },
     { name: 'Schedules', href: '/admin/schedules' },
+    { name: 'Student Tracking', href: '/admin/student-tracking' },
     { name: 'Reports', href: '/admin/reports' },
 ];
 </script>

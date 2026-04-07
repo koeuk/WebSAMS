@@ -11,6 +11,7 @@ use App\Http\Controllers\Dashboard\AttendanceController;
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\Dashboard\ScheduleController;
 use App\Http\Controllers\Dashboard\SemesterController;
+use App\Http\Controllers\Dashboard\StudentTrackingController;
 use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +37,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::resource('attendance', AttendanceController::class);
     Route::resource('semesters', SemesterController::class)->except(['show']);
     Route::resource('schedules', ScheduleController::class);
+    Route::get('/student-tracking', [StudentTrackingController::class, 'index'])->name('student-tracking.index');
+    Route::get('/student-tracking/{student}', [StudentTrackingController::class, 'show'])->name('student-tracking.show');
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/generate', [ReportController::class, 'generate'])->name('reports.generate');
 });
