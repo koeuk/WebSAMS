@@ -1,0 +1,68 @@
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+
+const props = defineProps({ classSubjects: Array, students: Array });
+
+const form = useForm({
+    class_subject_id: '',
+    student_id: '',
+    date: new Date().toISOString().split('T')[0],
+    status: 'present',
+    remarks: '',
+});
+
+const submit = () => { form.post('/admin/attendance'); };
+const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.teacher?.name})`;
+</script>
+
+<template>
+    <AdminLayout>
+        <div class="flex items-center gap-4 mb-6">
+            <Link href="/admin/attendance" class="text-sm text-gray-600 hover:text-gray-900">&larr; Back</Link>
+            <h2 class="text-2xl font-bold text-gray-900">Create Attendance</h2>
+        </div>
+
+        <div class="bg-white rounded-lg border border-gray-200 p-6 max-w-xl">
+            <form @submit.prevent="submit" class="space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Class - Subject (Teacher)</label>
+                    <select v-model="form.class_subject_id" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                        <option value="" disabled>Select</option>
+                        <option v-for="cs in classSubjects" :key="cs.id" :value="cs.id">{{ csLabel(cs) }}</option>
+                    </select>
+                    <p v-if="form.errors.class_subject_id" class="text-sm text-red-600 mt-1">{{ form.errors.class_subject_id }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Student</label>
+                    <select v-model="form.student_id" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                        <option value="" disabled>Select Student</option>
+                        <option v-for="s in students" :key="s.id" :value="s.id">{{ s.name }} ({{ s.email }})</option>
+                    </select>
+                    <p v-if="form.errors.student_id" class="text-sm text-red-600 mt-1">{{ form.errors.student_id }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Date</label>
+                    <input v-model="form.date" type="date" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" />
+                    <p v-if="form.errors.date" class="text-sm text-red-600 mt-1">{{ form.errors.date }}</p>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                    <select v-model="form.status" required class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm">
+                        <option value="present">Present</option>
+                        <option value="absent">Absent</option>
+                        <option value="late">Late</option>
+                        <option value="excused">Excused</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Remarks</label>
+                    <textarea v-model="form.remarks" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" placeholder="Optional" />
+                </div>
+                <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800 disabled:opacity-50">
+                    {{ form.processing ? 'Saving...' : 'Create Attendance' }}
+                </button>
+            </form>
+        </div>
+    </AdminLayout>
+</template>

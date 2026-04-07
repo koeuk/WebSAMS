@@ -10,6 +10,7 @@ use App\Http\Controllers\Dashboard\SubjectController;
 use App\Http\Controllers\Dashboard\AttendanceController;
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\Dashboard\ScheduleController;
+use App\Http\Controllers\Dashboard\SemesterController;
 use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,7 +33,8 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::delete('/class-subjects/{classSubject}', [ClassSubjectController::class, 'destroy'])->name('class-subjects.destroy');
     Route::post('/class-students', [ClassStudentController::class, 'store'])->name('class-students.store');
     Route::delete('/class-students/{classStudent}', [ClassStudentController::class, 'destroy'])->name('class-students.destroy');
-    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::resource('attendance', AttendanceController::class);
+    Route::resource('semesters', SemesterController::class)->except(['show']);
     Route::resource('schedules', ScheduleController::class);
     Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
     Route::get('/reports/generate', [ReportController::class, 'generate'])->name('reports.generate');

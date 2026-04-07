@@ -10,6 +10,7 @@ const navigation = [
     { name: 'Courses', href: '/admin/courses' },
     { name: 'Subjects', href: '/admin/subjects' },
     { name: 'Classes', href: '/admin/classes' },
+    { name: 'Semesters', href: '/admin/semesters' },
     { name: 'Attendance', href: '/admin/attendance' },
     { name: 'Schedules', href: '/admin/schedules' },
     { name: 'Reports', href: '/admin/reports' },

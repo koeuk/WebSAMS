@@ -5,13 +5,19 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 const props = defineProps({
     studentSummary: Array,
     overall: Object,
+    semester: Object,
     filters: Object,
     classes: Array,
     subjects: Array,
+    courses: Array,
 });
 
 const className = props.classes?.find(c => c.id == props.filters?.class_id)?.name || 'All Classes';
 const subjectName = props.subjects?.find(s => s.id == props.filters?.subject_id)?.name || 'All Subjects';
+const courseName = props.courses?.find(c => c.id == props.filters?.course_id)?.name || 'All Courses';
+const statusLabel = props.filters?.status ? props.filters.status.charAt(0).toUpperCase() + props.filters.status.slice(1) : 'All Status';
+
+const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
 </script>
 
 <template>
@@ -20,7 +26,11 @@ const subjectName = props.subjects?.find(s => s.id == props.filters?.subject_id)
             <Link href="/admin/reports" class="text-sm text-gray-600 hover:text-gray-900">&larr; Back</Link>
             <div>
                 <h2 class="text-2xl font-bold text-gray-900">Attendance Report</h2>
-                <p class="text-sm text-gray-600">{{ className }} | {{ subjectName }} | {{ filters?.date_from }} to {{ filters?.date_to }}</p>
+                <p class="text-sm text-gray-600">
+                    <span v-if="semester">{{ semester.name }} ({{ semester.academic_year }}) | </span>
+                    {{ courseName }} | {{ className }} | {{ subjectName }} | {{ statusLabel }}
+                </p>
+                <p class="text-sm text-gray-500">{{ formatDate(filters?.date_from) }} to {{ formatDate(filters?.date_to) }}</p>
             </div>
         </div>
 
@@ -75,7 +85,7 @@ const subjectName = props.subjects?.find(s => s.id == props.filters?.subject_id)
                         <td class="px-6 py-3 text-sm text-gray-600 text-center">{{ row.total }}</td>
                         <td class="px-6 py-3 text-sm text-green-600 text-center">{{ row.present }}</td>
                         <td class="px-6 py-3 text-sm text-red-600 text-center">{{ row.absent }}</td>
-                        <td class="px-6 py-3 text-sm text-yellow-600 text-center">{{ row.late }}</td>
+                        <td class="px-6 py-3 text-sm text-yellow-600 text-center font-medium">{{ row.late }}</td>
                         <td class="px-6 py-3 text-sm text-blue-600 text-center">{{ row.excused }}</td>
                         <td class="px-6 py-3 text-sm font-medium text-center" :class="row.rate >= 80 ? 'text-green-600' : row.rate >= 60 ? 'text-yellow-600' : 'text-red-600'">
                             {{ row.rate }}%

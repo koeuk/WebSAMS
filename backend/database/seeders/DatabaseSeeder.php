@@ -8,6 +8,7 @@ use App\Models\ClassSubject;
 use App\Models\Course;
 use App\Models\Schedule;
 use App\Models\SchoolClass;
+use App\Models\Semester;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Database\Seeder;
@@ -17,11 +18,15 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        // Semesters
+        Semester::create(['name' => 'Semester 1', 'academic_year' => '2025-2026', 'start_date' => '2025-09-01', 'end_date' => '2026-01-31']);
+        Semester::create(['name' => 'Semester 2', 'academic_year' => '2025-2026', 'start_date' => '2026-02-01', 'end_date' => '2026-06-30']);
+
         // Admin
         $admin = User::create([
             'name' => 'Admin',
-            'email' => 'admin@websams.com',
-            'password' => Hash::make('password'),
+            'email' => 'admin@email.com',
+            'password' => Hash::make('12345678'),
             'role' => 'admin',
         ]);
 
@@ -30,8 +35,8 @@ class DatabaseSeeder extends Seeder
         foreach (['Mr. John Smith', 'Ms. Sarah Lee', 'Mr. David Chen'] as $i => $name) {
             $teachers[] = User::create([
                 'name' => $name,
-                'email' => 'teacher' . ($i + 1) . '@websams.com',
-                'password' => Hash::make('password'),
+                'email' => 'teacher' . ($i + 1) . '@email.com',
+                'password' => Hash::make('12345678'),
                 'role' => 'teacher',
             ]);
         }
@@ -48,8 +53,8 @@ class DatabaseSeeder extends Seeder
         foreach ($studentNames as $i => $name) {
             $students[] = User::create([
                 'name' => $name,
-                'email' => 'student' . ($i + 1) . '@websams.com',
-                'password' => Hash::make('password'),
+                'email' => 'student' . ($i + 1) . '@email.com',
+                'password' => Hash::make('12345678'),
                 'role' => 'student',
             ]);
         }

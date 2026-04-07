@@ -1,8 +1,10 @@
 <script setup>
 import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
+import Modal from '@/Components/Modal.vue';
 
 const props = defineProps({
     attendance: Object,
@@ -20,9 +22,7 @@ const dateFrom = ref(props.filters?.date_from || '');
 const dateTo = ref(props.filters?.date_to || '');
 
 const applyFilters = (resetSubject = false) => {
-    if (resetSubject) {
-        subjectFilter.value = '';
-    }
+    if (resetSubject) subjectFilter.value = '';
     router.get('/admin/attendance', {
         course_id: courseFilter.value || undefined,
         class_id: classFilter.value || undefined,
@@ -45,11 +45,27 @@ const statusClass = (status) => ({
     'bg-yellow-100 text-yellow-800': status === 'late',
     'bg-blue-100 text-blue-800': status === 'excused',
 });
+
+const showDeleteModal = ref(false);
+const recordToDelete = ref(null);
+const confirmDelete = (record) => { recordToDelete.value = record; showDeleteModal.value = true; };
+const deleteRecord = () => {
+    router.delete(`/admin/attendance/${recordToDelete.value.id}`, {
+        onFinish: () => { showDeleteModal.value = false; recordToDelete.value = null; },
+    });
+};
 </script>
 
 <template>
     <AdminLayout>
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">Attendance Records</h2>
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Attendance Records</h2>
+            <Link href="/admin/attendance/create" class="px-4 py-2 text-sm font-medium text-white bg-gray-900 rounded-md hover:bg-gray-800">
+                Create Attendance
+            </Link>
+        </div>
+
+        <FlashMessage />
 
         <!-- Filters -->
         <div class="flex flex-wrap gap-3 mb-4">
@@ -87,6 +103,7 @@ const statusClass = (status) => ({
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Subject</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Recorded By</th>
+                        <th class="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -100,14 +117,21 @@ const statusClass = (status) => ({
                             <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full" :class="statusClass(record.status)">{{ record.status }}</span>
                         </td>
                         <td class="px-6 py-3 text-sm text-gray-600">{{ record.recorder?.name }}</td>
+                        <td class="px-6 py-3 text-right">
+                            <Link :href="`/admin/attendance/${record.id}`" class="text-sm text-gray-600 hover:text-gray-800 mr-2">View</Link>
+                            <Link :href="`/admin/attendance/${record.id}/edit`" class="text-sm text-blue-600 hover:text-blue-800 mr-2">Edit</Link>
+                            <button @click="confirmDelete(record)" class="text-sm text-red-600 hover:text-red-800">Delete</button>
+                        </td>
                     </tr>
                     <tr v-if="!attendance.data?.length">
-                        <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">No attendance records found.</td>
+                        <td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">No attendance records found.</td>
                     </tr>
                 </tbody>
             </table>
         </div>
 
         <Pagination :links="attendance.links" />
+
+        <Modal :show="showDeleteModal" title="Delete Attendance" message="Are you sure you want to delete this attendance record?" @confirm="deleteRecord" @cancel="showDeleteModal = false" />
     </AdminLayout>
 </template>

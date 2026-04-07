@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\ClassSubject;
 use App\Models\Course;
 use App\Models\SchoolClass;
 use App\Models\Subject;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -42,7 +44,6 @@ class AttendanceController extends Controller
 
         $attendance = $query->latest('date')->latest('id')->paginate(20)->withQueryString();
 
-        // Filter subjects by selected course
         $subjectsQuery = Subject::query();
         if ($request->filled('course_id')) {
             $subjectsQuery->where('course_id', $request->course_id);
@@ -55,5 +56,84 @@ class AttendanceController extends Controller
             'subjects' => $subjectsQuery->get(['id', 'name', 'code']),
             'filters' => $request->only(['course_id', 'class_id', 'subject_id', 'status', 'date_from', 'date_to']),
         ]);
+    }
+
+    public function create()
+    {
+        return Inertia::render('Attendance/Create', [
+            'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
+            'students' => User::where('role', 'student')->get(['id', 'name', 'email']),
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'class_subject_id' => 'required|exists:class_subject,id',
+            'student_id' => 'required|exists:users,id',
+            'date' => 'required|date',
+            'status' => 'required|in:present,absent,late,excused',
+            'remarks' => 'nullable|string',
+        ]);
+
+        $validated['recorded_by'] = auth()->id();
+
+        Attendance::updateOrCreate(
+            [
+                'class_subject_id' => $validated['class_subject_id'],
+                'student_id' => $validated['student_id'],
+                'date' => $validated['date'],
+            ],
+            [
+                'status' => $validated['status'],
+                'remarks' => $validated['remarks'],
+                'recorded_by' => $validated['recorded_by'],
+            ]
+        );
+
+        return redirect()->route('admin.attendance.index')->with('success', 'Attendance recorded successfully.');
+    }
+
+    public function show(Attendance $attendance)
+    {
+        $attendance->load(['student', 'classSubject.subject.course', 'classSubject.schoolClass', 'recorder']);
+
+        return Inertia::render('Attendance/Show', [
+            'record' => $attendance,
+        ]);
+    }
+
+    public function edit(Attendance $attendance)
+    {
+        $attendance->load(['student', 'classSubject.subject', 'classSubject.schoolClass']);
+
+        return Inertia::render('Attendance/Edit', [
+            'record' => $attendance,
+            'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
+            'students' => User::where('role', 'student')->get(['id', 'name', 'email']),
+        ]);
+    }
+
+    public function update(Request $request, Attendance $attendance)
+    {
+        $validated = $request->validate([
+            'class_subject_id' => 'required|exists:class_subject,id',
+            'student_id' => 'required|exists:users,id',
+            'date' => 'required|date',
+            'status' => 'required|in:present,absent,late,excused',
+            'remarks' => 'nullable|string',
+        ]);
+
+        $validated['recorded_by'] = auth()->id();
+        $attendance->update($validated);
+
+        return redirect()->route('admin.attendance.index')->with('success', 'Attendance updated successfully.');
+    }
+
+    public function destroy(Attendance $attendance)
+    {
+        $attendance->delete();
+
+        return redirect()->route('admin.attendance.index')->with('success', 'Attendance deleted successfully.');
     }
 }
