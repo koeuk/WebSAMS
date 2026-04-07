@@ -7,9 +7,12 @@ const user = page.props.auth.user;
 const navigation = [
     { name: 'Dashboard', href: '/admin/dashboard' },
     { name: 'Users', href: '/admin/users' },
-    { name: 'Classes', href: '/admin/classes' },
+    { name: 'Courses', href: '/admin/courses' },
     { name: 'Subjects', href: '/admin/subjects' },
+    { name: 'Classes', href: '/admin/classes' },
     { name: 'Attendance', href: '/admin/attendance' },
+    { name: 'Schedules', href: '/admin/schedules' },
+    { name: 'Reports', href: '/admin/reports' },
 ];
 </script>
 

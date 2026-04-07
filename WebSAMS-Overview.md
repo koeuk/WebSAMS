@@ -214,6 +214,32 @@ WebSAMS/
 
 **Unique constraint:** (class_subject_id, student_id, date) — prevents duplicate attendance per student per session per day.
 
+### 8. schedules
+
+| Field | Type | Notes |
+|---|---|---|
+| id | BIGINT | Primary Key, Auto Increment |
+| class_subject_id | BIGINT | FK → class_subject.id (CASCADE DELETE) |
+| day_of_week | ENUM | `mon`, `tue`, `wed`, `thu`, `fri` |
+| start_time | TIME | e.g. "08:00" |
+| end_time | TIME | e.g. "09:30" |
+| room | VARCHAR | Nullable, e.g. "Room 201" |
+| created_at | TIMESTAMP | |
+| updated_at | TIMESTAMP | |
+
+### 9. notifications
+
+| Field | Type | Notes |
+|---|---|---|
+| id | BIGINT | Primary Key, Auto Increment |
+| user_id | BIGINT | FK → users.id (CASCADE DELETE) |
+| title | VARCHAR | e.g. "Absence Alert" |
+| message | TEXT | Notification content |
+| type | ENUM | `absence`, `late`, `general` (default: `general`) |
+| is_read | BOOLEAN | Default: false |
+| created_at | TIMESTAMP | |
+| updated_at | TIMESTAMP | |
+
 ### Entity Relationship Diagram
 
 ```
@@ -231,6 +257,98 @@ class_student         attendances M────1 users (recorded_by)
     │                    │
 users (student) ────────┘
 ```
+
+---
+
+## Implementation Plan
+
+### Phase 1: Auth Foundation (Completed)
+- Sanctum installed for API token auth (teacher/student)
+- Session-based auth for admin login
+- Role middleware (`EnsureUserHasRole`) for route protection
+- CORS configured for localhost:3001 and :3002
+- Admin login page (Inertia + Vue)
+- API login endpoint (`POST /api/login`)
+
+### Phase 2: Admin Dashboard with Real Data (Completed)
+- Dashboard shows live stats: total students, teachers, classes, today's attendance rate
+- Recent attendance table with student name, class, subject, date, status
+
+### Phase 3: Admin CRUD — Users, Courses, Subjects
+- Shared Vue components: DataTable, Pagination, Modal, FlashMessage
+- Users: list (filter by role), create, edit, delete
+- Courses: list, create, edit, delete
+- Subjects: list (filter by course), create, edit, delete
+
+### Phase 4: Admin CRUD — Classes, Assignments, Enrollment
+- Classes: list, create, edit, delete, show (detail page)
+- Assign teachers to class-subjects
+- Enroll students into classes
+
+### Phase 5: Admin — Attendance, Schedules, Reports
+- Attendance viewing with filters (class, subject, date range, status)
+- Schedules CRUD (day, time, room)
+- Reports generation (filter + per-student breakdown)
+
+### Phase 6: Teacher API + Nuxt Frontend
+- API: dashboard (today's schedule), my classes, students list, mark attendance, attendance history
+- Nuxt: login, dashboard, classes, mark attendance page, attendance history
+
+### Phase 7: Student API + Nuxt Frontend
+- API: dashboard (attendance summary %), own attendance, profile
+- Nuxt: login, dashboard, attendance history, profile
+
+### Phase 8: Polish
+- Form request validation classes
+- Error handling + loading states
+- Pagination on all lists
+- Guard checks (ownership verification)
+
+### Build Order
+
+```
+Phase 1 (Auth) ────────────────────────┐
+    │                                   │
+    ├──► Phase 2 (Dashboard)            │
+    │                                   │
+    ├──► Phase 3 (Users/Courses/Subj.)  │
+    │         │                         │
+    │         ▼                         │
+    │    Phase 4 (Classes/Enrollment)   │
+    │         │                         │
+    │         ▼                         │
+    │    Phase 5 (Attendance/Reports)   │
+    │                                   │
+    ├──► Phase 6 (Teacher) ◄────────────┘
+    │         │
+    │         ▼
+    └──► Phase 7 (Student)
+              │
+              ▼
+         Phase 8 (Polish)
+```
+
+### How to Run
+
+```bash
+# Admin (Laravel + Inertia)
+cd backend && php artisan serve          # http://localhost:8000
+cd backend && npm run dev                # Vite dev server
+
+# Teacher (Nuxt)
+cd frontend-teacher && npm run dev       # http://localhost:3001
+
+# Student (Nuxt)
+cd frontend-student && npm run dev       # http://localhost:3002
+```
+
+### Test Credentials
+
+| Role | Email | Password |
+|---|---|---|
+| Admin | admin@websams.com | password |
+| Teacher | teacher1@websams.com | password |
+| Student | student1@websams.com | password |
 
 ---
 
