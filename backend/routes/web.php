@@ -1,9 +1,15 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Dashboard\ClassStudentController;
+use App\Http\Controllers\Dashboard\ClassSubjectController;
 use App\Http\Controllers\Dashboard\CourseController;
 use App\Http\Controllers\Dashboard\DashboardController;
+use App\Http\Controllers\Dashboard\SchoolClassController;
 use App\Http\Controllers\Dashboard\SubjectController;
+use App\Http\Controllers\Dashboard\AttendanceController;
+use App\Http\Controllers\Dashboard\ReportController;
+use App\Http\Controllers\Dashboard\ScheduleController;
 use App\Http\Controllers\Dashboard\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,4 +27,13 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::resource('users', UserController::class);
     Route::resource('courses', CourseController::class);
     Route::resource('subjects', SubjectController::class);
+    Route::resource('classes', SchoolClassController::class)->parameters(['classes' => 'class']);
+    Route::post('/class-subjects', [ClassSubjectController::class, 'store'])->name('class-subjects.store');
+    Route::delete('/class-subjects/{classSubject}', [ClassSubjectController::class, 'destroy'])->name('class-subjects.destroy');
+    Route::post('/class-students', [ClassStudentController::class, 'store'])->name('class-students.store');
+    Route::delete('/class-students/{classStudent}', [ClassStudentController::class, 'destroy'])->name('class-students.destroy');
+    Route::get('/attendance', [AttendanceController::class, 'index'])->name('attendance.index');
+    Route::resource('schedules', ScheduleController::class);
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/generate', [ReportController::class, 'generate'])->name('reports.generate');
 });

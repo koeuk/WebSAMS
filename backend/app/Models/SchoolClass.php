@@ -17,6 +17,6 @@ class SchoolClass extends Model
 
     public function students(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'class_student', 'school_class_id', 'student_id');
+        return $this->belongsToMany(User::class, 'class_student', 'school_class_id', 'student_id')->withPivot('id');
     }
 }
