@@ -4,6 +4,7 @@ const { user, logout } = useAuth()
 const navigation = [
   { name: 'Dashboard', href: '/' },
   { name: 'My Attendance', href: '/attendance' },
+  { name: 'Notifications', href: '/notifications' },
   { name: 'Profile', href: '/profile' },
 ]
 

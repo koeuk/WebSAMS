@@ -78,6 +78,29 @@ onMounted(async () => {
           </tbody>
         </table>
       </div>
+      <!-- Enrolled Classes -->
+      <h3 class="text-lg font-semibold text-gray-900 mb-3 mt-6">My Classes</h3>
+      <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+        <table class="w-full">
+          <thead>
+            <tr class="border-b border-gray-200 bg-gray-50">
+              <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Class</th>
+              <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Section</th>
+              <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Academic Year</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="c in dashboard.enrolledClasses" :key="c.id" class="border-b border-gray-100">
+              <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ c.name }}</td>
+              <td class="px-6 py-3 text-sm text-gray-600">{{ c.section || '-' }}</td>
+              <td class="px-6 py-3 text-sm text-gray-600">{{ c.academic_year }}</td>
+            </tr>
+            <tr v-if="!dashboard.enrolledClasses?.length">
+              <td colspan="3" class="px-6 py-6 text-center text-sm text-gray-500">Not enrolled in any classes.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </template>
   </div>
 </template>

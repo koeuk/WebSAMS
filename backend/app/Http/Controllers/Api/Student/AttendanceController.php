@@ -10,7 +10,7 @@ class AttendanceController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Attendance::with(['classSubject.subject', 'classSubject.schoolClass'])
+        $query = Attendance::with(['classSubject.subject', 'classSubject.schoolClass', 'timeSlot'])
             ->where('student_id', $request->user()->id);
 
         if ($request->filled('class_subject_id')) {

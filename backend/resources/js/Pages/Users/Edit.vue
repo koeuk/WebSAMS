@@ -1,8 +1,20 @@
 <script setup>
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, Link, router } from '@inertiajs/vue3';
+import { ref } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 
 const props = defineProps({ user: Object });
+
+const photoPreview = ref(props.user.profile_photo ? `/storage/${props.user.profile_photo}` : null);
+const handlePhoto = (e) => {
+    const file = e.target.files[0];
+    form.profile_photo = file;
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => { photoPreview.value = e.target.result; };
+        reader.readAsDataURL(file);
+    }
+};
 
 const form = useForm({
     name: props.user.name,
@@ -22,10 +34,14 @@ const form = useForm({
     department: props.user.department || '',
     qualification: props.user.qualification || '',
     hire_date: props.user.hire_date?.split('T')[0] || '',
+    profile_photo: null,
 });
 
 const submit = () => {
-    form.put(`/admin/users/${props.user.id}`);
+    form.post(`/admin/users/${props.user.id}`, {
+        _method: 'PUT',
+        forceFormData: true,
+    });
 };
 </script>
 
@@ -101,6 +117,15 @@ const submit = () => {
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
                         <input v-model="form.phone" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" />
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Profile Photo</label>
+                    <div class="flex items-center gap-4">
+                        <img v-if="photoPreview" :src="photoPreview" class="h-16 w-16 rounded-full object-cover border" />
+                        <div v-else class="h-16 w-16 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">No photo</div>
+                        <input type="file" accept="image/*" @change="handlePhoto" class="text-sm" />
                     </div>
                 </div>
 

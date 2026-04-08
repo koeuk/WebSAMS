@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 
@@ -69,9 +70,14 @@ class UserController extends Controller
             'department' => 'nullable|string|max:255',
             'qualification' => 'nullable|string|max:255',
             'hire_date' => 'nullable|date',
+            'profile_photo' => 'nullable|image|max:2048',
         ]);
 
         $validated['password'] = Hash::make($validated['password']);
+
+        if ($request->hasFile('profile_photo')) {
+            $validated['profile_photo'] = $request->file('profile_photo')->store('profile-photos', 'public');
+        }
 
         User::create($validated);
 
@@ -112,7 +118,17 @@ class UserController extends Controller
             'department' => 'nullable|string|max:255',
             'qualification' => 'nullable|string|max:255',
             'hire_date' => 'nullable|date',
+            'profile_photo' => 'nullable|image|max:2048',
         ]);
+
+        if ($request->hasFile('profile_photo')) {
+            if ($user->profile_photo) {
+                Storage::disk('public')->delete($user->profile_photo);
+            }
+            $validated['profile_photo'] = $request->file('profile_photo')->store('profile-photos', 'public');
+        } else {
+            unset($validated['profile_photo']);
+        }
 
         if ($validated['password']) {
             $validated['password'] = Hash::make($validated['password']);

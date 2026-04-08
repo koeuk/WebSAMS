@@ -57,6 +57,7 @@ const statusClass = (status: string) => ({
         <thead>
           <tr class="border-b border-gray-200 bg-gray-50">
             <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Date</th>
+            <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Time Slot</th>
             <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Student</th>
             <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Class</th>
             <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Subject</th>
@@ -66,6 +67,7 @@ const statusClass = (status: string) => ({
         <tbody>
           <tr v-for="record in attendance.data" :key="record.id" class="border-b border-gray-100">
             <td class="px-6 py-3 text-sm text-gray-900">{{ record.date }}</td>
+            <td class="px-6 py-3 text-sm text-gray-600">{{ record.time_slot?.name || '-' }}</td>
             <td class="px-6 py-3 text-sm text-gray-900">{{ record.student?.name }}</td>
             <td class="px-6 py-3 text-sm text-gray-600">{{ record.class_subject?.school_class?.name }}</td>
             <td class="px-6 py-3 text-sm text-gray-600">{{ record.class_subject?.subject?.name }}</td>
@@ -74,7 +76,7 @@ const statusClass = (status: string) => ({
             </td>
           </tr>
           <tr v-if="!attendance.data?.length">
-            <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">No attendance records found.</td>
+            <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">No attendance records found.</td>
           </tr>
         </tbody>
       </table>

@@ -13,11 +13,15 @@ const props = defineProps({
 
 const search = ref(props.filters?.search || '');
 const roleFilter = ref(props.filters?.role || '');
+const yearFilter = ref(props.filters?.year_level || '');
+const statusFilter = ref(props.filters?.status || '');
 
 const applyFilters = () => {
     router.get('/admin/users', {
         search: search.value || undefined,
         role: roleFilter.value || undefined,
+        year_level: yearFilter.value || undefined,
+        status: statusFilter.value || undefined,
     }, { preserveState: true });
 };
 
@@ -68,15 +72,25 @@ const roleBadgeClass = (role) => ({
                 class="px-3 py-2 border border-gray-300 rounded-md text-sm w-64"
                 @keyup.enter="applyFilters"
             />
-            <select
-                v-model="roleFilter"
-                class="px-3 py-2 border border-gray-300 rounded-md text-sm"
-                @change="applyFilters"
-            >
+            <select v-model="roleFilter" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters">
                 <option value="">All Roles</option>
                 <option value="admin">Admin</option>
                 <option value="teacher">Teacher</option>
                 <option value="student">Student</option>
+            </select>
+            <select v-model="yearFilter" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters">
+                <option value="">All Years</option>
+                <option value="1">Year 1</option>
+                <option value="2">Year 2</option>
+                <option value="3">Year 3</option>
+                <option value="4">Year 4</option>
+            </select>
+            <select v-model="statusFilter" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+                <option value="graduated">Graduated</option>
+                <option value="suspended">Suspended</option>
             </select>
         </div>
 

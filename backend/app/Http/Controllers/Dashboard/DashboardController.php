@@ -25,6 +25,23 @@ class DashboardController extends Controller
             ->take(10)
             ->get();
 
+        // Weekly chart data (last 7 days)
+        $weeklyChart = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->toDateString();
+            $total = Attendance::where('date', $date)->count();
+            $present = Attendance::where('date', $date)->where('status', 'present')->count();
+            $absent = Attendance::where('date', $date)->where('status', 'absent')->count();
+            $late = Attendance::where('date', $date)->where('status', 'late')->count();
+            $weeklyChart[] = [
+                'date' => now()->subDays($i)->format('M d'),
+                'present' => $present,
+                'absent' => $absent,
+                'late' => $late,
+                'rate' => $total > 0 ? round(($present + $late) / $total * 100) : 0,
+            ];
+        }
+
         return Inertia::render('Dashboard/Index', [
             'stats' => [
                 'totalStudents' => User::where('role', 'student')->count(),
@@ -32,6 +49,7 @@ class DashboardController extends Controller
                 'totalClasses' => SchoolClass::count(),
                 'todayAttendance' => $todayRate,
             ],
+            'weeklyChart' => $weeklyChart,
             'recentAttendance' => $recentAttendance,
         ]);
     }

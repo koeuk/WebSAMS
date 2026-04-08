@@ -12,9 +12,12 @@ const navigation = [
     { name: 'Classes', href: '/admin/classes' },
     { name: 'Semesters', href: '/admin/semesters' },
     { name: 'Attendance', href: '/admin/attendance' },
+    { name: 'Time Slots', href: '/admin/time-slots' },
     { name: 'Schedules', href: '/admin/schedules' },
     { name: 'Student Tracking', href: '/admin/student-tracking' },
     { name: 'Reports', href: '/admin/reports' },
+    { name: 'Notifications', href: '/admin/notifications' },
+    { name: 'Settings', href: '/admin/settings' },
 ];
 </script>
 
@@ -49,7 +52,13 @@ const navigation = [
             <header class="flex items-center justify-between h-16 px-6 bg-white border-b border-gray-200">
                 <div></div>
                 <div class="flex items-center gap-4">
-                    <span class="text-sm text-gray-600">{{ user?.name }}</span>
+                    <Link href="/admin/profile" class="flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900">
+                        <img v-if="user?.profile_photo" :src="`/storage/${user.profile_photo}`" class="h-8 w-8 rounded-full object-cover border" />
+                        <div v-else class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center text-gray-500 text-xs font-bold">
+                            {{ user?.name?.charAt(0) }}
+                        </div>
+                        {{ user?.name }}
+                    </Link>
                     <Link
                         href="/logout"
                         method="post"

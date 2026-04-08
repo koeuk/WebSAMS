@@ -1,15 +1,36 @@
 <?php
 
-namespace App\Http\Controllers\Api\Teacher;
+namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
+use App\Models\ClassStudent;
 use App\Models\ClassSubject;
 use App\Models\Notification as AppNotification;
+use App\Models\TimeSlot;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
-class AttendanceController extends Controller
+class BulkAttendanceController extends Controller
 {
+    public function create()
+    {
+        return Inertia::render('Attendance/BulkCreate', [
+            'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
+            'timeSlots' => TimeSlot::all(),
+        ]);
+    }
+
+    public function loadStudents(Request $request)
+    {
+        $request->validate(['class_subject_id' => 'required|exists:class_subject,id']);
+
+        $classSubject = ClassSubject::findOrFail($request->class_subject_id);
+        $students = $classSubject->schoolClass->students()->get(['users.id', 'name', 'email']);
+
+        return response()->json($students);
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -22,11 +43,7 @@ class AttendanceController extends Controller
             'attendances.*.remarks' => 'nullable|string',
         ]);
 
-        $classSubject = ClassSubject::findOrFail($validated['class_subject_id']);
-
-        if ($classSubject->teacher_id !== $request->user()->id) {
-            abort(403, 'Unauthorized.');
-        }
+        $classSubject = ClassSubject::with(['subject', 'schoolClass'])->findOrFail($validated['class_subject_id']);
 
         foreach ($validated['attendances'] as $record) {
             Attendance::updateOrCreate(
@@ -39,47 +56,20 @@ class AttendanceController extends Controller
                 [
                     'status' => $record['status'],
                     'remarks' => $record['remarks'] ?? null,
-                    'recorded_by' => $request->user()->id,
+                    'recorded_by' => auth()->id(),
                 ]
             );
-        }
 
-        // Auto-notify absent/late students
-        $classSubject->load(['subject', 'schoolClass']);
-        foreach ($validated['attendances'] as $record) {
             if (in_array($record['status'], ['absent', 'late'])) {
-                $type = $record['status'] === 'absent' ? 'absence' : 'late';
                 AppNotification::create([
                     'user_id' => $record['student_id'],
                     'title' => ucfirst($record['status']) . ' Notice',
                     'message' => "You were marked as {$record['status']} for {$classSubject->subject->name} ({$classSubject->schoolClass->name}) on {$validated['date']}.",
-                    'type' => $type,
+                    'type' => $record['status'] === 'absent' ? 'absence' : 'late',
                 ]);
             }
         }
 
-        return response()->json(['message' => 'Attendance recorded successfully.']);
-    }
-
-    public function index(Request $request)
-    {
-        $query = Attendance::with(['student', 'classSubject.subject', 'classSubject.schoolClass', 'timeSlot'])
-            ->whereHas('classSubject', fn ($q) => $q->where('teacher_id', $request->user()->id));
-
-        if ($request->filled('class_subject_id')) {
-            $query->where('class_subject_id', $request->class_subject_id);
-        }
-
-        if ($request->filled('date_from')) {
-            $query->where('date', '>=', $request->date_from);
-        }
-
-        if ($request->filled('date_to')) {
-            $query->where('date', '<=', $request->date_to);
-        }
-
-        $attendance = $query->latest('date')->latest('id')->paginate(20);
-
-        return response()->json($attendance);
+        return redirect()->route('admin.attendance.index')->with('success', 'Bulk attendance recorded successfully.');
     }
 }

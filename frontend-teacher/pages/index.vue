@@ -15,7 +15,7 @@ onMounted(async () => {
   loading.value = false
 })
 
-const days: Record<string, string> = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday' }
+const days: Record<string, string> = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' }
 </script>
 
 <template>
@@ -25,11 +25,27 @@ const days: Record<string, string> = { mon: 'Monday', tue: 'Tuesday', wed: 'Wedn
     <div v-if="loading" class="text-sm text-gray-500">Loading...</div>
 
     <template v-else>
-      <div class="mb-4">
-        <h3 class="text-lg font-semibold text-gray-900">
-          Today's Schedule ({{ days[dashboard?.today] || 'Weekend' }})
-        </h3>
+      <!-- Stats Cards -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <p class="text-sm text-gray-600">My Classes</p>
+          <p class="text-2xl font-bold text-gray-900">{{ dashboard?.stats?.totalClasses ?? 0 }}</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <p class="text-sm text-gray-600">Total Students</p>
+          <p class="text-2xl font-bold text-gray-900">{{ dashboard?.stats?.totalStudents ?? 0 }}</p>
+        </div>
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <p class="text-sm text-gray-600">Today's Attendance</p>
+          <p class="text-2xl font-bold" :class="(dashboard?.stats?.todayAttendance ?? 0) >= 80 ? 'text-green-600' : 'text-red-600'">
+            {{ dashboard?.stats?.todayAttendance ?? 0 }}%
+          </p>
+        </div>
       </div>
+
+      <h3 class="text-lg font-semibold text-gray-900 mb-3">
+        Today's Schedule ({{ days[dashboard?.today] || 'No classes today' }})
+      </h3>
 
       <div v-if="dashboard?.schedule?.length" class="grid gap-4">
         <div v-for="s in dashboard.schedule" :key="s.id" class="bg-white rounded-lg border border-gray-200 p-4">
@@ -39,7 +55,8 @@ const days: Record<string, string> = { mon: 'Monday', tue: 'Tuesday', wed: 'Wedn
               <p class="text-sm text-gray-600">{{ s.class_subject?.school_class?.name }}</p>
             </div>
             <div class="text-right">
-              <p class="text-sm font-medium text-gray-900">{{ s.start_time?.slice(0,5) }} - {{ s.end_time?.slice(0,5) }}</p>
+              <p class="text-sm font-medium text-gray-900">{{ s.time_slot?.name }}</p>
+              <p class="text-xs text-gray-500">{{ s.time_slot?.start_time?.slice(0,5) }} - {{ s.time_slot?.end_time?.slice(0,5) }}</p>
               <p class="text-sm text-gray-600">{{ s.room || 'No room' }}</p>
             </div>
           </div>

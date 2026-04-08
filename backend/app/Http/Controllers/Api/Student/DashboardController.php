@@ -39,9 +39,13 @@ class DashboardController extends Controller
                 ];
             })->values();
 
+        // Enrolled classes
+        $enrolledClasses = $request->user()->enrolledClasses()->get(['school_classes.id', 'name', 'section', 'academic_year']);
+
         return response()->json([
             'summary' => $summary,
             'bySubject' => $bySubject,
+            'enrolledClasses' => $enrolledClasses,
         ]);
     }
 }

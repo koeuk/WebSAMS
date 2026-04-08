@@ -43,6 +43,10 @@ class StudentTrackingController extends Controller
             $studentsQuery->whereHas('enrolledClasses', fn ($q) => $q->where('school_classes.id', $request->class_id));
         }
 
+        if ($request->filled('year_level')) {
+            $studentsQuery->where('year_level', $request->year_level);
+        }
+
         $students = $studentsQuery->get();
 
         // Calculate attendance for each student
@@ -93,7 +97,7 @@ class StudentTrackingController extends Controller
             'academicYears' => $academicYears,
             'courses' => Course::all(['id', 'name', 'code']),
             'classes' => SchoolClass::all(['id', 'name']),
-            'filters' => $request->only(['semester_id', 'academic_year', 'course_id', 'class_id', 'threshold']),
+            'filters' => $request->only(['semester_id', 'academic_year', 'course_id', 'class_id', 'year_level', 'threshold']),
             'threshold' => (int) $threshold,
             'summary' => [
                 'totalStudents' => count($tracking),

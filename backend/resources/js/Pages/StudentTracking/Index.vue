@@ -18,6 +18,7 @@ const semesterFilter = ref(props.filters?.semester_id || '');
 const yearFilter = ref(props.filters?.academic_year || '');
 const courseFilter = ref(props.filters?.course_id || '');
 const classFilter = ref(props.filters?.class_id || '');
+const yearLevelFilter = ref(props.filters?.year_level || '');
 const thresholdFilter = ref(props.threshold || 80);
 
 const applyFilters = () => {
@@ -26,6 +27,7 @@ const applyFilters = () => {
         academic_year: yearFilter.value || undefined,
         course_id: courseFilter.value || undefined,
         class_id: classFilter.value || undefined,
+        year_level: yearLevelFilter.value || undefined,
         threshold: thresholdFilter.value,
     }, { preserveState: true });
 };
@@ -97,6 +99,16 @@ const statusLabel = (status) => ({
                     </select>
                 </div>
                 <div>
+                    <label class="block text-xs text-gray-500 mb-1">Year Level</label>
+                    <select v-model="yearLevelFilter" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters()">
+                        <option value="">All Years</option>
+                        <option value="1">Year 1</option>
+                        <option value="2">Year 2</option>
+                        <option value="3">Year 3</option>
+                        <option value="4">Year 4</option>
+                    </select>
+                </div>
+                <div>
                     <label class="block text-xs text-gray-500 mb-1">Threshold (%)</label>
                     <input v-model="thresholdFilter" type="number" min="0" max="100" class="w-20 px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters()" />
                 </div>
@@ -110,6 +122,7 @@ const statusLabel = (status) => ({
                     <tr class="border-b border-gray-200 bg-gray-50">
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">#</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Student</th>
+                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Year</th>
                         <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Email</th>
                         <th class="text-center px-6 py-3 text-xs font-medium text-gray-500 uppercase">Total</th>
                         <th class="text-center px-6 py-3 text-xs font-medium text-gray-500 uppercase">Present</th>
@@ -124,6 +137,7 @@ const statusLabel = (status) => ({
                     <tr v-for="(row, index) in tracking" :key="row.student?.id" class="border-b border-gray-100" :class="row.status === 'danger' ? 'bg-red-50' : row.status === 'warning' ? 'bg-yellow-50' : ''">
                         <td class="px-6 py-3 text-sm text-gray-600">{{ index + 1 }}</td>
                         <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ row.student?.name }}</td>
+                        <td class="px-6 py-3 text-sm text-gray-600">{{ row.student?.year_level ? 'Y' + row.student.year_level : '-' }}</td>
                         <td class="px-6 py-3 text-sm text-gray-600">{{ row.student?.email }}</td>
                         <td class="px-6 py-3 text-sm text-gray-600 text-center">{{ row.total }}</td>
                         <td class="px-6 py-3 text-sm text-green-600 text-center">{{ row.present }}</td>
@@ -144,7 +158,7 @@ const statusLabel = (status) => ({
                         </td>
                     </tr>
                     <tr v-if="!tracking?.length">
-                        <td colspan="10" class="px-6 py-8 text-center text-sm text-gray-500">No attendance data found. Adjust filters or check that attendance has been recorded.</td>
+                        <td colspan="11" class="px-6 py-8 text-center text-sm text-gray-500">No attendance data found. Adjust filters or check that attendance has been recorded.</td>
                     </tr>
                 </tbody>
             </table>
