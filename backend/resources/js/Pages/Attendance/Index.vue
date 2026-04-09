@@ -41,10 +41,10 @@ const formatDate = (dateStr) => {
 };
 
 const statusClass = (status) => ({
-    'bg-green-100 text-green-800': status === 'present',
-    'bg-red-100 text-red-800': status === 'absent',
-    'bg-yellow-100 text-yellow-800': status === 'late',
-    'bg-blue-100 text-blue-800': status === 'excused',
+    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'present',
+    'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'absent',
+    'bg-amber-50 text-amber-700 ring-1 ring-amber-200': status === 'late',
+    'bg-sky-50 text-sky-700 ring-1 ring-sky-200': status === 'excused',
 });
 
 const showDeleteModal = ref(false);
@@ -59,84 +59,119 @@ const deleteRecord = () => {
 
 <template>
     <AdminLayout>
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-900">Attendance Records</h2>
-            <Link href="/admin/attendance/create" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark">
-                Create Attendance
-            </Link>
+        <div class="animate-fade-in">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Attendance Records</h2>
+                    <p class="text-sm text-slate-500 mt-1">Track and manage student attendance</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <Link href="/admin/bulk-attendance" class="btn-secondary">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                        Bulk Mark
+                    </Link>
+                    <Link href="/admin/attendance/create" class="btn-primary">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        Create Attendance
+                    </Link>
+                </div>
+            </div>
+
+            <FlashMessage />
+
+            <!-- Filters -->
+            <div class="card p-4 mb-6">
+                <div class="flex flex-wrap gap-3 items-end">
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Course</label>
+                        <select v-model="courseFilter" class="select-modern" @change="applyFilters(true)">
+                            <option value="">All Courses</option>
+                            <option v-for="c in courses" :key="c.id" :value="c.id">{{ c.name }}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class</label>
+                        <select v-model="classFilter" class="select-modern" @change="applyFilters()">
+                            <option value="">All Classes</option>
+                            <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.name }}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Subject</label>
+                        <select v-model="subjectFilter" class="select-modern" @change="applyFilters()">
+                            <option value="">All Subjects</option>
+                            <option v-for="s in subjects" :key="s.id" :value="s.id">{{ s.name }}</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
+                        <select v-model="statusFilter" class="select-modern" @change="applyFilters()">
+                            <option value="">All Status</option>
+                            <option value="present">Present</option>
+                            <option value="absent">Absent</option>
+                            <option value="late">Late</option>
+                            <option value="excused">Excused</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
+                        <input v-model="dateFrom" type="date" class="input-modern" @change="applyFilters()" />
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
+                        <input v-model="dateTo" type="date" class="input-modern" @change="applyFilters()" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="card overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Date</th>
+                                <th class="text-left">Time Slot</th>
+                                <th class="text-left">Student</th>
+                                <th class="text-left">Year</th>
+                                <th class="text-left">Class</th>
+                                <th class="text-left">Course</th>
+                                <th class="text-left">Subject</th>
+                                <th class="text-left">Status</th>
+                                <th class="text-left">Recorded By</th>
+                                <th class="text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="record in attendance.data" :key="record.id">
+                                <td class="whitespace-nowrap font-medium text-slate-900">{{ formatDate(record.date) }}</td>
+                                <td class="whitespace-nowrap">{{ record.time_slot?.name || '-' }}</td>
+                                <td class="font-semibold text-slate-900">{{ record.student?.name }}</td>
+                                <td>{{ record.student?.year_level ? 'Year ' + record.student.year_level : '-' }}</td>
+                                <td>{{ record.class_subject?.school_class?.name }}</td>
+                                <td>{{ record.class_subject?.subject?.course?.name }}</td>
+                                <td>{{ record.class_subject?.subject?.name }}</td>
+                                <td><span class="badge" :class="statusClass(record.status)">{{ record.status }}</span></td>
+                                <td>{{ record.recorder?.name }}</td>
+                                <td class="text-right">
+                                    <div class="flex items-center justify-end gap-1">
+                                        <Link :href="`/admin/attendance/${record.id}`" class="px-2.5 py-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors">View</Link>
+                                        <Link :href="`/admin/attendance/${record.id}/edit`" class="px-2.5 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">Edit</Link>
+                                        <button @click="confirmDelete(record)" class="px-2.5 py-1.5 text-[12px] font-medium text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors">Delete</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr v-if="!attendance.data?.length">
+                                <td colspan="10" class="!text-center !py-12 text-slate-400">No attendance records found.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <Pagination :links="attendance.links" />
+
+            <Modal :show="showDeleteModal" title="Delete Attendance" message="Are you sure you want to delete this attendance record?" @confirm="deleteRecord" @cancel="showDeleteModal = false" />
         </div>
-
-        <FlashMessage />
-
-        <!-- Filters -->
-        <div class="flex flex-wrap gap-3 mb-4">
-            <select v-model="courseFilter" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters(true)">
-                <option value="">All Courses</option>
-                <option v-for="c in courses" :key="c.id" :value="c.id">{{ c.name }}</option>
-            </select>
-            <select v-model="classFilter" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters()">
-                <option value="">All Classes</option>
-                <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.name }}</option>
-            </select>
-            <select v-model="subjectFilter" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters()">
-                <option value="">All Subjects</option>
-                <option v-for="s in subjects" :key="s.id" :value="s.id">{{ s.name }}</option>
-            </select>
-            <select v-model="statusFilter" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters()">
-                <option value="">All Status</option>
-                <option value="present">Present</option>
-                <option value="absent">Absent</option>
-                <option value="late">Late</option>
-                <option value="excused">Excused</option>
-            </select>
-            <input v-model="dateFrom" type="date" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters()" />
-            <input v-model="dateTo" type="date" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters()" />
-        </div>
-
-        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <table class="w-full">
-                <thead>
-                    <tr class="border-b border-gray-200 bg-gray-50">
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Date</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Time Slot</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Student</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Year</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Class</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Course</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Subject</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Status</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Recorded By</th>
-                        <th class="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="record in attendance.data" :key="record.id" class="border-b border-gray-100">
-                        <td class="px-6 py-3 text-sm text-gray-900 whitespace-nowrap">{{ formatDate(record.date) }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600 whitespace-nowrap">{{ record.time_slot?.name || '-' }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-900">{{ record.student?.name }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ record.student?.year_level ? 'Year ' + record.student.year_level : '-' }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ record.class_subject?.school_class?.name }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ record.class_subject?.subject?.course?.name }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ record.class_subject?.subject?.name }}</td>
-                        <td class="px-6 py-3">
-                            <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full" :class="statusClass(record.status)">{{ record.status }}</span>
-                        </td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ record.recorder?.name }}</td>
-                        <td class="px-6 py-3 text-right">
-                            <Link :href="`/admin/attendance/${record.id}`" class="text-sm text-gray-600 hover:text-gray-800 mr-2">View</Link>
-                            <Link :href="`/admin/attendance/${record.id}/edit`" class="text-sm text-blue-600 hover:text-blue-800 mr-2">Edit</Link>
-                            <button @click="confirmDelete(record)" class="text-sm text-red-600 hover:text-red-800">Delete</button>
-                        </td>
-                    </tr>
-                    <tr v-if="!attendance.data?.length">
-                        <td colspan="10" class="px-6 py-8 text-center text-sm text-gray-500">No attendance records found.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <Pagination :links="attendance.links" />
-
-        <Modal :show="showDeleteModal" title="Delete Attendance" message="Are you sure you want to delete this attendance record?" @confirm="deleteRecord" @cancel="showDeleteModal = false" />
     </AdminLayout>
 </template>

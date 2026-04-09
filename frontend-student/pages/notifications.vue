@@ -6,9 +6,7 @@ const notifications = ref<any>({ data: [] })
 const loading = ref(true)
 
 onMounted(async () => {
-  try {
-    notifications.value = await apiFetch('/student/notifications')
-  } catch {}
+  try { notifications.value = await apiFetch('/student/notifications') } catch {}
   loading.value = false
 })
 
@@ -22,40 +20,43 @@ const markAsRead = async (id: number) => {
 
 const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'
 
-const typeBadge = (type: string) => ({
-  'bg-red-100 text-red-800': type === 'absence',
-  'bg-yellow-100 text-yellow-800': type === 'late',
-  'bg-gray-100 text-gray-800': type === 'general',
+const typeBadgeClass = (type: string) => ({
+  'bg-rose-50 text-rose-700 ring-1 ring-rose-200': type === 'absence',
+  'bg-amber-50 text-amber-700 ring-1 ring-amber-200': type === 'late',
+  'bg-slate-100 text-slate-600 ring-1 ring-slate-200': type === 'general',
 })
 </script>
 
 <template>
-  <div>
-    <h2 class="text-2xl font-bold text-gray-900 mb-6">Notifications</h2>
+  <div class="animate-fade-in">
+    <div class="mb-8">
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Notifications</h2>
+      <p class="text-sm text-slate-500 mt-1">Stay updated with your attendance alerts</p>
+    </div>
 
-    <div v-if="loading" class="text-sm text-gray-500">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
 
-    <div v-else class="space-y-3">
+    <div v-else class="space-y-3 stagger-children">
       <div v-for="n in notifications.data" :key="n.id"
-        class="bg-white rounded-lg border border-gray-200 p-4"
+        class="card p-5 animate-fade-in-up transition-opacity"
         :class="n.is_read ? 'opacity-60' : ''"
       >
         <div class="flex items-start justify-between">
           <div>
-            <div class="flex items-center gap-2 mb-1">
-              <span class="inline-flex px-2 py-0.5 text-xs font-medium rounded-full" :class="typeBadge(n.type)">{{ n.type }}</span>
-              <h3 class="text-sm font-semibold text-gray-900">{{ n.title }}</h3>
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="badge" :class="typeBadgeClass(n.type)">{{ n.type }}</span>
+              <h3 class="text-[13px] font-semibold text-slate-900">{{ n.title }}</h3>
             </div>
-            <p class="text-sm text-gray-600">{{ n.message }}</p>
-            <p class="text-xs text-gray-400 mt-1">{{ formatDate(n.created_at) }}</p>
+            <p class="text-[13px] text-slate-600">{{ n.message }}</p>
+            <p class="text-[12px] text-slate-400 mt-1.5">{{ formatDate(n.created_at) }}</p>
           </div>
-          <button v-if="!n.is_read" @click="markAsRead(n.id)" class="text-xs text-blue-600 hover:text-blue-800 whitespace-nowrap">
+          <button v-if="!n.is_read" @click="markAsRead(n.id)" class="px-3 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors whitespace-nowrap">
             Mark read
           </button>
         </div>
       </div>
 
-      <div v-if="!notifications.data?.length" class="bg-white rounded-lg border border-gray-200 p-8 text-center text-sm text-gray-500">
+      <div v-if="!notifications.data?.length" class="card p-12 text-center text-slate-400">
         No notifications.
       </div>
     </div>

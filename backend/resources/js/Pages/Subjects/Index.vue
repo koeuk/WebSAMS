@@ -6,12 +6,7 @@ import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import Modal from '@/Components/Modal.vue';
 
-const props = defineProps({
-    subjects: Object,
-    courses: Array,
-    filters: Object,
-});
-
+const props = defineProps({ subjects: Object, courses: Array, filters: Object });
 const search = ref(props.filters?.search || '');
 const courseFilter = ref(props.filters?.course_id || '');
 
@@ -24,7 +19,6 @@ const applyFilters = () => {
 
 const showDeleteModal = ref(false);
 const subjectToDelete = ref(null);
-
 const confirmDelete = (subject) => { subjectToDelete.value = subject; showDeleteModal.value = true; };
 const deleteSubject = () => {
     router.delete(`/admin/subjects/${subjectToDelete.value.id}`, {
@@ -35,49 +29,67 @@ const deleteSubject = () => {
 
 <template>
     <AdminLayout>
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-900">Subjects</h2>
-            <Link href="/admin/subjects/create" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark">Create Subject</Link>
+        <div class="animate-fade-in">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Subjects</h2>
+                    <p class="text-sm text-slate-500 mt-1">Manage subjects across courses</p>
+                </div>
+                <Link href="/admin/subjects/create" class="btn-primary">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    Create Subject
+                </Link>
+            </div>
+
+            <FlashMessage />
+
+            <div class="card p-4 mb-6">
+                <div class="flex flex-wrap gap-3 items-end">
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Search</label>
+                        <input v-model="search" type="text" placeholder="Search subjects..." class="input-modern" @keyup.enter="applyFilters" />
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Course</label>
+                        <select v-model="courseFilter" class="select-modern" @change="applyFilters">
+                            <option value="">All Courses</option>
+                            <option v-for="c in courses" :key="c.id" :value="c.id">{{ c.name }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card overflow-hidden">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Name</th>
+                            <th class="text-left">Code</th>
+                            <th class="text-left">Course</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="subject in subjects.data" :key="subject.id">
+                            <td class="font-semibold text-slate-900">{{ subject.name }}</td>
+                            <td><span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200 font-mono">{{ subject.code }}</span></td>
+                            <td>{{ subject.course?.name }}</td>
+                            <td class="text-right">
+                                <div class="flex items-center justify-end gap-1">
+                                    <Link :href="`/admin/subjects/${subject.id}/edit`" class="px-2.5 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">Edit</Link>
+                                    <button @click="confirmDelete(subject)" class="px-2.5 py-1.5 text-[12px] font-medium text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-if="!subjects.data?.length">
+                            <td colspan="4" class="!text-center !py-12 text-slate-400">No subjects found.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <Pagination :links="subjects.links" />
+            <Modal :show="showDeleteModal" title="Delete Subject" :message="`Delete ${subjectToDelete?.name}?`" @confirm="deleteSubject" @cancel="showDeleteModal = false" />
         </div>
-
-        <FlashMessage />
-
-        <div class="flex gap-4 mb-4">
-            <input v-model="search" type="text" placeholder="Search subjects..." class="px-3 py-2 border border-gray-300 rounded-md text-sm w-64" @keyup.enter="applyFilters" />
-            <select v-model="courseFilter" class="px-3 py-2 border border-gray-300 rounded-md text-sm" @change="applyFilters">
-                <option value="">All Courses</option>
-                <option v-for="c in courses" :key="c.id" :value="c.id">{{ c.name }}</option>
-            </select>
-        </div>
-
-        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <table class="w-full">
-                <thead>
-                    <tr class="border-b border-gray-200 bg-gray-50">
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Name</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Code</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Course</th>
-                        <th class="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="subject in subjects.data" :key="subject.id" class="border-b border-gray-100">
-                        <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ subject.name }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ subject.code }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ subject.course?.name }}</td>
-                        <td class="px-6 py-3 text-right">
-                            <Link :href="`/admin/subjects/${subject.id}/edit`" class="text-sm text-blue-600 hover:text-blue-800 mr-3">Edit</Link>
-                            <button @click="confirmDelete(subject)" class="text-sm text-red-600 hover:text-red-800">Delete</button>
-                        </td>
-                    </tr>
-                    <tr v-if="!subjects.data?.length">
-                        <td colspan="4" class="px-6 py-8 text-center text-sm text-gray-500">No subjects found.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <Pagination :links="subjects.links" />
-        <Modal :show="showDeleteModal" title="Delete Subject" :message="`Delete ${subjectToDelete?.name}?`" @confirm="deleteSubject" @cancel="showDeleteModal = false" />
     </AdminLayout>
 </template>

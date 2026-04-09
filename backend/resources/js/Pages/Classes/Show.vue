@@ -12,7 +12,6 @@ const props = defineProps({
     availableStudents: Array,
 });
 
-// Assign subject form
 const subjectForm = useForm({
     school_class_id: props.schoolClass.id,
     subject_id: '',
@@ -25,7 +24,6 @@ const assignSubject = () => {
     });
 };
 
-// Enroll student form
 const studentForm = useForm({
     school_class_id: props.schoolClass.id,
     student_id: '',
@@ -37,7 +35,6 @@ const enrollStudent = () => {
     });
 };
 
-// Delete modals
 const showDeleteModal = ref(false);
 const deleteUrl = ref('');
 const deleteMessage = ref('');
@@ -63,106 +60,113 @@ const executeDelete = () => {
 
 <template>
     <AdminLayout>
-        <div class="flex items-center gap-4 mb-6">
-            <Link href="/admin/classes" class="text-sm text-gray-600 hover:text-gray-900">&larr; Back</Link>
-            <div>
-                <h2 class="text-2xl font-bold text-gray-900">{{ schoolClass.name }}</h2>
-                <p class="text-sm text-gray-600">{{ schoolClass.section ? `Section ${schoolClass.section} - ` : '' }}{{ schoolClass.academic_year }}</p>
+        <div class="animate-fade-in">
+            <div class="flex items-center gap-4 mb-8">
+                <Link href="/admin/classes" class="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition-colors">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"/></svg>
+                    Back
+                </Link>
+                <div class="h-5 w-px bg-slate-200"></div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ schoolClass.name }}</h2>
+                    <p class="text-sm text-slate-500 mt-0.5">{{ schoolClass.section ? `Section ${schoolClass.section} - ` : '' }}{{ schoolClass.academic_year }}</p>
+                </div>
             </div>
+
+            <FlashMessage />
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 stagger-children">
+                <!-- Subjects & Teachers -->
+                <div class="card overflow-hidden animate-fade-in-up">
+                    <div class="px-6 py-5 border-b border-slate-100">
+                        <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></div>
+                            Subjects & Teachers
+                        </h3>
+                    </div>
+
+                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+                        <form @submit.prevent="assignSubject" class="flex gap-2">
+                            <select v-model="subjectForm.subject_id" required class="select-modern flex-1">
+                                <option value="" disabled>Select Subject</option>
+                                <option v-for="s in availableSubjects" :key="s.id" :value="s.id">{{ s.name }} ({{ s.code }})</option>
+                            </select>
+                            <select v-model="subjectForm.teacher_id" required class="select-modern flex-1">
+                                <option value="" disabled>Select Teacher</option>
+                                <option v-for="t in availableTeachers" :key="t.id" :value="t.id">{{ t.name }}</option>
+                            </select>
+                            <button type="submit" :disabled="subjectForm.processing" class="btn-primary whitespace-nowrap !py-2">Assign</button>
+                        </form>
+                    </div>
+
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Subject</th>
+                                <th class="text-left">Teacher</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="cs in schoolClass.subjects" :key="cs.id">
+                                <td class="font-semibold text-slate-900">{{ cs.subject?.name }}</td>
+                                <td>{{ cs.teacher?.name }}</td>
+                                <td class="text-right">
+                                    <button @click="confirmRemoveSubject(cs)" class="px-2.5 py-1.5 text-[12px] font-medium text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors">Remove</button>
+                                </td>
+                            </tr>
+                            <tr v-if="!schoolClass.subjects?.length">
+                                <td colspan="3" class="!text-center !py-8 text-slate-400">No subjects assigned.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Enrolled Students -->
+                <div class="card overflow-hidden animate-fade-in-up">
+                    <div class="px-6 py-5 border-b border-slate-100">
+                        <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
+                            Enrolled Students
+                            <span class="ml-auto badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">{{ schoolClass.students?.length || 0 }}</span>
+                        </h3>
+                    </div>
+
+                    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+                        <form @submit.prevent="enrollStudent" class="flex gap-2">
+                            <select v-model="studentForm.student_id" required class="select-modern flex-1">
+                                <option value="" disabled>Select Student</option>
+                                <option v-for="s in availableStudents" :key="s.id" :value="s.id">{{ s.name }} ({{ s.email }})</option>
+                            </select>
+                            <button type="submit" :disabled="studentForm.processing" class="btn-primary whitespace-nowrap !py-2">Enroll</button>
+                        </form>
+                    </div>
+
+                    <table class="modern-table">
+                        <thead>
+                            <tr>
+                                <th class="text-left">Name</th>
+                                <th class="text-left">Email</th>
+                                <th class="text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="student in schoolClass.students" :key="student.id">
+                                <td class="font-semibold text-slate-900">{{ student.name }}</td>
+                                <td>{{ student.email }}</td>
+                                <td class="text-right">
+                                    <button @click="confirmRemoveStudent({ id: student.pivot?.id || student.id, student })" class="px-2.5 py-1.5 text-[12px] font-medium text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors">Remove</button>
+                                </td>
+                            </tr>
+                            <tr v-if="!schoolClass.students?.length">
+                                <td colspan="3" class="!text-center !py-8 text-slate-400">No students enrolled.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <Modal :show="showDeleteModal" title="Confirm Removal" :message="deleteMessage" @confirm="executeDelete" @cancel="showDeleteModal = false" />
         </div>
-
-        <FlashMessage />
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Subjects & Teachers -->
-            <div class="bg-white rounded-lg border border-gray-200">
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900">Subjects & Teachers</h3>
-                </div>
-
-                <!-- Assign form -->
-                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                    <form @submit.prevent="assignSubject" class="flex gap-2">
-                        <select v-model="subjectForm.subject_id" required class="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm">
-                            <option value="" disabled>Select Subject</option>
-                            <option v-for="s in availableSubjects" :key="s.id" :value="s.id">{{ s.name }} ({{ s.code }})</option>
-                        </select>
-                        <select v-model="subjectForm.teacher_id" required class="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm">
-                            <option value="" disabled>Select Teacher</option>
-                            <option v-for="t in availableTeachers" :key="t.id" :value="t.id">{{ t.name }}</option>
-                        </select>
-                        <button type="submit" :disabled="subjectForm.processing" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50 whitespace-nowrap">
-                            Assign
-                        </button>
-                    </form>
-                </div>
-
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-gray-200 bg-gray-50">
-                            <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Subject</th>
-                            <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Teacher</th>
-                            <th class="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="cs in schoolClass.subjects" :key="cs.id" class="border-b border-gray-100">
-                            <td class="px-6 py-3 text-sm text-gray-900">{{ cs.subject?.name }}</td>
-                            <td class="px-6 py-3 text-sm text-gray-600">{{ cs.teacher?.name }}</td>
-                            <td class="px-6 py-3 text-right">
-                                <button @click="confirmRemoveSubject(cs)" class="text-sm text-red-600 hover:text-red-800">Remove</button>
-                            </td>
-                        </tr>
-                        <tr v-if="!schoolClass.subjects?.length">
-                            <td colspan="3" class="px-6 py-6 text-center text-sm text-gray-500">No subjects assigned.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <!-- Enrolled Students -->
-            <div class="bg-white rounded-lg border border-gray-200">
-                <div class="px-6 py-4 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-900">Enrolled Students ({{ schoolClass.students?.length || 0 }})</h3>
-                </div>
-
-                <!-- Enroll form -->
-                <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                    <form @submit.prevent="enrollStudent" class="flex gap-2">
-                        <select v-model="studentForm.student_id" required class="flex-1 px-3 py-2 border border-gray-300 rounded-md text-sm">
-                            <option value="" disabled>Select Student</option>
-                            <option v-for="s in availableStudents" :key="s.id" :value="s.id">{{ s.name }} ({{ s.email }})</option>
-                        </select>
-                        <button type="submit" :disabled="studentForm.processing" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50 whitespace-nowrap">
-                            Enroll
-                        </button>
-                    </form>
-                </div>
-
-                <table class="w-full">
-                    <thead>
-                        <tr class="border-b border-gray-200 bg-gray-50">
-                            <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Name</th>
-                            <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Email</th>
-                            <th class="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="student in schoolClass.students" :key="student.id" class="border-b border-gray-100">
-                            <td class="px-6 py-3 text-sm text-gray-900">{{ student.name }}</td>
-                            <td class="px-6 py-3 text-sm text-gray-600">{{ student.email }}</td>
-                            <td class="px-6 py-3 text-right">
-                                <button @click="confirmRemoveStudent({ id: student.pivot?.id || student.id, student })" class="text-sm text-red-600 hover:text-red-800">Remove</button>
-                            </td>
-                        </tr>
-                        <tr v-if="!schoolClass.students?.length">
-                            <td colspan="3" class="px-6 py-6 text-center text-sm text-gray-500">No students enrolled.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <Modal :show="showDeleteModal" title="Confirm Removal" :message="deleteMessage" @confirm="executeDelete" @cancel="showDeleteModal = false" />
     </AdminLayout>
 </template>

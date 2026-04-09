@@ -16,53 +16,61 @@ const deleteSlot = () => {
     });
 };
 
-const typeBadge = (type) => ({
-    'bg-blue-100 text-blue-800': type === 'morning',
-    'bg-orange-100 text-orange-800': type === 'afternoon',
-    'bg-purple-100 text-purple-800': type === 'evening',
+const typeBadgeClass = (type) => ({
+    'bg-sky-50 text-sky-700 ring-1 ring-sky-200': type === 'morning',
+    'bg-amber-50 text-amber-700 ring-1 ring-amber-200': type === 'afternoon',
+    'bg-violet-50 text-violet-700 ring-1 ring-violet-200': type === 'evening',
 });
 </script>
 
 <template>
     <AdminLayout>
-        <div class="flex items-center justify-between mb-6">
-            <h2 class="text-2xl font-bold text-gray-900">Time Slots</h2>
-            <Link href="/admin/time-slots/create" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark">Create Time Slot</Link>
+        <div class="animate-fade-in">
+            <div class="flex items-center justify-between mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Time Slots</h2>
+                    <p class="text-sm text-slate-500 mt-1">Manage class time periods</p>
+                </div>
+                <Link href="/admin/time-slots/create" class="btn-primary">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                    Create Time Slot
+                </Link>
+            </div>
+
+            <FlashMessage />
+
+            <div class="card overflow-hidden">
+                <table class="modern-table">
+                    <thead>
+                        <tr>
+                            <th class="text-left">Name</th>
+                            <th class="text-left">Start</th>
+                            <th class="text-left">End</th>
+                            <th class="text-left">Type</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="ts in timeSlots" :key="ts.id">
+                            <td class="font-semibold text-slate-900">{{ ts.name }}</td>
+                            <td class="font-mono text-[13px]">{{ ts.start_time?.slice(0,5) }}</td>
+                            <td class="font-mono text-[13px]">{{ ts.end_time?.slice(0,5) }}</td>
+                            <td><span class="badge" :class="typeBadgeClass(ts.type)">{{ ts.type }}</span></td>
+                            <td class="text-right">
+                                <div class="flex items-center justify-end gap-1">
+                                    <Link :href="`/admin/time-slots/${ts.id}/edit`" class="px-2.5 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">Edit</Link>
+                                    <button @click="confirmDelete(ts)" class="px-2.5 py-1.5 text-[12px] font-medium text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr v-if="!timeSlots?.length">
+                            <td colspan="5" class="!text-center !py-12 text-slate-400">No time slots.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <Modal :show="showDeleteModal" title="Delete Time Slot" :message="`Delete ${toDelete?.name}?`" @confirm="deleteSlot" @cancel="showDeleteModal = false" />
         </div>
-
-        <FlashMessage />
-
-        <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-            <table class="w-full">
-                <thead>
-                    <tr class="border-b border-gray-200 bg-gray-50">
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Name</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Start</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">End</th>
-                        <th class="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase">Type</th>
-                        <th class="text-right px-6 py-3 text-xs font-medium text-gray-500 uppercase">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="ts in timeSlots" :key="ts.id" class="border-b border-gray-100">
-                        <td class="px-6 py-3 text-sm font-medium text-gray-900">{{ ts.name }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ ts.start_time?.slice(0,5) }}</td>
-                        <td class="px-6 py-3 text-sm text-gray-600">{{ ts.end_time?.slice(0,5) }}</td>
-                        <td class="px-6 py-3">
-                            <span class="inline-flex px-2 py-1 text-xs font-medium rounded-full" :class="typeBadge(ts.type)">{{ ts.type }}</span>
-                        </td>
-                        <td class="px-6 py-3 text-right">
-                            <Link :href="`/admin/time-slots/${ts.id}/edit`" class="text-sm text-blue-600 hover:text-blue-800 mr-3">Edit</Link>
-                            <button @click="confirmDelete(ts)" class="text-sm text-red-600 hover:text-red-800">Delete</button>
-                        </td>
-                    </tr>
-                    <tr v-if="!timeSlots?.length">
-                        <td colspan="5" class="px-6 py-8 text-center text-sm text-gray-500">No time slots.</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <Modal :show="showDeleteModal" title="Delete Time Slot" :message="`Delete ${toDelete?.name}?`" @confirm="deleteSlot" @cancel="showDeleteModal = false" />
     </AdminLayout>
 </template>

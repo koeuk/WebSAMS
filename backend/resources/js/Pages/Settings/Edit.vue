@@ -18,72 +18,71 @@ const handleLogo = (e) => {
 };
 
 const form = useForm({
-    university_name: props.settings.university_name || '',
-    university_address: props.settings.university_address || '',
-    university_phone: props.settings.university_phone || '',
-    university_email: props.settings.university_email || '',
-    university_website: props.settings.university_website || '',
-    university_logo: null,
+    university_name: props.settings.university_name || '', university_address: props.settings.university_address || '',
+    university_phone: props.settings.university_phone || '', university_email: props.settings.university_email || '',
+    university_website: props.settings.university_website || '', university_logo: null,
 });
 
-const submit = () => {
-    form.post('/admin/settings', {
-        _method: 'PUT',
-        forceFormData: true,
-    });
-};
+const submit = () => { form.post('/admin/settings', { _method: 'PUT', forceFormData: true }); };
 </script>
 
 <template>
     <AdminLayout>
-        <h2 class="text-2xl font-bold text-gray-900 mb-6">University Settings</h2>
+        <div class="animate-fade-in">
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">University Settings</h2>
+                <p class="text-sm text-slate-500 mt-1">Configure your institution's information</p>
+            </div>
 
-        <FlashMessage />
+            <FlashMessage />
 
-        <div class="max-w-xl">
-            <div class="bg-white rounded-lg border border-gray-200 p-6">
-                <form @submit.prevent="submit" class="space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">University Logo</label>
-                        <div class="flex items-center gap-4">
-                            <img v-if="logoPreview" :src="logoPreview" class="h-20 object-contain border rounded" />
-                            <div v-else class="h-20 w-20 bg-gray-200 flex items-center justify-center text-gray-400 text-xs rounded">No logo</div>
-                            <input type="file" accept="image/*" @change="handleLogo" class="text-sm" />
-                        </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">University Name</label>
-                        <input v-model="form.university_name" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" placeholder="e.g. BELTEI International University" />
-                        <p v-if="form.errors.university_name" class="text-sm text-red-600 mt-1">{{ form.errors.university_name }}</p>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Address</label>
-                        <textarea v-model="form.university_address" rows="2" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" />
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-4">
+            <div class="max-w-xl">
+                <div class="card p-8">
+                    <form @submit.prevent="submit" class="space-y-5">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                            <input v-model="form.university_phone" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" />
+                            <label class="block text-[13px] font-medium text-slate-600 mb-1.5">University Logo</label>
+                            <div class="flex items-center gap-4">
+                                <img v-if="logoPreview" :src="logoPreview" class="h-20 object-contain rounded-xl ring-2 ring-slate-100" />
+                                <div v-else class="h-20 w-20 bg-slate-100 flex items-center justify-center text-slate-400 text-xs rounded-xl">No logo</div>
+                                <label class="btn-secondary cursor-pointer text-[13px]">
+                                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    Upload
+                                    <input type="file" accept="image/*" @change="handleLogo" class="hidden" />
+                                </label>
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input v-model="form.university_email" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" />
-                            <p v-if="form.errors.university_email" class="text-sm text-red-600 mt-1">{{ form.errors.university_email }}</p>
+                            <label class="block text-[13px] font-medium text-slate-600 mb-1.5">University Name</label>
+                            <input v-model="form.university_name" type="text" class="input-modern" placeholder="e.g. BELTEI International University" />
+                            <p v-if="form.errors.university_name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.university_name }}</p>
                         </div>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">Website</label>
-                        <input v-model="form.university_website" type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" placeholder="e.g. https://beltei.edu.kh" />
-                    </div>
-
-                    <button type="submit" :disabled="form.processing" class="px-4 py-2 text-sm font-medium text-white bg-beltei rounded-md hover:bg-beltei-dark disabled:opacity-50">
-                        {{ form.processing ? 'Saving...' : 'Save Settings' }}
-                    </button>
-                </form>
+                        <div>
+                            <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Address</label>
+                            <textarea v-model="form.university_address" rows="2" class="input-modern" />
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Phone</label>
+                                <input v-model="form.university_phone" type="text" class="input-modern" />
+                            </div>
+                            <div>
+                                <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Email</label>
+                                <input v-model="form.university_email" type="email" class="input-modern" />
+                                <p v-if="form.errors.university_email" class="text-[12px] text-rose-500 mt-1">{{ form.errors.university_email }}</p>
+                            </div>
+                        </div>
+                        <div>
+                            <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Website</label>
+                            <input v-model="form.university_website" type="text" class="input-modern" placeholder="e.g. https://beltei.edu.kh" />
+                        </div>
+                        <div class="pt-2">
+                            <button type="submit" :disabled="form.processing" class="btn-primary">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+                                {{ form.processing ? 'Saving...' : 'Save Settings' }}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </AdminLayout>
