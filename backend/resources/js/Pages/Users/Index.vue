@@ -75,7 +75,7 @@ const statusBadgeClass = (status) => ({
             <!-- Filters -->
             <div class="card p-4 mb-6">
                 <div class="flex flex-wrap gap-3 items-end">
-                    <div class="flex-1 min-w-[200px]">
+                    <div class="flex-1 min-w-50">
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Search</label>
                         <input
                             v-model="search"
@@ -150,7 +150,7 @@ const statusBadgeClass = (status) => ({
                             </td>
                         </tr>
                         <tr v-if="!users.data?.length">
-                            <td colspan="7" class="!text-center !py-12 text-slate-400">No users found.</td>
+                            <td colspan="7" class="text-center! py-12! text-slate-400">No users found.</td>
                         </tr>
                     </tbody>
                 </table>

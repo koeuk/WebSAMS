@@ -148,7 +148,7 @@ const statusClass = (status) => ({
                                 </td>
                             </tr>
                             <tr v-if="!recentAttendance?.length">
-                                <td colspan="5" class="!text-center !py-12 text-slate-400">No attendance records yet.</td>
+                                <td colspan="5" class="text-center! py-12! text-slate-400">No attendance records yet.</td>
                             </tr>
                         </tbody>
                     </table>
