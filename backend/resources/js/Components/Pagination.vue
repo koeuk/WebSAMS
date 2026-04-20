@@ -8,20 +8,21 @@ defineProps({
 
 <template>
     <nav v-if="links && links.length > 3" class="flex items-center justify-center gap-1 mt-6">
-        <template v-for="link in links" :key="link.label">
+        <template v-for="link in links">
             <Link
                 v-if="link.url"
+                :key="`a-${link.label}`"
                 :href="link.url"
-                class="px-3 py-1 text-sm rounded-md border transition-colors"
+                class="px-3.5 py-1.5 text-sm font-medium rounded-lg border transition-colors"
                 :class="link.active
-                    ? 'bg-beltei text-white border-beltei'
-                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'"
-                v-html="link.label"
+                    ? 'bg-beltei text-white border-beltei shadow-sm'
+                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'"
                 preserve-scroll
-            />
+            ><span v-html="link.label" /></Link>
             <span
                 v-else
-                class="px-3 py-1 text-sm text-gray-400"
+                :key="`b-${link.label}`"
+                class="px-3.5 py-1.5 text-sm text-slate-300"
                 v-html="link.label"
             />
         </template>
