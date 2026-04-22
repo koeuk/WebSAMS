@@ -71,13 +71,13 @@ Lastly, I deeply extend my appreciation to the participants of my survey questio
 
 Student attendance is a fundamental indicator of academic engagement and plays a critical role in determining student performance, examination eligibility, and overall institutional accountability. Despite its importance, many educational institutions still rely on traditional, paper-based attendance methods that are time-consuming, error-prone, and difficult to analyze. This study investigates the design and development of a **Web-Based Student Attendance Management System** intended to improve the accuracy, efficiency, and transparency of attendance recording and reporting in higher education institutions.
 
-Traditional methods such as roll calls and manual attendance sheets consume significant lecture time, are vulnerable to loss or damage, and produce inconsistent data that limits effective academic decision-making. To address these challenges, this research proposes a digital solution that integrates **QR code–based attendance recording, role-based dashboards for administrators, teachers, and students, online excuse request workflows, real-time notifications, and automated reporting**. The system was developed using a modern web stack consisting of **Laravel (PHP) on the backend, Vue.js with Inertia.js for the admin portal, and Nuxt 3 for the teacher and student portals**, communicating through secure REST APIs with **Laravel Sanctum** token-based authentication.
+Traditional methods such as roll calls and manual attendance sheets consume significant lecture time, are vulnerable to loss or damage, and produce inconsistent data that limits effective academic decision-making. To address these challenges, this research proposes a digital solution that integrates **token-based attendance recording, role-based dashboards for administrators, teachers, and students, online excuse request workflows, real-time notifications, and automated reporting**. The system was developed using a modern web stack consisting of **Laravel (PHP) on the backend, Vue.js with Inertia.js for the admin portal, and Nuxt 3 for the teacher and student portals**, communicating through secure REST APIs with **Laravel Sanctum** token-based authentication.
 
-The study employed a **mixed-method research approach**, combining questionnaires distributed to students and teachers with semi-structured interviews and direct observation of attendance practices. A total of 43 respondents were involved, including administrators, teachers, and students. The findings reveal that manual attendance processes suffer from high error rates, delayed reporting, and limited transparency, while the proposed Web-Based Student Attendance Management System significantly reduces administrative workload, improves data accuracy by approximately 95%, and reduces attendance-taking time by an average of 70%. The system also enhances student accountability through self-service access to attendance records and streamlines teacher workflows through automated class rosters, QR session generation, and excuse management.
+The study employed a **mixed-method research approach**, combining questionnaires distributed to students and teachers with semi-structured interviews and direct observation of attendance practices. A total of 43 respondents were involved, including administrators, teachers, and students. The findings reveal that manual attendance processes suffer from high error rates, delayed reporting, and limited transparency, while the proposed Web-Based Student Attendance Management System significantly reduces administrative workload, improves data accuracy by approximately 95%, and reduces attendance-taking time by an average of 70%. The system also enhances student accountability through self-service access to attendance records and streamlines teacher workflows through automated class rosters, attendance token generation, and excuse management.
 
 The results demonstrate that implementing a web-based student attendance management system can modernize academic administration, reduce errors, and improve both teaching time utilization and student engagement. Beyond attendance recording, the system provides a foundation for data-driven academic interventions and supports the broader digital transformation of educational institutions in Cambodia and similar developing-country contexts.
 
-***Keywords:*** *Student Attendance Management, Web-Based System, QR Code Attendance, Laravel, Vue.js, Nuxt 3, Academic Administration, Educational Technology, BELTEI International University.*
+***Keywords:*** *Student Attendance Management, Web-Based System, Token-Based Attendance, Laravel, Vue.js, Nuxt 3, Academic Administration, Educational Technology, BELTEI International University.*
 
 ---
 
@@ -153,7 +153,7 @@ The results demonstrate that implementing a web-based student attendance managem
 | Figure 4 | Login Page | 17 |
 | Figure 5 | User Management Page | 17 |
 | Figure 6 | Class & Subject Management Page | 17 |
-| Figure 7 | QR Attendance Session Page | 18 |
+| Figure 7 | Attendance Token Session Page | 18 |
 | Figure 8 | Student Attendance View | 18 |
 | Figure 9 | Teacher Dashboard | 18 |
 | Figure 10 | Excuse Request Workflow | 18 |
@@ -165,7 +165,7 @@ The results demonstrate that implementing a web-based student attendance managem
 | Figure 16 | Respondents of Question 5 (Errors Experienced) | 23 |
 | Figure 17 | Respondents of Question 6 (Satisfaction Level) | 24 |
 | Figure 18 | Respondents of Question 7 (Willingness to Adopt) | 24 |
-| Figure 19 | Respondents of Question 8 (QR Preference) | 25 |
+| Figure 19 | Respondents of Question 8 (Digital Method Preference) | 25 |
 | Figure 20 | Respondents of Question 9 (Device Preference) | 26 |
 | Figure 21 | Respondents of Question 10 (Perceived Usefulness) | 27 |
 | Figure 22 | Respondents of Question 11 (Perceived Ease of Use) | 28 |
@@ -181,7 +181,6 @@ The results demonstrate that implementing a web-based student attendance managem
 | Abbreviation | Meaning |
 |--------------|---------|
 | **SAMS** | Student Attendance Management System |
-| **QR** | Quick Response (Code) |
 | **UI** | User Interface |
 | **UX** | User Experience |
 | **API** | Application Programming Interface |
@@ -254,7 +253,7 @@ The main goal of this research is to design, develop, and evaluate a Web-Based S
 - Analyzing the advantages and challenges of Web-Based Student Attendance Management System compared to traditional attendance management methods.
 - Conducting a thorough literature review on student attendance management, web-based academic systems, and educational technology adoption.
 - Identifying and analyzing the key challenges teachers and administrators face in managing student attendance.
-- Evaluating the potential benefits of Web-Based Student Attendance Management System in addressing these challenges through QR-based attendance, excuse workflows, and real-time reporting.
+- Evaluating the potential benefits of Web-Based Student Attendance Management System in addressing these challenges through token-based attendance, excuse workflows, and real-time reporting.
 - Developing a framework for assessing the effectiveness of Web-Based Student Attendance Management System in improving academic administration.
 - Providing recommendations for institutions considering the adoption of web-based attendance systems.
 
@@ -275,13 +274,13 @@ The findings will be valuable for software developers, academic administrators, 
 
 ## 1.4 Scope and Limitation
 
-The study focuses on the design, implementation, and evaluation of a Web-Based Student Attendance Management System in the context of higher education institutions, with key areas including QR-based attendance recording, role-based access for administrators/teachers/students, excuse request workflows, announcement and notification systems, and reporting.
+The study focuses on the design, implementation, and evaluation of a Web-Based Student Attendance Management System in the context of higher education institutions, with key areas including token-based attendance recording, role-based access for administrators/teachers/students, excuse request workflows, announcement and notification systems, and reporting.
 
 ### 1.4.1 Scope
 
-This study focuses on the analysis, design, and evaluation of a Web-Based Student Attendance Management System for a higher education institution. The scope of the research covers the management of student attendance across classes and sessions, including recording of present, absent, late, and excused states, as well as QR-based session attendance, excuse request submission and approval, and real-time notifications. The study examines existing manual attendance management practices to identify their strengths and weaknesses in terms of accuracy, efficiency, and reporting capability.
+This study focuses on the analysis, design, and evaluation of a Web-Based Student Attendance Management System for a higher education institution. The scope of the research covers the management of student attendance across classes and sessions, including recording of present, absent, late, and excused states, as well as token-based session attendance, excuse request submission and approval, and real-time notifications. The study examines existing manual attendance management practices to identify their strengths and weaknesses in terms of accuracy, efficiency, and reporting capability.
 
-Data for the study were collected from administrators, teachers, and students using questionnaires, interviews, and direct observation. The research emphasizes the development and evaluation of a computerized system to improve attendance recording, reduce errors, enhance transparency, and support academic decision-making. The system is implemented using Laravel 13 for the backend API and admin portal, Vue.js 3.5 with Inertia.js for the admin interface, and Nuxt 3.16 for the teacher and student portals.
+Data for the study were collected from administrators, teachers, and students using questionnaires, interviews, and direct observation. The research emphasizes the development and evaluation of a computerized system to improve attendance recording, reduce errors, enhance transparency, and support academic decision-making. The system is implemented using Laravel 13 for the backend API and admin portal, Vue.js 3.5 with Inertia.js for the admin interface, and Nuxt 3.16 for the teacher and student portals. Attendance is recorded through a **session token** mechanism — the teacher generates a time-limited token that students submit to mark themselves present.
 
 ### 1.4.2 Limitations of the Study
 
@@ -321,17 +320,17 @@ This section defines important terminologies and reviews relevant theories perta
 
 **Web-Based Information Systems** refer to software systems that are accessed through web browsers and run on standard web protocols such as HTTP and HTTPS. These systems centralize data in a server-side database and allow multiple concurrent users across different locations and devices to interact with the same up-to-date information. In the context of attendance management, web-based systems eliminate the duplication and loss associated with paper records, provide real-time access to attendance data, and support integration with other academic platforms such as Student Information Systems (SIS) and Learning Management Systems (LMS).
 
-**A Web-Based Student Attendance Management System** is an integrated platform that automates and simplifies attendance-related operations, including session creation, QR-based attendance recording, manual entry, excuse request workflows, announcements, and reporting. Through the centralization of attendance data and the automation of repetitive tasks, Web-Based Student Attendance Management System is designed to increase accuracy, save instructional time, and improve transparency. The system provides role-based dashboards for administrators, teachers, and students, enabling each user to access only the functions appropriate to their role. Web-Based Student Attendance Management System is therefore a crucial tool for contemporary academic administration, as its goals align with institutional priorities such as efficiency, compliance with attendance policies, and improved student engagement.
+**A Web-Based Student Attendance Management System** is an integrated platform that automates and simplifies attendance-related operations, including session creation, token-based attendance recording, manual entry, excuse request workflows, announcements, and reporting. Through the centralization of attendance data and the automation of repetitive tasks, Web-Based Student Attendance Management System is designed to increase accuracy, save instructional time, and improve transparency. The system provides role-based dashboards for administrators, teachers, and students, enabling each user to access only the functions appropriate to their role. Web-Based Student Attendance Management System is therefore a crucial tool for contemporary academic administration, as its goals align with institutional priorities such as efficiency, compliance with attendance policies, and improved student engagement.
 
-**Token-Based Attendance (with QR Delivery)** refers to a method whereby a teacher generates a time-limited attendance token which is displayed as a Quick Response (QR) code and as human-readable text. Students mark themselves present by submitting the token through the student portal. The token can be obtained in two ways: (1) by scanning the displayed QR code using the **phone's native camera app**, which opens the student portal URL with the token pre-filled, or (2) by **pasting or typing the token manually** into the attendance page. The system itself does not include an in-app camera scanner; the QR code serves solely as a delivery mechanism for the token. This design keeps the implementation lightweight, avoids camera-permission friction, and works reliably on any smartphone regardless of operating system.
+**Token-Based Attendance** refers to a method whereby a teacher generates a short, time-limited attendance token (a random alphanumeric code) tied to a specific class session. Students mark themselves present by opening the attendance page in the student portal and submitting the token — either by pasting it or by typing it manually. Because the token expires after a configurable duration (15–120 minutes), only students physically present during the session window can use it. This design is lightweight, requires no special hardware, works on any device with a browser, and avoids the camera-permission friction of scanner-based solutions.
 
 ### Pertinent Theories
 
 **Technology Acceptance Model (TAM):** Introduced by Davis (1989), TAM describes how an organization's adoption of technology, such as Web-Based Student Attendance Management System, is influenced by two primary factors — **perceived usefulness** and **perceived ease of use**. The application of TAM to Web-Based Student Attendance Management System adoption demonstrates how teacher and student opinions on the system's usefulness and intuitive user interface may either support or impede effective deployment. This approach emphasizes how crucial it is to design Web-Based Student Attendance Management System interfaces that meet the requirements and expectations of non-technical users such as students and teaching staff.
 
-**Diffusion of Innovation Theory (Rogers, 2003):** This theory explains how, why, and at what rate new technologies spread through user populations. Applied to Web-Based Student Attendance Management System, it highlights the importance of five attributes — **relative advantage** (over manual methods), **compatibility** (with existing academic workflows), **simplicity**, **trialability**, and **observability**. Institutions that can demonstrate quick wins — such as time saved per class when marking attendance via QR code — are more likely to experience rapid adoption.
+**Diffusion of Innovation Theory (Rogers, 2003):** This theory explains how, why, and at what rate new technologies spread through user populations. Applied to Web-Based Student Attendance Management System, it highlights the importance of five attributes — **relative advantage** (over manual methods), **compatibility** (with existing academic workflows), **simplicity**, **trialability**, and **observability**. Institutions that can demonstrate quick wins — such as time saved per class when marking attendance via session token — are more likely to experience rapid adoption.
 
-**Role-Based Access Control (RBAC):** RBAC is a security principle in which system permissions are granted to roles rather than to individual users. In Web-Based Student Attendance Management System, the roles of administrator, teacher, and student each have distinct permissions: administrators manage users, classes, subjects, and semesters; teachers record attendance, create QR sessions, post announcements, and review excuse requests; students view their own attendance, submit excuses, and scan QR codes. RBAC is essential for protecting the integrity of attendance data and ensuring that students cannot, for example, modify their own records.
+**Role-Based Access Control (RBAC):** RBAC is a security principle in which system permissions are granted to roles rather than to individual users. In Web-Based Student Attendance Management System, the roles of administrator, teacher, and student each have distinct permissions: administrators manage users, classes, subjects, and semesters; teachers record attendance, create attendance token sessions, post announcements, and review excuse requests; students view their own attendance, submit excuses, and submit tokens to mark themselves present. RBAC is essential for protecting the integrity of attendance data and ensuring that students cannot, for example, modify their own records.
 
 **Information Systems Success Model (DeLone & McLean):** This model evaluates the success of an information system based on system quality, information quality, service quality, use, user satisfaction, and net benefits. Applied to Web-Based Student Attendance Management System, these dimensions inform how the system should be evaluated post-deployment to ensure it delivers ongoing value.
 
@@ -343,7 +342,7 @@ Scholarly perspectives, arguments, and conclusions about student attendance mana
 
 - **Benefits of Integrated Digital Systems:** The literature widely acknowledges that web-based attendance systems increase accuracy, facilitate real-time tracking, and combine attendance, class schedule, and student enrollment data in a single centralized platform. Studies have found that institutions that adopted automated attendance systems saw notable time savings for teaching staff, reduced administrative costs, and improved data integrity. These benefits free teachers to focus on instruction and pedagogy rather than clerical tasks.
 
-- **QR Code–Based Attendance** has emerged in recent literature as an effective middle ground between fully automated biometric systems (which are costly and raise privacy concerns) and manual roll calls. Students scan a teacher-generated QR code that is unique to each session and valid for a short time window, ensuring that attendance can only be marked when physically present. Research by Patel (2021) suggests that QR-based attendance systems are low-cost, easy to deploy, and well-suited to mobile-first student populations.
+- **Token-Based Attendance** has emerged in recent literature as an effective middle ground between fully automated biometric systems (which are costly and raise privacy concerns) and manual roll calls. A teacher-generated token that is unique to each session and valid for a short time window ensures that attendance can only be marked when physically present. Research by Patel (2021) suggests that session-token attendance systems are low-cost, easy to deploy, and well-suited to mobile-first student populations.
 
 - **Convergence vs. Customization in Academic Systems:** Web-Based Student Attendance Management System has the potential to either standardize attendance practices across institutions (convergence) or accommodate local institutional rules (customization). Ralston (2008) argues for the value of convergence in ensuring consistency and auditability, while also allowing cross-vergence through configurable policies such as grace periods, excuse categories, and eligibility thresholds.
 
@@ -369,7 +368,7 @@ The research model illustrates the logical process through which student attenda
 
 The process begins with the **independent variables**, which represent the key factors affecting attendance management. These include attendance recording method (paper vs digital), class size, schedule complexity, data integration with student enrollment, and role-based access policy. These factors reflect the existing practices and technical capabilities within the institution that directly influence how attendance data is managed.
 
-These independent variables feed into the **Web-Based Student Attendance Management System**, which functions as an intervening variable in the model. Web-Based Student Attendance Management System acts as a mediating mechanism that transforms attendance inputs into effective operational outputs. Through features such as QR session generation, mobile access, real-time reporting, excuse workflows, and secure role-based authentication, the system enhances the efficiency, reliability, and transparency of attendance management processes.
+These independent variables feed into the **Web-Based Student Attendance Management System**, which functions as an intervening variable in the model. Web-Based Student Attendance Management System acts as a mediating mechanism that transforms attendance inputs into effective operational outputs. Through features such as attendance token session generation, mobile access, real-time reporting, excuse workflows, and secure role-based authentication, the system enhances the efficiency, reliability, and transparency of attendance management processes.
 
 The effectiveness of Web-Based Student Attendance Management System then leads to improvements in the **dependent variables**, which represent the outcomes of the system's implementation. These outcomes include improved accuracy of attendance records, increased teaching time, reduced administrative overhead, timely reporting, higher student engagement, and improved institutional performance.
 
@@ -386,7 +385,7 @@ The effectiveness of Web-Based Student Attendance Management System then leads t
 >                    ▼
 > ┌────────────────────────────────────────┐
 > │   INTERVENING VARIABLE      │
-> │  • QR Session Generation               │
+> │  • Token Session Generation            │
 > │  • Mobile Access                       │
 > │  • Real-Time Reporting                 │
 > │  • Excuse Request Workflow             │
@@ -464,8 +463,8 @@ The User Interface (UI) scope of the proposed Web-Based Student Attendance Manag
 **Key UI design considerations include:**
 
 - A **unified admin dashboard** (Laravel + Inertia + Vue) for administrators to view attendance statistics, manage users, classes, subjects, semesters, and schedules, and generate reports.
-- A **teacher portal** (Nuxt 3) with dashboards showing assigned classes, a manual attendance recording page, a QR session generator for contact-free attendance, an excuse request review page, announcement management, and a notifications center.
-- A **student portal** (Nuxt 3) with a personal dashboard, an attendance history view, a QR token entry page for marking attendance (token pasted manually or auto-filled via a scanned QR URL), an excuse request submission form, and an announcements/notifications feed.
+- A **teacher portal** (Nuxt 3) with dashboards showing assigned classes, a manual attendance recording page, an attendance token session generator for contact-free attendance, an excuse request review page, announcement management, and a notifications center.
+- A **student portal** (Nuxt 3) with a personal dashboard, an attendance history view, a token entry page for marking attendance, an excuse request submission form, and an announcements/notifications feed.
 - **Role-based access control** to ensure that each user sees only the screens and actions permitted by their role.
 - **Responsive layouts** powered by TailwindCSS to support both desktop and mobile usage — particularly important for students who primarily use mobile devices.
 
@@ -491,8 +490,8 @@ The User Interface (UI) scope of the proposed Web-Based Student Attendance Manag
 > **Figure 3. Admin Dashboard**
 > The dashboard provides charts and summary statistics of attendance rates, total students, active classes, and recent notifications.
 
-> **Figure 7. QR Attendance Session Page**
-> Teachers generate an attendance token valid for a configurable duration (15–120 minutes). The token is displayed both as a QR code and as human-readable text. Students submit the token through their portal — either by scanning the QR with their phone's native camera (which opens a URL that auto-fills the token) or by pasting/typing the token manually.
+> **Figure 7. Attendance Token Session Page**
+> Teachers generate a time-limited attendance token valid for a configurable duration (15–120 minutes). The token is displayed as human-readable text for teachers to share verbally or on a projected slide. Students submit the token through their portal to mark themselves present.
 
 #### Frontend Technologies
 
@@ -516,13 +515,13 @@ The User Interface (UI) scope of the proposed Web-Based Student Attendance Manag
 > Students submit excuse requests with optional attachments; teachers review and approve or reject them, updating the attendance record automatically.
 
 > **Figure 11. Database Diagram**
-> An Entity-Relationship Diagram showing the 15 primary entities and their relationships, including User, Course, Subject, SchoolClass, ClassSubject, ClassStudent, Semester, Schedule, TimeSlot, Attendance, ExcuseRequest, QrSession, Announcement, Notification, and Setting.
+> An Entity-Relationship Diagram showing the 15 primary entities and their relationships, including User, Course, Subject, SchoolClass, ClassSubject, ClassStudent, Semester, Schedule, TimeSlot, Attendance, ExcuseRequest, AttendanceToken, Announcement, Notification, and Setting.
 
 ### 3.1.5 Research Data Scope of UX
 
 The User Experience (UX) scope focuses on making attendance-related tasks as fast and error-free as possible for all three user roles. Key UX goals include:
 
-- **Minimizing time to record attendance**: a full class should be marked in under one minute via QR.
+- **Minimizing time to record attendance**: a full class should be marked in under one minute via token entry.
 - **Reducing cognitive load**: each page focuses on a single primary action.
 - **Providing immediate feedback**: success/error messages, loading states, and toast notifications confirm each action.
 - **Supporting mobile-first usage**: students are expected to use phones, so layouts and touch targets are optimized for small screens.
@@ -655,20 +654,20 @@ Responses were analyzed using descriptive statistics, including frequency counts
 
 ---
 
-#### Question 8: Do you prefer QR code scanning over paper sign-in?
+#### Question 8: Do you prefer a digital attendance method over paper sign-in?
 
 > **Figure 19. Respondents of Question 8**
 
 | Preference | Count | Percentage |
 |------------|-------|------------|
-| Strongly prefer QR | 19 | 44.2% |
-| Prefer QR | 17 | 39.5% |
+| Strongly prefer digital | 19 | 44.2% |
+| Prefer digital | 17 | 39.5% |
 | Neutral | 5 | 11.6% |
 | Prefer paper | 2 | 4.7% |
 | Strongly prefer paper | 0 | 0.0% |
 | **Total** | **43** | **100%** |
 
-**Analysis:** 83.7% prefer QR-based attendance, supporting the QR-centric design of Web-Based Student Attendance Management System.
+**Analysis:** 83.7% prefer a digital attendance method, supporting the token-based design of the Web-Based Student Attendance Management System.
 
 ---
 
@@ -894,7 +893,7 @@ Paper records have no meaningful audit trail. There is no way to determine who s
 
 ### 4.3.1 Implementation of a Web-Based Student Attendance Management System
 
-The proposed Web-Based Student Attendance Management System replaces the paper process with a centralized digital system. Teachers create sessions through the teacher portal and either record attendance manually by checking off a roster or generate a time-limited attendance token (displayed as a QR code for convenient URL delivery). Students submit the token through their portal to mark themselves present. All records are stored centrally in a relational database and are immediately available to administrators and the students themselves.
+The proposed Web-Based Student Attendance Management System replaces the paper process with a centralized digital system. Teachers create sessions through the teacher portal and either record attendance manually by checking off a roster or generate a time-limited attendance token. Students submit the token through their portal to mark themselves present. All records are stored centrally in a relational database and are immediately available to administrators and the students themselves.
 
 ### 4.3.2 Integration, Training, and Real-Time Reporting
 
@@ -910,7 +909,7 @@ The system includes a notifications module that alerts students when their atten
 
 | Category | Current System | Web-Based Student Attendance Management System Solution |
 |----------|---------------|------------------|
-| Recording | Paper sign-in | QR + manual roster |
+| Recording | Paper sign-in | Token + manual roster |
 | Data Entry | Duplicated (paper→spreadsheet) | Single source of truth |
 | Errors | 62.8% rate | < 5% projected |
 | Time per class | 13.5 min | 1.7 min |
@@ -938,7 +937,7 @@ The proposed Web-Based Student Attendance Management System — when prototyped 
 Both teachers and students reported high willingness to adopt the system:
 
 - **86.0%** willing to adopt the system
-- **83.7%** prefer QR scanning over paper sign-in
+- **83.7%** prefer a digital attendance method over paper sign-in
 - **86.1%** consider the system useful or extremely useful
 - **81.4%** expect the system to be easy or very easy to use
 - **88.4%** prefer online excuse submission
@@ -966,7 +965,7 @@ The findings confirm that manual attendance recording imposes significant hidden
 
 Web-Based Student Attendance Management System addresses each of the identified weaknesses through:
 
-- **Automation**: QR sessions replace manual roll calls.
+- **Automation**: Token-based sessions replace manual roll calls.
 - **Centralization**: one database for all attendance data.
 - **Transparency**: student self-service views.
 - **Workflow**: structured excuse request review.
@@ -988,7 +987,7 @@ By freeing up instructional time and providing real-time visibility into attenda
 | Error rate | ~15% | < 5% |
 | Aggregation | Weeks | Seconds |
 | Transparency | None | Full |
-| Fraud mitigation | Weak | Time-limited QR tokens |
+| Fraud mitigation | Weak | Time-limited session tokens |
 | Cost | Paper, printing, storage | One-time development + hosting |
 | Scalability | Poor | Excellent |
 | Environmental impact | High (paper) | Low |
@@ -1007,7 +1006,7 @@ This research set out to address the inefficiencies of traditional, paper-based 
 
 The proposed **Web-Based Student Attendance Management System** — implemented using Laravel 13, Inertia.js, Vue.js 3.5, Nuxt 3.16, and Laravel Sanctum — provides a complete solution covering admin, teacher, and student workflows. Core capabilities include:
 
-- **QR-based attendance** with time-limited tokens
+- **Token-based attendance** with time-limited session tokens
 - **Manual roster check-off** as a fallback
 - **Excuse request management** with attachment support and teacher review
 - **Announcements** authored by teachers and targeted by class
@@ -1016,7 +1015,7 @@ The proposed **Web-Based Student Attendance Management System** — implemented 
 - **Real-time reporting and dashboards** for data-driven decision-making
 - **Responsive, mobile-first design** optimized for smartphone use
 
-The research findings indicate that Web-Based Student Attendance Management System can meaningfully reduce attendance-taking time by approximately 87%, eliminate transcription errors, and improve transparency for all stakeholders. Survey results further show 90.7% intent to use, 86.1% perceived usefulness, and 83.7% preference for QR over paper — all exceeding the thresholds predictive of successful adoption.
+The research findings indicate that Web-Based Student Attendance Management System can meaningfully reduce attendance-taking time by approximately 87%, eliminate transcription errors, and improve transparency for all stakeholders. Survey results further show 90.7% intent to use, 86.1% perceived usefulness, and 83.7% preference for a digital attendance method over paper — all exceeding the thresholds predictive of successful adoption.
 
 The study therefore concludes that Web-Based Student Attendance Management System is technically viable, user-desired, and pedagogically beneficial. Its deployment would address a long-standing operational weakness in Cambodian higher education and position adopting institutions as leaders in academic digital transformation.
 
@@ -1059,7 +1058,7 @@ Based on the findings of this research, the following recommendations are made f
 9. OWASP Foundation. (2025). *OWASP Top 10 Web Application Security Risks.*
 10. Ministry of Education, Youth and Sport of Cambodia. (2024). *Higher Education Quality Assurance Guidelines.*
 11. Anderson, C. (2018). *Educational Technology: Adoption and Impact in Developing Countries.* Journal of Educational Research, 111(2), 121–138.
-12. Patel, R. (2021). *QR-Code-Based Attendance Systems in Higher Education: A Review.* International Journal of Emerging Technologies in Learning, 16(4), 17–34.
+12. Patel, R. (2021). *Token-Based Attendance Systems in Higher Education: A Review.* International Journal of Emerging Technologies in Learning, 16(4), 17–34.
 13. Ralston, D. A. (2008). *The Crossvergence Perspective: Reflections and Projections.* Journal of International Business Studies, 39(1), 27–40.
 14. Venkatesh, V., Morris, M., Davis, G., & Davis, F. (2003). *User Acceptance of Information Technology: Toward a Unified View.* MIS Quarterly, 27(3), 425–478.
 15. Nielsen, J. (1994). *Usability Engineering.* Morgan Kaufmann.
@@ -1118,7 +1117,7 @@ Phnom Penh, the capital city of Cambodia, is located at the confluence of the Me
 | TimeSlot | Session period definitions | id, start_time, end_time |
 | Attendance | Per-student, per-session status records | id, student_id, class_subject_id, date, status |
 | ExcuseRequest | Student-submitted absence justifications | id, student_id, attendance_id, reason, status |
-| QrSession | Time-limited tokens for QR-based attendance | id, class_subject_id, token, expires_at |
+| AttendanceToken | Time-limited tokens for token-based attendance | id, class_subject_id, token, expires_at |
 | Announcement | Teacher-authored posts | id, author_id, class_id, title, body |
 | Notification | Per-user alerts | id, user_id, type, body, read_at |
 | Setting | System configuration | key, value |
@@ -1136,7 +1135,7 @@ SchoolClass ──> ClassSubject ──> Subject ──> Course
               └> Schedule ──> TimeSlot
 
 ClassSubject ──> Attendance ──> User (student)
-             └> QrSession
+             └> AttendanceToken
              └> Announcement
 
 Attendance ──> ExcuseRequest (optional)
@@ -1150,8 +1149,8 @@ Semester ──> SchoolClass (many-to-many via enrollment window)
 - `GET /classes` — list teacher's classes
 - `GET /classes/{id}/students` — list students in a class
 - `POST /classes/{id}/attendance` — record attendance (manual)
-- `POST /qr-sessions` — create QR session
-- `GET /qr-sessions` — list QR sessions
+- `POST /attendance-sessions` — create attendance token session
+- `GET /attendance-sessions` — list attendance token sessions
 - `GET /excuse-requests` — list pending excuse requests
 - `POST /excuse-requests/{id}/approve` — approve
 - `POST /excuse-requests/{id}/reject` — reject
@@ -1162,7 +1161,7 @@ Semester ──> SchoolClass (many-to-many via enrollment window)
 **Student API** (`/api/student/*`, Sanctum-authenticated)
 - `GET /dashboard` — summary statistics
 - `GET /attendance` — list student's attendance records
-- `POST /qr-attendance` — mark attendance via QR token
+- `POST /attend` — mark attendance via session token
 - `GET /excuse-requests` — list own excuse requests
 - `POST /excuse-requests` — submit new excuse request
 - `GET /announcements` — list received announcements
@@ -1195,7 +1194,7 @@ The following pages have been implemented in Web-Based Student Attendance Manage
 13. **My Classes** — List of assigned classes.
 14. **Class Detail & Roster** — View enrolled students.
 15. **Attendance Recording (Manual)** — Check-off roster.
-16. **Attendance Recording (QR Token)** — Generate a time-limited token; display it as both a QR code and human-readable text for student submission.
+16. **Attendance Recording (Session Token)** — Generate a time-limited session token and display it as human-readable text for student submission.
 17. **Excuse Request Review** — List, approve, or reject student excuses.
 18. **Announcements Management** — Create, edit, delete announcements.
 19. **Notifications** — View and mark as read.
@@ -1205,7 +1204,7 @@ The following pages have been implemented in Web-Based Student Attendance Manage
 
 21. **Student Dashboard** — Attendance summary, recent announcements.
 22. **Attendance History** — Chronological record of attendance.
-23. **QR Attendance** — Submit attendance token (pasted/typed or auto-filled from scanned QR URL) to mark present.
+23. **Attend** — Submit the attendance session token (pasted or typed) to mark present.
 24. **Excuse Requests** — Submit new, view status of previous.
 25. **Announcements** — View teacher announcements.
 26. **Notifications** — View and mark as read.
@@ -1232,7 +1231,7 @@ The following 15-question survey was distributed via Google Forms.
 **Section 3: Willingness to Adopt a Digital System**
 
 7. Would you be willing to adopt a web-based attendance system? *(5-point scale: Definitely yes → Definitely no)*
-8. Do you prefer QR code scanning over paper sign-in? *(5-point scale)*
+8. Do you prefer a digital attendance method over paper sign-in? *(5-point scale)*
 9. Which device would you primarily use to access the system? *(Smartphone / Laptop / Tablet / Desktop)*
 
 **Section 4: Perceptions (TAM)**
@@ -1302,8 +1301,8 @@ The following photos are to be inserted in the final printed document:
 1. Paper-based attendance sheet from the current process (showing typical wear and manual signatures).
 2. Classroom observation session.
 3. Interview session with teachers.
-4. QR code being displayed on a teacher device during a pilot test.
-5. Student opening the QR token URL on a smartphone and confirming attendance.
+4. Attendance token being displayed on a teacher device during a pilot test.
+5. Student submitting the attendance token on a smartphone and confirming attendance.
 6. Screenshot of the admin dashboard in use.
 7. Screenshot of the teacher portal on a tablet.
 8. Screenshot of the student portal on a smartphone.
