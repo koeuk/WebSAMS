@@ -38,8 +38,7 @@ const form = useForm({
 });
 
 const submit = () => {
-    form.post(`/admin/users/${props.user.id}`, {
-        _method: 'PUT',
+    form.put(`/admin/users/${props.user.id}`, {
         forceFormData: true,
     });
 };
