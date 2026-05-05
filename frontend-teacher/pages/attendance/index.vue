@@ -38,6 +38,15 @@ const loadAttendance = async () => {
   } catch {}
 }
 
+const hasFilters = computed(() => !!(selectedClass.value || dateFrom.value || dateTo.value))
+
+const clearFilters = () => {
+  selectedClass.value = ''
+  dateFrom.value = ''
+  dateTo.value = ''
+  loadAttendance()
+}
+
 const statusClass = (status: string) => ({
   'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'present',
   'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'absent',
@@ -73,6 +82,14 @@ const statusClass = (status: string) => ({
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
           <AppDatePicker v-model="dateTo" placeholder="To date" @update:model-value="loadAttendance" />
         </div>
+        <button
+          v-if="hasFilters"
+          @click="clearFilters"
+          class="btn-secondary self-end py-2.5 text-[13px] text-slate-500"
+        >
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+          Clear Filters
+        </button>
       </div>
     </div>
 

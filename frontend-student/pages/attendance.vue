@@ -54,11 +54,11 @@ const statusConfig: Record<string, string> = {
       <div class="flex flex-wrap gap-3 items-end">
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
-          <input v-model="dateFrom" type="date" class="input-modern" @change="loadAttendance" />
+          <DatePicker v-model="dateFrom" placeholder="Start date" @update:model-value="loadAttendance" />
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
-          <input v-model="dateTo" type="date" class="input-modern" @change="loadAttendance" />
+          <DatePicker v-model="dateTo" placeholder="End date" @update:model-value="loadAttendance" />
         </div>
         <button
           v-if="dateFrom || dateTo"
