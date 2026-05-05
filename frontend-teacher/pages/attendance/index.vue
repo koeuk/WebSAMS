@@ -67,11 +67,11 @@ const statusClass = (status: string) => ({
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
-          <input v-model="dateFrom" type="date" class="input-modern" @change="loadAttendance" />
+          <AppDatePicker v-model="dateFrom" placeholder="From date" @update:model-value="loadAttendance" />
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
-          <input v-model="dateTo" type="date" class="input-modern" @change="loadAttendance" />
+          <AppDatePicker v-model="dateTo" placeholder="To date" @update:model-value="loadAttendance" />
         </div>
       </div>
     </div>

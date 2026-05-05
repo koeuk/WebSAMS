@@ -170,7 +170,7 @@ const submit = () => {
                                     </div>
                                     <div>
                                         <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Enrollment Date</label>
-                                        <input v-model="form.enrollment_date" type="date" class="input-modern" />
+                                        <DatePicker v-model="form.enrollment_date" placeholder="Pick enrollment date" />
                                     </div>
                                     <div>
                                         <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Guardian Name</label>
@@ -203,7 +203,7 @@ const submit = () => {
                                 </div>
                                 <div>
                                     <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Hire Date</label>
-                                    <input v-model="form.hire_date" type="date" class="input-modern" />
+                                    <DatePicker v-model="form.hire_date" placeholder="Pick hire date" />
                                 </div>
                             </div>
                         </div>

@@ -118,7 +118,7 @@ const submit = async () => {
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Date</label>
-          <input v-model="selectedDate" type="date" class="input-modern" />
+          <AppDatePicker v-model="selectedDate" />
         </div>
         <button v-if="students.length" @click="markAllPresent" class="btn-secondary">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>

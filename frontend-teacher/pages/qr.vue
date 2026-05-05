@@ -106,7 +106,7 @@ const qrUrl = computed(() =>
           </div>
           <div>
             <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Date</label>
-            <input v-model="selectedDate" type="date" class="input-modern w-full" />
+            <AppDatePicker v-model="selectedDate" class="w-full" />
           </div>
           <div>
             <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Time Slot (optional)</label>
