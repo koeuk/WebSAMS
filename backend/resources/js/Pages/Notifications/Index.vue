@@ -13,6 +13,12 @@ const applyFilters = () => {
     router.get('/admin/notifications', { type: typeFilter.value || undefined, search: search.value || undefined }, { preserveState: true });
 };
 
+const clearFilters = () => {
+    typeFilter.value = '';
+    search.value = '';
+    router.get('/admin/notifications', {}, { preserveState: false });
+};
+
 const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
 
 const typeBadgeClass = (type) => ({
@@ -45,6 +51,10 @@ const typeBadgeClass = (type) => ({
                             <option value="general">General</option>
                         </select>
                     </div>
+                    <button v-if="search || typeFilter" @click="clearFilters" class="flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors self-end">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                        Clear
+                    </button>
                 </div>
             </div>
 

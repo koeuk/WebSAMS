@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import SelectDropdown from '@/Components/SelectDropdown.vue';
 
 const props = defineProps({
     tracking: Array, semesters: Array, academicYears: Array, courses: Array, classes: Array, filters: Object, threshold: Number, summary: Object,
@@ -19,6 +20,45 @@ const applyFilters = () => {
         semester_id: semesterFilter.value || undefined, academic_year: yearFilter.value || undefined, course_id: courseFilter.value || undefined, class_id: classFilter.value || undefined, year_level: yearLevelFilter.value || undefined, threshold: thresholdFilter.value,
     }, { preserveState: true });
 };
+
+const hasActiveFilters = computed(() =>
+    semesterFilter.value || yearFilter.value || courseFilter.value ||
+    classFilter.value || yearLevelFilter.value || thresholdFilter.value != 80
+);
+
+const clearFilters = () => {
+    semesterFilter.value = '';
+    yearFilter.value = '';
+    courseFilter.value = '';
+    classFilter.value = '';
+    yearLevelFilter.value = '';
+    thresholdFilter.value = 80;
+    router.get('/admin/student-tracking', { threshold: 80 }, { preserveState: false });
+};
+
+const semesterOptions = computed(() => [
+    { value: '', label: 'All Time' },
+    ...(props.semesters?.map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })) ?? []),
+]);
+const yearOptions = computed(() => [
+    { value: '', label: 'All Years' },
+    ...(props.academicYears?.map(y => ({ value: y, label: y })) ?? []),
+]);
+const courseOptions = computed(() => [
+    { value: '', label: 'All Courses' },
+    ...(props.courses?.map(c => ({ value: c.id, label: c.name })) ?? []),
+]);
+const classOptions = computed(() => [
+    { value: '', label: 'All Classes' },
+    ...(props.classes?.map(c => ({ value: c.id, label: c.name })) ?? []),
+]);
+const yearLevelOptions = [
+    { value: '', label: 'All Years' },
+    { value: '1', label: 'Year 1' },
+    { value: '2', label: 'Year 2' },
+    { value: '3', label: 'Year 3' },
+    { value: '4', label: 'Year 4' },
+];
 
 const statusBadgeClass = (status) => ({
     'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'good',
@@ -77,45 +117,34 @@ const statusLabel = (status) => ({ good: 'Good', warning: 'At Risk', danger: 'Cr
             <!-- Filters -->
             <div class="card p-4 mb-6">
                 <div class="flex flex-wrap gap-3 items-end">
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Semester</label>
-                        <select v-model="semesterFilter" class="select-modern" @change="yearFilter = ''; applyFilters()">
-                            <option value="">All Time</option>
-                            <option v-for="s in semesters" :key="s.id" :value="s.id">{{ s.name }} ({{ s.academic_year }})</option>
-                        </select>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Semester</label>
+                        <SelectDropdown v-model="semesterFilter" :options="semesterOptions" placeholder="All Time" @change="yearFilter = ''; applyFilters()" />
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Academic Year</label>
-                        <select v-model="yearFilter" class="select-modern" @change="semesterFilter = ''; applyFilters()">
-                            <option value="">All Years</option>
-                            <option v-for="y in academicYears" :key="y" :value="y">{{ y }}</option>
-                        </select>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Academic Year</label>
+                        <SelectDropdown v-model="yearFilter" :options="yearOptions" placeholder="All Years" @change="semesterFilter = ''; applyFilters()" />
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Course</label>
-                        <select v-model="courseFilter" class="select-modern" @change="applyFilters()">
-                            <option value="">All Courses</option>
-                            <option v-for="c in courses" :key="c.id" :value="c.id">{{ c.name }}</option>
-                        </select>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Course</label>
+                        <SelectDropdown v-model="courseFilter" :options="courseOptions" placeholder="All Courses" @change="applyFilters()" />
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class</label>
-                        <select v-model="classFilter" class="select-modern" @change="applyFilters()">
-                            <option value="">All Classes</option>
-                            <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.name }}</option>
-                        </select>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Class</label>
+                        <SelectDropdown v-model="classFilter" :options="classOptions" placeholder="All Classes" @change="applyFilters()" />
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Year Level</label>
-                        <select v-model="yearLevelFilter" class="select-modern" @change="applyFilters()">
-                            <option value="">All Years</option>
-                            <option value="1">Year 1</option><option value="2">Year 2</option><option value="3">Year 3</option><option value="4">Year 4</option>
-                        </select>
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Year Level</label>
+                        <SelectDropdown v-model="yearLevelFilter" :options="yearLevelOptions" placeholder="All Years" @change="applyFilters()" />
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Threshold (%)</label>
-                        <input v-model="thresholdFilter" type="number" min="0" max="100" class="input-modern w-20" @change="applyFilters()" />
+                    <div class="flex flex-col gap-1.5">
+                        <label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Threshold (%)</label>
+                        <input v-model="thresholdFilter" type="number" min="0" max="100" class="input-modern w-24" @change="applyFilters()" />
                     </div>
+                    <button v-if="hasActiveFilters" @click="clearFilters" class="flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors self-end">
+                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                        Clear
+                    </button>
                 </div>
             </div>
 
