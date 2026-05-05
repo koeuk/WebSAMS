@@ -6,9 +6,6 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
@@ -17,6 +14,21 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('role', ['admin', 'teacher', 'student'])->default('student');
+            $table->string('phone')->nullable();
+            $table->tinyInteger('year_level')->nullable();
+            $table->string('id_number')->nullable()->unique();
+            $table->enum('gender', ['male', 'female'])->nullable();
+            $table->date('date_of_birth')->nullable();
+            $table->text('address')->nullable();
+            $table->string('profile_photo')->nullable();
+            $table->enum('status', ['active', 'inactive', 'graduated', 'suspended'])->default('active');
+            $table->string('guardian_name')->nullable();
+            $table->string('guardian_phone')->nullable();
+            $table->date('enrollment_date')->nullable();
+            $table->string('department')->nullable();
+            $table->string('qualification')->nullable();
+            $table->date('hire_date')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -37,9 +49,6 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('users');

@@ -36,17 +36,17 @@ class DatabaseSeeder extends Seeder
         // Admin
         User::create([
             'name' => 'Admin',
-            'email' => 'admin@websams.com',
+            'email' => 'admin@gmail.com',
             'password' => Hash::make('12345678'),
             'role' => 'admin',
         ]);
 
         // Teachers
         $teachers = [];
-        foreach (['Mr. John Smith', 'Ms. Sarah Lee', 'Mr. David Chen'] as $i => $name) {
+        foreach (['Mr. John Smith', 'Ms. Sarah Lee', 'Mr. David Chen', 'Ms. Emily Clark', 'Mr. James Wong'] as $i => $name) {
             $teachers[] = User::create([
                 'name' => $name,
-                'email' => 'teacher' . ($i + 1) . '@websams.com',
+                'email' => 'teacher' . ($i + 1) . '@gmail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'teacher',
             ]);
@@ -54,20 +54,14 @@ class DatabaseSeeder extends Seeder
 
         // Students (with year levels)
         $students = [];
-        $studentNames = [
-            'Alice Johnson', 'Bob Williams', 'Charlie Brown', 'Diana Ross',
-            'Edward Davis', 'Fiona Garcia', 'George Martinez', 'Hannah Wilson',
-            'Isaac Anderson', 'Julia Thomas', 'Kevin Taylor', 'Laura Moore',
-            'Michael Jackson', 'Nancy White', 'Oscar Harris', 'Patricia Clark',
-            'Quinn Lewis', 'Rachel Hall', 'Steven Young', 'Tina King',
-        ];
+        $studentNames = ['Alice Johnson', 'Bob Williams', 'Charlie Brown', 'Diana Ross', 'Edward Davis'];
         foreach ($studentNames as $i => $name) {
             $students[] = User::create([
                 'name' => $name,
-                'email' => 'student' . ($i + 1) . '@websams.com',
+                'email' => 'student' . ($i + 1) . '@gmail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'student',
-                'year_level' => ($i % 4) + 1, // Year 1-4
+                'year_level' => ($i % 4) + 1,
             ]);
         }
 
@@ -90,23 +84,23 @@ class DatabaseSeeder extends Seeder
         $year1B = SchoolClass::create(['name' => 'Year 1 - B', 'section' => 'B', 'academic_year' => '2025-2026']);
         $year2A = SchoolClass::create(['name' => 'Year 2 - A', 'section' => 'A', 'academic_year' => '2025-2026']);
 
-        // Assign teachers to class-subjects
+        // Assign teachers to class-subjects (one unique teacher per class-subject)
         $classSubjects = [
             ClassSubject::create(['school_class_id' => $year1A->id, 'subject_id' => $subjects[0]->id, 'teacher_id' => $teachers[0]->id]),
             ClassSubject::create(['school_class_id' => $year1A->id, 'subject_id' => $subjects[2]->id, 'teacher_id' => $teachers[1]->id]),
-            ClassSubject::create(['school_class_id' => $year1B->id, 'subject_id' => $subjects[1]->id, 'teacher_id' => $teachers[0]->id]),
-            ClassSubject::create(['school_class_id' => $year1B->id, 'subject_id' => $subjects[4]->id, 'teacher_id' => $teachers[2]->id]),
-            ClassSubject::create(['school_class_id' => $year2A->id, 'subject_id' => $subjects[3]->id, 'teacher_id' => $teachers[1]->id]),
+            ClassSubject::create(['school_class_id' => $year1B->id, 'subject_id' => $subjects[1]->id, 'teacher_id' => $teachers[2]->id]),
+            ClassSubject::create(['school_class_id' => $year1B->id, 'subject_id' => $subjects[4]->id, 'teacher_id' => $teachers[3]->id]),
+            ClassSubject::create(['school_class_id' => $year2A->id, 'subject_id' => $subjects[3]->id, 'teacher_id' => $teachers[4]->id]),
         ];
 
-        // Enroll students
-        foreach (array_slice($students, 0, 7) as $student) {
+        // Enroll students (5 students: 2 in year1A, 2 in year1B, 1 in year2A)
+        foreach (array_slice($students, 0, 2) as $student) {
             ClassStudent::create(['school_class_id' => $year1A->id, 'student_id' => $student->id]);
         }
-        foreach (array_slice($students, 7, 7) as $student) {
+        foreach (array_slice($students, 2, 2) as $student) {
             ClassStudent::create(['school_class_id' => $year1B->id, 'student_id' => $student->id]);
         }
-        foreach (array_slice($students, 14, 6) as $student) {
+        foreach (array_slice($students, 4, 1) as $student) {
             ClassStudent::create(['school_class_id' => $year2A->id, 'student_id' => $student->id]);
         }
 

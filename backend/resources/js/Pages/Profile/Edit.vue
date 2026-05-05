@@ -18,12 +18,13 @@ const handlePhoto = (e) => {
 };
 
 const form = useForm({
+    _method: 'put',
     name: props.user.name, email: props.user.email, phone: props.user.phone || '',
     current_password: '', new_password: '', new_password_confirmation: '', profile_photo: null,
 });
 
 const submit = () => {
-    form.post('/admin/profile', { _method: 'PUT', forceFormData: true });
+    form.post('/admin/profile', { forceFormData: true });
 };
 </script>
 
