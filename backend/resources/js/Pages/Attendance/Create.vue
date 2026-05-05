@@ -1,6 +1,7 @@
 <script setup>
 import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import DatePicker from '@/Components/DatePicker.vue';
 
 const props = defineProps({ classSubjects: Array, students: Array, timeSlots: Array });
 
@@ -53,7 +54,7 @@ const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.te
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Date</label>
-                            <input v-model="form.date" type="date" required class="input-modern" />
+                            <DatePicker v-model="form.date" placeholder="Select date" />
                             <p v-if="form.errors.date" class="text-[12px] text-rose-500 mt-1">{{ form.errors.date }}</p>
                         </div>
                         <div>

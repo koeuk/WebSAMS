@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 definePageMeta({ middleware: 'auth' })
 
 const { apiFetch } = useApi()
@@ -8,6 +10,19 @@ const timeSlots = ref<any[]>([])
 const students = ref<any[]>([])
 const selectedClass = ref('')
 const selectedTimeSlot = ref('')
+
+const classOptions = computed(() =>
+  classes.value.map((c: any) => ({
+    value: String(c.id),
+    label: `${c.school_class?.name} - ${c.subject?.name}`,
+  }))
+)
+const timeSlotOptions = computed(() =>
+  timeSlots.value.map((ts: any) => ({
+    value: String(ts.id),
+    label: `${ts.name} (${ts.start_time?.slice(0, 5)} - ${ts.end_time?.slice(0, 5)})`,
+  }))
+)
 const selectedDate = ref(new Date().toISOString().split('T')[0])
 const attendances = ref<Record<number, { status: string; remarks: string }>>({})
 const loading = ref(true)
@@ -83,17 +98,23 @@ const submit = async () => {
       <div class="flex flex-wrap gap-3 items-end">
         <div class="min-w-[250px]">
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class - Subject</label>
-          <select v-model="selectedClass" @change="loadStudents" class="select-modern w-full">
-            <option value="" disabled>Select Class - Subject</option>
-            <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.school_class?.name }} - {{ c.subject?.name }}</option>
-          </select>
+          <AppCombobox
+            v-model="selectedClass"
+            :options="classOptions"
+            placeholder="Select Class - Subject"
+            search-placeholder="Search class..."
+            class="w-full"
+            @update:model-value="loadStudents"
+          />
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Time Slot</label>
-          <select v-model="selectedTimeSlot" class="select-modern">
-            <option value="" disabled>Select Time Slot</option>
-            <option v-for="ts in timeSlots" :key="ts.id" :value="ts.id">{{ ts.name }} ({{ ts.start_time?.slice(0,5) }} - {{ ts.end_time?.slice(0,5) }})</option>
-          </select>
+          <AppCombobox
+            v-model="selectedTimeSlot"
+            :options="timeSlotOptions"
+            placeholder="Select Time Slot"
+            search-placeholder="Search time slot..."
+          />
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Date</label>

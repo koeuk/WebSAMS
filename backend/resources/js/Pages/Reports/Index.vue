@@ -3,6 +3,7 @@ import { useForm, Link } from '@inertiajs/vue3';
 import { watch, computed } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
+import DatePicker from '@/Components/DatePicker.vue';
 
 const props = defineProps({ semesters: Array, courses: Array, classes: Array, subjects: Array });
 
@@ -48,12 +49,12 @@ const submit = () => { form.get('/admin/reports/generate'); };
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Date From</label>
-                            <input v-model="form.date_from" type="date" :required="!form.semester_id" class="input-modern" />
+                            <DatePicker v-model="form.date_from" placeholder="Start date" />
                             <p v-if="form.errors.date_from" class="text-[12px] text-rose-500 mt-1">{{ form.errors.date_from }}</p>
                         </div>
                         <div>
                             <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Date To</label>
-                            <input v-model="form.date_to" type="date" :required="!form.semester_id" class="input-modern" />
+                            <DatePicker v-model="form.date_to" placeholder="End date" />
                             <p v-if="form.errors.date_to" class="text-[12px] text-rose-500 mt-1">{{ form.errors.date_to }}</p>
                         </div>
                     </div>

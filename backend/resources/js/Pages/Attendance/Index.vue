@@ -6,6 +6,7 @@ import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import Modal from '@/Components/Modal.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
+import DatePicker from '@/Components/DatePicker.vue';
 
 const props = defineProps({
     attendance: Object,
@@ -141,11 +142,11 @@ const deleteRecord = () => {
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
-                        <input v-model="dateFrom" type="date" class="input-modern" @change="applyFilters()" />
+                        <DatePicker v-model="dateFrom" placeholder="Start date" @update:model-value="applyFilters()" />
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
-                        <input v-model="dateTo" type="date" class="input-modern" @change="applyFilters()" />
+                        <DatePicker v-model="dateTo" placeholder="End date" @update:model-value="applyFilters()" />
                     </div>
                     <button
                         v-if="courseFilter || classFilter || subjectFilter || statusFilter || dateFrom || dateTo"

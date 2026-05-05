@@ -59,6 +59,20 @@ const expiresIn = computed(() => {
   return `${mins}m ${secs}s`
 })
 
+const classOptions = computed(() =>
+  classes.value.map((c: any) => ({
+    value: String(c.id),
+    label: `${c.class_name} — ${c.subject_name}`,
+  }))
+)
+const timeSlotOptions = computed(() => [
+  { value: '', label: 'None' },
+  ...timeSlots.value.map((t: any) => ({
+    value: String(t.id),
+    label: `${t.name} (${t.start_time}–${t.end_time})`,
+  })),
+])
+
 const qrUrl = computed(() =>
   activeSession.value?.token
     ? `${window?.location?.origin?.replace('3001', '3002') ?? 'http://localhost:3002'}/qr?token=${activeSession.value.token}`
@@ -82,12 +96,13 @@ const qrUrl = computed(() =>
         <div class="space-y-4">
           <div>
             <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Class / Subject</label>
-            <select v-model="selectedClass" class="select-modern w-full">
-              <option value="">Select a class...</option>
-              <option v-for="c in classes" :key="c.id" :value="c.id">
-                {{ c.class_name }} — {{ c.subject_name }}
-              </option>
-            </select>
+            <AppCombobox
+              v-model="selectedClass"
+              :options="classOptions"
+              placeholder="Select a class..."
+              search-placeholder="Search class..."
+              class="w-full"
+            />
           </div>
           <div>
             <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Date</label>
@@ -95,10 +110,13 @@ const qrUrl = computed(() =>
           </div>
           <div>
             <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Time Slot (optional)</label>
-            <select v-model="selectedSlot" class="select-modern w-full">
-              <option value="">None</option>
-              <option v-for="t in timeSlots" :key="t.id" :value="t.id">{{ t.name }} ({{ t.start_time }}–{{ t.end_time }})</option>
-            </select>
+            <AppCombobox
+              v-model="selectedSlot"
+              :options="timeSlotOptions"
+              placeholder="None"
+              search-placeholder="Search time slot..."
+              class="w-full"
+            />
           </div>
           <div>
             <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Valid for (minutes)</label>

@@ -44,6 +44,12 @@ const remove = async (a: any) => {
   } catch {}
 }
 
+const audienceOptions = [
+  { value: 'students', label: 'Students only' },
+  { value: 'teachers', label: 'Teachers only' },
+  { value: 'all', label: 'Everyone' },
+]
+
 const audienceConfig: Record<string, string> = {
   all:      'bg-violet-50 text-violet-700 ring-1 ring-violet-200',
   students: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
@@ -107,11 +113,13 @@ const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { 
               </div>
               <div>
                 <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Audience</label>
-                <select v-model="form.audience" class="select-modern w-full">
-                  <option value="students">Students only</option>
-                  <option value="teachers">Teachers only</option>
-                  <option value="all">Everyone</option>
-                </select>
+                <AppCombobox
+                  v-model="form.audience"
+                  :options="audienceOptions"
+                  placeholder="Select audience..."
+                  search-placeholder="Search..."
+                  class="w-full"
+                />
               </div>
             </div>
             <div class="flex gap-3 mt-6">

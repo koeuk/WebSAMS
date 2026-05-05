@@ -2,6 +2,7 @@
 import { useForm, Link, router } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import DatePicker from '@/Components/DatePicker.vue';
 
 const props = defineProps({ user: Object });
 
@@ -120,7 +121,7 @@ const submit = () => {
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Date of Birth</label>
-                                    <input v-model="form.date_of_birth" type="date" class="input-modern" />
+                                    <DatePicker v-model="form.date_of_birth" placeholder="Pick date of birth" />
                                 </div>
                                 <div>
                                     <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Phone</label>

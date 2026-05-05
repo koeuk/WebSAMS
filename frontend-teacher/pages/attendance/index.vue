@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { computed } from 'vue'
+
 definePageMeta({ middleware: 'auth' })
 
 const { apiFetch } = useApi()
@@ -9,6 +11,14 @@ const selectedClass = ref('')
 const dateFrom = ref('')
 const dateTo = ref('')
 const loading = ref(true)
+
+const classOptions = computed(() => [
+  { value: '', label: 'All Classes' },
+  ...classes.value.map((c: any) => ({
+    value: String(c.id),
+    label: `${c.school_class?.name} - ${c.subject?.name}`,
+  })),
+])
 
 onMounted(async () => {
   try {
@@ -47,10 +57,13 @@ const statusClass = (status: string) => ({
       <div class="flex flex-wrap gap-3 items-end">
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class</label>
-          <select v-model="selectedClass" class="select-modern" @change="loadAttendance">
-            <option value="">All Classes</option>
-            <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.school_class?.name }} - {{ c.subject?.name }}</option>
-          </select>
+          <AppCombobox
+            v-model="selectedClass"
+            :options="classOptions"
+            placeholder="All Classes"
+            search-placeholder="Search class..."
+            @update:model-value="loadAttendance"
+          />
         </div>
         <div>
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
