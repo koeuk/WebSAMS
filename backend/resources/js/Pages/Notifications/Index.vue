@@ -3,6 +3,13 @@ import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
+import FilterCombobox from '@/Components/FilterCombobox.vue';
+
+const typeOptions = [
+    { value: 'absence', label: 'Absence' },
+    { value: 'late', label: 'Late' },
+    { value: 'general', label: 'General' },
+];
 
 const props = defineProps({ notifications: Object, filters: Object });
 
@@ -44,12 +51,7 @@ const typeBadgeClass = (type) => ({
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Type</label>
-                        <select v-model="typeFilter" class="select-modern" @change="applyFilters">
-                            <option value="">All Types</option>
-                            <option value="absence">Absence</option>
-                            <option value="late">Late</option>
-                            <option value="general">General</option>
-                        </select>
+                        <FilterCombobox v-model="typeFilter" :options="typeOptions" placeholder="All Types" @update:model-value="applyFilters" />
                     </div>
                     <button v-if="search || typeFilter" @click="clearFilters" class="flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors self-end">
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>

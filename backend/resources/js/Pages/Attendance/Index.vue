@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import Modal from '@/Components/Modal.vue';
+import FilterCombobox from '@/Components/FilterCombobox.vue';
 
 const props = defineProps({
     attendance: Object,
@@ -19,6 +20,16 @@ const courseFilter = ref(props.filters?.course_id || '');
 const classFilter = ref(props.filters?.class_id || '');
 const subjectFilter = ref(props.filters?.subject_id || '');
 const statusFilter = ref(props.filters?.status || '');
+
+const courseOptions = computed(() => (props.courses || []).map(c => ({ value: c.id, label: c.name })));
+const classOptions = computed(() => (props.classes || []).map(c => ({ value: c.id, label: c.name })));
+const subjectOptions = computed(() => (props.subjects || []).map(s => ({ value: s.id, label: s.name })));
+const statusOptions = [
+    { value: 'present', label: 'Present' },
+    { value: 'absent', label: 'Absent' },
+    { value: 'late', label: 'Late' },
+    { value: 'excused', label: 'Excused' },
+];
 const dateFrom = ref(props.filters?.date_from || '');
 const dateTo = ref(props.filters?.date_to || '');
 
@@ -94,34 +105,39 @@ const deleteRecord = () => {
                 <div class="flex flex-wrap gap-3 items-end">
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Course</label>
-                        <select v-model="courseFilter" class="select-modern" @change="applyFilters(true)">
-                            <option value="">All Courses</option>
-                            <option v-for="c in courses" :key="c.id" :value="c.id">{{ c.name }}</option>
-                        </select>
+                        <FilterCombobox
+                            v-model="courseFilter"
+                            :options="courseOptions"
+                            placeholder="All Courses"
+                            @update:model-value="applyFilters(true)"
+                        />
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class</label>
-                        <select v-model="classFilter" class="select-modern" @change="applyFilters()">
-                            <option value="">All Classes</option>
-                            <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.name }}</option>
-                        </select>
+                        <FilterCombobox
+                            v-model="classFilter"
+                            :options="classOptions"
+                            placeholder="All Classes"
+                            @update:model-value="applyFilters()"
+                        />
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Subject</label>
-                        <select v-model="subjectFilter" class="select-modern" @change="applyFilters()">
-                            <option value="">All Subjects</option>
-                            <option v-for="s in subjects" :key="s.id" :value="s.id">{{ s.name }}</option>
-                        </select>
+                        <FilterCombobox
+                            v-model="subjectFilter"
+                            :options="subjectOptions"
+                            placeholder="All Subjects"
+                            @update:model-value="applyFilters()"
+                        />
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
-                        <select v-model="statusFilter" class="select-modern" @change="applyFilters()">
-                            <option value="">All Status</option>
-                            <option value="present">Present</option>
-                            <option value="absent">Absent</option>
-                            <option value="late">Late</option>
-                            <option value="excused">Excused</option>
-                        </select>
+                        <FilterCombobox
+                            v-model="statusFilter"
+                            :options="statusOptions"
+                            placeholder="All Status"
+                            @update:model-value="applyFilters()"
+                        />
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>

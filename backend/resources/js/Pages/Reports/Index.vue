@@ -1,7 +1,8 @@
 <script setup>
 import { useForm, Link } from '@inertiajs/vue3';
-import { watch } from 'vue';
+import { watch, computed } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FilterCombobox from '@/Components/FilterCombobox.vue';
 
 const props = defineProps({ semesters: Array, courses: Array, classes: Array, subjects: Array });
 
@@ -15,6 +16,17 @@ watch(() => form.semester_id, (id) => {
         if (sem) { form.date_from = sem.start_date?.split('T')[0]; form.date_to = sem.end_date?.split('T')[0]; }
     }
 });
+
+const semesterOptions = computed(() => (props.semesters || []).map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })));
+const courseOptions = computed(() => (props.courses || []).map(c => ({ value: c.id, label: c.name })));
+const classOptions = computed(() => (props.classes || []).map(c => ({ value: c.id, label: c.name })));
+const subjectOptions = computed(() => (props.subjects || []).map(s => ({ value: s.id, label: s.name })));
+const reportStatusOptions = [
+    { value: 'present', label: 'Present' },
+    { value: 'absent', label: 'Absent' },
+    { value: 'late', label: 'Late Only' },
+    { value: 'excused', label: 'Excused' },
+];
 
 const submit = () => { form.get('/admin/reports/generate'); };
 </script>
@@ -31,10 +43,7 @@ const submit = () => { form.get('/admin/reports/generate'); };
                 <form @submit.prevent="submit" class="space-y-5">
                     <div>
                         <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Semester</label>
-                        <select v-model="form.semester_id" class="select-modern w-full">
-                            <option value="">Custom Date Range</option>
-                            <option v-for="s in semesters" :key="s.id" :value="s.id">{{ s.name }} ({{ s.academic_year }})</option>
-                        </select>
+                        <FilterCombobox v-model="form.semester_id" :options="semesterOptions" placeholder="Custom Date Range" class="w-full" />
                     </div>
                     <div class="grid grid-cols-2 gap-4">
                         <div>
@@ -50,34 +59,19 @@ const submit = () => { form.get('/admin/reports/generate'); };
                     </div>
                     <div>
                         <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Course <span class="text-slate-400">(optional)</span></label>
-                        <select v-model="form.course_id" class="select-modern w-full">
-                            <option value="">All Courses</option>
-                            <option v-for="c in courses" :key="c.id" :value="c.id">{{ c.name }}</option>
-                        </select>
+                        <FilterCombobox v-model="form.course_id" :options="courseOptions" placeholder="All Courses" class="w-full" />
                     </div>
                     <div>
                         <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Class <span class="text-slate-400">(optional)</span></label>
-                        <select v-model="form.class_id" class="select-modern w-full">
-                            <option value="">All Classes</option>
-                            <option v-for="c in classes" :key="c.id" :value="c.id">{{ c.name }}</option>
-                        </select>
+                        <FilterCombobox v-model="form.class_id" :options="classOptions" placeholder="All Classes" class="w-full" />
                     </div>
                     <div>
                         <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Subject <span class="text-slate-400">(optional)</span></label>
-                        <select v-model="form.subject_id" class="select-modern w-full">
-                            <option value="">All Subjects</option>
-                            <option v-for="s in subjects" :key="s.id" :value="s.id">{{ s.name }}</option>
-                        </select>
+                        <FilterCombobox v-model="form.subject_id" :options="subjectOptions" placeholder="All Subjects" class="w-full" />
                     </div>
                     <div>
                         <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Status Filter <span class="text-slate-400">(optional)</span></label>
-                        <select v-model="form.status" class="select-modern w-full">
-                            <option value="">All Status</option>
-                            <option value="present">Present</option>
-                            <option value="absent">Absent</option>
-                            <option value="late">Late Only</option>
-                            <option value="excused">Excused</option>
-                        </select>
+                        <FilterCombobox v-model="form.status" :options="reportStatusOptions" placeholder="All Status" class="w-full" />
                     </div>
                     <div class="pt-2">
                         <button type="submit" :disabled="form.processing" class="btn-primary">

@@ -5,6 +5,25 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import Modal from '@/Components/Modal.vue';
+import FilterCombobox from '@/Components/FilterCombobox.vue';
+
+const roleOptions = [
+    { value: 'admin', label: 'Admin' },
+    { value: 'teacher', label: 'Teacher' },
+    { value: 'student', label: 'Student' },
+];
+const yearOptions = [
+    { value: '1', label: 'Year 1' },
+    { value: '2', label: 'Year 2' },
+    { value: '3', label: 'Year 3' },
+    { value: '4', label: 'Year 4' },
+];
+const statusOptions = [
+    { value: 'active', label: 'Active' },
+    { value: 'inactive', label: 'Inactive' },
+    { value: 'graduated', label: 'Graduated' },
+    { value: 'suspended', label: 'Suspended' },
+];
 
 const props = defineProps({
     users: Object,
@@ -95,32 +114,15 @@ const statusBadgeClass = (status) => ({
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Role</label>
-                        <select v-model="roleFilter" class="select-modern" @change="applyFilters">
-                            <option value="">All Roles</option>
-                            <option value="admin">Admin</option>
-                            <option value="teacher">Teacher</option>
-                            <option value="student">Student</option>
-                        </select>
+                        <FilterCombobox v-model="roleFilter" :options="roleOptions" placeholder="All Roles" @update:model-value="applyFilters" />
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Year Level</label>
-                        <select v-model="yearFilter" class="select-modern" @change="applyFilters">
-                            <option value="">All Years</option>
-                            <option value="1">Year 1</option>
-                            <option value="2">Year 2</option>
-                            <option value="3">Year 3</option>
-                            <option value="4">Year 4</option>
-                        </select>
+                        <FilterCombobox v-model="yearFilter" :options="yearOptions" placeholder="All Years" @update:model-value="applyFilters" />
                     </div>
                     <div>
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
-                        <select v-model="statusFilter" class="select-modern" @change="applyFilters">
-                            <option value="">All Status</option>
-                            <option value="active">Active</option>
-                            <option value="inactive">Inactive</option>
-                            <option value="graduated">Graduated</option>
-                            <option value="suspended">Suspended</option>
-                        </select>
+                        <FilterCombobox v-model="statusFilter" :options="statusOptions" placeholder="All Status" @update:model-value="applyFilters" />
                     </div>
                     <button v-if="search || roleFilter || yearFilter || statusFilter" @click="clearFilters" class="flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors self-end">
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>

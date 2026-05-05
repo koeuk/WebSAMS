@@ -1,11 +1,14 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FilterCombobox from '@/Components/FilterCombobox.vue';
 
 const props = defineProps({ student: Object, bySubject: Array, overall: Object, recentRecords: Array, semester: Object, semesters: Array, filters: Object });
 
 const semesterFilter = ref(props.filters?.semester_id || '');
+const semesterOptions = computed(() => (props.semesters || []).map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })));
+
 const changeSemester = () => {
     router.get(`/admin/student-tracking/${props.student.id}`, { semester_id: semesterFilter.value || undefined }, { preserveState: true });
 };
@@ -36,10 +39,7 @@ const statusClass = (status) => ({
                     </div>
                 </div>
                 <div>
-                    <select v-model="semesterFilter" class="select-modern" @change="changeSemester">
-                        <option value="">All Time</option>
-                        <option v-for="s in semesters" :key="s.id" :value="s.id">{{ s.name }} ({{ s.academic_year }})</option>
-                    </select>
+                    <FilterCombobox v-model="semesterFilter" :options="semesterOptions" placeholder="All Time" @update:model-value="changeSemester" />
                 </div>
             </div>
 

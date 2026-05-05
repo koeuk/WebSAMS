@@ -4,10 +4,10 @@ import { ref } from 'vue'
 const { user, logout } = useAuth()
 
 const navigation = [
-  { name: 'Dashboard',        href: '/',                icon: 'dashboard' },
+  { name: 'Dashboard',        href: '/',                icon: 'dashboard', exact: true },
   { name: 'My Classes',       href: '/classes',         icon: 'classes' },
   { name: 'Mark Attendance',  href: '/attendance/mark', icon: 'mark' },
-  { name: 'History',          href: '/attendance',      icon: 'history' },
+  { name: 'History',          href: '/attendance',      icon: 'history',   exact: true },
   { name: 'QR Attendance',    href: '/qr',              icon: 'qr' },
   { name: 'Excuse Requests',  href: '/excuses',         icon: 'excuse' },
   { name: 'Announcements',    href: '/announcements',   icon: 'announce' },
@@ -16,7 +16,8 @@ const navigation = [
 ]
 
 const route = useRoute()
-const isActive = (href: string) => route.path === href || (href !== '/' && route.path.startsWith(href))
+const isActive = (item: { href: string; exact?: boolean }) =>
+  item.exact ? route.path === item.href : route.path === item.href || route.path.startsWith(item.href + '/')
 
 const sidebarOpen = ref(false)
 
@@ -64,13 +65,13 @@ const handleLogout = async () => {
           :key="item.name"
           :to="item.href"
           class="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200"
-          :class="isActive(item.href)
+          :class="isActive(item)
             ? 'bg-white/[0.1] text-white nav-active-glow'
             : 'text-slate-400 hover:bg-white/[0.05] hover:text-slate-200'"
           @click="sidebarOpen = false"
         >
           <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors shrink-0"
-               :class="isActive(item.href) ? 'bg-[#d4a017]/20 text-[#d4a017]' : 'bg-white/[0.04] text-slate-500 group-hover:text-slate-300'">
+               :class="isActive(item) ? 'bg-[#d4a017]/20 text-[#d4a017]' : 'bg-white/[0.04] text-slate-500 group-hover:text-slate-300'">
             <svg v-if="item.icon === 'dashboard'" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
             <svg v-else-if="item.icon === 'classes'" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             <svg v-else-if="item.icon === 'mark'" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
