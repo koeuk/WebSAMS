@@ -76,7 +76,7 @@ const isActive = (href) => page.url.startsWith(href);
 
             <!-- User section at bottom -->
             <div class="px-3 pb-4 pt-2 border-t border-white/[0.06]">
-                <Link href="/admin/profile" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/[0.05] transition-colors">
+                <Link :href="`/admin/users/${user.id}/edit`" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/[0.05] transition-colors">
                     <div class="relative">
                         <img v-if="user?.profile_photo" :src="`/storage/${user.profile_photo}`" class="h-9 w-9 rounded-lg object-cover ring-2 ring-white/10" />
                         <div v-else class="h-9 w-9 rounded-lg bg-gradient-to-br from-beltei-gold to-beltei-gold-dark flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/10">
@@ -117,7 +117,7 @@ const isActive = (href) => page.url.startsWith(href);
                         <p class="text-[13px] font-semibold text-slate-700">{{ user?.name }}</p>
                         <p class="text-[11px] text-slate-400">Admin</p>
                     </div>
-                    <Link href="/admin/profile">
+                    <Link :href="`/admin/users/${user.id}/edit`">
                         <img v-if="user?.profile_photo" :src="`/storage/${user.profile_photo}`" class="h-9 w-9 rounded-lg object-cover ring-2 ring-slate-100 hover:ring-beltei-gold/40 transition-all" />
                         <div v-else class="h-9 w-9 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-500 text-sm font-bold hover:ring-2 hover:ring-beltei-gold/40 transition-all">
                             {{ user?.name?.charAt(0) }}
