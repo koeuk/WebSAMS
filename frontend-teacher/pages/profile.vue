@@ -34,7 +34,7 @@ const formatDate = (d: string) => d
             <div class="absolute inset-0 rounded-2xl" style="background: linear-gradient(135deg, #d4a017, #1e3a6e); padding: 2px; border-radius: 18px;">
               <div class="w-full h-full rounded-2xl bg-white" style="border-radius: 16px;"></div>
             </div>
-            <img v-if="profile.profile_photo" :src="`http://localhost:8000/storage/${profile.profile_photo}`" class="relative h-20 w-20 rounded-2xl object-cover" style="border-radius: 16px;" />
+            <img v-if="profile.profile_photo" :src="`http://127.0.0.1:8001/storage/${profile.profile_photo}`" class="relative h-20 w-20 rounded-2xl object-cover" style="border-radius: 16px;" />
             <div v-else class="relative h-20 w-20 rounded-2xl flex items-center justify-center text-white text-2xl font-extrabold" style="border-radius: 16px; background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
               {{ profile.name?.charAt(0) }}
             </div>
