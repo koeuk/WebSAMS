@@ -23,7 +23,7 @@ const sidebarOpen = ref(false)
 
 const handleLogout = async () => {
   await logout()
-  navigateTo('/login')
+  navigateTo('/auth/login')
 }
 </script>
 

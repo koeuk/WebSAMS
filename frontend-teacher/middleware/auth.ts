@@ -3,11 +3,11 @@ export default defineNuxtRouteMiddleware((to) => {
 
   init()
 
-  if (!isAuthenticated.value && to.path !== '/login') {
-    return navigateTo('/login')
+  if (!isAuthenticated.value && to.path !== '/auth/login') {
+    return navigateTo('/auth/login')
   }
 
-  if (isAuthenticated.value && to.path === '/login') {
+  if (isAuthenticated.value && to.path === '/auth/login') {
     return navigateTo('/')
   }
 })
