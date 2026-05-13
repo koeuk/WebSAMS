@@ -18,12 +18,13 @@ const handleLogo = (e) => {
 };
 
 const form = useForm({
+    _method: 'PUT',
     university_name: props.settings.university_name || '', university_address: props.settings.university_address || '',
     university_phone: props.settings.university_phone || '', university_email: props.settings.university_email || '',
     university_website: props.settings.university_website || '', university_logo: null,
 });
 
-const submit = () => { form.post('/admin/settings', { _method: 'PUT', forceFormData: true }); };
+const submit = () => { form.post('/admin/settings', { forceFormData: true }); };
 </script>
 
 <template>
