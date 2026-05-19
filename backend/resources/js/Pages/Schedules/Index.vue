@@ -42,7 +42,7 @@
                                     <TableCell class="text-right">
                                         <div class="flex items-center justify-end gap-1">
                                             <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(s)">Edit</Button>
-                                            <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="confirmDelete(s)">Delete</Button>
+                                            <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/schedules/${s.id}/delete`, { preserveState: true, preserveScroll: true })">Delete</Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -59,8 +59,6 @@
             </Card>
 
             <ScheduleForm v-model:open="showForm" :schedule="editingSchedule" :class-subjects="classSubjects" :time-slots="timeSlots" />
-
-            <Modal :show="showDeleteModal" title="Delete Schedule" message="Are you sure?" @confirm="deleteSchedule" @cancel="showDeleteModal = false" />
         </div>
     </AdminLayout>
 </template>
@@ -70,7 +68,6 @@ import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import Modal from '@/Components/Modal.vue';
 import ScheduleForm from '@/Components/Forms/ScheduleForm.vue';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -89,13 +86,4 @@ const editingSchedule = ref(null);
 const openCreate = () => { editingSchedule.value = null; showForm.value = true; };
 const openEdit = (s) => { editingSchedule.value = s; showForm.value = true; };
 
-// ── Delete ───────────────────────────────────────────────
-const showDeleteModal = ref(false);
-const scheduleToDelete = ref(null);
-const confirmDelete = (s) => { scheduleToDelete.value = s; showDeleteModal.value = true; };
-const deleteSchedule = () => {
-    router.delete(`/admin/schedules/${scheduleToDelete.value.id}`, {
-        onFinish: () => { showDeleteModal.value = false; scheduleToDelete.value = null; },
-    });
-};
 </script>

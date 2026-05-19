@@ -36,7 +36,7 @@
                             <TableCell class="text-right">
                                 <div class="flex items-center justify-end gap-1">
                                     <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(ts)">Edit</Button>
-                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="confirmDelete(ts)">Delete</Button>
+                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/time-slots/${ts.id}/delete`, { preserveState: true, preserveScroll: true })">Delete</Button>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -46,9 +46,6 @@
                     </TableBody>
                 </Table>
             </Card>
-
-            <!-- Delete confirmation modal -->
-            <Modal :show="showDeleteModal" title="Delete Time Slot" :message="`Delete ${toDelete?.name}?`" @confirm="deleteSlot" @cancel="showDeleteModal = false" />
 
             <!-- Create / Edit Form -->
             <TimeSlotForm v-model:open="showForm" :time-slot="editingTimeSlot" />
@@ -61,7 +58,6 @@ import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import Modal from '@/Components/Modal.vue';
 import TimeSlotForm from '@/Components/Forms/TimeSlotForm.vue';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -69,16 +65,6 @@ import { Card } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
 const props = defineProps({ timeSlots: Array });
-
-// ── Delete ────────────────────────────────────────────────────────────────────
-const showDeleteModal = ref(false);
-const toDelete = ref(null);
-const confirmDelete = (ts) => { toDelete.value = ts; showDeleteModal.value = true; };
-const deleteSlot = () => {
-    router.delete(`/admin/time-slots/${toDelete.value.id}`, {
-        onFinish: () => { showDeleteModal.value = false; toDelete.value = null; },
-    });
-};
 
 // ── Create / Edit ─────────────────────────────────────────────────────────────
 const showForm = ref(false);

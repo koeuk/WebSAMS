@@ -29,7 +29,7 @@
                         <TableCell class="text-gray-600">{{ formatDate(s.end_date) }}</TableCell>
                         <TableCell class="text-right">
                             <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-800 mr-1" @click="openEdit(s)">Edit</Button>
-                            <Button variant="ghost" size="sm" class="text-red-600 hover:text-red-800" @click="confirmDelete(s)">Delete</Button>
+                            <Button variant="ghost" size="sm" class="text-red-600 hover:text-red-800" @click="router.visit(`/admin/semesters/${s.id}/delete`, { preserveState: true, preserveScroll: true })">Delete</Button>
                         </TableCell>
                     </TableRow>
                     <TableRow v-if="!semesters.data?.length">
@@ -40,9 +40,6 @@
         </div>
 
         <Pagination :links="semesters.links" />
-
-        <!-- Delete confirmation modal -->
-        <Modal :show="showDeleteModal" title="Delete Semester" :message="`Delete ${semesterToDelete?.name}?`" @confirm="deleteSemester" @cancel="showDeleteModal = false" />
 
         <!-- Create / Edit Form -->
         <SemesterForm v-model:open="showForm" :semester="editingSemester" />
@@ -55,22 +52,11 @@ import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import Modal from '@/Components/Modal.vue';
 import SemesterForm from '@/Components/Forms/SemesterForm.vue';
 import { Button } from '@/Components/ui/button';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
 const props = defineProps({ semesters: Object });
-
-// ── Delete ────────────────────────────────────────────────────────────────────
-const showDeleteModal = ref(false);
-const semesterToDelete = ref(null);
-const confirmDelete = (s) => { semesterToDelete.value = s; showDeleteModal.value = true; };
-const deleteSemester = () => {
-    router.delete(`/admin/semesters/${semesterToDelete.value.id}`, {
-        onFinish: () => { showDeleteModal.value = false; semesterToDelete.value = null; },
-    });
-};
 
 // ── Create / Edit ─────────────────────────────────────────────────────────────
 const showForm = ref(false);

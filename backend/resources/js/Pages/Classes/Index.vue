@@ -72,8 +72,6 @@
             <Pagination :links="classes.links" />
 
             <ClassForm v-model:open="showForm" :school-class="editingClass" />
-
-            <Modal :show="showDeleteModal" title="Delete Class" :message="`Delete ${classToDelete?.name}?`" @confirm="deleteClass" @cancel="showDeleteModal = false" />
         </div>
     </AdminLayout>
 </template>
@@ -84,7 +82,6 @@ import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import Modal from '@/Components/Modal.vue';
 import ClassForm from '@/Components/Forms/ClassForm.vue';
 import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';
@@ -111,13 +108,4 @@ const editingClass = ref(null);
 const openCreate = () => { editingClass.value = null; showForm.value = true; };
 const openEdit = (c) => { editingClass.value = c; showForm.value = true; };
 
-// ── Delete ───────────────────────────────────────────────
-const showDeleteModal = ref(false);
-const classToDelete = ref(null);
-const confirmDelete = (c) => { classToDelete.value = c; showDeleteModal.value = true; };
-const deleteClass = () => {
-    router.delete(`/admin/classes/${classToDelete.value.id}`, {
-        onFinish: () => { showDeleteModal.value = false; classToDelete.value = null; },
-    });
-};
 </script>

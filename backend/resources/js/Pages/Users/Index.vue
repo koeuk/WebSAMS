@@ -85,7 +85,7 @@
                                         <Link :href="`/admin/users/${user.id}`">View</Link>
                                     </Button>
                                     <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(user)">Edit</Button>
-                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="confirmDelete(user)">Delete</Button>
+                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/users/${user.id}/delete`, { preserveState: true, preserveScroll: true })">Delete</Button>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -97,15 +97,6 @@
             </div>
 
             <Pagination :links="users.links" />
-
-            <!-- Delete Modal -->
-            <Modal
-                :show="showDeleteModal"
-                title="Delete User"
-                :message="`Are you sure you want to delete ${userToDelete?.name}?`"
-                @confirm="deleteUser"
-                @cancel="showDeleteModal = false"
-            />
 
             <UserForm v-model:open="showForm" :user="editingUser" :roles="props.roles" :genders="props.genders" :statuses="props.statuses" />
 
@@ -119,7 +110,6 @@ import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import Modal from '@/Components/Modal.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
 import UserForm from '@/Components/Forms/UserForm.vue';
 import { Input } from '@/Components/ui/input';
@@ -176,24 +166,6 @@ const clearFilters = () => {
     yearFilter.value = '';
     statusFilter.value = '';
     router.get('/admin/users', {}, { preserveState: false });
-};
-
-// ── Delete ──────────────────────────────────────────────────────────────────
-const showDeleteModal = ref(false);
-const userToDelete = ref(null);
-
-const confirmDelete = (user) => {
-    userToDelete.value = user;
-    showDeleteModal.value = true;
-};
-
-const deleteUser = () => {
-    router.delete(`/admin/users/${userToDelete.value.id}`, {
-        onFinish: () => {
-            showDeleteModal.value = false;
-            userToDelete.value = null;
-        },
-    });
 };
 
 // ── Form Dialog ──────────────────────────────────────────────────────────────
