@@ -73,6 +73,7 @@ import { useForm } from '@inertiajs/vue3'
 import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import { Clock, Loader2 } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 import ModalForm from '@/Components/ModalForm.vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
@@ -105,14 +106,14 @@ const submit = (setErrors) => {
     if (isEdit.value) {
         form.put(route('admin.time-slots.update', props.timeSlot.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: close,
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('Time slot updated successfully'); close() },
+            onError: (errors) => { toast.error('Failed to update time slot'); setErrors(errors) },
         })
     } else {
         form.post(route('admin.time-slots.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { close(); form.reset(); form.type = 'morning' },
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('Time slot created successfully'); close(); form.reset(); form.type = 'morning' },
+            onError: (errors) => { toast.error('Failed to create time slot'); setErrors(errors) },
         })
     }
 }

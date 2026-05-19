@@ -27,7 +27,7 @@ class AttendanceController extends Controller
                 AllowedFilter::exact('status'),
                 AllowedFilter::callback('date_from',  fn ($q, $v) => $q->where('date', '>=', $v)),
                 AllowedFilter::callback('date_to',    fn ($q, $v) => $q->where('date', '<=', $v)),
-            ])
+            )
             ->with(['student', 'classSubject.subject.course', 'classSubject.schoolClass', 'recorder', 'timeSlot'])
             ->latest('date')
             ->latest('id')

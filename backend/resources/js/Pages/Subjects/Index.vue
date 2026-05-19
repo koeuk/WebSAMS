@@ -53,7 +53,7 @@
                             <TableCell class="text-right">
                                 <div class="flex items-center justify-end gap-1">
                                     <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700" @click="openEdit(subject)">Edit</Button>
-                                    <Button variant="ghost" size="sm" @click="confirmDelete(subject)" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50">Delete</Button>
+                                    <Button variant="ghost" size="sm" @click="router.visit(`/admin/subjects/${subject.id}/delete`, { preserveState: true, preserveScroll: true })" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50">Delete</Button>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -65,7 +65,6 @@
             </Card>
 
             <Pagination :links="subjects.links" />
-            <Modal :show="showDeleteModal" title="Delete Subject" :message="`Delete ${subjectToDelete?.name}?`" @confirm="deleteSubject" @cancel="showDeleteModal = false" />
         </div>
 
         <SubjectForm v-model:open="showForm" :subject="editingSubject" :courses="courses" />
@@ -78,7 +77,6 @@ import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import Modal from '@/Components/Modal.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
 import SubjectForm from '@/Components/Forms/SubjectForm.vue';
 import { Input } from '@/Components/ui/input';
@@ -113,13 +111,4 @@ const editingSubject = ref(null);
 const openCreate = () => { editingSubject.value = null; showForm.value = true; };
 const openEdit = (subject) => { editingSubject.value = subject; showForm.value = true; };
 
-// Delete modal
-const showDeleteModal = ref(false);
-const subjectToDelete = ref(null);
-const confirmDelete = (subject) => { subjectToDelete.value = subject; showDeleteModal.value = true; };
-const deleteSubject = () => {
-    router.delete(`/admin/subjects/${subjectToDelete.value.id}`, {
-        onFinish: () => { showDeleteModal.value = false; subjectToDelete.value = null; },
-    });
-};
 </script>

@@ -104,11 +104,13 @@
                 <slot />
             </main>
         </div>
+        <Toaster rich-colors position="top-right" />
     </div>
 </template>
 
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
+import Toaster from '@/Components/ui/sonner/Sonner.vue';
 import { ref } from 'vue';
 
 const page = usePage();

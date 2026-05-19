@@ -189,6 +189,7 @@ import { useForm } from '@inertiajs/vue3'
 import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import { UserRound, Loader2 } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 import ModalForm from '@/Components/ModalForm.vue'
 import DatePicker from '@/Components/DatePicker.vue'
 import { Input } from '@/Components/ui/input'
@@ -242,14 +243,14 @@ const submit = (setErrors) => {
     if (isEdit.value) {
         form.put(route('admin.users.update', props.user.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: close,
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('User updated successfully'); close() },
+            onError: (errors) => { toast.error('Failed to update user'); setErrors(errors) },
         })
     } else {
         form.post(route('admin.users.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { close(); form.reset(); form.role = 'student'; form.status = 'active' },
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('User created successfully'); close(); form.reset(); form.role = 'student'; form.status = 'active' },
+            onError: (errors) => { toast.error('Failed to create user'); setErrors(errors) },
         })
     }
 }

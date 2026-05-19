@@ -67,6 +67,7 @@ import { useForm } from '@inertiajs/vue3'
 import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import { BookMarked, Loader2 } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 import ModalForm from '@/Components/ModalForm.vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
@@ -100,14 +101,14 @@ const submit = (setErrors) => {
     if (isEdit.value) {
         form.put(route('admin.subjects.update', props.subject.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: close,
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('Subject updated successfully'); close() },
+            onError: (errors) => { toast.error('Failed to update subject'); setErrors(errors) },
         })
     } else {
         form.post(route('admin.subjects.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { close(); form.reset() },
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('Subject created successfully'); close(); form.reset() },
+            onError: (errors) => { toast.error('Failed to create subject'); setErrors(errors) },
         })
     }
 }

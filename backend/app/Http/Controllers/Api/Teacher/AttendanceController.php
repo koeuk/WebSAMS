@@ -23,10 +23,10 @@ class AttendanceController extends Controller
             'attendances.*.student_id' => 'required|exists:users,id',
             'attendances.*.status'     => 'required|in:present,absent,late,excused',
             'attendances.*.remarks'    => 'nullable|string',
-        ]);
+            );
 
-        $classSubject = ClassSubject::with(['subject', 'schoolClass'])
-            ->findOrFail($validated['class_subject_id']);
+        $classSubject = ClassSubject::with(['subject', 'schoolClass'            )
+            ->findOrFail($validated['class_subject_id'            );
 
         if ($classSubject->teacher_id !== $request->user()->id) {
             abort(403, 'Unauthorized.');
@@ -52,10 +52,10 @@ class AttendanceController extends Controller
 
             $notifications = [];
             foreach ($validated['attendances'] as $record) {
-                if (in_array($record['status'], ['absent', 'late'])) {
+                if (in_array($record['status'], ['absent', 'late'            )) {
                     $notifications[] = [
                         'user_id'    => $record['student_id'],
-                        'title'      => ucfirst($record['status']) . ' Notice',
+                        'title'      => ucfirst($record['status'            ) . ' Notice',
                         'message'    => "You were marked as {$record['status']} for {$classSubject->subject->name} ({$classSubject->schoolClass->name}) on {$validated['date']}.",
                         'type'       => $record['status'] === 'absent' ? 'absence' : 'late',
                         'created_at' => now(),
@@ -74,7 +74,7 @@ class AttendanceController extends Controller
             throw $e;
         }
 
-        return response()->json(['message' => 'Attendance recorded successfully.']);
+        return response()->json(['message' => 'Attendance recorded successfully.'            );
     }
 
     public function index(Request $request)
@@ -84,9 +84,9 @@ class AttendanceController extends Controller
                 AllowedFilter::exact('class_subject_id'),
                 AllowedFilter::callback('date_from', fn ($q, $v) => $q->where('date', '>=', $v)),
                 AllowedFilter::callback('date_to',   fn ($q, $v) => $q->where('date', '<=', $v)),
-            ])
-            ->allowedSorts(['date', 'id'])
-            ->with(['student', 'classSubject.subject', 'classSubject.schoolClass', 'timeSlot'])
+            )
+            ->allowedSorts(['date', 'id'            )
+            ->with(['student', 'classSubject.subject', 'classSubject.schoolClass', 'timeSlot'            )
             ->whereHas('classSubject', fn ($q) => $q->where('teacher_id', $request->user()->id))
             ->latest('date')
             ->latest('id')

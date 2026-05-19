@@ -61,6 +61,7 @@ import { useForm } from '@inertiajs/vue3'
 import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import { CalendarDays, Loader2 } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 import ModalForm from '@/Components/ModalForm.vue'
 import DatePicker from '@/Components/DatePicker.vue'
 import { Input } from '@/Components/ui/input'
@@ -92,14 +93,14 @@ const submit = (setErrors) => {
     if (isEdit.value) {
         form.put(route('admin.semesters.update', props.semester.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: close,
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('Semester updated successfully'); close() },
+            onError: (errors) => { toast.error('Failed to update semester'); setErrors(errors) },
         })
     } else {
         form.post(route('admin.semesters.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { close(); form.reset() },
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('Semester created successfully'); close(); form.reset() },
+            onError: (errors) => { toast.error('Failed to create semester'); setErrors(errors) },
         })
     }
 }

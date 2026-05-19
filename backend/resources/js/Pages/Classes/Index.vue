@@ -58,7 +58,7 @@
                                         <Link :href="`/admin/classes/${c.id}`">View</Link>
                                     </Button>
                                     <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(c)">Edit</Button>
-                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="confirmDelete(c)">Delete</Button>
+                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/classes/${c.id}/delete`, { preserveState: true, preserveScroll: true })">Delete</Button>
                                 </div>
                             </TableCell>
                         </TableRow>

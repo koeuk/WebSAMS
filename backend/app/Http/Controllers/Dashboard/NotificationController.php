@@ -17,7 +17,7 @@ class NotificationController extends Controller
             ->allowedFilters(
                 AllowedFilter::exact('type'),
                 AllowedFilter::callback('search', fn ($q, $v) => $q->whereHas('user', fn ($q) => $q->where('name', 'like', "%{$v}%"))),
-            ])
+            )
             ->with('user')
             ->latest()
             ->paginate(20)
@@ -25,7 +25,7 @@ class NotificationController extends Controller
 
         return Inertia::render('Notifications/Index', [
             'notifications' => $notifications,
-            'filters'       => $request->input('filter', []),
-        ]);
+            'filters'       => $request->input('filter', [            ),
+            );
     }
 }

@@ -17,20 +17,20 @@ class StudentTrackingController extends Controller
 {
     public function index(Request $request)
     {
-        $filters   = $request->input('filter', []);
+        $filters   = $request->input('filter', [            );
         $threshold = $filters['threshold'] ?? 80;
 
         $dateFrom = null;
         $dateTo   = null;
 
-        if (!empty($filters['semester_id'])) {
-            $semester = Semester::find($filters['semester_id']);
+        if (!empty($filters['semester_id'            )) {
+            $semester = Semester::find($filters['semester_id'            );
             if ($semester) {
                 $dateFrom = $semester->start_date->toDateString();
                 $dateTo   = $semester->end_date->toDateString();
             }
-        } elseif (!empty($filters['academic_year'])) {
-            $years = explode('-', $filters['academic_year']);
+        } elseif (!empty($filters['academic_year'            )) {
+            $years = explode('-', $filters['academic_year'            );
             if (count($years) === 2) {
                 $dateFrom = $years[0] . '-09-01';
                 $dateTo   = $years[1] . '-06-30';
@@ -42,7 +42,7 @@ class StudentTrackingController extends Controller
             ->allowedFilters(
                 AllowedFilter::callback('class_id', fn ($q, $v) => $q->whereHas('enrolledClasses', fn ($q) => $q->where('school_classes.id', $v))),
                 AllowedFilter::exact('year_level'),
-            ])
+            )
             ->get();
 
         $courseId = $filters['course_id'] ?? null;
@@ -52,7 +52,7 @@ class StudentTrackingController extends Controller
             $query = Attendance::where('student_id', $student->id);
 
             if ($dateFrom && $dateTo) {
-                $query->whereBetween('date', [$dateFrom, $dateTo]);
+                $query->whereBetween('date', [$dateFrom, $dateTo            );
             }
 
             if ($courseId) {
@@ -68,7 +68,7 @@ class StudentTrackingController extends Controller
             $absent  = $records->where('status', 'absent')->count();
             $late    = $records->where('status', 'late')->count();
             $excused = $records->where('status', 'excused')->count();
-            $rate    = round(($records->whereIn('status', ['present', 'late'])->count() / $total) * 100);
+            $rate    = round(($records->whereIn('status', ['present', 'late'            )->count() / $total) * 100);
 
             $tracking[] = [
                 'student' => $student,
@@ -82,7 +82,7 @@ class StudentTrackingController extends Controller
             ];
         }
 
-        usort($tracking, fn ($a, $b) => $a['rate'] - $b['rate']);
+        usort($tracking, fn ($a, $b) => $a['rate'] - $b['rate'            );
 
         $academicYears = SchoolClass::distinct()->pluck('academic_year');
 
@@ -90,8 +90,8 @@ class StudentTrackingController extends Controller
             'tracking'      => $tracking,
             'semesters'     => Semester::orderBy('start_date', 'desc')->get(),
             'academicYears' => $academicYears,
-            'courses'       => Course::all(['id', 'name', 'code']),
-            'classes'       => SchoolClass::all(['id', 'name']),
+            'courses'       => Course::all(['id', 'name', 'code'            ),
+            'classes'       => SchoolClass::all(['id', 'name'            ),
             'filters'       => $filters,
             'threshold'     => (int) $threshold,
             'summary'       => [
@@ -99,7 +99,7 @@ class StudentTrackingController extends Controller
                 'lowAttendance' => count(array_filter($tracking, fn ($t) => $t['rate'] < $threshold)),
                 'averageRate'   => count($tracking) > 0 ? round(array_sum(array_column($tracking, 'rate')) / count($tracking)) : 0,
             ],
-        ]);
+            );
     }
 
     public function show(Request $request, User $student)
@@ -108,7 +108,7 @@ class StudentTrackingController extends Controller
             abort(404);
         }
 
-        $filters    = $request->input('filter', []);
+        $filters    = $request->input('filter', [            );
         $semesterId = $filters['semester_id'] ?? null;
         $dateFrom   = null;
         $dateTo     = null;
@@ -121,11 +121,11 @@ class StudentTrackingController extends Controller
             }
         }
 
-        $query = Attendance::with(['classSubject.subject.course', 'classSubject.schoolClass'])
+        $query = Attendance::with(['classSubject.subject.course', 'classSubject.schoolClass'            )
             ->where('student_id', $student->id);
 
         if ($dateFrom && $dateTo) {
-            $query->whereBetween('date', [$dateFrom, $dateTo]);
+            $query->whereBetween('date', [$dateFrom, $dateTo            );
         }
 
         $records = $query->latest('date')->get();
@@ -143,7 +143,7 @@ class StudentTrackingController extends Controller
                 'absent'  => $subjectRecords->where('status', 'absent')->count(),
                 'late'    => $subjectRecords->where('status', 'late')->count(),
                 'excused' => $subjectRecords->where('status', 'excused')->count(),
-                'rate'    => $total > 0 ? round(($subjectRecords->whereIn('status', ['present', 'late'])->count() / $total) * 100) : 0,
+                'rate'    => $total > 0 ? round(($subjectRecords->whereIn('status', ['present', 'late'            )->count() / $total) * 100) : 0,
             ];
         })->values();
 
@@ -154,7 +154,7 @@ class StudentTrackingController extends Controller
             'absent'  => $records->where('status', 'absent')->count(),
             'late'    => $records->where('status', 'late')->count(),
             'excused' => $records->where('status', 'excused')->count(),
-            'rate'    => $total > 0 ? round(($records->whereIn('status', ['present', 'late'])->count() / $total) * 100) : 0,
+            'rate'    => $total > 0 ? round(($records->whereIn('status', ['present', 'late'            )->count() / $total) * 100) : 0,
         ];
 
         $allSemesters  = Semester::all();
@@ -186,6 +186,6 @@ class StudentTrackingController extends Controller
             'semester'      => $semester,
             'semesters'     => Semester::orderBy('start_date', 'desc')->get(),
             'filters'       => $filters,
-        ]);
+            );
     }
 }

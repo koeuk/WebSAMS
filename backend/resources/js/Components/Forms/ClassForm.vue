@@ -53,6 +53,7 @@ import { useForm } from '@inertiajs/vue3'
 import { Form, Field } from 'vee-validate'
 import * as yup from 'yup'
 import { School, Loader2 } from 'lucide-vue-next'
+import { toast } from 'vue-sonner'
 import ModalForm from '@/Components/ModalForm.vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
@@ -83,14 +84,14 @@ const submit = (setErrors) => {
     if (isEdit.value) {
         form.put(route('admin.classes.update', props.schoolClass.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: close,
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('Class updated successfully'); close() },
+            onError: (errors) => { toast.error('Failed to update class'); setErrors(errors) },
         })
     } else {
         form.post(route('admin.classes.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { close(); form.reset() },
-            onError: (errors) => setErrors(errors),
+            onSuccess: () => { toast.success('Class created successfully'); close(); form.reset() },
+            onError: (errors) => { toast.error('Failed to create class'); setErrors(errors) },
         })
     }
 }
