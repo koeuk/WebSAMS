@@ -1,6 +1,6 @@
 <template>
     <Sheet :open="open" @update:open="emit('update:open', $event)">
-        <SheetContent side="right" :style="widthStyle" class="flex flex-col gap-0 p-0 !w-auto !max-w-none" @pointer-down-outside.prevent @interact-outside.prevent>
+        <SheetContent side="right" :style="widthStyle" class="flex flex-col gap-0 p-0 !max-w-none" @pointer-down-outside.prevent @interact-outside.prevent>
             <!-- Title slot -->
             <div class="px-6 py-5 border-b shrink-0">
                 <slot name="title">

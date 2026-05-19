@@ -1,6 +1,6 @@
 <template>
     <Form :validation-schema="schema" v-slot="{ setErrors, meta }" :initial-values="form">
-        <ModalForm :open="open" size="md" @update:open="emit('update:open', $event)">
+        <ModalForm :open="open" size="lg" @update:open="emit('update:open', $event)">
             <template #title>
                 <div class="flex items-center gap-3">
                     <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center">
