@@ -39,7 +39,7 @@ class StudentTrackingController extends Controller
 
         $students = QueryBuilder::for(User::class)
             ->where('role', 'student')
-            ->allowedFilters([
+            ->allowedFilters(
                 AllowedFilter::callback('class_id', fn ($q, $v) => $q->whereHas('enrolledClasses', fn ($q) => $q->where('school_classes.id', $v))),
                 AllowedFilter::exact('year_level'),
             ])

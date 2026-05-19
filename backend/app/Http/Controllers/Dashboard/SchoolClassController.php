@@ -7,6 +7,7 @@ use App\Models\SchoolClass;
 use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -17,7 +18,7 @@ class SchoolClassController extends Controller
     {
         $classes = QueryBuilder::for(SchoolClass::class)
             ->withCount(['subjects', 'students'])
-            ->allowedFilters([
+            ->allowedFilters(
                 AllowedFilter::callback('search', fn ($q, $v) => $q->where('name', 'like', "%{$v}%")),
             ])
             ->latest()
@@ -38,26 +39,29 @@ class SchoolClassController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'section' => 'nullable|string|max:50',
+            'name'          => 'required|string|max:255',
+            'section'       => 'nullable|string|max:50',
             'academic_year' => 'required|string|max:20',
         ]);
 
-        SchoolClass::create($validated);
+        DB::beginTransaction();
+        try {
+            SchoolClass::create($validated);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', $e->getMessage());
+        }
 
         return redirect()->route('admin.classes.index')->with('success', 'Class created successfully.');
     }
 
     public function show(SchoolClass $class)
     {
-        $class->load([
-            'subjects.subject',
-            'subjects.teacher',
-            'students',
-        ]);
+        $class->load(['subjects.subject', 'subjects.teacher', 'students']);
 
         return Inertia::render('Classes/Show', [
-            'schoolClass' => $class,
+            'schoolClass'       => $class,
             'availableSubjects' => Subject::all(['id', 'name', 'code']),
             'availableTeachers' => User::where('role', 'teacher')->get(['id', 'name', 'email']),
             'availableStudents' => User::where('role', 'student')
@@ -68,27 +72,44 @@ class SchoolClassController extends Controller
 
     public function edit(SchoolClass $class)
     {
-        return Inertia::render('Classes/Edit', [
-            'schoolClass' => $class,
-        ]);
+        return Inertia::render('Classes/Edit', ['schoolClass' => $class]);
     }
 
     public function update(Request $request, SchoolClass $class)
     {
         $validated = $request->validate([
-            'name' => 'required|string|max:255',
-            'section' => 'nullable|string|max:50',
+            'name'          => 'required|string|max:255',
+            'section'       => 'nullable|string|max:50',
             'academic_year' => 'required|string|max:20',
         ]);
 
-        $class->update($validated);
+        DB::beginTransaction();
+        try {
+            $class->update($validated);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', $e->getMessage());
+        }
 
         return redirect()->route('admin.classes.index')->with('success', 'Class updated successfully.');
     }
 
+    public function delete(SchoolClass $class)
+    {
+        return Inertia::render('Classes/Delete', ['schoolClass' => $class]);
+    }
+
     public function destroy(SchoolClass $class)
     {
-        $class->delete();
+        DB::beginTransaction();
+        try {
+            $class->delete();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
 
         return redirect()->route('admin.classes.index')->with('success', 'Class deleted successfully.');
     }

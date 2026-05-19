@@ -16,7 +16,7 @@ class ExcuseRequestController extends Controller
         $teacherId = $request->user()->id;
 
         $excuseRequests = QueryBuilder::for(ExcuseRequest::class)
-            ->allowedFilters([
+            ->allowedFilters(
                 AllowedFilter::exact('status'),
             ])
             ->with(['student', 'attendance.classSubject.schoolClass', 'attendance.classSubject.subject'])

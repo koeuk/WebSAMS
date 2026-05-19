@@ -80,7 +80,7 @@ class AttendanceController extends Controller
     public function index(Request $request)
     {
         $attendance = QueryBuilder::for(Attendance::class)
-            ->allowedFilters([
+            ->allowedFilters(
                 AllowedFilter::exact('class_subject_id'),
                 AllowedFilter::callback('date_from', fn ($q, $v) => $q->where('date', '>=', $v)),
                 AllowedFilter::callback('date_to',   fn ($q, $v) => $q->where('date', '<=', $v)),

@@ -20,7 +20,7 @@ class AttendanceController extends Controller
     public function index(Request $request)
     {
         $attendance = QueryBuilder::for(Attendance::class)
-            ->allowedFilters([
+            ->allowedFilters(
                 AllowedFilter::callback('course_id',  fn ($q, $v) => $q->whereHas('classSubject.subject', fn ($q) => $q->where('course_id', $v))),
                 AllowedFilter::callback('class_id',   fn ($q, $v) => $q->whereHas('classSubject', fn ($q) => $q->where('school_class_id', $v))),
                 AllowedFilter::callback('subject_id', fn ($q, $v) => $q->whereHas('classSubject', fn ($q) => $q->where('subject_id', $v))),

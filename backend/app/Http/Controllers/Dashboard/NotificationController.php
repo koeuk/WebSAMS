@@ -14,7 +14,7 @@ class NotificationController extends Controller
     public function index(Request $request)
     {
         $notifications = QueryBuilder::for(Notification::class)
-            ->allowedFilters([
+            ->allowedFilters(
                 AllowedFilter::exact('type'),
                 AllowedFilter::callback('search', fn ($q, $v) => $q->whereHas('user', fn ($q) => $q->where('name', 'like', "%{$v}%"))),
             ])

@@ -18,6 +18,8 @@
                 v-html="link.label"
             />
         </template>
+    </nav>
+</template>
 
 <script setup>
 import { Link } from '@inertiajs/vue3';

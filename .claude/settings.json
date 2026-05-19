@@ -10,7 +10,11 @@
       "Bash(sed -n '49,56p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Components/Forms/SemesterForm.vue)",
       "Bash(sed -n '58,65p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Components/Forms/TimeSlotForm.vue)",
       "Bash(sed -n '156,165p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Components/Forms/UserForm.vue)",
-      "Bash(find /home/koeuk/Projects/WebSAMS/backend/resources/js/Pages '\\(' -name Create.vue -o -name Edit.vue '\\)' ! -path */Attendance/* ! -path */Profile/* ! -path */Settings/*)"
+      "Bash(find /home/koeuk/Projects/WebSAMS/backend/resources/js/Pages '\\(' -name Create.vue -o -name Edit.vue '\\)' ! -path */Attendance/* ! -path */Profile/* ! -path */Settings/*)",
+      "Bash(xargs php -l)",
+      "Bash(php -r ' *)",
+      "Bash(git -C /home/koeuk/Projects/WebSAMS/backend log --oneline -3 -- resources/js/Components/Pagination.vue)",
+      "Bash(npx shadcn-vue@latest add sonner --yes)"
     ]
   }
 }

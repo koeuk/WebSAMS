@@ -7,6 +7,7 @@ use App\Models\ClassSubject;
 use App\Models\Schedule;
 use App\Models\TimeSlot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class ScheduleController extends Controller
@@ -21,9 +22,9 @@ class ScheduleController extends Controller
             ->sortBy(fn ($items, $key) => array_search($key, $dayOrder));
 
         return Inertia::render('Schedules/Index', [
-            'schedules' => $schedules,
+            'schedules'     => $schedules,
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
-            'timeSlots' => TimeSlot::all(),
+            'timeSlots'     => TimeSlot::all(),
         ]);
     }
 
@@ -31,7 +32,7 @@ class ScheduleController extends Controller
     {
         return Inertia::render('Schedules/Create', [
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
-            'timeSlots' => TimeSlot::all(),
+            'timeSlots'     => TimeSlot::all(),
         ]);
     }
 
@@ -39,12 +40,19 @@ class ScheduleController extends Controller
     {
         $validated = $request->validate([
             'class_subject_id' => 'required|exists:class_subject,id',
-            'time_slot_id' => 'required|exists:time_slots,id',
-            'day_of_week' => 'required|in:mon,tue,wed,thu,fri,sat,sun',
-            'room' => 'nullable|string|max:50',
+            'time_slot_id'     => 'required|exists:time_slots,id',
+            'day_of_week'      => 'required|in:mon,tue,wed,thu,fri,sat,sun',
+            'room'             => 'nullable|string|max:50',
         ]);
 
-        Schedule::create($validated);
+        DB::beginTransaction();
+        try {
+            Schedule::create($validated);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', $e->getMessage());
+        }
 
         return redirect()->route('admin.schedules.index')->with('success', 'Schedule created successfully.');
     }
@@ -52,9 +60,9 @@ class ScheduleController extends Controller
     public function edit(Schedule $schedule)
     {
         return Inertia::render('Schedules/Edit', [
-            'schedule' => $schedule->load(['classSubject', 'timeSlot']),
+            'schedule'      => $schedule->load(['classSubject', 'timeSlot']),
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
-            'timeSlots' => TimeSlot::all(),
+            'timeSlots'     => TimeSlot::all(),
         ]);
     }
 
@@ -62,19 +70,40 @@ class ScheduleController extends Controller
     {
         $validated = $request->validate([
             'class_subject_id' => 'required|exists:class_subject,id',
-            'time_slot_id' => 'required|exists:time_slots,id',
-            'day_of_week' => 'required|in:mon,tue,wed,thu,fri,sat,sun',
-            'room' => 'nullable|string|max:50',
+            'time_slot_id'     => 'required|exists:time_slots,id',
+            'day_of_week'      => 'required|in:mon,tue,wed,thu,fri,sat,sun',
+            'room'             => 'nullable|string|max:50',
         ]);
 
-        $schedule->update($validated);
+        DB::beginTransaction();
+        try {
+            $schedule->update($validated);
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->withInput()->with('error', $e->getMessage());
+        }
 
         return redirect()->route('admin.schedules.index')->with('success', 'Schedule updated successfully.');
     }
 
+    public function delete(Schedule $schedule)
+    {
+        return Inertia::render('Schedules/Delete', [
+            'schedule' => $schedule->load(['classSubject.schoolClass', 'classSubject.subject', 'timeSlot']),
+        ]);
+    }
+
     public function destroy(Schedule $schedule)
     {
-        $schedule->delete();
+        DB::beginTransaction();
+        try {
+            $schedule->delete();
+            DB::commit();
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return back()->with('error', $e->getMessage());
+        }
 
         return redirect()->route('admin.schedules.index')->with('success', 'Schedule deleted successfully.');
     }
