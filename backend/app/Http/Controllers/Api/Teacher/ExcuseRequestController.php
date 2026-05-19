@@ -19,7 +19,7 @@ class ExcuseRequestController extends Controller
             ->allowedFilters(
                 AllowedFilter::exact('status'),
             )
-            ->with(['student', 'attendance.classSubject.schoolClass', 'attendance.classSubject.subject'            )
+            ->with(['student', 'attendance.classSubject.schoolClass', 'attendance.classSubject.subject'])
             ->whereHas('attendance.classSubject', fn ($q) => $q->where('teacher_id', $teacherId))
             ->latest()
             ->paginate(20);
@@ -39,7 +39,7 @@ class ExcuseRequestController extends Controller
         $data = $request->validate([
             'status'        => 'required|in:approved,rejected',
             'reviewer_note' => 'nullable|string|max:500',
-            );
+        ]);
 
         DB::beginTransaction();
         try {
@@ -48,10 +48,10 @@ class ExcuseRequestController extends Controller
                 'reviewer_note' => $data['reviewer_note'] ?? null,
                 'reviewed_by'   => $teacherId,
                 'reviewed_at'   => now(),
-            );
+            ]);
 
             if ($data['status'] === 'approved') {
-                $excuseRequest->attendance->update(['status' => 'excused'            );
+                $excuseRequest->attendance->update(['status' => 'excused']);
             }
 
             DB::commit();
@@ -60,6 +60,6 @@ class ExcuseRequestController extends Controller
             throw $e;
         }
 
-        return response()->json(['message' => 'Excuse request reviewed.', 'request' => $excuseRequest            );
+        return response()->json(['message' => 'Excuse request reviewed.', 'request' => $excuseRequest]);
     }
 }

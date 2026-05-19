@@ -19,15 +19,15 @@ class ReportController extends Controller
     {
         return Inertia::render('Reports/Index', [
             'semesters' => Semester::orderBy('start_date', 'desc')->get(),
-            'courses'   => Course::all(['id', 'name', 'code'            ),
-            'classes'   => SchoolClass::all(['id', 'name'            ),
-            'subjects'  => Subject::all(['id', 'name', 'code'            ),
-            );
+            'courses'   => Course::all(['id', 'name', 'code']),
+            'classes'   => SchoolClass::all(['id', 'name']),
+            'subjects'  => Subject::all(['id', 'name', 'code']),
+        ]);
     }
 
     public function generate(Request $request)
     {
-        $filters    = $request->input('filter', [            );
+        $filters    = $request->input('filter', []);
         $semesterId = $filters['semester_id'] ?? null;
         $dateFrom   = $filters['date_from'] ?? null;
         $dateTo     = $filters['date_to'] ?? null;
@@ -38,11 +38,11 @@ class ReportController extends Controller
             $dateTo   = $semester->end_date->toDateString();
         }
 
-        $request->merge(['date_from' => $dateFrom, 'date_to' => $dateTo            );
+        $request->merge(['date_from' => $dateFrom, 'date_to' => $dateTo]);
         $request->validate([
             'date_from' => 'required|date',
             'date_to'   => 'required|date|after_or_equal:date_from',
-            );
+        ]);
 
         $records = QueryBuilder::for(Attendance::class)
             ->allowedFilters(
@@ -51,8 +51,8 @@ class ReportController extends Controller
                 AllowedFilter::callback('subject_id', fn ($q, $v) => $q->whereHas('classSubject', fn ($q) => $q->where('subject_id', $v))),
                 AllowedFilter::exact('status'),
             )
-            ->with(['student', 'classSubject.subject.course', 'classSubject.schoolClass'            )
-            ->whereBetween('date', [$dateFrom, $dateTo            )
+            ->with(['student', 'classSubject.subject.course', 'classSubject.schoolClass'])
+            ->whereBetween('date', [$dateFrom, $dateTo])
             ->get();
 
         // Per-student summary
@@ -65,7 +65,7 @@ class ReportController extends Controller
                 'absent'  => $studentRecords->where('status', 'absent')->count(),
                 'late'    => $studentRecords->where('status', 'late')->count(),
                 'excused' => $studentRecords->where('status', 'excused')->count(),
-                'rate'    => $total > 0 ? round(($studentRecords->whereIn('status', ['present', 'late'            )->count() / $total) * 100) : 0,
+                'rate'    => $total > 0 ? round(($studentRecords->whereIn('status', ['present', 'late'])->count() / $total) * 100) : 0,
             ];
         })->sortByDesc('late')->values();
 
@@ -77,7 +77,7 @@ class ReportController extends Controller
             'absent'  => $records->where('status', 'absent')->count(),
             'late'    => $records->where('status', 'late')->count(),
             'excused' => $records->where('status', 'excused')->count(),
-            'rate'    => $total > 0 ? round(($records->whereIn('status', ['present', 'late'            )->count() / $total) * 100) : 0,
+            'rate'    => $total > 0 ? round(($records->whereIn('status', ['present', 'late'])->count() / $total) * 100) : 0,
         ];
 
         $semester = $semesterId ? Semester::find($semesterId) : null;
@@ -88,9 +88,9 @@ class ReportController extends Controller
             'semester'       => $semester,
             'filters'        => $filters,
             'semesters'      => Semester::orderBy('start_date', 'desc')->get(),
-            'courses'        => Course::all(['id', 'name', 'code'            ),
-            'classes'        => SchoolClass::all(['id', 'name'            ),
-            'subjects'       => Subject::all(['id', 'name', 'code'            ),
-            );
+            'courses'        => Course::all(['id', 'name', 'code']),
+            'classes'        => SchoolClass::all(['id', 'name']),
+            'subjects'       => Subject::all(['id', 'name', 'code']),
+        ]);
     }
 }

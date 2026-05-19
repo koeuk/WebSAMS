@@ -25,7 +25,7 @@ class NotificationController extends Controller
 
         return Inertia::render('Notifications/Index', [
             'notifications' => $notifications,
-            'filters'       => $request->input('filter', [            ),
-            );
+            'filters'       => $request->input('filter', []),
+        ]);
     }
 }

@@ -14,7 +14,8 @@
       "Bash(xargs php -l)",
       "Bash(php -r ' *)",
       "Bash(git -C /home/koeuk/Projects/WebSAMS/backend log --oneline -3 -- resources/js/Components/Pagination.vue)",
-      "Bash(npx shadcn-vue@latest add sonner --yes)"
+      "Bash(npx shadcn-vue@latest add sonner --yes)",
+      "Bash(grep -rn \"\\\\[[ ]\\\\{8,\\\\}\\)\" /home/koeuk/Projects/WebSAMS/backend/app/Http/Controllers/ --include=\"*.php\")"
     ]
   }
 }
