@@ -17,7 +17,7 @@
             <div class="space-y-6 stagger-children">
                 <div v-for="(daySchedules, day) in schedules" :key="day" class="animate-fade-in-up">
                     <div class="flex items-center gap-3 mb-3">
-                        <Badge :class="dayColors[day] || 'bg-slate-100 text-slate-600'" class="border-0">{{ days[day] || day }}</Badge>
+                        <Badge :class="dayColors[day] || 'bg-slate-100 text-slate-600'" class="border-0">{{ dayLabels[day] || day }}</Badge>
                         <div class="flex-1 h-px bg-slate-100"></div>
                     </div>
                     <Card class="overflow-hidden">
@@ -58,7 +58,7 @@
                 </CardContent>
             </Card>
 
-            <ScheduleForm v-model:open="showForm" :schedule="editingSchedule" :class-subjects="classSubjects" :time-slots="timeSlots" />
+            <ScheduleForm v-model:open="showForm" :schedule="editingSchedule" :class-subjects="classSubjects" :time-slots="timeSlots" :days="props.days" />
         </div>
     </AdminLayout>
 </template>
@@ -74,9 +74,9 @@ import { Badge } from '@/Components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Card, CardContent } from '@/Components/ui/card';
 
-const props = defineProps({ schedules: Object, classSubjects: Array, timeSlots: Array });
+const props = defineProps({ schedules: Object, classSubjects: Array, timeSlots: Array, days: Array });
 
-const days = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
+const dayLabels = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
 const dayColors = { mon: 'bg-blue-50 text-blue-700', tue: 'bg-emerald-50 text-emerald-700', wed: 'bg-amber-50 text-amber-700', thu: 'bg-violet-50 text-violet-700', fri: 'bg-rose-50 text-rose-700', sat: 'bg-sky-50 text-sky-700', sun: 'bg-slate-100 text-slate-600' };
 
 // ── Form (create & edit) ─────────────────────────────────

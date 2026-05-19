@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Enums\Gender;
 use App\Enums\UserStatus;
+use App\Enums\YearLevel;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -35,20 +36,22 @@ class UserController extends Controller
             ->withQueryString();
 
         return Inertia::render('Users/Index', [
-            'users'    => $users,
-            'filters'  => $request->input('filter', []),
-            'roles'    => ['admin', 'teacher', 'student'],
-            'genders'  => Gender::cases(),
-            'statuses' => UserStatus::cases(),
+            'users'       => $users,
+            'filters'     => $request->input('filter', []),
+            'roles'       => ['admin', 'teacher', 'student'],
+            'genders'     => Gender::cases(),
+            'statuses'    => UserStatus::cases(),
+            'yearLevels'  => YearLevel::options(),
         ]);
     }
 
     public function create()
     {
         return Inertia::render('Users/Create', [
-            'roles'    => ['admin', 'teacher', 'student'],
-            'genders'  => Gender::cases(),
-            'statuses' => UserStatus::cases(),
+            'roles'      => ['admin', 'teacher', 'student'],
+            'genders'    => Gender::cases(),
+            'statuses'   => UserStatus::cases(),
+            'yearLevels' => YearLevel::options(),
         ]);
     }
 
@@ -101,10 +104,11 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return Inertia::render('Users/Edit', [
-            'user'     => $user,
-            'roles'    => ['admin', 'teacher', 'student'],
-            'genders'  => Gender::cases(),
-            'statuses' => UserStatus::cases(),
+            'user'       => $user,
+            'roles'      => ['admin', 'teacher', 'student'],
+            'genders'    => Gender::cases(),
+            'statuses'   => UserStatus::cases(),
+            'yearLevels' => YearLevel::options(),
         ]);
     }
 

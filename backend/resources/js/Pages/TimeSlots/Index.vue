@@ -48,7 +48,7 @@
             </Card>
 
             <!-- Create / Edit Form -->
-            <TimeSlotForm v-model:open="showForm" :time-slot="editingTimeSlot" />
+            <TimeSlotForm v-model:open="showForm" :time-slot="editingTimeSlot" :types="props.types" />
         </div>
     </AdminLayout>
 </template>
@@ -64,7 +64,7 @@ import { Badge } from '@/Components/ui/badge';
 import { Card } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
-const props = defineProps({ timeSlots: Array });
+const props = defineProps({ timeSlots: Array, types: Array });
 
 // ── Create / Edit ─────────────────────────────────────────────────────────────
 const showForm = ref(false);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\DayOfWeek;
 use App\Http\Controllers\Controller;
 use App\Models\ClassSubject;
 use App\Models\Schedule;
@@ -25,6 +26,7 @@ class ScheduleController extends Controller
             'schedules'     => $schedules,
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
             'timeSlots'     => TimeSlot::all(),
+            'days'          => DayOfWeek::options(),
         ]);
     }
 
@@ -33,6 +35,7 @@ class ScheduleController extends Controller
         return Inertia::render('Schedules/Create', [
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
             'timeSlots'     => TimeSlot::all(),
+            'days'          => DayOfWeek::options(),
         ]);
     }
 
@@ -63,6 +66,7 @@ class ScheduleController extends Controller
             'schedule'      => $schedule->load(['classSubject', 'timeSlot']),
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
             'timeSlots'     => TimeSlot::all(),
+            'days'          => DayOfWeek::options(),
         ]);
     }
 

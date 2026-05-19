@@ -121,10 +121,9 @@
                                     <Select v-model="form.year_level">
                                         <SelectTrigger class="w-full"><SelectValue placeholder="Select" /></SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="1">Year 1</SelectItem>
-                                            <SelectItem value="2">Year 2</SelectItem>
-                                            <SelectItem value="3">Year 3</SelectItem>
-                                            <SelectItem value="4">Year 4</SelectItem>
+                                            <SelectItem v-for="yl in yearLevels" :key="yl.value" :value="yl.value">
+                                                {{ yl.label }}
+                                            </SelectItem>
                                         </SelectContent>
                                     </Select>
                                 </div>
@@ -199,11 +198,12 @@ import { Button } from '@/Components/ui/button'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
 
 const props = defineProps({
-    open:     { type: Boolean, required: true },
-    user:     { type: Object,  default: null },
-    roles:    { type: Array,   default: () => [] },
-    genders:  { type: Array,   default: () => [] },
-    statuses: { type: Array,   default: () => [] },
+    open:        { type: Boolean, required: true },
+    user:        { type: Object,  default: null },
+    roles:       { type: Array,   default: () => [] },
+    genders:     { type: Array,   default: () => [] },
+    statuses:    { type: Array,   default: () => [] },
+    yearLevels:  { type: Array,   default: () => [] },
 })
 const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.user)

@@ -50,13 +50,9 @@
                                 <SelectValue placeholder="Select day" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="mon">Monday</SelectItem>
-                                <SelectItem value="tue">Tuesday</SelectItem>
-                                <SelectItem value="wed">Wednesday</SelectItem>
-                                <SelectItem value="thu">Thursday</SelectItem>
-                                <SelectItem value="fri">Friday</SelectItem>
-                                <SelectItem value="sat">Saturday</SelectItem>
-                                <SelectItem value="sun">Sunday</SelectItem>
+                                <SelectItem v-for="d in days" :key="d.value" :value="d.value">
+                                    {{ d.label }}
+                                </SelectItem>
                             </SelectContent>
                         </Select>
                         <p v-if="form.errors.day_of_week" class="text-[12px] text-rose-500 mt-1">{{ form.errors.day_of_week }}</p>
@@ -97,6 +93,7 @@ const props = defineProps({
     schedule:      { type: Object, default: null },
     classSubjects: { type: Array, default: () => [] },
     timeSlots:     { type: Array, default: () => [] },
+    days:          { type: Array, default: () => [] },
 })
 const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.schedule)

@@ -98,7 +98,7 @@
 
             <Pagination :links="users.links" />
 
-            <UserForm v-model:open="showForm" :user="editingUser" :roles="props.roles" :genders="props.genders" :statuses="props.statuses" />
+            <UserForm v-model:open="showForm" :user="editingUser" :roles="props.roles" :genders="props.genders" :statuses="props.statuses" :year-levels="props.yearLevels" />
 
         </div>
     </AdminLayout>
@@ -137,11 +137,12 @@ const statusOptions = [
 ];
 
 const props = defineProps({
-    users:    Object,
-    filters:  Object,
-    roles:    Array,
-    genders:  Array,
-    statuses: Array,
+    users:      Object,
+    filters:    Object,
+    roles:      Array,
+    genders:    Array,
+    statuses:   Array,
+    yearLevels: Array,
 });
 
 const search = ref(props.filters?.search || '');

@@ -47,9 +47,9 @@
                             <SelectValue placeholder="Select type…" />
                         </SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="morning">Morning</SelectItem>
-                            <SelectItem value="afternoon">Afternoon</SelectItem>
-                            <SelectItem value="evening">Evening</SelectItem>
+                            <SelectItem v-for="t in types" :key="t.value" :value="t.value">
+                                {{ t.label }}
+                            </SelectItem>
                         </SelectContent>
                     </Select>
                     <p v-if="form.errors.type" class="text-[12px] text-rose-500 mt-1">{{ form.errors.type }}</p>
@@ -83,6 +83,7 @@ import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@
 const props = defineProps({
     open:     { type: Boolean, required: true },
     timeSlot: { type: Object, default: null },
+    types:    { type: Array, default: () => [] },
 })
 const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.timeSlot)

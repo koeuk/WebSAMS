@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\TimeSlotType;
 use App\Http\Controllers\Controller;
 use App\Models\TimeSlot;
 use Illuminate\Http\Request;
@@ -14,12 +15,15 @@ class TimeSlotController extends Controller
     {
         return Inertia::render('TimeSlots/Index', [
             'timeSlots' => TimeSlot::orderBy('start_time')->get(),
+            'types'     => TimeSlotType::options(),
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('TimeSlots/Create');
+        return Inertia::render('TimeSlots/Create', [
+            'types' => TimeSlotType::options(),
+        ]);
     }
 
     public function store(Request $request)
@@ -45,7 +49,10 @@ class TimeSlotController extends Controller
 
     public function edit(TimeSlot $timeSlot)
     {
-        return Inertia::render('TimeSlots/Edit', ['timeSlot' => $timeSlot]);
+        return Inertia::render('TimeSlots/Edit', [
+            'timeSlot' => $timeSlot,
+            'types'    => TimeSlotType::options(),
+        ]);
     }
 
     public function update(Request $request, TimeSlot $timeSlot)

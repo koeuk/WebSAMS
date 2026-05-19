@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\AttendanceStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\ClassSubject;
@@ -54,8 +55,9 @@ class AttendanceController extends Controller
     {
         return Inertia::render('Attendance/Create', [
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
-            'students' => User::where('role', 'student')->get(['id', 'name', 'email']),
-            'timeSlots' => TimeSlot::all(),
+            'students'      => User::where('role', 'student')->get(['id', 'name', 'email']),
+            'timeSlots'     => TimeSlot::all(),
+            'statuses'      => AttendanceStatus::options(),
         ]);
     }
 
@@ -103,10 +105,11 @@ class AttendanceController extends Controller
         $attendance->load(['student', 'classSubject.subject', 'classSubject.schoolClass', 'timeSlot']);
 
         return Inertia::render('Attendance/Edit', [
-            'record' => $attendance,
+            'record'        => $attendance,
             'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
-            'students' => User::where('role', 'student')->get(['id', 'name', 'email']),
-            'timeSlots' => TimeSlot::all(),
+            'students'      => User::where('role', 'student')->get(['id', 'name', 'email']),
+            'timeSlots'     => TimeSlot::all(),
+            'statuses'      => AttendanceStatus::options(),
         ]);
     }
 

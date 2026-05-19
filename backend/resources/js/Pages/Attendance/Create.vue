@@ -66,10 +66,7 @@
                                     <SelectValue placeholder="Select Status" />
                                 </SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="present">Present</SelectItem>
-                                    <SelectItem value="absent">Absent</SelectItem>
-                                    <SelectItem value="late">Late</SelectItem>
-                                    <SelectItem value="excused">Excused</SelectItem>
+                                    <SelectItem v-for="s in statuses" :key="s.value" :value="s.value">{{ s.label }}</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
@@ -100,7 +97,7 @@ import { Textarea } from '@/Components/ui/textarea';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 
-const props = defineProps({ classSubjects: Array, students: Array, timeSlots: Array });
+const props = defineProps({ classSubjects: Array, students: Array, timeSlots: Array, statuses: Array });
 
 const form = useForm({
     class_subject_id: '',
