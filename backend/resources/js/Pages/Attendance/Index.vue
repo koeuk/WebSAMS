@@ -164,6 +164,7 @@ const props = defineProps({
     classes: Array,
     subjects: Array,
     timeSlots: Array,
+    statuses: Array,
     filters: Object,
 });
 
@@ -175,12 +176,7 @@ const statusFilter = ref(props.filters?.status || '');
 const courseOptions = computed(() => (props.courses || []).map(c => ({ value: c.id, label: c.name })));
 const classOptions = computed(() => (props.classes || []).map(c => ({ value: c.id, label: c.name })));
 const subjectOptions = computed(() => (props.subjects || []).map(s => ({ value: s.id, label: s.name })));
-const statusOptions = [
-    { value: 'present', label: 'Present' },
-    { value: 'absent', label: 'Absent' },
-    { value: 'late', label: 'Late' },
-    { value: 'excused', label: 'Excused' },
-];
+const statusOptions = computed(() => props.statuses || []);
 const dateFrom = ref(props.filters?.date_from || '');
 const dateTo = ref(props.filters?.date_to || '');
 

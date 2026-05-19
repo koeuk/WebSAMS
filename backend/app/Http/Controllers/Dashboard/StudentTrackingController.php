@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\YearLevel;
 use App\Http\Controllers\Controller;
 use App\Models\Attendance;
 use App\Models\Course;
@@ -92,6 +93,7 @@ class StudentTrackingController extends Controller
             'academicYears' => $academicYears,
             'courses'       => Course::all(['id', 'name', 'code']),
             'classes'       => SchoolClass::all(['id', 'name']),
+            'yearLevels'    => YearLevel::options(),
             'filters'       => $filters,
             'threshold'     => (int) $threshold,
             'summary'       => [

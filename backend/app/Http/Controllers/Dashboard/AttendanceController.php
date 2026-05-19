@@ -47,6 +47,7 @@ class AttendanceController extends Controller
             'classes'    => SchoolClass::all(['id', 'name']),
             'subjects'   => $subjectsQuery->get(['id', 'name', 'code']),
             'timeSlots'  => TimeSlot::all(),
+            'statuses'   => AttendanceStatus::options(),
             'filters'    => $request->input('filter', []),
         ]);
     }

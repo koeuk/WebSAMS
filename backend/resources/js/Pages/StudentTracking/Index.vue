@@ -148,7 +148,7 @@ import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
 const props = defineProps({
-    tracking: Array, semesters: Array, academicYears: Array, courses: Array, classes: Array, filters: Object, threshold: Number, summary: Object,
+    tracking: Array, semesters: Array, academicYears: Array, courses: Array, classes: Array, yearLevels: Array, filters: Object, threshold: Number, summary: Object,
 });
 
 const semesterFilter = ref(props.filters?.semester_id || '');
@@ -195,13 +195,10 @@ const classOptions = computed(() => [
     { value: '', label: 'All Classes' },
     ...(props.classes?.map(c => ({ value: c.id, label: c.name })) ?? []),
 ]);
-const yearLevelOptions = [
+const yearLevelOptions = computed(() => [
     { value: '', label: 'All Years' },
-    { value: '1', label: 'Year 1' },
-    { value: '2', label: 'Year 2' },
-    { value: '3', label: 'Year 3' },
-    { value: '4', label: 'Year 4' },
-];
+    ...(props.yearLevels ?? []),
+]);
 
 const statusBadgeClass = (status) => ({
     'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'good',

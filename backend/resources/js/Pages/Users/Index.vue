@@ -105,7 +105,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
@@ -118,24 +118,6 @@ import { Badge } from '@/Components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 
-const roleOptions = [
-    { value: 'admin', label: 'Admin' },
-    { value: 'teacher', label: 'Teacher' },
-    { value: 'student', label: 'Student' },
-];
-const yearOptions = [
-    { value: '1', label: 'Year 1' },
-    { value: '2', label: 'Year 2' },
-    { value: '3', label: 'Year 3' },
-    { value: '4', label: 'Year 4' },
-];
-const statusOptions = [
-    { value: 'active', label: 'Active' },
-    { value: 'inactive', label: 'Inactive' },
-    { value: 'graduated', label: 'Graduated' },
-    { value: 'suspended', label: 'Suspended' },
-];
-
 const props = defineProps({
     users:      Object,
     filters:    Object,
@@ -144,6 +126,10 @@ const props = defineProps({
     statuses:   Array,
     yearLevels: Array,
 });
+
+const roleOptions   = computed(() => (props.roles   || []).map(r => ({ value: r, label: r.charAt(0).toUpperCase() + r.slice(1) })));
+const yearOptions   = computed(() => props.yearLevels || []);
+const statusOptions = computed(() => (props.statuses || []).map(s => ({ value: s, label: s.charAt(0).toUpperCase() + s.slice(1) })));
 
 const search = ref(props.filters?.search || '');
 const roleFilter = ref(props.filters?.role || '');
