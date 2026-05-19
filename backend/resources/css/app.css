@@ -71,9 +71,15 @@
     --color-page-bg: #f1f5f9;
 }
 
-/* Smooth scrolling & transitions */
-* {
-    scroll-behavior: smooth;
+/* Base layer — set default border color for shadcn components */
+@layer base {
+    * {
+        @apply border-border;
+        scroll-behavior: smooth;
+    }
+    body {
+        @apply bg-background text-foreground;
+    }
 }
 
 /* Custom scrollbar */
