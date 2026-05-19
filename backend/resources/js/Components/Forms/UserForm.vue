@@ -72,8 +72,8 @@
                                 <Select v-model="form.gender">
                                     <SelectTrigger class="w-full"><SelectValue placeholder="Select" /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem v-for="g in genders" :key="g.value" :value="g.value">
-                                            {{ g.name.charAt(0).toUpperCase() + g.name.slice(1).toLowerCase() }}
+                                        <SelectItem v-for="g in genders" :key="g" :value="g">
+                                            {{ g.charAt(0).toUpperCase() + g.slice(1).toLowerCase() }}
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
@@ -83,8 +83,8 @@
                                 <Select v-model="form.status">
                                     <SelectTrigger class="w-full"><SelectValue placeholder="Select status" /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem v-for="s in statuses" :key="s.value" :value="s.value">
-                                            {{ s.name.charAt(0).toUpperCase() + s.name.slice(1).toLowerCase() }}
+                                        <SelectItem v-for="s in statuses" :key="s" :value="s">
+                                            {{ s.charAt(0).toUpperCase() + s.slice(1).toLowerCase() }}
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
@@ -224,10 +224,10 @@ watch(() => props.user, (u) => {
     if (u) {
         form.name = u.name; form.email = u.email; form.password = ''; form.role = u.role
         form.phone = u.phone || ''; form.id_number = u.id_number || ''
-        form.gender = u.gender?.value ?? u.gender ?? ''
+        form.gender = u.gender ?? ''
         form.date_of_birth = u.date_of_birth?.split('T')[0] || ''
         form.address = u.address || ''
-        form.status = u.status?.value ?? u.status ?? 'active'
+        form.status = u.status ?? 'active'
         form.guardian_name = u.guardian_name || ''; form.guardian_phone = u.guardian_phone || ''
         form.enrollment_date = u.enrollment_date?.split('T')[0] || ''
         form.department = u.department || ''; form.qualification = u.qualification || ''
