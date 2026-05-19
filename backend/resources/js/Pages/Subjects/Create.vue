@@ -1,6 +1,11 @@
 <script setup>
 import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 
 const props = defineProps({ courses: Array });
 
@@ -23,34 +28,40 @@ const submit = () => { form.post('/admin/subjects'); };
                 </div>
             </div>
 
-            <div class="card p-8 max-w-xl">
-                <form @submit.prevent="submit" class="space-y-5">
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Course *</label>
-                        <select v-model="form.course_id" required class="select-modern w-full">
-                            <option value="" disabled>Select a course</option>
-                            <option v-for="c in courses" :key="c.id" :value="c.id">{{ c.name }} ({{ c.code }})</option>
-                        </select>
-                        <p v-if="form.errors.course_id" class="text-[12px] text-rose-500 mt-1">{{ form.errors.course_id }}</p>
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name *</label>
-                        <input v-model="form.name" type="text" required class="input-modern" />
-                        <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Code *</label>
-                        <input v-model="form.code" type="text" required class="input-modern" placeholder="e.g. CS101" />
-                        <p v-if="form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ form.errors.code }}</p>
-                    </div>
-                    <div class="pt-2">
-                        <button type="submit" :disabled="form.processing" class="btn-primary">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                            {{ form.processing ? 'Creating...' : 'Create Subject' }}
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <Card class="max-w-xl">
+                <CardContent class="p-8">
+                    <form @submit.prevent="submit" class="space-y-5">
+                        <div>
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Course *</Label>
+                            <Select v-model="form.course_id" required>
+                                <SelectTrigger class="w-full">
+                                    <SelectValue placeholder="Select a course" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem v-for="c in courses" :key="c.id" :value="String(c.id)">{{ c.name }} ({{ c.code }})</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <p v-if="form.errors.course_id" class="text-[12px] text-rose-500 mt-1">{{ form.errors.course_id }}</p>
+                        </div>
+                        <div>
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name *</Label>
+                            <Input v-model="form.name" type="text" required />
+                            <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
+                        </div>
+                        <div>
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code *</Label>
+                            <Input v-model="form.code" type="text" required placeholder="e.g. CS101" />
+                            <p v-if="form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ form.errors.code }}</p>
+                        </div>
+                        <div class="pt-2">
+                            <Button type="submit" :disabled="form.processing" class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                                {{ form.processing ? 'Creating...' : 'Create Subject' }}
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
     </AdminLayout>
 </template>

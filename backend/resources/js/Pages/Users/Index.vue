@@ -6,6 +6,10 @@ import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import Modal from '@/Components/Modal.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Badge } from '@/Components/ui/badge';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
 const roleOptions = [
     { value: 'admin', label: 'Admin' },
@@ -69,18 +73,17 @@ const deleteUser = () => {
     });
 };
 
-const roleBadgeClass = (role) => ({
-    'bg-violet-50 text-violet-700 ring-1 ring-violet-200': role === 'admin',
-    'bg-sky-50 text-sky-700 ring-1 ring-sky-200': role === 'teacher',
-    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': role === 'student',
-});
+const roleBadgeVariant = (role) => {
+    if (role === 'admin') return 'default';
+    if (role === 'teacher') return 'secondary';
+    return 'outline';
+};
 
-const statusBadgeClass = (status) => ({
-    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'active',
-    'bg-slate-100 text-slate-600 ring-1 ring-slate-200': status === 'inactive',
-    'bg-sky-50 text-sky-700 ring-1 ring-sky-200': status === 'graduated',
-    'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'suspended',
-});
+const statusBadgeVariant = (status) => {
+    if (status === 'active') return 'default';
+    if (status === 'suspended') return 'destructive';
+    return 'secondary';
+};
 </script>
 
 <template>
@@ -91,10 +94,12 @@ const statusBadgeClass = (status) => ({
                     <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Users</h2>
                     <p class="text-sm text-slate-500 mt-1">Manage students, teachers, and administrators</p>
                 </div>
-                <Link href="/admin/users/create" class="btn-primary">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                    Create User
-                </Link>
+                <Button as-child>
+                    <Link href="/admin/users/create" class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        Create User
+                    </Link>
+                </Button>
             </div>
 
             <FlashMessage />
@@ -104,11 +109,10 @@ const statusBadgeClass = (status) => ({
                 <div class="flex flex-wrap gap-3 items-end">
                     <div class="flex-1 min-w-50">
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Search</label>
-                        <input
+                        <Input
                             v-model="search"
                             type="text"
                             placeholder="Search by name or email..."
-                            class="input-modern"
                             @keyup.enter="applyFilters"
                         />
                     </div>
@@ -124,50 +128,64 @@ const statusBadgeClass = (status) => ({
                         <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
                         <FilterCombobox v-model="statusFilter" :options="statusOptions" placeholder="All Status" @update:model-value="applyFilters" />
                     </div>
-                    <button v-if="search || roleFilter || yearFilter || statusFilter" @click="clearFilters" class="flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors self-end">
+                    <Button
+                        v-if="search || roleFilter || yearFilter || statusFilter"
+                        variant="outline"
+                        size="sm"
+                        @click="clearFilters"
+                        class="self-end flex items-center gap-1.5"
+                    >
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
                         Clear
-                    </button>
+                    </Button>
                 </div>
             </div>
 
             <!-- Table -->
             <div class="card overflow-hidden">
-                <table class="modern-table">
-                    <thead>
-                        <tr>
-                            <th class="text-left">ID</th>
-                            <th class="text-left">Name</th>
-                            <th class="text-left">Email</th>
-                            <th class="text-left">Role</th>
-                            <th class="text-left">Gender</th>
-                            <th class="text-left">Status</th>
-                            <th class="text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="user in users.data" :key="user.id">
-                            <td class="text-slate-400 font-mono text-[13px]">{{ user.id_number || '-' }}</td>
-                            <td class="font-semibold text-slate-900">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead class="text-left">ID</TableHead>
+                            <TableHead class="text-left">Name</TableHead>
+                            <TableHead class="text-left">Email</TableHead>
+                            <TableHead class="text-left">Role</TableHead>
+                            <TableHead class="text-left">Gender</TableHead>
+                            <TableHead class="text-left">Status</TableHead>
+                            <TableHead class="text-right">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow v-for="user in users.data" :key="user.id">
+                            <TableCell class="text-slate-400 font-mono text-[13px]">{{ user.id_number || '-' }}</TableCell>
+                            <TableCell class="font-semibold text-slate-900">
                                 <Link :href="`/admin/users/${user.id}`" class="hover:text-beltei transition-colors">{{ user.name }}</Link>
-                            </td>
-                            <td>{{ user.email }}</td>
-                            <td><span class="badge" :class="roleBadgeClass(user.role)">{{ user.role }}</span></td>
-                            <td class="capitalize">{{ user.gender || '-' }}</td>
-                            <td><span class="badge" :class="statusBadgeClass(user.status)">{{ user.status || 'active' }}</span></td>
-                            <td class="text-right">
+                            </TableCell>
+                            <TableCell>{{ user.email }}</TableCell>
+                            <TableCell>
+                                <Badge :variant="roleBadgeVariant(user.role)" class="capitalize">{{ user.role }}</Badge>
+                            </TableCell>
+                            <TableCell class="capitalize">{{ user.gender || '-' }}</TableCell>
+                            <TableCell>
+                                <Badge :variant="statusBadgeVariant(user.status)" class="capitalize">{{ user.status || 'active' }}</Badge>
+                            </TableCell>
+                            <TableCell class="text-right">
                                 <div class="flex items-center justify-end gap-1">
-                                    <Link :href="`/admin/users/${user.id}`" class="px-2.5 py-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors">View</Link>
-                                    <Link :href="`/admin/users/${user.id}/edit`" class="px-2.5 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">Edit</Link>
-                                    <button @click="confirmDelete(user)" class="px-2.5 py-1.5 text-[12px] font-medium text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors">Delete</button>
+                                    <Button variant="ghost" size="sm" as-child>
+                                        <Link :href="`/admin/users/${user.id}`">View</Link>
+                                    </Button>
+                                    <Button variant="ghost" size="sm" as-child class="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
+                                        <Link :href="`/admin/users/${user.id}/edit`">Edit</Link>
+                                    </Button>
+                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="confirmDelete(user)">Delete</Button>
                                 </div>
-                            </td>
-                        </tr>
-                        <tr v-if="!users.data?.length">
-                            <td colspan="7" class="text-center! py-12! text-slate-400">No users found.</td>
-                        </tr>
-                    </tbody>
-                </table>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow v-if="!users.data?.length">
+                            <TableCell colspan="7" class="text-center py-12 text-slate-400">No users found.</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
             </div>
 
             <Pagination :links="users.links" />

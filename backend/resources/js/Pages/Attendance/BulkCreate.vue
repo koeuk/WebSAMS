@@ -4,6 +4,11 @@ import { useForm, Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import DatePicker from '@/Components/DatePicker.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 
 const props = defineProps({ classSubjects: Array, timeSlots: Array });
 
@@ -78,75 +83,89 @@ const statusColors = {
             <FlashMessage />
 
             <!-- Selection Controls -->
-            <div class="card p-4 mb-6">
-                <div class="flex flex-wrap gap-3 items-end">
-                    <div class="min-w-[250px]">
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class - Subject</label>
-                        <select v-model="selectedClass" @change="loadStudents" class="select-modern w-full">
-                            <option value="" disabled>Select Class - Subject</option>
-                            <option v-for="cs in classSubjects" :key="cs.id" :value="cs.id">{{ csLabel(cs) }}</option>
-                        </select>
+            <Card class="mb-6">
+                <CardContent class="p-4">
+                    <div class="flex flex-wrap gap-3 items-end">
+                        <div class="min-w-[250px]">
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class - Subject</label>
+                            <Select v-model="selectedClass" @update:model-value="loadStudents">
+                                <SelectTrigger class="w-full">
+                                    <SelectValue placeholder="Select Class - Subject" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem v-for="cs in classSubjects" :key="cs.id" :value="String(cs.id)">{{ csLabel(cs) }}</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Time Slot</label>
+                            <Select v-model="selectedTimeSlot">
+                                <SelectTrigger class="w-[220px]">
+                                    <SelectValue placeholder="Select Time Slot" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem v-for="ts in timeSlots" :key="ts.id" :value="String(ts.id)">{{ ts.name }} ({{ ts.start_time?.slice(0,5) }} - {{ ts.end_time?.slice(0,5) }})</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Date</label>
+                            <DatePicker v-model="selectedDate" placeholder="Select date" />
+                        </div>
+                        <Button v-if="students.length" variant="outline" @click="markAllPresent" class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            Mark All Present
+                        </Button>
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Time Slot</label>
-                        <select v-model="selectedTimeSlot" class="select-modern">
-                            <option value="" disabled>Select Time Slot</option>
-                            <option v-for="ts in timeSlots" :key="ts.id" :value="ts.id">{{ ts.name }} ({{ ts.start_time?.slice(0,5) }} - {{ ts.end_time?.slice(0,5) }})</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Date</label>
-                        <DatePicker v-model="selectedDate" placeholder="Select date" />
-                    </div>
-                    <button v-if="students.length" @click="markAllPresent" class="btn-secondary">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        Mark All Present
-                    </button>
-                </div>
-            </div>
+                </CardContent>
+            </Card>
 
             <!-- Student Table -->
-            <div v-if="students.length" class="card overflow-hidden">
-                <table class="modern-table">
-                    <thead>
-                        <tr>
-                            <th class="text-left">Student</th>
-                            <th class="text-center">Present</th>
-                            <th class="text-center">Absent</th>
-                            <th class="text-center">Late</th>
-                            <th class="text-center">Excused</th>
-                            <th class="text-left">Remarks</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="student in students" :key="student.id">
-                            <td class="font-semibold text-slate-900">{{ student.name }}</td>
-                            <td class="text-center"><input type="radio" :name="`s-${student.id}`" value="present" v-model="attendances[student.id].status" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500" /></td>
-                            <td class="text-center"><input type="radio" :name="`s-${student.id}`" value="absent" v-model="attendances[student.id].status" class="w-4 h-4 text-rose-600 focus:ring-rose-500" /></td>
-                            <td class="text-center"><input type="radio" :name="`s-${student.id}`" value="late" v-model="attendances[student.id].status" class="w-4 h-4 text-amber-600 focus:ring-amber-500" /></td>
-                            <td class="text-center"><input type="radio" :name="`s-${student.id}`" value="excused" v-model="attendances[student.id].status" class="w-4 h-4 text-sky-600 focus:ring-sky-500" /></td>
-                            <td><input v-model="attendances[student.id].remarks" type="text" class="input-modern !py-1.5" placeholder="Optional" /></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <Card v-if="students.length" class="overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Student</TableHead>
+                            <TableHead class="text-center">Present</TableHead>
+                            <TableHead class="text-center">Absent</TableHead>
+                            <TableHead class="text-center">Late</TableHead>
+                            <TableHead class="text-center">Excused</TableHead>
+                            <TableHead>Remarks</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow v-for="student in students" :key="student.id">
+                            <TableCell class="font-semibold text-slate-900">{{ student.name }}</TableCell>
+                            <TableCell class="text-center"><input type="radio" :name="`s-${student.id}`" value="present" v-model="attendances[student.id].status" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500" /></TableCell>
+                            <TableCell class="text-center"><input type="radio" :name="`s-${student.id}`" value="absent" v-model="attendances[student.id].status" class="w-4 h-4 text-rose-600 focus:ring-rose-500" /></TableCell>
+                            <TableCell class="text-center"><input type="radio" :name="`s-${student.id}`" value="late" v-model="attendances[student.id].status" class="w-4 h-4 text-amber-600 focus:ring-amber-500" /></TableCell>
+                            <TableCell class="text-center"><input type="radio" :name="`s-${student.id}`" value="excused" v-model="attendances[student.id].status" class="w-4 h-4 text-sky-600 focus:ring-sky-500" /></TableCell>
+                            <TableCell><Input v-model="attendances[student.id].remarks" type="text" class="py-1.5 h-auto" placeholder="Optional" /></TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
                 <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
-                    <button @click="submit" class="btn-primary">
+                    <Button @click="submit" class="flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
                         Submit Attendance
-                    </button>
+                    </Button>
                 </div>
-            </div>
+            </Card>
 
-            <div v-else-if="loadingStudents" class="card p-12 text-center">
-                <div class="inline-flex items-center gap-2 text-sm text-slate-400">
-                    <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                    Loading students...
-                </div>
-            </div>
+            <Card v-else-if="loadingStudents">
+                <CardContent class="p-12 text-center">
+                    <div class="inline-flex items-center gap-2 text-sm text-slate-400">
+                        <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
+                        Loading students...
+                    </div>
+                </CardContent>
+            </Card>
 
-            <div v-else-if="selectedClass && !loadingStudents" class="card p-12 text-center text-slate-400">
-                No students found for this class.
-            </div>
+            <Card v-else-if="selectedClass && !loadingStudents">
+                <CardContent class="p-12 text-center text-slate-400">
+                    No students found for this class.
+                </CardContent>
+            </Card>
         </div>
     </AdminLayout>
 </template>

@@ -4,6 +4,12 @@ import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
 const typeOptions = [
     { value: 'absence', label: 'Absence' },
@@ -43,53 +49,57 @@ const typeBadgeClass = (type) => ({
                 <p class="text-sm text-slate-500 mt-1">System notifications and alerts</p>
             </div>
 
-            <div class="card p-4 mb-6">
-                <div class="flex flex-wrap gap-3 items-end">
-                    <div class="flex-1 min-w-[200px]">
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Search</label>
-                        <input v-model="search" type="text" placeholder="Search student..." class="input-modern" @keyup.enter="applyFilters" />
+            <Card class="mb-6">
+                <CardContent class="p-4">
+                    <div class="flex flex-wrap gap-3 items-end">
+                        <div class="flex-1 min-w-[200px]">
+                            <Label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Search</Label>
+                            <Input v-model="search" type="text" placeholder="Search student..." @keyup.enter="applyFilters" />
+                        </div>
+                        <div>
+                            <Label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Type</Label>
+                            <FilterCombobox v-model="typeFilter" :options="typeOptions" placeholder="All Types" @update:model-value="applyFilters" />
+                        </div>
+                        <Button v-if="search || typeFilter" variant="outline" size="sm" @click="clearFilters" class="flex items-center gap-1.5 self-end">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                            Clear
+                        </Button>
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Type</label>
-                        <FilterCombobox v-model="typeFilter" :options="typeOptions" placeholder="All Types" @update:model-value="applyFilters" />
-                    </div>
-                    <button v-if="search || typeFilter" @click="clearFilters" class="flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors self-end">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                        Clear
-                    </button>
-                </div>
-            </div>
+                </CardContent>
+            </Card>
 
-            <div class="card overflow-hidden">
-                <table class="modern-table">
-                    <thead>
-                        <tr>
-                            <th class="text-left">Date</th>
-                            <th class="text-left">Student</th>
-                            <th class="text-left">Type</th>
-                            <th class="text-left">Title</th>
-                            <th class="text-left">Message</th>
-                            <th class="text-center">Read</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="n in notifications.data" :key="n.id">
-                            <td class="whitespace-nowrap font-medium text-slate-900">{{ formatDate(n.created_at) }}</td>
-                            <td class="font-semibold text-slate-900">{{ n.user?.name }}</td>
-                            <td><span class="badge" :class="typeBadgeClass(n.type)">{{ n.type }}</span></td>
-                            <td class="font-medium text-slate-900">{{ n.title }}</td>
-                            <td class="max-w-[250px] truncate">{{ n.message }}</td>
-                            <td class="text-center">
-                                <span v-if="n.is_read" class="badge bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Yes</span>
-                                <span v-else class="badge bg-slate-100 text-slate-500 ring-1 ring-slate-200">No</span>
-                            </td>
-                        </tr>
-                        <tr v-if="!notifications.data?.length">
-                            <td colspan="6" class="!text-center !py-12 text-slate-400">No notifications.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <Card class="overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Date</TableHead>
+                            <TableHead>Student</TableHead>
+                            <TableHead>Type</TableHead>
+                            <TableHead>Title</TableHead>
+                            <TableHead>Message</TableHead>
+                            <TableHead class="text-center">Read</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow v-for="n in notifications.data" :key="n.id">
+                            <TableCell class="whitespace-nowrap font-medium text-slate-900">{{ formatDate(n.created_at) }}</TableCell>
+                            <TableCell class="font-semibold text-slate-900">{{ n.user?.name }}</TableCell>
+                            <TableCell>
+                                <Badge variant="outline" :class="typeBadgeClass(n.type)">{{ n.type }}</Badge>
+                            </TableCell>
+                            <TableCell class="font-medium text-slate-900">{{ n.title }}</TableCell>
+                            <TableCell class="max-w-[250px] truncate">{{ n.message }}</TableCell>
+                            <TableCell class="text-center">
+                                <Badge v-if="n.is_read" variant="outline" class="bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200">Yes</Badge>
+                                <Badge v-else variant="outline" class="bg-slate-100 text-slate-500 ring-1 ring-slate-200">No</Badge>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow v-if="!notifications.data?.length">
+                            <TableCell colspan="6" class="text-center py-12 text-slate-400">No notifications.</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </Card>
 
             <Pagination :links="notifications.links" />
         </div>

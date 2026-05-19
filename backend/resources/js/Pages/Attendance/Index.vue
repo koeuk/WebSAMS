@@ -7,6 +7,10 @@ import FlashMessage from '@/Components/FlashMessage.vue';
 import Modal from '@/Components/Modal.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
 import DatePicker from '@/Components/DatePicker.vue';
+import { Button } from '@/Components/ui/button';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
 const props = defineProps({
     attendance: Object,
@@ -62,11 +66,18 @@ const formatDate = (dateStr) => {
     return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 };
 
+const statusVariant = (status) => ({
+    present: 'default',
+    absent: 'destructive',
+    late: 'secondary',
+    excused: 'outline',
+}[status] || 'outline');
+
 const statusClass = (status) => ({
-    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'present',
-    'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'absent',
-    'bg-amber-50 text-amber-700 ring-1 ring-amber-200': status === 'late',
-    'bg-sky-50 text-sky-700 ring-1 ring-sky-200': status === 'excused',
+    'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-50': status === 'present',
+    'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-50': status === 'absent',
+    'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-50': status === 'late',
+    'bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-50': status === 'excused',
 });
 
 const showDeleteModal = ref(false);
@@ -88,121 +99,135 @@ const deleteRecord = () => {
                     <p class="text-sm text-slate-500 mt-1">Track and manage student attendance</p>
                 </div>
                 <div class="flex items-center gap-3">
-                    <Link href="/admin/bulk-attendance" class="btn-secondary">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                        Bulk Mark
-                    </Link>
-                    <Link href="/admin/attendance/create" class="btn-primary">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                        Create Attendance
-                    </Link>
+                    <Button variant="outline" as-child>
+                        <Link href="/admin/bulk-attendance" class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+                            Bulk Mark
+                        </Link>
+                    </Button>
+                    <Button as-child>
+                        <Link href="/admin/attendance/create" class="flex items-center gap-2">
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                            Create Attendance
+                        </Link>
+                    </Button>
                 </div>
             </div>
 
             <FlashMessage />
 
             <!-- Filters -->
-            <div class="card p-4 mb-6">
-                <div class="flex flex-wrap gap-3 items-end">
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Course</label>
-                        <FilterCombobox
-                            v-model="courseFilter"
-                            :options="courseOptions"
-                            placeholder="All Courses"
-                            @update:model-value="applyFilters(true)"
-                        />
+            <Card class="mb-6">
+                <CardContent class="p-4">
+                    <div class="flex flex-wrap gap-3 items-end">
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Course</label>
+                            <FilterCombobox
+                                v-model="courseFilter"
+                                :options="courseOptions"
+                                placeholder="All Courses"
+                                @update:model-value="applyFilters(true)"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class</label>
+                            <FilterCombobox
+                                v-model="classFilter"
+                                :options="classOptions"
+                                placeholder="All Classes"
+                                @update:model-value="applyFilters()"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Subject</label>
+                            <FilterCombobox
+                                v-model="subjectFilter"
+                                :options="subjectOptions"
+                                placeholder="All Subjects"
+                                @update:model-value="applyFilters()"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
+                            <FilterCombobox
+                                v-model="statusFilter"
+                                :options="statusOptions"
+                                placeholder="All Status"
+                                @update:model-value="applyFilters()"
+                            />
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
+                            <DatePicker v-model="dateFrom" placeholder="Start date" @update:model-value="applyFilters()" />
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
+                            <DatePicker v-model="dateTo" placeholder="End date" @update:model-value="applyFilters()" />
+                        </div>
+                        <Button
+                            v-if="courseFilter || classFilter || subjectFilter || statusFilter || dateFrom || dateTo"
+                            variant="outline"
+                            size="sm"
+                            @click="clearFilters"
+                            class="flex items-center gap-1.5"
+                        >
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                            Clear
+                        </Button>
                     </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class</label>
-                        <FilterCombobox
-                            v-model="classFilter"
-                            :options="classOptions"
-                            placeholder="All Classes"
-                            @update:model-value="applyFilters()"
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Subject</label>
-                        <FilterCombobox
-                            v-model="subjectFilter"
-                            :options="subjectOptions"
-                            placeholder="All Subjects"
-                            @update:model-value="applyFilters()"
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
-                        <FilterCombobox
-                            v-model="statusFilter"
-                            :options="statusOptions"
-                            placeholder="All Status"
-                            @update:model-value="applyFilters()"
-                        />
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
-                        <DatePicker v-model="dateFrom" placeholder="Start date" @update:model-value="applyFilters()" />
-                    </div>
-                    <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
-                        <DatePicker v-model="dateTo" placeholder="End date" @update:model-value="applyFilters()" />
-                    </div>
-                    <button
-                        v-if="courseFilter || classFilter || subjectFilter || statusFilter || dateFrom || dateTo"
-                        @click="clearFilters"
-                        class="flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors"
-                    >
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                        Clear
-                    </button>
-                </div>
-            </div>
+                </CardContent>
+            </Card>
 
             <!-- Table -->
-            <div class="card overflow-hidden">
+            <Card class="overflow-hidden">
                 <div class="overflow-x-auto">
-                    <table class="modern-table">
-                        <thead>
-                            <tr>
-                                <th class="text-left">Date</th>
-                                <th class="text-left">Time Slot</th>
-                                <th class="text-left">Student</th>
-                                <th class="text-left">Year</th>
-                                <th class="text-left">Class</th>
-                                <th class="text-left">Course</th>
-                                <th class="text-left">Subject</th>
-                                <th class="text-left">Status</th>
-                                <th class="text-left">Recorded By</th>
-                                <th class="text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="record in attendance.data" :key="record.id">
-                                <td class="whitespace-nowrap font-medium text-slate-900">{{ formatDate(record.date) }}</td>
-                                <td class="whitespace-nowrap">{{ record.time_slot?.name || '-' }}</td>
-                                <td class="font-semibold text-slate-900">{{ record.student?.name }}</td>
-                                <td>{{ record.student?.year_level ? 'Year ' + record.student.year_level : '-' }}</td>
-                                <td>{{ record.class_subject?.school_class?.name }}</td>
-                                <td>{{ record.class_subject?.subject?.course?.name }}</td>
-                                <td>{{ record.class_subject?.subject?.name }}</td>
-                                <td><span class="badge" :class="statusClass(record.status)">{{ record.status }}</span></td>
-                                <td>{{ record.recorder?.name }}</td>
-                                <td class="text-right">
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Time Slot</TableHead>
+                                <TableHead>Student</TableHead>
+                                <TableHead>Year</TableHead>
+                                <TableHead>Class</TableHead>
+                                <TableHead>Course</TableHead>
+                                <TableHead>Subject</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Recorded By</TableHead>
+                                <TableHead class="text-right">Actions</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow v-for="record in attendance.data" :key="record.id">
+                                <TableCell class="whitespace-nowrap font-medium text-slate-900">{{ formatDate(record.date) }}</TableCell>
+                                <TableCell class="whitespace-nowrap">{{ record.time_slot?.name || '-' }}</TableCell>
+                                <TableCell class="font-semibold text-slate-900">{{ record.student?.name }}</TableCell>
+                                <TableCell>{{ record.student?.year_level ? 'Year ' + record.student.year_level : '-' }}</TableCell>
+                                <TableCell>{{ record.class_subject?.school_class?.name }}</TableCell>
+                                <TableCell>{{ record.class_subject?.subject?.course?.name }}</TableCell>
+                                <TableCell>{{ record.class_subject?.subject?.name }}</TableCell>
+                                <TableCell>
+                                    <Badge class="capitalize" :class="statusClass(record.status)">{{ record.status }}</Badge>
+                                </TableCell>
+                                <TableCell>{{ record.recorder?.name }}</TableCell>
+                                <TableCell class="text-right">
                                     <div class="flex items-center justify-end gap-1">
-                                        <Link :href="`/admin/attendance/${record.id}`" class="px-2.5 py-1.5 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-50 rounded-lg transition-colors">View</Link>
-                                        <Link :href="`/admin/attendance/${record.id}/edit`" class="px-2.5 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">Edit</Link>
-                                        <button @click="confirmDelete(record)" class="px-2.5 py-1.5 text-[12px] font-medium text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors">Delete</button>
+                                        <Button variant="ghost" size="sm" as-child>
+                                            <Link :href="`/admin/attendance/${record.id}`">View</Link>
+                                        </Button>
+                                        <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" as-child>
+                                            <Link :href="`/admin/attendance/${record.id}/edit`">Edit</Link>
+                                        </Button>
+                                        <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="confirmDelete(record)">Delete</Button>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr v-if="!attendance.data?.length">
-                                <td colspan="10" class="!text-center !py-12 text-slate-400">No attendance records found.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                </TableCell>
+                            </TableRow>
+                            <TableRow v-if="!attendance.data?.length">
+                                <TableCell colspan="10" class="text-center py-12 text-slate-400">No attendance records found.</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
                 </div>
-            </div>
+            </Card>
 
             <Pagination :links="attendance.links" />
 

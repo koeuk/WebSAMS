@@ -1,6 +1,11 @@
 <script setup>
 import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 
 const form = useForm({ name: '', start_time: '', end_time: '', type: 'morning' });
 const submit = () => { form.post('/admin/time-slots'); };
@@ -21,39 +26,46 @@ const submit = () => { form.post('/admin/time-slots'); };
                 </div>
             </div>
 
-            <div class="card p-8 max-w-xl">
-                <form @submit.prevent="submit" class="space-y-5">
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name *</label>
-                        <input v-model="form.name" type="text" required class="input-modern" placeholder="e.g. Morning 1" />
-                        <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
+            <Card class="max-w-xl">
+                <CardContent class="p-8">
+                    <form @submit.prevent="submit" class="space-y-5">
                         <div>
-                            <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Start Time *</label>
-                            <input v-model="form.start_time" type="time" required class="input-modern" />
+                            <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name *</Label>
+                            <Input v-model="form.name" type="text" required placeholder="e.g. Morning 1" />
+                            <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Start Time *</Label>
+                                <Input v-model="form.start_time" type="time" required />
+                            </div>
+                            <div>
+                                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">End Time *</Label>
+                                <Input v-model="form.end_time" type="time" required />
+                            </div>
                         </div>
                         <div>
-                            <label class="block text-[13px] font-medium text-slate-600 mb-1.5">End Time *</label>
-                            <input v-model="form.end_time" type="time" required class="input-modern" />
+                            <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Type</Label>
+                            <Select v-model="form.type">
+                                <SelectTrigger class="w-full">
+                                    <SelectValue placeholder="Select type..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="morning">Morning</SelectItem>
+                                    <SelectItem value="afternoon">Afternoon</SelectItem>
+                                    <SelectItem value="evening">Evening</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Type</label>
-                        <select v-model="form.type" class="select-modern w-full">
-                            <option value="morning">Morning</option>
-                            <option value="afternoon">Afternoon</option>
-                            <option value="evening">Evening</option>
-                        </select>
-                    </div>
-                    <div class="pt-2">
-                        <button type="submit" :disabled="form.processing" class="btn-primary">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                            {{ form.processing ? 'Creating...' : 'Create' }}
-                        </button>
-                    </div>
-                </form>
-            </div>
+                        <div class="pt-2">
+                            <Button type="submit" :disabled="form.processing" class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                                {{ form.processing ? 'Creating...' : 'Create' }}
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
     </AdminLayout>
 </template>

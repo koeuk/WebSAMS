@@ -3,6 +3,9 @@ import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
 const props = defineProps({ student: Object, bySubject: Array, overall: Object, recentRecords: Array, semester: Object, semesters: Array, filters: Object });
 
@@ -47,62 +50,109 @@ const statusClass = (status) => ({
 
             <!-- Overall Summary -->
             <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8 stagger-children">
-                <div class="card p-4 text-center animate-fade-in-up"><p class="text-[13px] text-slate-500">Total</p><p class="text-2xl font-bold text-slate-900 mt-1">{{ overall?.total }}</p></div>
-                <div class="card p-4 text-center animate-fade-in-up"><p class="text-[13px] text-slate-500">Present</p><p class="text-2xl font-bold text-emerald-600 mt-1">{{ overall?.present }}</p></div>
-                <div class="card p-4 text-center animate-fade-in-up"><p class="text-[13px] text-slate-500">Absent</p><p class="text-2xl font-bold text-rose-600 mt-1">{{ overall?.absent }}</p></div>
-                <div class="card p-4 text-center animate-fade-in-up"><p class="text-[13px] text-slate-500">Late</p><p class="text-2xl font-bold text-amber-600 mt-1">{{ overall?.late }}</p></div>
-                <div class="card p-4 text-center animate-fade-in-up"><p class="text-[13px] text-slate-500">Excused</p><p class="text-2xl font-bold text-sky-600 mt-1">{{ overall?.excused }}</p></div>
-                <div class="card p-4 text-center animate-fade-in-up"><p class="text-[13px] text-slate-500">Rate</p><p class="text-2xl font-bold mt-1" :class="(overall?.rate ?? 0) >= 80 ? 'text-emerald-600' : (overall?.rate ?? 0) >= 60 ? 'text-amber-600' : 'text-rose-600'">{{ overall?.rate }}%</p></div>
+                <Card class="animate-fade-in-up">
+                    <CardContent class="p-4 text-center">
+                        <p class="text-[13px] text-slate-500">Total</p>
+                        <p class="text-2xl font-bold text-slate-900 mt-1">{{ overall?.total }}</p>
+                    </CardContent>
+                </Card>
+                <Card class="animate-fade-in-up">
+                    <CardContent class="p-4 text-center">
+                        <p class="text-[13px] text-slate-500">Present</p>
+                        <p class="text-2xl font-bold text-emerald-600 mt-1">{{ overall?.present }}</p>
+                    </CardContent>
+                </Card>
+                <Card class="animate-fade-in-up">
+                    <CardContent class="p-4 text-center">
+                        <p class="text-[13px] text-slate-500">Absent</p>
+                        <p class="text-2xl font-bold text-rose-600 mt-1">{{ overall?.absent }}</p>
+                    </CardContent>
+                </Card>
+                <Card class="animate-fade-in-up">
+                    <CardContent class="p-4 text-center">
+                        <p class="text-[13px] text-slate-500">Late</p>
+                        <p class="text-2xl font-bold text-amber-600 mt-1">{{ overall?.late }}</p>
+                    </CardContent>
+                </Card>
+                <Card class="animate-fade-in-up">
+                    <CardContent class="p-4 text-center">
+                        <p class="text-[13px] text-slate-500">Excused</p>
+                        <p class="text-2xl font-bold text-sky-600 mt-1">{{ overall?.excused }}</p>
+                    </CardContent>
+                </Card>
+                <Card class="animate-fade-in-up">
+                    <CardContent class="p-4 text-center">
+                        <p class="text-[13px] text-slate-500">Rate</p>
+                        <p class="text-2xl font-bold mt-1" :class="(overall?.rate ?? 0) >= 80 ? 'text-emerald-600' : (overall?.rate ?? 0) >= 60 ? 'text-amber-600' : 'text-rose-600'">{{ overall?.rate }}%</p>
+                    </CardContent>
+                </Card>
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
                 <!-- By Subject -->
-                <div class="card overflow-hidden">
+                <Card class="overflow-hidden">
                     <div class="px-6 py-5 border-b border-slate-100">
                         <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                             <div class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></div>
                             Attendance by Subject
                         </h3>
                     </div>
-                    <table class="modern-table">
-                        <thead><tr><th class="text-left">Subject</th><th class="text-left">Course</th><th class="text-center">Present</th><th class="text-center">Absent</th><th class="text-center">Late</th><th class="text-center">Rate</th></tr></thead>
-                        <tbody>
-                            <tr v-for="row in bySubject" :key="row.subject">
-                                <td class="font-semibold text-slate-900">{{ row.subject }}</td>
-                                <td>{{ row.course }}</td>
-                                <td class="text-center font-mono text-emerald-600">{{ row.present }}</td>
-                                <td class="text-center font-mono text-rose-600">{{ row.absent }}</td>
-                                <td class="text-center font-mono text-amber-600">{{ row.late }}</td>
-                                <td class="text-center font-bold" :class="row.rate >= 80 ? 'text-emerald-600' : row.rate >= 60 ? 'text-amber-600' : 'text-rose-600'">{{ row.rate }}%</td>
-                            </tr>
-                            <tr v-if="!bySubject?.length"><td colspan="6" class="!text-center !py-8 text-slate-400">No data.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Subject</TableHead>
+                                <TableHead>Course</TableHead>
+                                <TableHead class="text-center">Present</TableHead>
+                                <TableHead class="text-center">Absent</TableHead>
+                                <TableHead class="text-center">Late</TableHead>
+                                <TableHead class="text-center">Rate</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow v-for="row in bySubject" :key="row.subject">
+                                <TableCell class="font-semibold text-slate-900">{{ row.subject }}</TableCell>
+                                <TableCell>{{ row.course }}</TableCell>
+                                <TableCell class="text-center font-mono text-emerald-600">{{ row.present }}</TableCell>
+                                <TableCell class="text-center font-mono text-rose-600">{{ row.absent }}</TableCell>
+                                <TableCell class="text-center font-mono text-amber-600">{{ row.late }}</TableCell>
+                                <TableCell class="text-center font-bold" :class="row.rate >= 80 ? 'text-emerald-600' : row.rate >= 60 ? 'text-amber-600' : 'text-rose-600'">{{ row.rate }}%</TableCell>
+                            </TableRow>
+                            <TableRow v-if="!bySubject?.length">
+                                <TableCell colspan="6" class="text-center py-8 text-slate-400">No data.</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </Card>
 
                 <!-- Enrolled Classes -->
-                <div class="card overflow-hidden">
+                <Card class="overflow-hidden">
                     <div class="px-6 py-5 border-b border-slate-100">
                         <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                             <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
                             Enrolled Classes
                         </h3>
                     </div>
-                    <table class="modern-table">
-                        <thead><tr><th class="text-left">Class</th><th class="text-left">Section</th><th class="text-left">Year</th></tr></thead>
-                        <tbody>
-                            <tr v-for="c in student.enrolled_classes" :key="c.id">
-                                <td class="font-semibold text-slate-900">{{ c.name }}</td>
-                                <td>{{ c.section || '-' }}</td>
-                                <td>{{ c.academic_year }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Class</TableHead>
+                                <TableHead>Section</TableHead>
+                                <TableHead>Year</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow v-for="c in student.enrolled_classes" :key="c.id">
+                                <TableCell class="font-semibold text-slate-900">{{ c.name }}</TableCell>
+                                <TableCell>{{ c.section || '-' }}</TableCell>
+                                <TableCell>{{ c.academic_year }}</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </Card>
             </div>
 
             <!-- Recent Records -->
-            <div class="card overflow-hidden">
+            <Card class="overflow-hidden">
                 <div class="px-6 py-5 border-b border-slate-100">
                     <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                         <div class="w-1.5 h-1.5 rounded-full bg-sky-400"></div>
@@ -110,25 +160,41 @@ const statusClass = (status) => ({
                     </h3>
                 </div>
                 <div class="overflow-x-auto">
-                    <table class="modern-table">
-                        <thead><tr><th class="text-left">Date</th><th class="text-left">Student</th><th class="text-left">Academic Year</th><th class="text-left">Semester</th><th class="text-left">Course</th><th class="text-left">Subject</th><th class="text-left">Class</th><th class="text-left">Status</th><th class="text-left">Remarks</th></tr></thead>
-                        <tbody>
-                            <tr v-for="r in recentRecords" :key="r.id">
-                                <td class="whitespace-nowrap font-medium text-slate-900">{{ formatDate(r.date) }}</td>
-                                <td class="font-semibold text-slate-900">{{ r.student_name }}</td>
-                                <td>{{ r.academic_year || '-' }}</td>
-                                <td>{{ r.semester || '-' }}</td>
-                                <td>{{ r.course }}</td>
-                                <td>{{ r.subject }}</td>
-                                <td>{{ r.class }}</td>
-                                <td><span class="badge" :class="statusClass(r.status)">{{ r.status }}</span></td>
-                                <td>{{ r.remarks || '-' }}</td>
-                            </tr>
-                            <tr v-if="!recentRecords?.length"><td colspan="9" class="!text-center !py-8 text-slate-400">No records.</td></tr>
-                        </tbody>
-                    </table>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Date</TableHead>
+                                <TableHead>Student</TableHead>
+                                <TableHead>Academic Year</TableHead>
+                                <TableHead>Semester</TableHead>
+                                <TableHead>Course</TableHead>
+                                <TableHead>Subject</TableHead>
+                                <TableHead>Class</TableHead>
+                                <TableHead>Status</TableHead>
+                                <TableHead>Remarks</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow v-for="r in recentRecords" :key="r.id">
+                                <TableCell class="whitespace-nowrap font-medium text-slate-900">{{ formatDate(r.date) }}</TableCell>
+                                <TableCell class="font-semibold text-slate-900">{{ r.student_name }}</TableCell>
+                                <TableCell>{{ r.academic_year || '-' }}</TableCell>
+                                <TableCell>{{ r.semester || '-' }}</TableCell>
+                                <TableCell>{{ r.course }}</TableCell>
+                                <TableCell>{{ r.subject }}</TableCell>
+                                <TableCell>{{ r.class }}</TableCell>
+                                <TableCell>
+                                    <Badge variant="outline" :class="statusClass(r.status)">{{ r.status }}</Badge>
+                                </TableCell>
+                                <TableCell>{{ r.remarks || '-' }}</TableCell>
+                            </TableRow>
+                            <TableRow v-if="!recentRecords?.length">
+                                <TableCell colspan="9" class="text-center py-8 text-slate-400">No records.</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
                 </div>
-            </div>
+            </Card>
         </div>
     </AdminLayout>
 </template>

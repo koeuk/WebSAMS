@@ -5,6 +5,11 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
 import Modal from '@/Components/Modal.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
 const props = defineProps({ courses: Object, filters: Object });
 const search = ref(props.filters?.search || '');
@@ -36,57 +41,65 @@ const deleteCourse = () => {
                     <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Courses</h2>
                     <p class="text-sm text-slate-500 mt-1">Manage academic courses and programs</p>
                 </div>
-                <Link href="/admin/courses/create" class="btn-primary">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                    Create Course
-                </Link>
+                <Button as-child>
+                    <Link href="/admin/courses/create" class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        Create Course
+                    </Link>
+                </Button>
             </div>
 
             <FlashMessage />
 
-            <div class="card p-4 mb-6">
-                <div class="flex flex-wrap gap-3 items-end">
-                    <div class="flex-1 min-w-[200px]">
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Search</label>
-                        <input v-model="search" type="text" placeholder="Search courses..." class="input-modern" @keyup.enter="applyFilters" />
+            <Card class="mb-6">
+                <CardContent class="p-4">
+                    <div class="flex flex-wrap gap-3 items-end">
+                        <div class="flex-1 min-w-[200px]">
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Search</label>
+                            <Input v-model="search" type="text" placeholder="Search courses..." @keyup.enter="applyFilters" />
+                        </div>
+                        <Button v-if="search" variant="outline" size="sm" @click="clearFilters" class="flex items-center gap-1.5">
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
+                            Clear
+                        </Button>
                     </div>
-                    <button v-if="search" @click="clearFilters" class="flex items-center gap-1.5 px-3 py-2 text-[12px] font-medium text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg border border-slate-200 transition-colors">
-                        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                        Clear
-                    </button>
-                </div>
-            </div>
+                </CardContent>
+            </Card>
 
-            <div class="card overflow-hidden">
-                <table class="modern-table">
-                    <thead>
-                        <tr>
-                            <th class="text-left">Name</th>
-                            <th class="text-left">Code</th>
-                            <th class="text-left">Subjects</th>
-                            <th class="text-left">Description</th>
-                            <th class="text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr v-for="course in courses.data" :key="course.id">
-                            <td class="font-semibold text-slate-900">{{ course.name }}</td>
-                            <td><span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200 font-mono">{{ course.code }}</span></td>
-                            <td class="font-mono text-[13px]">{{ course.subjects_count }}</td>
-                            <td class="max-w-[200px] truncate">{{ course.description || '-' }}</td>
-                            <td class="text-right">
+            <Card class="overflow-hidden">
+                <Table>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>Name</TableHead>
+                            <TableHead>Code</TableHead>
+                            <TableHead>Subjects</TableHead>
+                            <TableHead>Description</TableHead>
+                            <TableHead class="text-right">Actions</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        <TableRow v-for="course in courses.data" :key="course.id">
+                            <TableCell class="font-semibold text-slate-900">{{ course.name }}</TableCell>
+                            <TableCell>
+                                <Badge variant="secondary" class="font-mono">{{ course.code }}</Badge>
+                            </TableCell>
+                            <TableCell class="font-mono text-[13px]">{{ course.subjects_count }}</TableCell>
+                            <TableCell class="max-w-[200px] truncate">{{ course.description || '-' }}</TableCell>
+                            <TableCell class="text-right">
                                 <div class="flex items-center justify-end gap-1">
-                                    <Link :href="`/admin/courses/${course.id}/edit`" class="px-2.5 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors">Edit</Link>
-                                    <button @click="confirmDelete(course)" class="px-2.5 py-1.5 text-[12px] font-medium text-rose-500 hover:text-rose-700 hover:bg-rose-50 rounded-lg transition-colors">Delete</button>
+                                    <Button variant="ghost" size="sm" as-child>
+                                        <Link :href="`/admin/courses/${course.id}/edit`" class="text-blue-600 hover:text-blue-700">Edit</Link>
+                                    </Button>
+                                    <Button variant="ghost" size="sm" @click="confirmDelete(course)" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50">Delete</Button>
                                 </div>
-                            </td>
-                        </tr>
-                        <tr v-if="!courses.data?.length">
-                            <td colspan="5" class="!text-center !py-12 text-slate-400">No courses found.</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+                            </TableCell>
+                        </TableRow>
+                        <TableRow v-if="!courses.data?.length">
+                            <TableCell colspan="5" class="text-center py-12 text-slate-400">No courses found.</TableCell>
+                        </TableRow>
+                    </TableBody>
+                </Table>
+            </Card>
 
             <Pagination :links="courses.links" />
             <Modal :show="showDeleteModal" title="Delete Course" :message="`Delete ${courseToDelete?.name}? This will also delete all subjects under it.`" @confirm="deleteCourse" @cancel="showDeleteModal = false" />

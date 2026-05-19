@@ -2,6 +2,11 @@
 import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import DatePicker from '@/Components/DatePicker.vue';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 
 const props = defineProps({ record: Object, classSubjects: Array, students: Array, timeSlots: Array });
 
@@ -33,55 +38,77 @@ const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.te
                 </div>
             </div>
 
-            <div class="card p-8 max-w-xl">
-                <form @submit.prevent="submit" class="space-y-5">
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Class - Subject (Teacher)</label>
-                        <select v-model="form.class_subject_id" required class="select-modern w-full">
-                            <option v-for="cs in classSubjects" :key="cs.id" :value="cs.id">{{ csLabel(cs) }}</option>
-                        </select>
-                        <p v-if="form.errors.class_subject_id" class="text-[12px] text-rose-500 mt-1">{{ form.errors.class_subject_id }}</p>
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Student</label>
-                        <select v-model="form.student_id" required class="select-modern w-full">
-                            <option v-for="s in students" :key="s.id" :value="s.id">{{ s.name }} ({{ s.email }})</option>
-                        </select>
-                        <p v-if="form.errors.student_id" class="text-[12px] text-rose-500 mt-1">{{ form.errors.student_id }}</p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
+            <Card class="max-w-xl">
+                <CardContent class="p-8">
+                    <form @submit.prevent="submit" class="space-y-5">
                         <div>
-                            <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Date</label>
-                            <DatePicker v-model="form.date" placeholder="Select date" />
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Class - Subject (Teacher)</Label>
+                            <Select v-model="form.class_subject_id" required>
+                                <SelectTrigger class="w-full">
+                                    <SelectValue placeholder="Select" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem v-for="cs in classSubjects" :key="cs.id" :value="String(cs.id)">{{ csLabel(cs) }}</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <p v-if="form.errors.class_subject_id" class="text-[12px] text-rose-500 mt-1">{{ form.errors.class_subject_id }}</p>
                         </div>
                         <div>
-                            <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Time Slot</label>
-                            <select v-model="form.time_slot_id" required class="select-modern w-full">
-                                <option v-for="ts in timeSlots" :key="ts.id" :value="ts.id">{{ ts.name }} ({{ ts.start_time?.slice(0,5) }} - {{ ts.end_time?.slice(0,5) }})</option>
-                            </select>
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Student</Label>
+                            <Select v-model="form.student_id" required>
+                                <SelectTrigger class="w-full">
+                                    <SelectValue placeholder="Select Student" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem v-for="s in students" :key="s.id" :value="String(s.id)">{{ s.name }} ({{ s.email }})</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <p v-if="form.errors.student_id" class="text-[12px] text-rose-500 mt-1">{{ form.errors.student_id }}</p>
                         </div>
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Status</label>
-                        <select v-model="form.status" required class="select-modern w-full">
-                            <option value="present">Present</option>
-                            <option value="absent">Absent</option>
-                            <option value="late">Late</option>
-                            <option value="excused">Excused</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Remarks</label>
-                        <textarea v-model="form.remarks" rows="2" class="input-modern" placeholder="Optional" />
-                    </div>
-                    <div class="pt-2">
-                        <button type="submit" :disabled="form.processing" class="btn-primary">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
-                            {{ form.processing ? 'Saving...' : 'Save Changes' }}
-                        </button>
-                    </div>
-                </form>
-            </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Date</Label>
+                                <DatePicker v-model="form.date" placeholder="Select date" />
+                            </div>
+                            <div>
+                                <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Time Slot</Label>
+                                <Select v-model="form.time_slot_id" required>
+                                    <SelectTrigger class="w-full">
+                                        <SelectValue placeholder="Select Time Slot" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem v-for="ts in timeSlots" :key="ts.id" :value="String(ts.id)">{{ ts.name }} ({{ ts.start_time?.slice(0,5) }} - {{ ts.end_time?.slice(0,5) }})</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                        </div>
+                        <div>
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Status</Label>
+                            <Select v-model="form.status" required>
+                                <SelectTrigger class="w-full">
+                                    <SelectValue placeholder="Select Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="present">Present</SelectItem>
+                                    <SelectItem value="absent">Absent</SelectItem>
+                                    <SelectItem value="late">Late</SelectItem>
+                                    <SelectItem value="excused">Excused</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div>
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Remarks</Label>
+                            <Textarea v-model="form.remarks" rows="2" placeholder="Optional" />
+                        </div>
+                        <div class="pt-2">
+                            <Button type="submit" :disabled="form.processing" class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
+                                {{ form.processing ? 'Saving...' : 'Save Changes' }}
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
     </AdminLayout>
 </template>

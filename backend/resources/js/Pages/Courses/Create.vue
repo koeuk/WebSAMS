@@ -1,6 +1,11 @@
 <script setup>
 import { useForm, Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
+import { Card, CardContent } from '@/Components/ui/card';
 
 const form = useForm({ name: '', code: '', description: '' });
 const submit = () => { form.post('/admin/courses'); };
@@ -21,30 +26,32 @@ const submit = () => { form.post('/admin/courses'); };
                 </div>
             </div>
 
-            <div class="card p-8 max-w-xl">
-                <form @submit.prevent="submit" class="space-y-5">
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name *</label>
-                        <input v-model="form.name" type="text" required class="input-modern" />
-                        <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Code *</label>
-                        <input v-model="form.code" type="text" required class="input-modern" placeholder="e.g. CS" />
-                        <p v-if="form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ form.errors.code }}</p>
-                    </div>
-                    <div>
-                        <label class="block text-[13px] font-medium text-slate-600 mb-1.5">Description</label>
-                        <textarea v-model="form.description" rows="3" class="input-modern" />
-                    </div>
-                    <div class="pt-2">
-                        <button type="submit" :disabled="form.processing" class="btn-primary">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                            {{ form.processing ? 'Creating...' : 'Create Course' }}
-                        </button>
-                    </div>
-                </form>
-            </div>
+            <Card class="max-w-xl">
+                <CardContent class="p-8">
+                    <form @submit.prevent="submit" class="space-y-5">
+                        <div>
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name *</Label>
+                            <Input v-model="form.name" type="text" required />
+                            <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
+                        </div>
+                        <div>
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code *</Label>
+                            <Input v-model="form.code" type="text" required placeholder="e.g. CS" />
+                            <p v-if="form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ form.errors.code }}</p>
+                        </div>
+                        <div>
+                            <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Description</Label>
+                            <Textarea v-model="form.description" rows="3" />
+                        </div>
+                        <div class="pt-2">
+                            <Button type="submit" :disabled="form.processing" class="flex items-center gap-2">
+                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                                {{ form.processing ? 'Creating...' : 'Create Course' }}
+                            </Button>
+                        </div>
+                    </form>
+                </CardContent>
+            </Card>
         </div>
     </AdminLayout>
 </template>
