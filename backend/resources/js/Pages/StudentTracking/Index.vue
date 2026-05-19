@@ -160,7 +160,7 @@ const thresholdFilter = ref(props.threshold || 80);
 
 const applyFilters = () => {
     router.get('/admin/student-tracking', {
-        semester_id: semesterFilter.value || undefined, academic_year: yearFilter.value || undefined, course_id: courseFilter.value || undefined, class_id: classFilter.value || undefined, year_level: yearLevelFilter.value || undefined, threshold: thresholdFilter.value,
+        filter: { semester_id: semesterFilter.value || undefined, academic_year: yearFilter.value || undefined, course_id: courseFilter.value || undefined, class_id: classFilter.value || undefined, year_level: yearLevelFilter.value || undefined, threshold: thresholdFilter.value },
     }, { preserveState: true });
 };
 
@@ -176,7 +176,7 @@ const clearFilters = () => {
     classFilter.value = '';
     yearLevelFilter.value = '';
     thresholdFilter.value = 80;
-    router.get('/admin/student-tracking', { threshold: 80 }, { preserveState: false });
+    router.get('/admin/student-tracking', { filter: { threshold: 80 } }, { preserveState: false });
 };
 
 const semesterOptions = computed(() => [

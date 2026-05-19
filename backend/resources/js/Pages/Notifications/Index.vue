@@ -88,7 +88,7 @@ const typeFilter = ref(props.filters?.type || '');
 const search = ref(props.filters?.search || '');
 
 const applyFilters = () => {
-    router.get('/admin/notifications', { type: typeFilter.value || undefined, search: search.value || undefined }, { preserveState: true });
+    router.get('/admin/notifications', { filter: { type: typeFilter.value || undefined, search: search.value || undefined } }, { preserveState: true });
 };
 
 const clearFilters = () => {

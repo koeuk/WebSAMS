@@ -161,10 +161,12 @@ const statusFilter = ref(props.filters?.status || '');
 
 const applyFilters = () => {
     router.get('/admin/users', {
-        search: search.value || undefined,
-        role: roleFilter.value || undefined,
-        year_level: yearFilter.value || undefined,
-        status: statusFilter.value || undefined,
+        filter: {
+            search: search.value || undefined,
+            role: roleFilter.value || undefined,
+            year_level: yearFilter.value || undefined,
+            status: statusFilter.value || undefined,
+        },
     }, { preserveState: true });
 };
 

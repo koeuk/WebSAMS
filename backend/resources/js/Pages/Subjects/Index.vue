@@ -94,8 +94,10 @@ const courseOptions = computed(() => (props.courses || []).map(c => ({ value: c.
 
 const applyFilters = () => {
     router.get('/admin/subjects', {
-        search: search.value || undefined,
-        course_id: courseFilter.value || undefined,
+        filter: {
+            search: search.value || undefined,
+            course_id: courseFilter.value || undefined,
+        },
     }, { preserveState: true });
 };
 

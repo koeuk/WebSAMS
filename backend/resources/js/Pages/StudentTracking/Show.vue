@@ -186,7 +186,7 @@ const semesterFilter = ref(props.filters?.semester_id || '');
 const semesterOptions = computed(() => (props.semesters || []).map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })));
 
 const changeSemester = () => {
-    router.get(`/admin/student-tracking/${props.student.id}`, { semester_id: semesterFilter.value || undefined }, { preserveState: true });
+    router.get(`/admin/student-tracking/${props.student.id}`, { filter: { semester_id: semesterFilter.value || undefined } }, { preserveState: true });
 };
 
 const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';

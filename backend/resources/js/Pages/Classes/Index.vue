@@ -96,7 +96,7 @@ const props = defineProps({ classes: Object, filters: Object });
 const search = ref(props.filters?.search || '');
 
 const applyFilters = () => {
-    router.get('/admin/classes', { search: search.value || undefined }, { preserveState: true });
+    router.get('/admin/classes', { filter: { search: search.value || undefined } }, { preserveState: true });
 };
 
 const clearFilters = () => {

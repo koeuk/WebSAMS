@@ -100,9 +100,9 @@ onMounted(async () => {
 
 const loadAttendance = async () => {
   const params = new URLSearchParams()
-  if (selectedClass.value) params.set('class_subject_id', selectedClass.value)
-  if (dateFrom.value) params.set('date_from', dateFrom.value)
-  if (dateTo.value) params.set('date_to', dateTo.value)
+  if (selectedClass.value) params.set('filter[class_subject_id]', selectedClass.value)
+  if (dateFrom.value) params.set('filter[date_from]', dateFrom.value)
+  if (dateTo.value) params.set('filter[date_to]', dateTo.value)
   try {
     attendance.value = await apiFetch(`/teacher/attendance?${params.toString()}`)
   } catch {}

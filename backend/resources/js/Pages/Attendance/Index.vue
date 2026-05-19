@@ -187,12 +187,14 @@ const dateTo = ref(props.filters?.date_to || '');
 const applyFilters = (resetSubject = false) => {
     if (resetSubject) subjectFilter.value = '';
     router.get('/admin/attendance', {
-        course_id: courseFilter.value || undefined,
-        class_id: classFilter.value || undefined,
-        subject_id: subjectFilter.value || undefined,
-        status: statusFilter.value || undefined,
-        date_from: dateFrom.value || undefined,
-        date_to: dateTo.value || undefined,
+        filter: {
+            course_id: courseFilter.value || undefined,
+            class_id: classFilter.value || undefined,
+            subject_id: subjectFilter.value || undefined,
+            status: statusFilter.value || undefined,
+            date_from: dateFrom.value || undefined,
+            date_to: dateTo.value || undefined,
+        },
     }, { preserveState: true });
 };
 

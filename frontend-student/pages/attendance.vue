@@ -106,8 +106,8 @@ onMounted(async () => {
 
 const loadAttendance = async () => {
   const params = new URLSearchParams()
-  if (dateFrom.value) params.set('date_from', dateFrom.value)
-  if (dateTo.value) params.set('date_to', dateTo.value)
+  if (dateFrom.value) params.set('filter[date_from]', dateFrom.value)
+  if (dateTo.value) params.set('filter[date_to]', dateTo.value)
   try { attendance.value = await apiFetch(`/student/attendance?${params.toString()}`) } catch {}
 }
 

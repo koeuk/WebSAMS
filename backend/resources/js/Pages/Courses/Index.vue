@@ -88,7 +88,7 @@ const props = defineProps({ courses: Object, filters: Object });
 const search = ref(props.filters?.search || '');
 
 const applyFilters = () => {
-    router.get('/admin/courses', { search: search.value || undefined }, { preserveState: true });
+    router.get('/admin/courses', { filter: { search: search.value || undefined } }, { preserveState: true });
 };
 
 const clearFilters = () => {

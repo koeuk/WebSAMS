@@ -24,17 +24,15 @@
                         </div>
                     </div>
                 </div>
-                <Button as-child>
-                    <Link :href="`/admin/users/${user.id}/edit`" class="flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                        Edit
-                    </Link>
+                <Button @click="showEdit = true" class="flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                    Edit
                 </Button>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 stagger-children">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <!-- Basic Info -->
-                <Card class="animate-fade-in-up">
+                <Card>
                     <CardContent class="p-6">
                         <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-5 flex items-center gap-2">
                             <div class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></div>
@@ -74,9 +72,8 @@
                 </Card>
 
                 <!-- Role-specific Info -->
-                <Card class="animate-fade-in-up">
+                <Card>
                     <CardContent class="p-6">
-                        <!-- Student Info -->
                         <template v-if="user.role === 'student'">
                             <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-5 flex items-center gap-2">
                                 <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
@@ -102,14 +99,55 @@
                             </div>
                         </template>
 
+                        <template v-else-if="user.role === 'teacher'">
+                            <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-5 flex items-center gap-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+                                Teacher Info
+                            </h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between py-2 border-b border-slate-50">
+                                    <p class="text-[13px] text-slate-500">Department</p>
+                                    <p class="text-[13px] font-semibold text-slate-900">{{ user.department || '-' }}</p>
+                                </div>
+                                <div class="flex items-center justify-between py-2 border-b border-slate-50">
+                                    <p class="text-[13px] text-slate-500">Qualification</p>
+                                    <p class="text-[13px] font-semibold text-slate-900">{{ user.qualification || '-' }}</p>
+                                </div>
+                                <div class="flex items-center justify-between py-2">
+                                    <p class="text-[13px] text-slate-500">Hire Date</p>
+                                    <p class="text-[13px] font-semibold text-slate-900">{{ formatDate(user.hire_date) }}</p>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template v-else>
+                            <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-5 flex items-center gap-2">
+                                <div class="w-1.5 h-1.5 rounded-full bg-slate-400"></div>
+                                Account
+                            </h3>
+                            <p class="text-[13px] text-slate-500">Administrator account</p>
+                        </template>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <UserForm v-model:open="showEdit" :user="user" />
+        </div>
+    </AdminLayout>
+</template>
+
 <script setup>
+import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import UserForm from '@/Components/Forms/UserForm.vue';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
 
 const props = defineProps({ user: Object });
+
+const showEdit = ref(false);
 
 const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
 

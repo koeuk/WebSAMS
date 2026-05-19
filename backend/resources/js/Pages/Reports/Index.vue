@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { useForm, Link } from '@inertiajs/vue3';
+import { useForm, router, Link } from '@inertiajs/vue3';
 import { watch, computed } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
@@ -88,5 +88,17 @@ const reportStatusOptions = [
     { value: 'excused', label: 'Excused' },
 ];
 
-const submit = () => { form.get('/admin/reports/generate'); };
+const submit = () => {
+    router.get('/admin/reports/generate', {
+        filter: {
+            semester_id: form.semester_id || undefined,
+            course_id: form.course_id || undefined,
+            class_id: form.class_id || undefined,
+            subject_id: form.subject_id || undefined,
+            status: form.status || undefined,
+            date_from: form.date_from || undefined,
+            date_to: form.date_to || undefined,
+        },
+    });
+};
 </script>

@@ -99,7 +99,7 @@ onMounted(async () => { await load() })
 
 const load = async () => {
   loading.value = true
-  try { data.value = await apiFetch(`/teacher/excuse-requests?status=${filter.value}`) } catch {}
+  try { data.value = await apiFetch(`/teacher/excuse-requests?filter[status]=${filter.value}`) } catch {}
   loading.value = false
 }
 
