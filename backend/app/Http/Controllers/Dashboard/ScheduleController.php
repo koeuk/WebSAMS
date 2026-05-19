@@ -22,6 +22,8 @@ class ScheduleController extends Controller
 
         return Inertia::render('Schedules/Index', [
             'schedules' => $schedules,
+            'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
+            'timeSlots' => TimeSlot::all(),
         ]);
     }
 
