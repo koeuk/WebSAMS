@@ -4,7 +4,13 @@
       "WebFetch(domain:lordicon.com)",
       "Bash(npx shadcn-vue@latest add select textarea badge table separator --yes)",
       "Bash(npx shadcn-vue@latest add dialog sheet --yes)",
-      "Bash(composer require *)"
+      "Bash(composer require *)",
+      "Bash(sed -n '49,56p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Components/Forms/SubjectForm.vue)",
+      "Bash(sed -n '82,92p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Components/Forms/ScheduleForm.vue)",
+      "Bash(sed -n '49,56p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Components/Forms/SemesterForm.vue)",
+      "Bash(sed -n '58,65p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Components/Forms/TimeSlotForm.vue)",
+      "Bash(sed -n '156,165p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Components/Forms/UserForm.vue)",
+      "Bash(find /home/koeuk/Projects/WebSAMS/backend/resources/js/Pages '\\(' -name Create.vue -o -name Edit.vue '\\)' ! -path */Attendance/* ! -path */Profile/* ! -path */Settings/*)"
     ]
   }
 }

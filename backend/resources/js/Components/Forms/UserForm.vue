@@ -1,17 +1,22 @@
 <template>
-    <ModalForm
-        :open="open"
-        @update:open="emit('update:open', $event)"
-        :title="isEdit ? 'Edit User' : 'Create User'"
-        :description="isEdit ? `Update ${user?.name}'s information.` : 'Add a new user to the system.'"
-        size="lg"
-    >
-        <form @submit.prevent="submit">
-            <div class="max-h-[70vh] overflow-y-auto pr-1 space-y-6 py-2">
+    <Form :validation-schema="schema" v-slot="{ setErrors, meta }" :initial-values="form">
+        <ModalForm :open="open" size="lg" @update:open="emit('update:open', $event)">
+            <template #title>
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center">
+                        <UserRound class="w-4 h-4 text-slate-600" />
+                    </div>
+                    <div>
+                        <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? 'Edit User' : 'Create User' }}</h2>
+                        <p class="text-xs text-slate-500">{{ isEdit ? `Update ${user?.name}'s information` : 'Add a new user to the system' }}</p>
+                    </div>
+                </div>
+            </template>
 
+            <div class="space-y-6">
                 <!-- Basic Info -->
                 <div>
-                    <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                    <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                         <div class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></div>
                         Basic Info
                     </h3>
@@ -19,12 +24,18 @@
                         <div class="grid grid-cols-2 gap-4">
                             <div>
                                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name *</Label>
-                                <Input v-model="form.name" type="text" required />
+                                <Field name="name" v-slot="{ field, errorMessage }">
+                                    <Input v-bind="field" v-model="form.name" type="text" />
+                                    <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
+                                </Field>
                                 <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
                             </div>
                             <div>
                                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Email *</Label>
-                                <Input v-model="form.email" type="email" required />
+                                <Field name="email" v-slot="{ field, errorMessage }">
+                                    <Input v-bind="field" v-model="form.email" type="email" />
+                                    <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
+                                </Field>
                                 <p v-if="form.errors.email" class="text-[12px] text-rose-500 mt-1">{{ form.errors.email }}</p>
                             </div>
                         </div>
@@ -32,21 +43,19 @@
                             <div>
                                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">
                                     Password
-                                    <span v-if="isEdit" class="text-slate-400">(leave blank to keep)</span>
+                                    <span v-if="isEdit" class="text-slate-400 font-normal">(leave blank to keep)</span>
                                     <span v-else>*</span>
                                 </Label>
-                                <Input v-model="form.password" type="password" :required="!isEdit" />
+                                <Input v-model="form.password" type="password" :placeholder="isEdit ? '••••••••' : ''" />
                                 <p v-if="form.errors.password" class="text-[12px] text-rose-500 mt-1">{{ form.errors.password }}</p>
                             </div>
                             <div>
                                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Role *</Label>
                                 <Select v-model="form.role">
-                                    <SelectTrigger class="w-full">
-                                        <SelectValue placeholder="Select role" />
-                                    </SelectTrigger>
+                                    <SelectTrigger class="w-full"><SelectValue placeholder="Select role" /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem v-for="role in props.roles" :key="role" :value="role">
-                                            {{ role.charAt(0).toUpperCase() + role.slice(1) }}
+                                        <SelectItem v-for="r in roles" :key="r" :value="r">
+                                            {{ r.charAt(0).toUpperCase() + r.slice(1) }}
                                         </SelectItem>
                                     </SelectContent>
                                 </Select>
@@ -61,11 +70,9 @@
                             <div>
                                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Gender</Label>
                                 <Select v-model="form.gender">
-                                    <SelectTrigger class="w-full">
-                                        <SelectValue placeholder="Select" />
-                                    </SelectTrigger>
+                                    <SelectTrigger class="w-full"><SelectValue placeholder="Select" /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem v-for="g in props.genders" :key="g.value" :value="g.value">
+                                        <SelectItem v-for="g in genders" :key="g.value" :value="g.value">
                                             {{ g.name.charAt(0).toUpperCase() + g.name.slice(1).toLowerCase() }}
                                         </SelectItem>
                                     </SelectContent>
@@ -74,11 +81,9 @@
                             <div>
                                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Status</Label>
                                 <Select v-model="form.status">
-                                    <SelectTrigger class="w-full">
-                                        <SelectValue placeholder="Select status" />
-                                    </SelectTrigger>
+                                    <SelectTrigger class="w-full"><SelectValue placeholder="Select status" /></SelectTrigger>
                                     <SelectContent>
-                                        <SelectItem v-for="s in props.statuses" :key="s.value" :value="s.value">
+                                        <SelectItem v-for="s in statuses" :key="s.value" :value="s.value">
                                             {{ s.name.charAt(0).toUpperCase() + s.name.slice(1).toLowerCase() }}
                                         </SelectItem>
                                     </SelectContent>
@@ -105,7 +110,7 @@
                 <!-- Student Info -->
                 <template v-if="form.role === 'student'">
                     <div>
-                        <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
+                        <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
                             <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
                             Student Info
                         </h3>
@@ -114,9 +119,7 @@
                                 <div>
                                     <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Year Level</Label>
                                     <Select v-model="form.year_level">
-                                        <SelectTrigger class="w-full">
-                                            <SelectValue placeholder="Select" />
-                                        </SelectTrigger>
+                                        <SelectTrigger class="w-full"><SelectValue placeholder="Select" /></SelectTrigger>
                                         <SelectContent>
                                             <SelectItem value="1">Year 1</SelectItem>
                                             <SelectItem value="2">Year 2</SelectItem>
@@ -142,16 +145,57 @@
                     </div>
                 </template>
 
+                <!-- Teacher Info -->
+                <template v-if="form.role === 'teacher'">
+                    <div>
+                        <h3 class="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3 flex items-center gap-2">
+                            <div class="w-1.5 h-1.5 rounded-full bg-blue-400"></div>
+                            Teacher Info
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Department</Label>
+                                    <Input v-model="form.department" type="text" placeholder="e.g. Computer Science" />
+                                </div>
+                                <div>
+                                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Qualification</Label>
+                                    <Input v-model="form.qualification" type="text" placeholder="e.g. M.Sc." />
+                                </div>
+                            </div>
+                            <div>
+                                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Hire Date</Label>
+                                <DatePicker v-model="form.hire_date" placeholder="Pick hire date" />
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <template #footer>
+                <Button variant="outline" type="button" @click="close">Cancel</Button>
+                <Button type="button" :disabled="!meta.valid || form.processing" @click="submit(setErrors)">
+                    <Loader2 v-if="form.processing" class="w-4 h-4 animate-spin" />
+                    {{ isEdit ? 'Save Changes' : 'Create User' }}
+                </Button>
+            </template>
+        </ModalForm>
+    </Form>
+</template>
+
 <script setup>
-import { computed, watch } from 'vue';
-import { useForm } from '@inertiajs/vue3';
-import ModalForm from '@/Components/ModalForm.vue';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+import { computed, watch } from 'vue'
+import { useForm } from '@inertiajs/vue3'
+import { Form, Field } from 'vee-validate'
+import * as yup from 'yup'
+import { UserRound, Loader2 } from 'lucide-vue-next'
+import ModalForm from '@/Components/ModalForm.vue'
+import DatePicker from '@/Components/DatePicker.vue'
+import { Input } from '@/Components/ui/input'
+import { Label } from '@/Components/ui/label'
+import { Textarea } from '@/Components/ui/textarea'
+import { Button } from '@/Components/ui/button'
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
 
 const props = defineProps({
     open:     { type: Boolean, required: true },
@@ -159,63 +203,54 @@ const props = defineProps({
     roles:    { type: Array,   default: () => [] },
     genders:  { type: Array,   default: () => [] },
     statuses: { type: Array,   default: () => [] },
-});
+})
+const emit = defineEmits(['update:open'])
+const isEdit = computed(() => !!props.user)
 
-const emit = defineEmits(['update:open']);
-
-const isEdit = computed(() => !!props.user);
+const schema = yup.object({
+    name:  yup.string().required('Name is required'),
+    email: yup.string().email('Invalid email').required('Email is required'),
+})
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    role: 'student',
-    phone: '',
-    id_number: '',
-    gender: '',
-    date_of_birth: '',
-    address: '',
-    status: 'active',
-    guardian_name: '',
-    guardian_phone: '',
-    enrollment_date: '',
-    department: '',
-    qualification: '',
-    hire_date: '',
-});
+    name: '', email: '', password: '', role: 'student',
+    phone: '', id_number: '', gender: '', date_of_birth: '', address: '', status: 'active',
+    guardian_name: '', guardian_phone: '', enrollment_date: '',
+    department: '', qualification: '', hire_date: '',
+})
 
 watch(() => props.user, (u) => {
     if (u) {
-        form.name = u.name;
-        form.email = u.email;
-        form.password = '';
-        form.role = u.role;
-        form.phone = u.phone || '';
-        form.id_number = u.id_number || '';
-        form.gender = u.gender?.value ?? u.gender ?? '';
-        form.date_of_birth = u.date_of_birth?.split('T')[0] || '';
-        form.address = u.address || '';
-        form.status = u.status?.value ?? u.status ?? 'active';
-        form.guardian_name = u.guardian_name || '';
-        form.guardian_phone = u.guardian_phone || '';
-        form.enrollment_date = u.enrollment_date?.split('T')[0] || '';
-        form.department = u.department || '';
-        form.qualification = u.qualification || '';
-        form.hire_date = u.hire_date?.split('T')[0] || '';
+        form.name = u.name; form.email = u.email; form.password = ''; form.role = u.role
+        form.phone = u.phone || ''; form.id_number = u.id_number || ''
+        form.gender = u.gender?.value ?? u.gender ?? ''
+        form.date_of_birth = u.date_of_birth?.split('T')[0] || ''
+        form.address = u.address || ''
+        form.status = u.status?.value ?? u.status ?? 'active'
+        form.guardian_name = u.guardian_name || ''; form.guardian_phone = u.guardian_phone || ''
+        form.enrollment_date = u.enrollment_date?.split('T')[0] || ''
+        form.department = u.department || ''; form.qualification = u.qualification || ''
+        form.hire_date = u.hire_date?.split('T')[0] || ''
     } else {
-        form.reset();
-        form.role = 'student';
-        form.status = 'active';
+        form.reset(); form.role = 'student'; form.status = 'active'
     }
-}, { immediate: true });
+}, { immediate: true })
 
-const close = () => emit('update:open', false);
+const close = () => emit('update:open', false)
 
-const submit = () => {
+const submit = (setErrors) => {
     if (isEdit.value) {
-        form.put(`/admin/users/${props.user.id}`, { onSuccess: close });
+        form.put(route('admin.users.update', props.user.id), {
+            preserveScroll: true, preserveState: true,
+            onSuccess: close,
+            onError: (errors) => setErrors(errors),
+        })
     } else {
-        form.post('/admin/users', { onSuccess: () => { close(); form.reset(); } });
+        form.post(route('admin.users.store'), {
+            preserveScroll: true, preserveState: true,
+            onSuccess: () => { close(); form.reset(); form.role = 'student'; form.status = 'active' },
+            onError: (errors) => setErrors(errors),
+        })
     }
-};
+}
 </script>
