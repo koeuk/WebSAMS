@@ -51,11 +51,8 @@ const features = [
 
       <!-- Logo -->
       <div class="relative flex items-center gap-3">
-        <div
-          class="w-11 h-11 rounded-xl flex items-center justify-center shadow-lg"
-          style="background: linear-gradient(135deg, #d4a017, #b08f12); box-shadow: 0 8px 24px rgba(212,160,23,0.3);"
-        >
-          <img src="/logo.png" alt="BELTEI" class="h-8" />
+        <div class="w-11 h-11 rounded-xl overflow-hidden shadow-lg">
+          <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
         </div>
         <div>
           <h1 class="text-white font-bold text-base leading-tight tracking-tight">WebSAMS</h1>
@@ -102,8 +99,8 @@ const features = [
 
         <!-- Mobile logo -->
         <div class="flex lg:hidden items-center justify-center gap-3 mb-8">
-          <div class="w-10 h-10 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #d4a017, #b08f12);">
-            <img src="/logo.png" alt="BELTEI" class="h-7" />
+          <div class="w-10 h-10 rounded-xl overflow-hidden">
+            <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
           </div>
           <div>
             <h1 class="font-bold text-slate-900 text-base">WebSAMS</h1>

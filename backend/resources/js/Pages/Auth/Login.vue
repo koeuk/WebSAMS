@@ -13,8 +13,8 @@ const submit = () => {
         <div class="w-full max-w-md animate-fade-in">
             <div class="card p-10 shadow-xl border-0" style="box-shadow: 0 20px 60px rgba(30, 58, 110, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);">
                 <div class="text-center mb-8">
-                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-linear-to-br from-beltei-gold to-beltei-gold-dark shadow-lg shadow-beltei-gold/20 mb-4">
-                        <img src="/logo.png" alt="BELTEI International University" class="h-14" />
+                    <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-lg mb-4 inline-block">
+                        <img src="/logo1.png" alt="BELTEI International University" class="w-full h-full object-cover" />
                     </div>
                     <h1 class="text-2xl font-bold text-slate-900 tracking-tight">WebSAMS</h1>
                     <p class="text-[13px] text-slate-500 mt-1">Student Attendance Management System</p>

@@ -5,7 +5,10 @@ export default defineNuxtConfig({
   app: {
     head: {
       title: 'BELTEI - WebSAMS Teacher',
-      link: [{ rel: 'icon', type: 'image/png', href: '/logo.png' }],
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/logo1.png' },
+        { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css' },
+      ],
     },
   },
   modules: [

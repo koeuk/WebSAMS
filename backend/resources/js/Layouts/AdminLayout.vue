@@ -31,8 +31,8 @@ const isActive = (href) => page.url.startsWith(href);
         <aside class="fixed inset-y-0 left-0 w-[260px] bg-sidebar flex flex-col z-30">
             <!-- Brand -->
             <div class="flex items-center gap-3 h-[72px] px-6 border-b border-white/[0.06]">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-beltei-gold to-beltei-gold-dark flex items-center justify-center shadow-lg shadow-beltei-gold/20">
-                    <img src="/logo.png" alt="BELTEI" class="h-7" />
+                <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg">
+                    <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
                 </div>
                 <div>
                     <h1 class="text-[15px] font-bold text-white tracking-tight">WebSAMS</h1>
