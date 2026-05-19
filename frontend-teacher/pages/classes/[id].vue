@@ -1,32 +1,3 @@
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const route = useRoute()
-const { apiFetch } = useApi()
-
-const students = ref<any[]>([])
-const loading = ref(true)
-const search = ref('')
-
-onMounted(async () => {
-  try {
-    students.value = await apiFetch(`/teacher/classes/${route.params.id}/students`)
-  } catch {}
-  loading.value = false
-})
-
-const filtered = computed(() =>
-  search.value
-    ? students.value.filter((s: any) =>
-        s.name?.toLowerCase().includes(search.value.toLowerCase()) ||
-        s.email?.toLowerCase().includes(search.value.toLowerCase())
-      )
-    : students.value
-)
-</script>
-
 <template>
   <div class="animate-fade-in">
 
@@ -111,5 +82,32 @@ const filtered = computed(() =>
         </table>
       </div>
     </template>
-  </div>
-</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const route = useRoute()
+const { apiFetch } = useApi()
+
+const students = ref<any[]>([])
+const loading = ref(true)
+const search = ref('')
+
+onMounted(async () => {
+  try {
+    students.value = await apiFetch(`/teacher/classes/${route.params.id}/students`)
+  } catch {}
+  loading.value = false
+})
+
+const filtered = computed(() =>
+  search.value
+    ? students.value.filter((s: any) =>
+        s.name?.toLowerCase().includes(search.value.toLowerCase()) ||
+        s.email?.toLowerCase().includes(search.value.toLowerCase())
+      )
+    : students.value
+)
+</script>

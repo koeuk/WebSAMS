@@ -1,52 +1,3 @@
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const data = ref<any>({ data: [] })
-const loading = ref(true)
-const filter = ref('pending')
-
-const reviewing = ref<any>(null)
-const reviewNote = ref('')
-const submitting = ref(false)
-
-onMounted(async () => { await load() })
-
-const load = async () => {
-  loading.value = true
-  try { data.value = await apiFetch(`/teacher/excuse-requests?status=${filter.value}`) } catch {}
-  loading.value = false
-}
-
-const requests = computed(() => data.value?.data ?? [])
-
-const openReview = (r: any) => { reviewing.value = r; reviewNote.value = '' }
-
-const submitReview = async (status: 'approved' | 'rejected') => {
-  if (!reviewing.value) return
-  submitting.value = true
-  try {
-    await apiFetch(`/teacher/excuse-requests/${reviewing.value.id}/review`, {
-      method: 'PUT',
-      body: { status, reviewer_note: reviewNote.value },
-    })
-    reviewing.value = null
-    await load()
-  } catch {}
-  submitting.value = false
-}
-
-const statusConfig: Record<string, string> = {
-  pending:  'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-  approved: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
-  rejected: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
-}
-
-const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
@@ -129,6 +80,55 @@ const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { 
     </Teleport>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const data = ref<any>({ data: [] })
+const loading = ref(true)
+const filter = ref('pending')
+
+const reviewing = ref<any>(null)
+const reviewNote = ref('')
+const submitting = ref(false)
+
+onMounted(async () => { await load() })
+
+const load = async () => {
+  loading.value = true
+  try { data.value = await apiFetch(`/teacher/excuse-requests?status=${filter.value}`) } catch {}
+  loading.value = false
+}
+
+const requests = computed(() => data.value?.data ?? [])
+
+const openReview = (r: any) => { reviewing.value = r; reviewNote.value = '' }
+
+const submitReview = async (status: 'approved' | 'rejected') => {
+  if (!reviewing.value) return
+  submitting.value = true
+  try {
+    await apiFetch(`/teacher/excuse-requests/${reviewing.value.id}/review`, {
+      method: 'PUT',
+      body: { status, reviewer_note: reviewNote.value },
+    })
+    reviewing.value = null
+    await load()
+  } catch {}
+  submitting.value = false
+}
+
+const statusConfig: Record<string, string> = {
+  pending:  'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+  approved: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+  rejected: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
+}
+
+const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'
+</script>
 
 <style scoped>
 .modal-enter-active, .modal-leave-active { transition: opacity 0.2s; }

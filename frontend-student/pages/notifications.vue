@@ -1,32 +1,3 @@
-<script setup lang="ts">
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const notifications = ref<any>({ data: [] })
-const loading = ref(true)
-
-onMounted(async () => {
-  try { notifications.value = await apiFetch('/student/notifications') } catch {}
-  loading.value = false
-})
-
-const markAsRead = async (id: number) => {
-  try {
-    await apiFetch(`/student/notifications/${id}/read`, { method: 'PUT' })
-    const n = notifications.value.data.find((n: any) => n.id === id)
-    if (n) n.is_read = true
-  } catch {}
-}
-
-const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'
-
-const typeBadgeClass = (type: string) => ({
-  'bg-rose-50 text-rose-700 ring-1 ring-rose-200': type === 'absence',
-  'bg-amber-50 text-amber-700 ring-1 ring-amber-200': type === 'late',
-  'bg-slate-100 text-slate-600 ring-1 ring-slate-200': type === 'general',
-})
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-8">
@@ -62,3 +33,32 @@ const typeBadgeClass = (type: string) => ({
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const notifications = ref<any>({ data: [] })
+const loading = ref(true)
+
+onMounted(async () => {
+  try { notifications.value = await apiFetch('/student/notifications') } catch {}
+  loading.value = false
+})
+
+const markAsRead = async (id: number) => {
+  try {
+    await apiFetch(`/student/notifications/${id}/read`, { method: 'PUT' })
+    const n = notifications.value.data.find((n: any) => n.id === id)
+    if (n) n.is_read = true
+  } catch {}
+}
+
+const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-'
+
+const typeBadgeClass = (type: string) => ({
+  'bg-rose-50 text-rose-700 ring-1 ring-rose-200': type === 'absence',
+  'bg-amber-50 text-amber-700 ring-1 ring-amber-200': type === 'late',
+  'bg-slate-100 text-slate-600 ring-1 ring-slate-200': type === 'general',
+})
+</script>

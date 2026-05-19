@@ -1,3 +1,9 @@
+<template>
+  <DialogTrigger v-bind="props">
+    <slot />
+  </DialogTrigger>
+</template>
+
 <script setup>
 import { DialogTrigger } from "reka-ui";
 
@@ -6,9 +12,3 @@ const props = defineProps({
   as: { type: null, required: false },
 });
 </script>
-
-<template>
-  <DialogTrigger v-bind="props">
-    <slot />
-  </DialogTrigger>
-</template>

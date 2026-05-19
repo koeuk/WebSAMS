@@ -1,3 +1,9 @@
+<template>
+  <SelectValue v-bind="props">
+    <slot />
+  </SelectValue>
+</template>
+
 <script setup>
 import { SelectValue } from "reka-ui";
 
@@ -7,9 +13,3 @@ const props = defineProps({
   as: { type: null, required: false },
 });
 </script>
-
-<template>
-  <SelectValue v-bind="props">
-    <slot />
-  </SelectValue>
-</template>

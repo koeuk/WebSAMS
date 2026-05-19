@@ -1,37 +1,3 @@
-<script setup>
-import { useForm } from '@inertiajs/vue3';
-import { ref } from 'vue';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const props = defineProps({ settings: Object });
-
-const logoPreview = ref(props.settings.university_logo ? `/storage/${props.settings.university_logo}` : null);
-const handleLogo = (e) => {
-    const file = e.target.files[0];
-    form.university_logo = file;
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => { logoPreview.value = e.target.result; };
-        reader.readAsDataURL(file);
-    }
-};
-
-const form = useForm({
-    _method: 'PUT',
-    university_name: props.settings.university_name || '', university_address: props.settings.university_address || '',
-    university_phone: props.settings.university_phone || '', university_email: props.settings.university_email || '',
-    university_website: props.settings.university_website || '', university_logo: null,
-});
-
-const submit = () => { form.post('/admin/settings', { forceFormData: true }); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -95,3 +61,37 @@ const submit = () => { form.post('/admin/settings', { forceFormData: true }); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const props = defineProps({ settings: Object });
+
+const logoPreview = ref(props.settings.university_logo ? `/storage/${props.settings.university_logo}` : null);
+const handleLogo = (e) => {
+    const file = e.target.files[0];
+    form.university_logo = file;
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => { logoPreview.value = e.target.result; };
+        reader.readAsDataURL(file);
+    }
+};
+
+const form = useForm({
+    _method: 'PUT',
+    university_name: props.settings.university_name || '', university_address: props.settings.university_address || '',
+    university_phone: props.settings.university_phone || '', university_email: props.settings.university_email || '',
+    university_website: props.settings.university_website || '', university_logo: null,
+});
+
+const submit = () => { form.post('/admin/settings', { forceFormData: true }); };
+</script>

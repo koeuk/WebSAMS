@@ -1,20 +1,3 @@
-<script lang="ts" setup>
-import type { CalendarRootEmits, CalendarRootProps } from "reka-ui"
-import type { HTMLAttributes } from "vue"
-import { reactiveOmit } from "@vueuse/core"
-import { CalendarRoot, useForwardPropsEmits } from "reka-ui"
-import { cn } from "@/lib/utils"
-import { CalendarCell, CalendarCellTrigger, CalendarGrid, CalendarGridBody, CalendarGridHead, CalendarGridRow, CalendarHeadCell, CalendarHeader, CalendarHeading, CalendarNextButton, CalendarPrevButton } from "."
-
-const props = defineProps<CalendarRootProps & { class?: HTMLAttributes["class"] }>()
-
-const emits = defineEmits<CalendarRootEmits>()
-
-const delegatedProps = reactiveOmit(props, "class")
-
-const forwarded = useForwardPropsEmits(delegatedProps, emits)
-</script>
-
 <template>
   <CalendarRoot
     v-slot="{ grid, weekDays }"
@@ -56,3 +39,20 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
     </div>
   </CalendarRoot>
 </template>
+
+<script lang="ts" setup>
+import type { CalendarRootEmits, CalendarRootProps } from "reka-ui"
+import type { HTMLAttributes } from "vue"
+import { reactiveOmit } from "@vueuse/core"
+import { CalendarRoot, useForwardPropsEmits } from "reka-ui"
+import { cn } from "@/lib/utils"
+import { CalendarCell, CalendarCellTrigger, CalendarGrid, CalendarGridBody, CalendarGridHead, CalendarGridRow, CalendarHeadCell, CalendarHeader, CalendarHeading, CalendarNextButton, CalendarPrevButton } from "."
+
+const props = defineProps<CalendarRootProps & { class?: HTMLAttributes["class"] }>()
+
+const emits = defineEmits<CalendarRootEmits>()
+
+const delegatedProps = reactiveOmit(props, "class")
+
+const forwarded = useForwardPropsEmits(delegatedProps, emits)
+</script>

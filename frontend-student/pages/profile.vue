@@ -1,31 +1,3 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const profile = ref<any>(null)
-const loading = ref(true)
-
-onMounted(async () => {
-  try { profile.value = await apiFetch('/student/profile') } catch {}
-  loading.value = false
-})
-
-const formatDate = (d: string) => d
-  ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  : '-'
-
-const statusConfig: Record<string, { pill: string; dot: string; label: string }> = {
-  active:    { pill: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200', dot: 'bg-emerald-400', label: 'Active' },
-  inactive:  { pill: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200',     dot: 'bg-slate-400',   label: 'Inactive' },
-  graduated: { pill: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',             dot: 'bg-sky-400',     label: 'Graduated' },
-  suspended: { pill: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',          dot: 'bg-rose-400',    label: 'Suspended' },
-}
-
-const status = (s: string) => statusConfig[s] ?? statusConfig.active
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
@@ -156,5 +128,31 @@ const status = (s: string) => statusConfig[s] ?? statusConfig.active
         </table>
       </div>
     </template>
-  </div>
-</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const profile = ref<any>(null)
+const loading = ref(true)
+
+onMounted(async () => {
+  try { profile.value = await apiFetch('/student/profile') } catch {}
+  loading.value = false
+})
+
+const formatDate = (d: string) => d
+  ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : '-'
+
+const statusConfig: Record<string, { pill: string; dot: string; label: string }> = {
+  active:    { pill: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200', dot: 'bg-emerald-400', label: 'Active' },
+  inactive:  { pill: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200',     dot: 'bg-slate-400',   label: 'Inactive' },
+  graduated: { pill: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',             dot: 'bg-sky-400',     label: 'Graduated' },
+  suspended: { pill: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',          dot: 'bg-rose-400',    label: 'Suspended' },
+}
+
+const status = (s: string) => statusConfig[s] ?? statusConfig.active
+</script>

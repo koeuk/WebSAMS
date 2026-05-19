@@ -1,3 +1,9 @@
+<template>
+  <SelectRoot v-bind="forwarded">
+    <slot />
+  </SelectRoot>
+</template>
+
 <script setup>
 import { SelectRoot, useForwardPropsEmits } from "reka-ui";
 
@@ -18,9 +24,3 @@ const emits = defineEmits(["update:modelValue", "update:open"]);
 
 const forwarded = useForwardPropsEmits(props, emits);
 </script>
-
-<template>
-  <SelectRoot v-bind="forwarded">
-    <slot />
-  </SelectRoot>
-</template>

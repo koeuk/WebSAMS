@@ -1,16 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const form = useForm({ name: '', academic_year: '', start_date: '', end_date: '' });
-const submit = () => { form.post('/admin/semesters'); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -63,3 +50,16 @@ const submit = () => { form.post('/admin/semesters'); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import DatePicker from '@/Components/DatePicker.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const form = useForm({ name: '', academic_year: '', start_date: '', end_date: '' });
+const submit = () => { form.post('/admin/semesters'); };
+</script>

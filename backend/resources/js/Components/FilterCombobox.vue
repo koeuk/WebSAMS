@@ -1,48 +1,3 @@
-<script setup>
-import { ref, computed, nextTick } from 'vue';
-import { PopoverRoot, PopoverTrigger, PopoverContent } from 'reka-ui';
-import { Check, ChevronsUpDown } from 'lucide-vue-next';
-
-const props = defineProps({
-    modelValue: { type: [String, Number], default: '' },
-    options: { type: Array, default: () => [] }, // [{ value, label }]
-    placeholder: { type: String, default: 'Select...' },
-});
-const emit = defineEmits(['update:modelValue']);
-
-const open = ref(false);
-const search = ref('');
-const searchInput = ref(null);
-
-const selectedLabel = computed(() => {
-    const opt = props.options.find(o => String(o.value) === String(props.modelValue));
-    return opt?.label ?? props.placeholder;
-});
-
-const isSelected = computed(() => props.modelValue !== '' && props.modelValue !== null && props.modelValue !== undefined);
-
-const filtered = computed(() => {
-    if (!search.value) return props.options;
-    const q = search.value.toLowerCase();
-    return props.options.filter(o => o.label.toLowerCase().includes(q));
-});
-
-const handleOpen = async (val) => {
-    open.value = val;
-    if (val) {
-        search.value = '';
-        await nextTick();
-        searchInput.value?.focus();
-    }
-};
-
-const select = (val) => {
-    emit('update:modelValue', val);
-    open.value = false;
-    search.value = '';
-};
-</script>
-
 <template>
     <PopoverRoot :open="open" @update:open="handleOpen">
         <PopoverTrigger as-child>
@@ -108,3 +63,48 @@ const select = (val) => {
         </PopoverContent>
     </PopoverRoot>
 </template>
+
+<script setup>
+import { ref, computed, nextTick } from 'vue';
+import { PopoverRoot, PopoverTrigger, PopoverContent } from 'reka-ui';
+import { Check, ChevronsUpDown } from 'lucide-vue-next';
+
+const props = defineProps({
+    modelValue: { type: [String, Number], default: '' },
+    options: { type: Array, default: () => [] }, // [{ value, label }]
+    placeholder: { type: String, default: 'Select...' },
+});
+const emit = defineEmits(['update:modelValue']);
+
+const open = ref(false);
+const search = ref('');
+const searchInput = ref(null);
+
+const selectedLabel = computed(() => {
+    const opt = props.options.find(o => String(o.value) === String(props.modelValue));
+    return opt?.label ?? props.placeholder;
+});
+
+const isSelected = computed(() => props.modelValue !== '' && props.modelValue !== null && props.modelValue !== undefined);
+
+const filtered = computed(() => {
+    if (!search.value) return props.options;
+    const q = search.value.toLowerCase();
+    return props.options.filter(o => o.label.toLowerCase().includes(q));
+});
+
+const handleOpen = async (val) => {
+    open.value = val;
+    if (val) {
+        search.value = '';
+        await nextTick();
+        searchInput.value?.focus();
+    }
+};
+
+const select = (val) => {
+    emit('update:modelValue', val);
+    open.value = false;
+    search.value = '';
+};
+</script>

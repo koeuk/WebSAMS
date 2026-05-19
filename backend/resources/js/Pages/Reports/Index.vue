@@ -1,40 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import { watch, computed } from 'vue';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FilterCombobox from '@/Components/FilterCombobox.vue';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const props = defineProps({ semesters: Array, courses: Array, classes: Array, subjects: Array });
-
-const form = useForm({
-    semester_id: '', course_id: '', class_id: '', subject_id: '', status: '', date_from: '', date_to: '',
-});
-
-watch(() => form.semester_id, (id) => {
-    if (id) {
-        const sem = props.semesters.find(s => s.id == id);
-        if (sem) { form.date_from = sem.start_date?.split('T')[0]; form.date_to = sem.end_date?.split('T')[0]; }
-    }
-});
-
-const semesterOptions = computed(() => (props.semesters || []).map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })));
-const courseOptions = computed(() => (props.courses || []).map(c => ({ value: c.id, label: c.name })));
-const classOptions = computed(() => (props.classes || []).map(c => ({ value: c.id, label: c.name })));
-const subjectOptions = computed(() => (props.subjects || []).map(s => ({ value: s.id, label: s.name })));
-const reportStatusOptions = [
-    { value: 'present', label: 'Present' },
-    { value: 'absent', label: 'Absent' },
-    { value: 'late', label: 'Late Only' },
-    { value: 'excused', label: 'Excused' },
-];
-
-const submit = () => { form.get('/admin/reports/generate'); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -90,3 +53,40 @@ const submit = () => { form.get('/admin/reports/generate'); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import { watch, computed } from 'vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FilterCombobox from '@/Components/FilterCombobox.vue';
+import DatePicker from '@/Components/DatePicker.vue';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const props = defineProps({ semesters: Array, courses: Array, classes: Array, subjects: Array });
+
+const form = useForm({
+    semester_id: '', course_id: '', class_id: '', subject_id: '', status: '', date_from: '', date_to: '',
+});
+
+watch(() => form.semester_id, (id) => {
+    if (id) {
+        const sem = props.semesters.find(s => s.id == id);
+        if (sem) { form.date_from = sem.start_date?.split('T')[0]; form.date_to = sem.end_date?.split('T')[0]; }
+    }
+});
+
+const semesterOptions = computed(() => (props.semesters || []).map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })));
+const courseOptions = computed(() => (props.courses || []).map(c => ({ value: c.id, label: c.name })));
+const classOptions = computed(() => (props.classes || []).map(c => ({ value: c.id, label: c.name })));
+const subjectOptions = computed(() => (props.subjects || []).map(s => ({ value: s.id, label: s.name })));
+const reportStatusOptions = [
+    { value: 'present', label: 'Present' },
+    { value: 'absent', label: 'Absent' },
+    { value: 'late', label: 'Late Only' },
+    { value: 'excused', label: 'Excused' },
+];
+
+const submit = () => { form.get('/admin/reports/generate'); };
+</script>

@@ -1,31 +1,3 @@
-<script setup>
-import { ref, computed } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FilterCombobox from '@/Components/FilterCombobox.vue';
-import { Badge } from '@/Components/ui/badge';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
-
-const props = defineProps({ student: Object, bySubject: Array, overall: Object, recentRecords: Array, semester: Object, semesters: Array, filters: Object });
-
-const semesterFilter = ref(props.filters?.semester_id || '');
-const semesterOptions = computed(() => (props.semesters || []).map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })));
-
-const changeSemester = () => {
-    router.get(`/admin/student-tracking/${props.student.id}`, { semester_id: semesterFilter.value || undefined }, { preserveState: true });
-};
-
-const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
-
-const statusClass = (status) => ({
-    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'present',
-    'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'absent',
-    'bg-amber-50 text-amber-700 ring-1 ring-amber-200': status === 'late',
-    'bg-sky-50 text-sky-700 ring-1 ring-sky-200': status === 'excused',
-});
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -198,3 +170,31 @@ const statusClass = (status) => ({
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { ref, computed } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FilterCombobox from '@/Components/FilterCombobox.vue';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+
+const props = defineProps({ student: Object, bySubject: Array, overall: Object, recentRecords: Array, semester: Object, semesters: Array, filters: Object });
+
+const semesterFilter = ref(props.filters?.semester_id || '');
+const semesterOptions = computed(() => (props.semesters || []).map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })));
+
+const changeSemester = () => {
+    router.get(`/admin/student-tracking/${props.student.id}`, { semester_id: semesterFilter.value || undefined }, { preserveState: true });
+};
+
+const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
+
+const statusClass = (status) => ({
+    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'present',
+    'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'absent',
+    'bg-amber-50 text-amber-700 ring-1 ring-amber-200': status === 'late',
+    'bg-sky-50 text-sky-700 ring-1 ring-sky-200': status === 'excused',
+});
+</script>

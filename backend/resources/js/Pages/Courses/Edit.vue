@@ -1,23 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const props = defineProps({ course: Object });
-
-const form = useForm({
-    name: props.course.name,
-    code: props.course.code,
-    description: props.course.description || '',
-});
-
-const submit = () => { form.put(`/admin/courses/${props.course.id}`); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -62,3 +42,23 @@ const submit = () => { form.put(`/admin/courses/${props.course.id}`); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const props = defineProps({ course: Object });
+
+const form = useForm({
+    name: props.course.name,
+    code: props.course.code,
+    description: props.course.description || '',
+});
+
+const submit = () => { form.put(`/admin/courses/${props.course.id}`); };
+</script>

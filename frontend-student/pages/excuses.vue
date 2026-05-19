@@ -1,69 +1,3 @@
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const attendance = ref<any>({ data: [] })
-const excuses = ref<any>({ data: [] })
-const loading = ref(true)
-const showForm = ref(false)
-const selectedAttendance = ref<any>(null)
-const reason = ref('')
-const submitting = ref(false)
-const successMsg = ref('')
-
-onMounted(async () => {
-  try {
-    ;[attendance.value, excuses.value] = await Promise.all([
-      apiFetch('/student/attendance'),
-      apiFetch('/student/excuse-requests'),
-    ])
-  } catch {}
-  loading.value = false
-})
-
-const absences = computed(() =>
-  (attendance.value?.data ?? []).filter((r: any) => r.status === 'absent')
-)
-
-const pendingExcuseIds = computed(() =>
-  new Set((excuses.value?.data ?? []).map((e: any) => e.attendance_id))
-)
-
-const requests = computed(() => excuses.value?.data ?? [])
-
-const openForm = (record: any) => {
-  selectedAttendance.value = record
-  reason.value = ''
-  showForm.value = true
-}
-
-const submit = async () => {
-  if (!selectedAttendance.value || !reason.value.trim()) return
-  submitting.value = true
-  try {
-    await apiFetch('/student/excuse-requests', {
-      method: 'POST',
-      body: { attendance_id: selectedAttendance.value.id, reason: reason.value },
-    })
-    showForm.value = false
-    successMsg.value = 'Excuse request submitted successfully.'
-    excuses.value = await apiFetch('/student/excuse-requests')
-    setTimeout(() => { successMsg.value = '' }, 4000)
-  } catch {}
-  submitting.value = false
-}
-
-const statusConfig: Record<string, string> = {
-  pending:  'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-  approved: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
-  rejected: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
-}
-
-const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
@@ -132,29 +66,71 @@ const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { 
       </div>
     </template>
 
-    <!-- Form modal -->
-    <Teleport to="body">
-      <Transition name="modal">
-        <div v-if="showForm" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm" @click.self="showForm = false">
-          <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6">
-            <h3 class="text-lg font-bold text-slate-900 mb-1">Submit Excuse</h3>
-            <p class="text-[13px] text-slate-500 mb-4">
-              {{ selectedAttendance?.class_subject?.subject?.name }} — {{ selectedAttendance?.date }}
-            </p>
-            <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Reason</label>
-            <textarea v-model="reason" rows="4" class="input-modern w-full resize-none mb-5" placeholder="Explain why you were absent..."></textarea>
-            <div class="flex gap-3">
-              <button @click="submit" :disabled="submitting || !reason.trim()" class="btn-primary flex-1 justify-center py-2.5 text-[13px]">
-                {{ submitting ? 'Submitting...' : 'Submit Request' }}
-              </button>
-              <button @click="showForm = false" class="btn-secondary py-2.5 px-5 text-[13px]">Cancel</button>
-            </div>
-          </div>
-        </div>
-      </Transition>
-    </Teleport>
-  </div>
-</template>
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const attendance = ref<any>({ data: [] })
+const excuses = ref<any>({ data: [] })
+const loading = ref(true)
+const showForm = ref(false)
+const selectedAttendance = ref<any>(null)
+const reason = ref('')
+const submitting = ref(false)
+const successMsg = ref('')
+
+onMounted(async () => {
+  try {
+    ;[attendance.value, excuses.value] = await Promise.all([
+      apiFetch('/student/attendance'),
+      apiFetch('/student/excuse-requests'),
+    ])
+  } catch {}
+  loading.value = false
+})
+
+const absences = computed(() =>
+  (attendance.value?.data ?? []).filter((r: any) => r.status === 'absent')
+)
+
+const pendingExcuseIds = computed(() =>
+  new Set((excuses.value?.data ?? []).map((e: any) => e.attendance_id))
+)
+
+const requests = computed(() => excuses.value?.data ?? [])
+
+const openForm = (record: any) => {
+  selectedAttendance.value = record
+  reason.value = ''
+  showForm.value = true
+}
+
+const submit = async () => {
+  if (!selectedAttendance.value || !reason.value.trim()) return
+  submitting.value = true
+  try {
+    await apiFetch('/student/excuse-requests', {
+      method: 'POST',
+      body: { attendance_id: selectedAttendance.value.id, reason: reason.value },
+    })
+    showForm.value = false
+    successMsg.value = 'Excuse request submitted successfully.'
+    excuses.value = await apiFetch('/student/excuse-requests')
+    setTimeout(() => { successMsg.value = '' }, 4000)
+  } catch {}
+  submitting.value = false
+}
+
+const statusConfig: Record<string, string> = {
+  pending:  'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+  approved: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+  rejected: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
+}
+
+const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'
+</script>
 
 <style scoped>
 .modal-enter-active, .modal-leave-active { transition: opacity 0.2s; }

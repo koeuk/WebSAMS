@@ -1,18 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
-
-const props = defineProps({ courses: Array });
-
-const form = useForm({ course_id: '', name: '', code: '' });
-const submit = () => { form.post('/admin/subjects'); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -65,3 +50,18 @@ const submit = () => { form.post('/admin/subjects'); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+
+const props = defineProps({ courses: Array });
+
+const form = useForm({ course_id: '', name: '', code: '' });
+const submit = () => { form.post('/admin/subjects'); };
+</script>

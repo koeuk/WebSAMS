@@ -1,32 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const { user, logout } = useAuth()
-
-const navigation = [
-  { name: 'Dashboard',        href: '/',                icon: 'dashboard', exact: true },
-  { name: 'My Classes',       href: '/classes',         icon: 'classes' },
-  { name: 'Mark Attendance',  href: '/attendance/mark', icon: 'mark' },
-  { name: 'History',          href: '/attendance',      icon: 'history',   exact: true },
-  { name: 'QR Attendance',    href: '/qr',              icon: 'qr' },
-  { name: 'Excuse Requests',  href: '/excuses',         icon: 'excuse' },
-  { name: 'Announcements',    href: '/announcements',   icon: 'announce' },
-  { name: 'Notifications',    href: '/notifications',   icon: 'bell' },
-  { name: 'Profile',          href: '/profile',         icon: 'profile' },
-]
-
-const route = useRoute()
-const isActive = (item: { href: string; exact?: boolean }) =>
-  item.exact ? route.path === item.href : route.path === item.href || route.path.startsWith(item.href + '/')
-
-const sidebarOpen = ref(false)
-
-const handleLogout = async () => {
-  await logout()
-  navigateTo('/auth/login')
-}
-</script>
-
 <template>
   <div class="min-h-screen bg-slate-50">
 
@@ -142,6 +113,35 @@ const handleLogout = async () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const { user, logout } = useAuth()
+
+const navigation = [
+  { name: 'Dashboard',        href: '/',                icon: 'dashboard', exact: true },
+  { name: 'My Classes',       href: '/classes',         icon: 'classes' },
+  { name: 'Mark Attendance',  href: '/attendance/mark', icon: 'mark' },
+  { name: 'History',          href: '/attendance',      icon: 'history',   exact: true },
+  { name: 'QR Attendance',    href: '/qr',              icon: 'qr' },
+  { name: 'Excuse Requests',  href: '/excuses',         icon: 'excuse' },
+  { name: 'Announcements',    href: '/announcements',   icon: 'announce' },
+  { name: 'Notifications',    href: '/notifications',   icon: 'bell' },
+  { name: 'Profile',          href: '/profile',         icon: 'profile' },
+]
+
+const route = useRoute()
+const isActive = (item: { href: string; exact?: boolean }) =>
+  item.exact ? route.path === item.href : route.path === item.href || route.path.startsWith(item.href + '/')
+
+const sidebarOpen = ref(false)
+
+const handleLogout = async () => {
+  await logout()
+  navigateTo('/auth/login')
+}
+</script>
 
 <style scoped>
 .fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }

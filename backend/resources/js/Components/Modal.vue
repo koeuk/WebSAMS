@@ -1,13 +1,3 @@
-<script setup>
-defineProps({
-    show: Boolean,
-    title: { type: String, default: 'Confirm' },
-    message: { type: String, default: 'Are you sure?' },
-});
-
-const emit = defineEmits(['confirm', 'cancel']);
-</script>
-
 <template>
     <Teleport to="body">
         <Transition
@@ -51,3 +41,13 @@ const emit = defineEmits(['confirm', 'cancel']);
         </Transition>
     </Teleport>
 </template>
+
+<script setup>
+defineProps({
+    show: Boolean,
+    title: { type: String, default: 'Confirm' },
+    message: { type: String, default: 'Are you sure?' },
+});
+
+const emit = defineEmits(['confirm', 'cancel']);
+</script>

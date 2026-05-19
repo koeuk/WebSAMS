@@ -1,18 +1,3 @@
-<script setup lang="ts">
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const classes = ref<any[]>([])
-const loading = ref(true)
-
-onMounted(async () => {
-  try {
-    classes.value = await apiFetch('/teacher/classes')
-  } catch {}
-  loading.value = false
-})
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-8">
@@ -49,3 +34,18 @@ onMounted(async () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const classes = ref<any[]>([])
+const loading = ref(true)
+
+onMounted(async () => {
+  try {
+    classes.value = await apiFetch('/teacher/classes')
+  } catch {}
+  loading.value = false
+})
+</script>

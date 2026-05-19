@@ -1,67 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-import { Link, router, useForm } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Pagination from '@/Components/Pagination.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
-import Modal from '@/Components/Modal.vue';
-import ModalForm from '@/Components/ModalForm.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
-import { Label } from '@/Components/ui/label';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const props = defineProps({ classes: Object, filters: Object });
-const search = ref(props.filters?.search || '');
-
-const applyFilters = () => {
-    router.get('/admin/classes', { search: search.value || undefined }, { preserveState: true });
-};
-
-const clearFilters = () => {
-    search.value = '';
-    router.get('/admin/classes', {}, { preserveState: false });
-};
-
-// ── Create ──────────────────────────────────────────────
-const showCreateDialog = ref(false);
-const createForm = useForm({ name: '', section: '', academic_year: '' });
-const submitCreate = () => {
-    createForm.post('/admin/classes', {
-        onSuccess: () => { showCreateDialog.value = false; createForm.reset(); },
-    });
-};
-
-// ── Edit ────────────────────────────────────────────────
-const showEditDialog = ref(false);
-const editingItem = ref(null);
-const editForm = useForm({ name: '', section: '', academic_year: '' });
-const openEdit = (c) => {
-    editingItem.value = c;
-    editForm.name = c.name;
-    editForm.section = c.section || '';
-    editForm.academic_year = c.academic_year;
-    showEditDialog.value = true;
-};
-const submitEdit = () => {
-    editForm.put(`/admin/classes/${editingItem.value.id}`, {
-        onSuccess: () => { showEditDialog.value = false; },
-    });
-};
-
-// ── Delete ───────────────────────────────────────────────
-const showDeleteModal = ref(false);
-const classToDelete = ref(null);
-const confirmDelete = (c) => { classToDelete.value = c; showDeleteModal.value = true; };
-const deleteClass = () => {
-    router.delete(`/admin/classes/${classToDelete.value.id}`, {
-        onFinish: () => { showDeleteModal.value = false; classToDelete.value = null; },
-    });
-};
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -70,7 +6,7 @@ const deleteClass = () => {
                     <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Classes</h2>
                     <p class="text-sm text-slate-500 mt-1">Manage classes and sections</p>
                 </div>
-                <Button @click="showCreateDialog = true" class="flex items-center gap-2">
+                <Button @click="openCreate" class="flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
                     Create Class
                 </Button>
@@ -135,61 +71,53 @@ const deleteClass = () => {
 
             <Pagination :links="classes.links" />
 
-            <!-- Create Dialog -->
-            <ModalForm v-model:open="showCreateDialog" title="Create Class" description="Add a new class to the system." size="md">
-                <form @submit.prevent="submitCreate" class="space-y-4 py-2">
-                    <div>
-                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Name *</Label>
-                        <Input v-model="createForm.name" type="text" required placeholder="e.g. Grade 10-A" />
-                        <p v-if="createForm.errors.name" class="text-[12px] text-rose-500 mt-1">{{ createForm.errors.name }}</p>
-                    </div>
-                    <div>
-                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Section</Label>
-                        <Input v-model="createForm.section" type="text" placeholder="e.g. A" />
-                    </div>
-                    <div>
-                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Academic Year *</Label>
-                        <Input v-model="createForm.academic_year" type="text" required placeholder="e.g. 2025-2026" />
-                        <p v-if="createForm.errors.academic_year" class="text-[12px] text-rose-500 mt-1">{{ createForm.errors.academic_year }}</p>
-                    </div>
-                    <div class="flex justify-end gap-2 pt-4">
-                        <Button type="button" variant="outline" @click="showCreateDialog = false">Cancel</Button>
-                        <Button type="submit" :disabled="createForm.processing" class="flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                            {{ createForm.processing ? 'Creating...' : 'Create Class' }}
-                        </Button>
-                    </div>
-                </form>
-            </ModalForm>
-
-            <!-- Edit Dialog -->
-            <ModalForm v-model:open="showEditDialog" title="Edit Class" :description="`Update ${editingItem?.name}.`" size="md">
-                <form @submit.prevent="submitEdit" class="space-y-4 py-2">
-                    <div>
-                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Name *</Label>
-                        <Input v-model="editForm.name" type="text" required />
-                        <p v-if="editForm.errors.name" class="text-[12px] text-rose-500 mt-1">{{ editForm.errors.name }}</p>
-                    </div>
-                    <div>
-                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Section</Label>
-                        <Input v-model="editForm.section" type="text" />
-                    </div>
-                    <div>
-                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Academic Year *</Label>
-                        <Input v-model="editForm.academic_year" type="text" required />
-                        <p v-if="editForm.errors.academic_year" class="text-[12px] text-rose-500 mt-1">{{ editForm.errors.academic_year }}</p>
-                    </div>
-                    <div class="flex justify-end gap-2 pt-4">
-                        <Button type="button" variant="outline" @click="showEditDialog = false">Cancel</Button>
-                        <Button type="submit" :disabled="editForm.processing" class="flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
-                            {{ editForm.processing ? 'Saving...' : 'Save Changes' }}
-                        </Button>
-                    </div>
-                </form>
-            </ModalForm>
+            <ClassForm v-model:open="showForm" :school-class="editingClass" />
 
             <Modal :show="showDeleteModal" title="Delete Class" :message="`Delete ${classToDelete?.name}?`" @confirm="deleteClass" @cancel="showDeleteModal = false" />
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
+import Modal from '@/Components/Modal.vue';
+import ClassForm from '@/Components/Forms/ClassForm.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Badge } from '@/Components/ui/badge';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const props = defineProps({ classes: Object, filters: Object });
+const search = ref(props.filters?.search || '');
+
+const applyFilters = () => {
+    router.get('/admin/classes', { search: search.value || undefined }, { preserveState: true });
+};
+
+const clearFilters = () => {
+    search.value = '';
+    router.get('/admin/classes', {}, { preserveState: false });
+};
+
+// ── Form (create & edit) ─────────────────────────────────
+const showForm = ref(false);
+const editingClass = ref(null);
+
+const openCreate = () => { editingClass.value = null; showForm.value = true; };
+const openEdit = (c) => { editingClass.value = c; showForm.value = true; };
+
+// ── Delete ───────────────────────────────────────────────
+const showDeleteModal = ref(false);
+const classToDelete = ref(null);
+const confirmDelete = (c) => { classToDelete.value = c; showDeleteModal.value = true; };
+const deleteClass = () => {
+    router.delete(`/admin/classes/${classToDelete.value.id}`, {
+        onFinish: () => { showDeleteModal.value = false; classToDelete.value = null; },
+    });
+};
+</script>

@@ -1,45 +1,3 @@
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const data = ref<any>({ data: [] })
-const loading = ref(true)
-
-onMounted(async () => {
-  try { data.value = await apiFetch('/teacher/notifications') } catch {}
-  loading.value = false
-})
-
-const notifications = computed(() => data.value?.data ?? [])
-const unreadCount = computed(() => notifications.value.filter((n: any) => !n.is_read).length)
-
-const markRead = async (n: any) => {
-  if (n.is_read) return
-  try {
-    await apiFetch(`/teacher/notifications/${n.id}/read`, { method: 'PUT' })
-    n.is_read = true
-  } catch {}
-}
-
-const markAllRead = async () => {
-  try {
-    await apiFetch('/teacher/notifications/read-all', { method: 'POST' })
-    notifications.value.forEach((n: any) => { n.is_read = true })
-  } catch {}
-}
-
-const typeConfig: Record<string, string> = {
-  absent:  'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
-  late:    'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-  excused: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
-  info:    'bg-slate-100 text-slate-600 ring-1 ring-slate-200',
-}
-
-const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="flex items-center justify-between mb-7">
@@ -83,3 +41,45 @@ const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { 
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const data = ref<any>({ data: [] })
+const loading = ref(true)
+
+onMounted(async () => {
+  try { data.value = await apiFetch('/teacher/notifications') } catch {}
+  loading.value = false
+})
+
+const notifications = computed(() => data.value?.data ?? [])
+const unreadCount = computed(() => notifications.value.filter((n: any) => !n.is_read).length)
+
+const markRead = async (n: any) => {
+  if (n.is_read) return
+  try {
+    await apiFetch(`/teacher/notifications/${n.id}/read`, { method: 'PUT' })
+    n.is_read = true
+  } catch {}
+}
+
+const markAllRead = async () => {
+  try {
+    await apiFetch('/teacher/notifications/read-all', { method: 'POST' })
+    notifications.value.forEach((n: any) => { n.is_read = true })
+  } catch {}
+}
+
+const typeConfig: Record<string, string> = {
+  absent:  'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
+  late:    'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+  excused: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
+  info:    'bg-slate-100 text-slate-600 ring-1 ring-slate-200',
+}
+
+const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''
+</script>

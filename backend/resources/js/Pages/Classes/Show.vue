@@ -1,68 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-import { Link, useForm, router } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
-import Modal from '@/Components/Modal.vue';
-import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
-
-const props = defineProps({
-    schoolClass: Object,
-    availableSubjects: Array,
-    availableTeachers: Array,
-    availableStudents: Array,
-});
-
-const subjectForm = useForm({
-    school_class_id: props.schoolClass.id,
-    subject_id: '',
-    teacher_id: '',
-});
-
-const assignSubject = () => {
-    subjectForm.post('/admin/class-subjects', {
-        onSuccess: () => { subjectForm.subject_id = ''; subjectForm.teacher_id = ''; },
-    });
-};
-
-const studentForm = useForm({
-    school_class_id: props.schoolClass.id,
-    student_id: '',
-});
-
-const enrollStudent = () => {
-    studentForm.post('/admin/class-students', {
-        onSuccess: () => { studentForm.student_id = ''; },
-    });
-};
-
-const showDeleteModal = ref(false);
-const deleteUrl = ref('');
-const deleteMessage = ref('');
-
-const confirmRemoveSubject = (cs) => {
-    deleteUrl.value = `/admin/class-subjects/${cs.id}`;
-    deleteMessage.value = `Remove ${cs.subject?.name} (${cs.teacher?.name})?`;
-    showDeleteModal.value = true;
-};
-
-const confirmRemoveStudent = (cs) => {
-    deleteUrl.value = `/admin/class-students/${cs.id}`;
-    deleteMessage.value = `Remove ${cs.student?.name} from this class?`;
-    showDeleteModal.value = true;
-};
-
-const executeDelete = () => {
-    router.delete(deleteUrl.value, {
-        onFinish: () => { showDeleteModal.value = false; },
-    });
-};
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -187,3 +122,68 @@ const executeDelete = () => {
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { Link, useForm, router } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
+import Modal from '@/Components/Modal.vue';
+import { Button } from '@/Components/ui/button';
+import { Badge } from '@/Components/ui/badge';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+
+const props = defineProps({
+    schoolClass: Object,
+    availableSubjects: Array,
+    availableTeachers: Array,
+    availableStudents: Array,
+});
+
+const subjectForm = useForm({
+    school_class_id: props.schoolClass.id,
+    subject_id: '',
+    teacher_id: '',
+});
+
+const assignSubject = () => {
+    subjectForm.post('/admin/class-subjects', {
+        onSuccess: () => { subjectForm.subject_id = ''; subjectForm.teacher_id = ''; },
+    });
+};
+
+const studentForm = useForm({
+    school_class_id: props.schoolClass.id,
+    student_id: '',
+});
+
+const enrollStudent = () => {
+    studentForm.post('/admin/class-students', {
+        onSuccess: () => { studentForm.student_id = ''; },
+    });
+};
+
+const showDeleteModal = ref(false);
+const deleteUrl = ref('');
+const deleteMessage = ref('');
+
+const confirmRemoveSubject = (cs) => {
+    deleteUrl.value = `/admin/class-subjects/${cs.id}`;
+    deleteMessage.value = `Remove ${cs.subject?.name} (${cs.teacher?.name})?`;
+    showDeleteModal.value = true;
+};
+
+const confirmRemoveStudent = (cs) => {
+    deleteUrl.value = `/admin/class-students/${cs.id}`;
+    deleteMessage.value = `Remove ${cs.student?.name} from this class?`;
+    showDeleteModal.value = true;
+};
+
+const executeDelete = () => {
+    router.delete(deleteUrl.value, {
+        onFinish: () => { showDeleteModal.value = false; },
+    });
+};
+</script>

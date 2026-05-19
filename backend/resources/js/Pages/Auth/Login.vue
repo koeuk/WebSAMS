@@ -1,17 +1,3 @@
-<script setup>
-import { useForm } from '@inertiajs/vue3';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const form = useForm({ email: '', password: '' });
-
-const submit = () => {
-    form.post('/login', { onFinish: () => form.reset('password') });
-};
-</script>
-
 <template>
     <div class="flex items-center justify-center min-h-screen bg-linear-to-br from-slate-100 via-blue-50/30 to-slate-100">
         <div class="w-full max-w-md animate-fade-in">
@@ -56,3 +42,17 @@ const submit = () => {
         </div>
     </div>
 </template>
+
+<script setup>
+import { useForm } from '@inertiajs/vue3';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const form = useForm({ email: '', password: '' });
+
+const submit = () => {
+    form.post('/login', { onFinish: () => form.reset('password') });
+};
+</script>

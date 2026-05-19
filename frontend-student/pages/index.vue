@@ -1,32 +1,3 @@
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const { user, fetchUser } = useAuth()
-
-const dashboard = ref<any>(null)
-const loading = ref(true)
-
-onMounted(async () => {
-  await fetchUser()
-  try {
-    dashboard.value = await apiFetch('/student/dashboard')
-  } catch {}
-  loading.value = false
-})
-
-const rate = computed(() => dashboard.value?.summary?.rate ?? 0)
-const firstName = computed(() => user.value?.name?.split(' ')[0] ?? 'Student')
-
-/* SVG donut ring */
-const radius = 54
-const circumference = 2 * Math.PI * radius
-const dashOffset = computed(() => circumference - (rate.value / 100) * circumference)
-const rateColor = computed(() => rate.value >= 80 ? '#10b981' : rate.value >= 60 ? '#f59e0b' : '#f43f5e')
-</script>
-
 <template>
   <div class="animate-fade-in">
 
@@ -216,5 +187,32 @@ const rateColor = computed(() => rate.value >= 80 ? '#10b981' : rate.value >= 60
         </table>
       </div>
     </template>
-  </div>
-</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const { user, fetchUser } = useAuth()
+
+const dashboard = ref<any>(null)
+const loading = ref(true)
+
+onMounted(async () => {
+  await fetchUser()
+  try {
+    dashboard.value = await apiFetch('/student/dashboard')
+  } catch {}
+  loading.value = false
+})
+
+const rate = computed(() => dashboard.value?.summary?.rate ?? 0)
+const firstName = computed(() => user.value?.name?.split(' ')[0] ?? 'Student')
+
+/* SVG donut ring */
+const radius = 54
+const circumference = 2 * Math.PI * radius
+const dashOffset = computed(() => circumference - (rate.value / 100) * circumference)
+const rateColor = computed(() => rate.value >= 80 ? '#10b981' : rate.value >= 60 ? '#f59e0b' : '#f43f5e')
+</script>

@@ -1,11 +1,3 @@
-<script setup>
-import { Link } from '@inertiajs/vue3';
-
-defineProps({
-    links: Array,
-});
-</script>
-
 <template>
     <nav v-if="links && links.length > 3" class="flex items-center justify-center gap-1 mt-6">
         <template v-for="link in links">
@@ -26,5 +18,11 @@ defineProps({
                 v-html="link.label"
             />
         </template>
-    </nav>
-</template>
+
+<script setup>
+import { Link } from '@inertiajs/vue3';
+
+defineProps({
+    links: Array,
+});
+</script>

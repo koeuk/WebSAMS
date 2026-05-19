@@ -1,36 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-definePageMeta({ layout: false, middleware: 'auth' })
-
-const email = ref('')
-const password = ref('')
-const error = ref('')
-const loading = ref(false)
-const showPassword = ref(false)
-
-const { login } = useAuth()
-
-const submit = async () => {
-  error.value = ''
-  loading.value = true
-  try {
-    await login(email.value, password.value)
-    navigateTo('/')
-  } catch (e: any) {
-    error.value = e?.data?.message || 'Invalid credentials.'
-  } finally {
-    loading.value = false
-  }
-}
-
-const features = [
-  { icon: 'check', text: 'Real-time attendance tracking' },
-  { icon: 'chart', text: 'Attendance rate by subject' },
-  { icon: 'bell', text: 'Instant absence notifications' },
-]
-</script>
-
 <template>
   <div class="flex min-h-screen">
 
@@ -180,3 +147,36 @@ const features = [
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+definePageMeta({ layout: false, middleware: 'auth' })
+
+const email = ref('')
+const password = ref('')
+const error = ref('')
+const loading = ref(false)
+const showPassword = ref(false)
+
+const { login } = useAuth()
+
+const submit = async () => {
+  error.value = ''
+  loading.value = true
+  try {
+    await login(email.value, password.value)
+    navigateTo('/')
+  } catch (e: any) {
+    error.value = e?.data?.message || 'Invalid credentials.'
+  } finally {
+    loading.value = false
+  }
+}
+
+const features = [
+  { icon: 'check', text: 'Real-time attendance tracking' },
+  { icon: 'chart', text: 'Attendance rate by subject' },
+  { icon: 'bell', text: 'Instant absence notifications' },
+]
+</script>

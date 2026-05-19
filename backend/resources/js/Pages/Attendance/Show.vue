@@ -1,26 +1,3 @@
-<script setup>
-import { Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const props = defineProps({ record: Object });
-
-const formatDate = (dateStr) => {
-    if (!dateStr) return '-';
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-};
-
-const statusClass = (status) => ({
-    'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-50': status === 'present',
-    'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-50': status === 'absent',
-    'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-50': status === 'late',
-    'bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-50': status === 'excused',
-});
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -93,3 +70,26 @@ const statusClass = (status) => ({
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Button } from '@/Components/ui/button';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const props = defineProps({ record: Object });
+
+const formatDate = (dateStr) => {
+    if (!dateStr) return '-';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+};
+
+const statusClass = (status) => ({
+    'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-50': status === 'present',
+    'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-50': status === 'absent',
+    'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-50': status === 'late',
+    'bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-50': status === 'excused',
+});
+</script>

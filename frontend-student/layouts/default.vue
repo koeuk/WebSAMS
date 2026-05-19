@@ -1,29 +1,3 @@
-<script setup lang="ts">
-import { ref } from 'vue'
-
-const { user, logout } = useAuth()
-
-const navigation = [
-  { name: 'Dashboard',       href: '/',              icon: 'dashboard' },
-  { name: 'My Attendance',   href: '/attendance',    icon: 'attendance' },
-  { name: 'Excuse Requests', href: '/excuses',       icon: 'excuse' },
-  { name: 'QR Attend',       href: '/qr',            icon: 'qr' },
-  { name: 'Announcements',   href: '/announcements', icon: 'announce' },
-  { name: 'Notifications',   href: '/notifications', icon: 'bell' },
-  { name: 'Profile',         href: '/profile',       icon: 'profile' },
-]
-
-const route = useRoute()
-const isActive = (href: string) => route.path === href || (href !== '/' && route.path.startsWith(href))
-
-const sidebarOpen = ref(false)
-
-const handleLogout = async () => {
-  await logout()
-  navigateTo('/auth/login')
-}
-</script>
-
 <template>
   <div class="min-h-screen bg-slate-50">
 
@@ -121,6 +95,32 @@ const handleLogout = async () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+
+const { user, logout } = useAuth()
+
+const navigation = [
+  { name: 'Dashboard',       href: '/',              icon: 'dashboard' },
+  { name: 'My Attendance',   href: '/attendance',    icon: 'attendance' },
+  { name: 'Excuse Requests', href: '/excuses',       icon: 'excuse' },
+  { name: 'QR Attend',       href: '/qr',            icon: 'qr' },
+  { name: 'Announcements',   href: '/announcements', icon: 'announce' },
+  { name: 'Notifications',   href: '/notifications', icon: 'bell' },
+  { name: 'Profile',         href: '/profile',       icon: 'profile' },
+]
+
+const route = useRoute()
+const isActive = (href: string) => route.path === href || (href !== '/' && route.path.startsWith(href))
+
+const sidebarOpen = ref(false)
+
+const handleLogout = async () => {
+  await logout()
+  navigateTo('/auth/login')
+}
+</script>
 
 <style scoped>
 .fade-enter-active, .fade-leave-active { transition: opacity 0.2s; }

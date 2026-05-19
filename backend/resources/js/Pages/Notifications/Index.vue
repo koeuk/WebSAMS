@@ -1,46 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-import { router } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Pagination from '@/Components/Pagination.vue';
-import FilterCombobox from '@/Components/FilterCombobox.vue';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Badge } from '@/Components/ui/badge';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
-
-const typeOptions = [
-    { value: 'absence', label: 'Absence' },
-    { value: 'late', label: 'Late' },
-    { value: 'general', label: 'General' },
-];
-
-const props = defineProps({ notifications: Object, filters: Object });
-
-const typeFilter = ref(props.filters?.type || '');
-const search = ref(props.filters?.search || '');
-
-const applyFilters = () => {
-    router.get('/admin/notifications', { type: typeFilter.value || undefined, search: search.value || undefined }, { preserveState: true });
-};
-
-const clearFilters = () => {
-    typeFilter.value = '';
-    search.value = '';
-    router.get('/admin/notifications', {}, { preserveState: false });
-};
-
-const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
-
-const typeBadgeClass = (type) => ({
-    'bg-rose-50 text-rose-700 ring-1 ring-rose-200': type === 'absence',
-    'bg-amber-50 text-amber-700 ring-1 ring-amber-200': type === 'late',
-    'bg-slate-100 text-slate-600 ring-1 ring-slate-200': type === 'general',
-});
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -105,3 +62,46 @@ const typeBadgeClass = (type) => ({
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { router } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
+import FilterCombobox from '@/Components/FilterCombobox.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+
+const typeOptions = [
+    { value: 'absence', label: 'Absence' },
+    { value: 'late', label: 'Late' },
+    { value: 'general', label: 'General' },
+];
+
+const props = defineProps({ notifications: Object, filters: Object });
+
+const typeFilter = ref(props.filters?.type || '');
+const search = ref(props.filters?.search || '');
+
+const applyFilters = () => {
+    router.get('/admin/notifications', { type: typeFilter.value || undefined, search: search.value || undefined }, { preserveState: true });
+};
+
+const clearFilters = () => {
+    typeFilter.value = '';
+    search.value = '';
+    router.get('/admin/notifications', {}, { preserveState: false });
+};
+
+const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+
+const typeBadgeClass = (type) => ({
+    'bg-rose-50 text-rose-700 ring-1 ring-rose-200': type === 'absence',
+    'bg-amber-50 text-amber-700 ring-1 ring-amber-200': type === 'late',
+    'bg-slate-100 text-slate-600 ring-1 ring-slate-200': type === 'general',
+});
+</script>

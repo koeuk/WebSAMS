@@ -1,15 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const form = useForm({ name: '', section: '', academic_year: '' });
-const submit = () => { form.post('/admin/classes'); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -54,3 +42,15 @@ const submit = () => { form.post('/admin/classes'); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const form = useForm({ name: '', section: '', academic_year: '' });
+const submit = () => { form.post('/admin/classes'); };
+</script>

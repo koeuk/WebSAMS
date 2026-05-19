@@ -1,49 +1,3 @@
-<script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
-
-const props = defineProps({
-    modelValue: [String, Number],
-    options: Array, // [{ value, label }]
-    placeholder: { type: String, default: 'Select...' },
-    searchable: { type: Boolean, default: false },
-});
-
-const emit = defineEmits(['update:modelValue', 'change']);
-
-const open = ref(false);
-const search = ref('');
-const containerRef = ref(null);
-
-const selectedLabel = computed(() => {
-    const found = props.options?.find(o => String(o.value) === String(props.modelValue));
-    return found ? found.label : props.placeholder;
-});
-
-const isSelected = (val) => String(props.modelValue) === String(val);
-
-const filtered = computed(() => {
-    if (!search.value) return props.options;
-    return props.options.filter(o => o.label.toLowerCase().includes(search.value.toLowerCase()));
-});
-
-const select = (value) => {
-    emit('update:modelValue', value);
-    emit('change', value);
-    open.value = false;
-    search.value = '';
-};
-
-const handleOutside = (e) => {
-    if (containerRef.value && !containerRef.value.contains(e.target)) {
-        open.value = false;
-        search.value = '';
-    }
-};
-
-onMounted(() => document.addEventListener('mousedown', handleOutside));
-onUnmounted(() => document.removeEventListener('mousedown', handleOutside));
-</script>
-
 <template>
     <div ref="containerRef" class="relative">
         <!-- Trigger -->
@@ -112,3 +66,49 @@ onUnmounted(() => document.removeEventListener('mousedown', handleOutside));
         </Transition>
     </div>
 </template>
+
+<script setup>
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+
+const props = defineProps({
+    modelValue: [String, Number],
+    options: Array, // [{ value, label }]
+    placeholder: { type: String, default: 'Select...' },
+    searchable: { type: Boolean, default: false },
+});
+
+const emit = defineEmits(['update:modelValue', 'change']);
+
+const open = ref(false);
+const search = ref('');
+const containerRef = ref(null);
+
+const selectedLabel = computed(() => {
+    const found = props.options?.find(o => String(o.value) === String(props.modelValue));
+    return found ? found.label : props.placeholder;
+});
+
+const isSelected = (val) => String(props.modelValue) === String(val);
+
+const filtered = computed(() => {
+    if (!search.value) return props.options;
+    return props.options.filter(o => o.label.toLowerCase().includes(search.value.toLowerCase()));
+});
+
+const select = (value) => {
+    emit('update:modelValue', value);
+    emit('change', value);
+    open.value = false;
+    search.value = '';
+};
+
+const handleOutside = (e) => {
+    if (containerRef.value && !containerRef.value.contains(e.target)) {
+        open.value = false;
+        search.value = '';
+    }
+};
+
+onMounted(() => document.addEventListener('mousedown', handleOutside));
+onUnmounted(() => document.removeEventListener('mousedown', handleOutside));
+</script>

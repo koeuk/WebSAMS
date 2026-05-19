@@ -1,3 +1,9 @@
+<template>
+  <SelectGroup :class="cn('p-1 w-full', props.class)" v-bind="delegatedProps">
+    <slot />
+  </SelectGroup>
+</template>
+
 <script setup>
 import { reactiveOmit } from "@vueuse/core";
 import { SelectGroup } from "reka-ui";
@@ -15,9 +21,3 @@ const props = defineProps({
 
 const delegatedProps = reactiveOmit(props, "class");
 </script>
-
-<template>
-  <SelectGroup :class="cn('p-1 w-full', props.class)" v-bind="delegatedProps">
-    <slot />
-  </SelectGroup>
-</template>

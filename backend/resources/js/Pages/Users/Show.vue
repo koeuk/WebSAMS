@@ -1,27 +1,3 @@
-<script setup>
-import { Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const props = defineProps({ user: Object });
-
-const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
-
-const statusBadgeVariant = (status) => {
-    if (status === 'active') return 'default';
-    if (status === 'suspended') return 'destructive';
-    return 'secondary';
-};
-
-const roleBadgeVariant = (role) => {
-    if (role === 'admin') return 'default';
-    if (role === 'teacher') return 'secondary';
-    return 'outline';
-};
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -126,42 +102,26 @@ const roleBadgeVariant = (role) => {
                             </div>
                         </template>
 
-                        <!-- Teacher Info -->
-                        <template v-if="user.role === 'teacher'">
-                            <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-5 flex items-center gap-2">
-                                <div class="w-1.5 h-1.5 rounded-full bg-sky-400"></div>
-                                Teacher Info
-                            </h3>
-                            <div class="space-y-4">
-                                <div class="flex items-center justify-between py-2 border-b border-slate-50">
-                                    <p class="text-[13px] text-slate-500">Department</p>
-                                    <p class="text-[13px] font-semibold text-slate-900">{{ user.department || '-' }}</p>
-                                </div>
-                                <div class="flex items-center justify-between py-2 border-b border-slate-50">
-                                    <p class="text-[13px] text-slate-500">Qualification</p>
-                                    <p class="text-[13px] font-semibold text-slate-900">{{ user.qualification || '-' }}</p>
-                                </div>
-                                <div class="flex items-center justify-between py-2">
-                                    <p class="text-[13px] text-slate-500">Hire Date</p>
-                                    <p class="text-[13px] font-semibold text-slate-900">{{ formatDate(user.hire_date) }}</p>
-                                </div>
-                            </div>
-                        </template>
+<script setup>
+import { Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Button } from '@/Components/ui/button';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
 
-                        <!-- Admin Info -->
-                        <template v-if="user.role === 'admin'">
-                            <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-5 flex items-center gap-2">
-                                <div class="w-1.5 h-1.5 rounded-full bg-violet-400"></div>
-                                Admin Info
-                            </h3>
-                            <div class="flex items-center gap-3 p-4 rounded-xl bg-violet-50/50">
-                                <svg class="w-5 h-5 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
-                                <p class="text-[13px] text-violet-700 font-medium">Full system access</p>
-                            </div>
-                        </template>
-                    </CardContent>
-                </Card>
-            </div>
-        </div>
-    </AdminLayout>
-</template>
+const props = defineProps({ user: Object });
+
+const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : '-';
+
+const statusBadgeVariant = (status) => {
+    if (status === 'active') return 'default';
+    if (status === 'suspended') return 'destructive';
+    return 'secondary';
+};
+
+const roleBadgeVariant = (role) => {
+    if (role === 'admin') return 'default';
+    if (role === 'teacher') return 'secondary';
+    return 'outline';
+};
+</script>

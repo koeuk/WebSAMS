@@ -1,52 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
-
-const photoPreview = ref(null);
-const handlePhoto = (e) => {
-    const file = e.target.files[0];
-    form.profile_photo = file;
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => { photoPreview.value = e.target.result; };
-        reader.readAsDataURL(file);
-    }
-};
-
-const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    role: 'student',
-    phone: '',
-    year_level: '',
-    id_number: '',
-    gender: '',
-    date_of_birth: '',
-    address: '',
-    status: 'active',
-    guardian_name: '',
-    guardian_phone: '',
-    enrollment_date: '',
-    department: '',
-    qualification: '',
-    hire_date: '',
-    profile_photo: null,
-});
-
-const submit = () => {
-    form.post('/admin/users');
-};
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -96,9 +47,9 @@ const submit = () => {
                                                 <SelectValue placeholder="Select role" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="admin">Admin</SelectItem>
-                                                <SelectItem value="teacher">Teacher</SelectItem>
-                                                <SelectItem value="student">Student</SelectItem>
+                                                <SelectItem v-for="role in props.roles" :key="role" :value="role">
+                                                    {{ role.charAt(0).toUpperCase() + role.slice(1) }}
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -116,8 +67,9 @@ const submit = () => {
                                                 <SelectValue placeholder="Select" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="male">Male</SelectItem>
-                                                <SelectItem value="female">Female</SelectItem>
+                                                <SelectItem v-for="g in props.genders" :key="g.value" :value="g.value">
+                                                    {{ g.name.charAt(0).toUpperCase() + g.name.slice(1).toLowerCase() }}
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -128,10 +80,9 @@ const submit = () => {
                                                 <SelectValue placeholder="Select status" />
                                             </SelectTrigger>
                                             <SelectContent>
-                                                <SelectItem value="active">Active</SelectItem>
-                                                <SelectItem value="inactive">Inactive</SelectItem>
-                                                <SelectItem value="graduated">Graduated</SelectItem>
-                                                <SelectItem value="suspended">Suspended</SelectItem>
+                                                <SelectItem v-for="s in props.statuses" :key="s.value" :value="s.value">
+                                                    {{ s.name.charAt(0).toUpperCase() + s.name.slice(1).toLowerCase() }}
+                                                </SelectItem>
                                             </SelectContent>
                                         </Select>
                                     </div>
@@ -209,39 +160,53 @@ const submit = () => {
                             </div>
                         </template>
 
-                        <!-- Teacher-specific -->
-                        <template v-if="form.role === 'teacher'">
-                            <div>
-                                <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-4 flex items-center gap-2">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-sky-400"></div>
-                                    Teacher Info
-                                </h3>
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div>
-                                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Department</Label>
-                                        <Input v-model="form.department" type="text" placeholder="e.g. Computer Science" />
-                                    </div>
-                                    <div>
-                                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Qualification</Label>
-                                        <Input v-model="form.qualification" type="text" placeholder="e.g. Master in CS" />
-                                    </div>
-                                    <div>
-                                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Hire Date</Label>
-                                        <DatePicker v-model="form.hire_date" placeholder="Pick hire date" />
-                                    </div>
-                                </div>
-                            </div>
-                        </template>
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import DatePicker from '@/Components/DatePicker.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 
-                        <div class="pt-2">
-                            <Button type="submit" :disabled="form.processing" class="flex items-center gap-2">
-                                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                                {{ form.processing ? 'Creating...' : 'Create User' }}
-                            </Button>
-                        </div>
-                    </form>
-                </CardContent>
-            </Card>
-        </div>
-    </AdminLayout>
-</template>
+const props = defineProps({ roles: Array, genders: Array, statuses: Array });
+
+const photoPreview = ref(null);
+const handlePhoto = (e) => {
+    const file = e.target.files[0];
+    form.profile_photo = file;
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => { photoPreview.value = e.target.result; };
+        reader.readAsDataURL(file);
+    }
+};
+
+const form = useForm({
+    name: '',
+    email: '',
+    password: '',
+    role: 'student',
+    phone: '',
+    year_level: '',
+    id_number: '',
+    gender: '',
+    date_of_birth: '',
+    address: '',
+    status: 'active',
+    guardian_name: '',
+    guardian_phone: '',
+    enrollment_date: '',
+    department: '',
+    qualification: '',
+    hire_date: '',
+    profile_photo: null,
+});
+
+const submit = () => {
+    form.post('/admin/users');
+};
+</script>

@@ -1,37 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import { ref } from 'vue';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const props = defineProps({ user: Object });
-
-const photoPreview = ref(props.user.profile_photo ? `/storage/${props.user.profile_photo}` : null);
-const handlePhoto = (e) => {
-    const file = e.target.files[0];
-    form.profile_photo = file;
-    if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => { photoPreview.value = e.target.result; };
-        reader.readAsDataURL(file);
-    }
-};
-
-const form = useForm({
-    _method: 'put',
-    name: props.user.name, email: props.user.email, phone: props.user.phone || '',
-    current_password: '', new_password: '', new_password_confirmation: '', profile_photo: null,
-});
-
-const submit = () => {
-    form.post('/admin/profile', { forceFormData: true });
-};
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -123,3 +89,37 @@ const submit = () => {
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import { ref } from 'vue';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const props = defineProps({ user: Object });
+
+const photoPreview = ref(props.user.profile_photo ? `/storage/${props.user.profile_photo}` : null);
+const handlePhoto = (e) => {
+    const file = e.target.files[0];
+    form.profile_photo = file;
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => { photoPreview.value = e.target.result; };
+        reader.readAsDataURL(file);
+    }
+};
+
+const form = useForm({
+    _method: 'put',
+    name: props.user.name, email: props.user.email, phone: props.user.phone || '',
+    current_password: '', new_password: '', new_password_confirmation: '', profile_photo: null,
+});
+
+const submit = () => {
+    form.post('/admin/profile', { forceFormData: true });
+};
+</script>

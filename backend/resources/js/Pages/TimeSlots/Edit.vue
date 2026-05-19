@@ -1,20 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
-
-const props = defineProps({ timeSlot: Object });
-const form = useForm({
-    name: props.timeSlot.name, start_time: props.timeSlot.start_time?.slice(0, 5),
-    end_time: props.timeSlot.end_time?.slice(0, 5), type: props.timeSlot.type,
-});
-const submit = () => { form.put(`/admin/time-slots/${props.timeSlot.id}`); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -72,3 +55,20 @@ const submit = () => { form.put(`/admin/time-slots/${props.timeSlot.id}`); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+
+const props = defineProps({ timeSlot: Object });
+const form = useForm({
+    name: props.timeSlot.name, start_time: props.timeSlot.start_time?.slice(0, 5),
+    end_time: props.timeSlot.end_time?.slice(0, 5), type: props.timeSlot.type,
+});
+const submit = () => { form.put(`/admin/time-slots/${props.timeSlot.id}`); };
+</script>

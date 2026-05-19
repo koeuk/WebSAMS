@@ -1,47 +1,3 @@
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-
-const attendance = ref<any>({ data: [] })
-const dateFrom = ref('')
-const dateTo = ref('')
-const loading = ref(true)
-
-onMounted(async () => {
-  await loadAttendance()
-  loading.value = false
-})
-
-const loadAttendance = async () => {
-  const params = new URLSearchParams()
-  if (dateFrom.value) params.set('date_from', dateFrom.value)
-  if (dateTo.value) params.set('date_to', dateTo.value)
-  try { attendance.value = await apiFetch(`/student/attendance?${params.toString()}`) } catch {}
-}
-
-const records = computed(() => attendance.value?.data ?? [])
-
-const stats = computed(() => {
-  const data = records.value
-  const total = data.length
-  const present = data.filter((r: any) => r.status === 'present').length
-  const absent = data.filter((r: any) => r.status === 'absent').length
-  const late = data.filter((r: any) => r.status === 'late').length
-  const rate = total ? Math.round((present / total) * 100) : 0
-  return { total, present, absent, late, rate }
-})
-
-const statusConfig: Record<string, string> = {
-  present: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
-  absent:  'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
-  late:    'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-  excused: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
-}
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
@@ -130,3 +86,47 @@ const statusConfig: Record<string, string> = {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+
+const attendance = ref<any>({ data: [] })
+const dateFrom = ref('')
+const dateTo = ref('')
+const loading = ref(true)
+
+onMounted(async () => {
+  await loadAttendance()
+  loading.value = false
+})
+
+const loadAttendance = async () => {
+  const params = new URLSearchParams()
+  if (dateFrom.value) params.set('date_from', dateFrom.value)
+  if (dateTo.value) params.set('date_to', dateTo.value)
+  try { attendance.value = await apiFetch(`/student/attendance?${params.toString()}`) } catch {}
+}
+
+const records = computed(() => attendance.value?.data ?? [])
+
+const stats = computed(() => {
+  const data = records.value
+  const total = data.length
+  const present = data.filter((r: any) => r.status === 'present').length
+  const absent = data.filter((r: any) => r.status === 'absent').length
+  const late = data.filter((r: any) => r.status === 'late').length
+  const rate = total ? Math.round((present / total) * 100) : 0
+  return { total, present, absent, late, rate }
+})
+
+const statusConfig: Record<string, string> = {
+  present: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200',
+  absent:  'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
+  late:    'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+  excused: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
+}
+</script>

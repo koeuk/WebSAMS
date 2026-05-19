@@ -1,24 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const props = defineProps({ semester: Object });
-
-const form = useForm({
-    name: props.semester.name,
-    academic_year: props.semester.academic_year,
-    start_date: props.semester.start_date?.split('T')[0] || '',
-    end_date: props.semester.end_date?.split('T')[0] || '',
-});
-
-const submit = () => { form.put(`/admin/semesters/${props.semester.id}`); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -70,3 +49,24 @@ const submit = () => { form.put(`/admin/semesters/${props.semester.id}`); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import DatePicker from '@/Components/DatePicker.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const props = defineProps({ semester: Object });
+
+const form = useForm({
+    name: props.semester.name,
+    academic_year: props.semester.academic_year,
+    start_date: props.semester.start_date?.split('T')[0] || '',
+    end_date: props.semester.end_date?.split('T')[0] || '',
+});
+
+const submit = () => { form.put(`/admin/semesters/${props.semester.id}`); };
+</script>

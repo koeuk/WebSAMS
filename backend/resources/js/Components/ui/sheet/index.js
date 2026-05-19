@@ -10,7 +10,7 @@ export { default as SheetTitle } from "./SheetTitle.vue";
 export { default as SheetTrigger } from "./SheetTrigger.vue";
 
 export const sheetVariants = cva(
-  "fixed z-50 gap-4 bg-background p-6 shadow-lg transition ease-in-out data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500",
+  "fixed z-50 gap-4 bg-background p-6 shadow-2xl transition-all ease-[cubic-bezier(0.32,0.72,0,1)] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:duration-300 data-[state=open]:duration-500 data-[state=open]:fade-in-0 data-[state=closed]:fade-out-0",
   {
     variants: {
       side: {

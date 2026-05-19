@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch(domain:lordicon.com)",
       "Bash(npx shadcn-vue@latest add select textarea badge table separator --yes)",
-      "Bash(npx shadcn-vue@latest add dialog sheet --yes)"
+      "Bash(npx shadcn-vue@latest add dialog sheet --yes)",
+      "Bash(composer require *)"
     ]
   }
 }

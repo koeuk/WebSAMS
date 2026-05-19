@@ -1,23 +1,3 @@
-<script setup lang="ts">
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const { fetchUser } = useAuth()
-
-const dashboard = ref<any>(null)
-const loading = ref(true)
-
-onMounted(async () => {
-  await fetchUser()
-  try {
-    dashboard.value = await apiFetch('/teacher/dashboard')
-  } catch {}
-  loading.value = false
-})
-
-const days: Record<string, string> = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' }
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="flex items-center justify-between mb-8">
@@ -107,5 +87,23 @@ const days: Record<string, string> = { mon: 'Monday', tue: 'Tuesday', wed: 'Wedn
         No classes scheduled for today.
       </div>
     </template>
-  </div>
-</template>
+
+<script setup lang="ts">
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const { fetchUser } = useAuth()
+
+const dashboard = ref<any>(null)
+const loading = ref(true)
+
+onMounted(async () => {
+  await fetchUser()
+  try {
+    dashboard.value = await apiFetch('/teacher/dashboard')
+  } catch {}
+  loading.value = false
+})
+
+const days: Record<string, string> = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' }
+</script>

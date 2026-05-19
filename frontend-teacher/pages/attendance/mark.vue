@@ -1,85 +1,3 @@
-<script setup lang="ts">
-import { computed } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-
-const classes = ref<any[]>([])
-const timeSlots = ref<any[]>([])
-const students = ref<any[]>([])
-const selectedClass = ref('')
-const selectedTimeSlot = ref('')
-
-const classOptions = computed(() =>
-  classes.value.map((c: any) => ({
-    value: String(c.id),
-    label: `${c.school_class?.name} - ${c.subject?.name}`,
-  }))
-)
-const timeSlotOptions = computed(() =>
-  timeSlots.value.map((ts: any) => ({
-    value: String(ts.id),
-    label: `${ts.name} (${ts.start_time?.slice(0, 5)} - ${ts.end_time?.slice(0, 5)})`,
-  }))
-)
-const selectedDate = ref(new Date().toISOString().split('T')[0])
-const attendances = ref<Record<number, { status: string; remarks: string }>>({})
-const loading = ref(true)
-const submitting = ref(false)
-const success = ref('')
-const error = ref('')
-
-onMounted(async () => {
-  try {
-    classes.value = await apiFetch('/teacher/classes')
-    timeSlots.value = await apiFetch('/teacher/time-slots')
-  } catch {}
-  loading.value = false
-})
-
-const loadStudents = async () => {
-  if (!selectedClass.value) return
-  students.value = []
-  try {
-    students.value = await apiFetch(`/teacher/classes/${selectedClass.value}/students`)
-    attendances.value = {}
-    students.value.forEach((s: any) => {
-      attendances.value[s.id] = { status: 'present', remarks: '' }
-    })
-  } catch {}
-}
-
-const markAllPresent = () => {
-  Object.keys(attendances.value).forEach((id) => {
-    attendances.value[Number(id)].status = 'present'
-  })
-}
-
-const submit = async () => {
-  submitting.value = true
-  success.value = ''
-  error.value = ''
-  try {
-    const payload = {
-      class_subject_id: Number(selectedClass.value),
-      date: selectedDate.value,
-      time_slot_id: Number(selectedTimeSlot.value),
-      attendances: Object.entries(attendances.value).map(([studentId, data]) => ({
-        student_id: Number(studentId),
-        status: data.status,
-        remarks: data.remarks || null,
-      })),
-    }
-    await apiFetch('/teacher/attendance', { method: 'POST', body: payload })
-    success.value = 'Attendance recorded successfully!'
-  } catch (e: any) {
-    error.value = e?.data?.message || 'Failed to record attendance.'
-  }
-  submitting.value = false
-}
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-8">
@@ -164,3 +82,85 @@ const submit = async () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+
+const classes = ref<any[]>([])
+const timeSlots = ref<any[]>([])
+const students = ref<any[]>([])
+const selectedClass = ref('')
+const selectedTimeSlot = ref('')
+
+const classOptions = computed(() =>
+  classes.value.map((c: any) => ({
+    value: String(c.id),
+    label: `${c.school_class?.name} - ${c.subject?.name}`,
+  }))
+)
+const timeSlotOptions = computed(() =>
+  timeSlots.value.map((ts: any) => ({
+    value: String(ts.id),
+    label: `${ts.name} (${ts.start_time?.slice(0, 5)} - ${ts.end_time?.slice(0, 5)})`,
+  }))
+)
+const selectedDate = ref(new Date().toISOString().split('T')[0])
+const attendances = ref<Record<number, { status: string; remarks: string }>>({})
+const loading = ref(true)
+const submitting = ref(false)
+const success = ref('')
+const error = ref('')
+
+onMounted(async () => {
+  try {
+    classes.value = await apiFetch('/teacher/classes')
+    timeSlots.value = await apiFetch('/teacher/time-slots')
+  } catch {}
+  loading.value = false
+})
+
+const loadStudents = async () => {
+  if (!selectedClass.value) return
+  students.value = []
+  try {
+    students.value = await apiFetch(`/teacher/classes/${selectedClass.value}/students`)
+    attendances.value = {}
+    students.value.forEach((s: any) => {
+      attendances.value[s.id] = { status: 'present', remarks: '' }
+    })
+  } catch {}
+}
+
+const markAllPresent = () => {
+  Object.keys(attendances.value).forEach((id) => {
+    attendances.value[Number(id)].status = 'present'
+  })
+}
+
+const submit = async () => {
+  submitting.value = true
+  success.value = ''
+  error.value = ''
+  try {
+    const payload = {
+      class_subject_id: Number(selectedClass.value),
+      date: selectedDate.value,
+      time_slot_id: Number(selectedTimeSlot.value),
+      attendances: Object.entries(attendances.value).map(([studentId, data]) => ({
+        student_id: Number(studentId),
+        status: data.status,
+        remarks: data.remarks || null,
+      })),
+    }
+    await apiFetch('/teacher/attendance', { method: 'POST', body: payload })
+    success.value = 'Attendance recorded successfully!'
+  } catch (e: any) {
+    error.value = e?.data?.message || 'Failed to record attendance.'
+  }
+  submitting.value = false
+}
+</script>

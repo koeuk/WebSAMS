@@ -1,95 +1,3 @@
-<script setup>
-import { ref, computed } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import Pagination from '@/Components/Pagination.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
-import Modal from '@/Components/Modal.vue';
-import FilterCombobox from '@/Components/FilterCombobox.vue';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Button } from '@/Components/ui/button';
-import { Badge } from '@/Components/ui/badge';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
-
-const props = defineProps({
-    attendance: Object,
-    courses: Array,
-    classes: Array,
-    subjects: Array,
-    timeSlots: Array,
-    filters: Object,
-});
-
-const courseFilter = ref(props.filters?.course_id || '');
-const classFilter = ref(props.filters?.class_id || '');
-const subjectFilter = ref(props.filters?.subject_id || '');
-const statusFilter = ref(props.filters?.status || '');
-
-const courseOptions = computed(() => (props.courses || []).map(c => ({ value: c.id, label: c.name })));
-const classOptions = computed(() => (props.classes || []).map(c => ({ value: c.id, label: c.name })));
-const subjectOptions = computed(() => (props.subjects || []).map(s => ({ value: s.id, label: s.name })));
-const statusOptions = [
-    { value: 'present', label: 'Present' },
-    { value: 'absent', label: 'Absent' },
-    { value: 'late', label: 'Late' },
-    { value: 'excused', label: 'Excused' },
-];
-const dateFrom = ref(props.filters?.date_from || '');
-const dateTo = ref(props.filters?.date_to || '');
-
-const applyFilters = (resetSubject = false) => {
-    if (resetSubject) subjectFilter.value = '';
-    router.get('/admin/attendance', {
-        course_id: courseFilter.value || undefined,
-        class_id: classFilter.value || undefined,
-        subject_id: subjectFilter.value || undefined,
-        status: statusFilter.value || undefined,
-        date_from: dateFrom.value || undefined,
-        date_to: dateTo.value || undefined,
-    }, { preserveState: true });
-};
-
-const clearFilters = () => {
-    courseFilter.value = '';
-    classFilter.value = '';
-    subjectFilter.value = '';
-    statusFilter.value = '';
-    dateFrom.value = '';
-    dateTo.value = '';
-    router.get('/admin/attendance', {}, { preserveState: false });
-};
-
-const formatDate = (dateStr) => {
-    if (!dateStr) return '-';
-    const d = new Date(dateStr);
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-};
-
-const statusVariant = (status) => ({
-    present: 'default',
-    absent: 'destructive',
-    late: 'secondary',
-    excused: 'outline',
-}[status] || 'outline');
-
-const statusClass = (status) => ({
-    'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-50': status === 'present',
-    'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-50': status === 'absent',
-    'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-50': status === 'late',
-    'bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-50': status === 'excused',
-});
-
-const showDeleteModal = ref(false);
-const recordToDelete = ref(null);
-const confirmDelete = (record) => { recordToDelete.value = record; showDeleteModal.value = true; };
-const deleteRecord = () => {
-    router.delete(`/admin/attendance/${recordToDelete.value.id}`, {
-        onFinish: () => { showDeleteModal.value = false; recordToDelete.value = null; },
-    });
-};
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -235,3 +143,95 @@ const deleteRecord = () => {
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { ref, computed } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import Pagination from '@/Components/Pagination.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
+import Modal from '@/Components/Modal.vue';
+import FilterCombobox from '@/Components/FilterCombobox.vue';
+import DatePicker from '@/Components/DatePicker.vue';
+import { Button } from '@/Components/ui/button';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+
+const props = defineProps({
+    attendance: Object,
+    courses: Array,
+    classes: Array,
+    subjects: Array,
+    timeSlots: Array,
+    filters: Object,
+});
+
+const courseFilter = ref(props.filters?.course_id || '');
+const classFilter = ref(props.filters?.class_id || '');
+const subjectFilter = ref(props.filters?.subject_id || '');
+const statusFilter = ref(props.filters?.status || '');
+
+const courseOptions = computed(() => (props.courses || []).map(c => ({ value: c.id, label: c.name })));
+const classOptions = computed(() => (props.classes || []).map(c => ({ value: c.id, label: c.name })));
+const subjectOptions = computed(() => (props.subjects || []).map(s => ({ value: s.id, label: s.name })));
+const statusOptions = [
+    { value: 'present', label: 'Present' },
+    { value: 'absent', label: 'Absent' },
+    { value: 'late', label: 'Late' },
+    { value: 'excused', label: 'Excused' },
+];
+const dateFrom = ref(props.filters?.date_from || '');
+const dateTo = ref(props.filters?.date_to || '');
+
+const applyFilters = (resetSubject = false) => {
+    if (resetSubject) subjectFilter.value = '';
+    router.get('/admin/attendance', {
+        course_id: courseFilter.value || undefined,
+        class_id: classFilter.value || undefined,
+        subject_id: subjectFilter.value || undefined,
+        status: statusFilter.value || undefined,
+        date_from: dateFrom.value || undefined,
+        date_to: dateTo.value || undefined,
+    }, { preserveState: true });
+};
+
+const clearFilters = () => {
+    courseFilter.value = '';
+    classFilter.value = '';
+    subjectFilter.value = '';
+    statusFilter.value = '';
+    dateFrom.value = '';
+    dateTo.value = '';
+    router.get('/admin/attendance', {}, { preserveState: false });
+};
+
+const formatDate = (dateStr) => {
+    if (!dateStr) return '-';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+};
+
+const statusVariant = (status) => ({
+    present: 'default',
+    absent: 'destructive',
+    late: 'secondary',
+    excused: 'outline',
+}[status] || 'outline');
+
+const statusClass = (status) => ({
+    'bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-50': status === 'present',
+    'bg-rose-50 text-rose-700 border-rose-200 hover:bg-rose-50': status === 'absent',
+    'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-50': status === 'late',
+    'bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-50': status === 'excused',
+});
+
+const showDeleteModal = ref(false);
+const recordToDelete = ref(null);
+const confirmDelete = (record) => { recordToDelete.value = record; showDeleteModal.value = true; };
+const deleteRecord = () => {
+    router.delete(`/admin/attendance/${recordToDelete.value.id}`, {
+        onFinish: () => { showDeleteModal.value = false; recordToDelete.value = null; },
+    });
+};
+</script>

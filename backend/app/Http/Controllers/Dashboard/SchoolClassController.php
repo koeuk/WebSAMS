@@ -8,22 +8,25 @@ use App\Models\Subject;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class SchoolClassController extends Controller
 {
     public function index(Request $request)
     {
-        $query = SchoolClass::withCount(['subjects', 'students']);
-
-        if ($request->filled('search')) {
-            $query->where('name', 'like', "%{$request->search}%");
-        }
-
-        $classes = $query->latest()->paginate(15)->withQueryString();
+        $classes = QueryBuilder::for(SchoolClass::class)
+            ->withCount(['subjects', 'students'])
+            ->allowedFilters([
+                AllowedFilter::callback('search', fn ($q, $v) => $q->where('name', 'like', "%{$v}%")),
+            ])
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
         return Inertia::render('Classes/Index', [
             'classes' => $classes,
-            'filters' => $request->only(['search']),
+            'filters' => $request->input('filter', []),
         ]);
     }
 

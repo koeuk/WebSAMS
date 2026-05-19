@@ -1,70 +1,3 @@
-<script setup>
-import { ref } from 'vue';
-import { useForm, Link, router } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
-
-const props = defineProps({ classSubjects: Array, timeSlots: Array });
-
-const selectedClass = ref('');
-const selectedTimeSlot = ref('');
-const selectedDate = ref(new Date().toISOString().split('T')[0]);
-const students = ref([]);
-const attendances = ref({});
-const loadingStudents = ref(false);
-
-const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.teacher?.name})`;
-
-const loadStudents = async () => {
-    if (!selectedClass.value) return;
-    loadingStudents.value = true;
-    try {
-        const res = await fetch(`/admin/bulk-attendance/students?class_subject_id=${selectedClass.value}`, {
-            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
-        });
-        students.value = await res.json();
-        attendances.value = {};
-        students.value.forEach(s => {
-            attendances.value[s.id] = { status: 'present', remarks: '' };
-        });
-    } catch {}
-    loadingStudents.value = false;
-};
-
-const markAllPresent = () => {
-    Object.keys(attendances.value).forEach(id => { attendances.value[id].status = 'present'; });
-};
-
-const form = useForm({});
-
-const submit = () => {
-    const data = {
-        class_subject_id: selectedClass.value,
-        date: selectedDate.value,
-        time_slot_id: selectedTimeSlot.value,
-        attendances: Object.entries(attendances.value).map(([studentId, data]) => ({
-            student_id: Number(studentId),
-            status: data.status,
-            remarks: data.remarks || null,
-        })),
-    };
-    router.post('/admin/bulk-attendance', data);
-};
-
-const statusColors = {
-    present: 'bg-emerald-100 text-emerald-700 border-emerald-300',
-    absent: 'bg-rose-100 text-rose-700 border-rose-300',
-    late: 'bg-amber-100 text-amber-700 border-amber-300',
-    excused: 'bg-sky-100 text-sky-700 border-sky-300',
-};
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -169,3 +102,70 @@ const statusColors = {
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { ref } from 'vue';
+import { useForm, Link, router } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
+import DatePicker from '@/Components/DatePicker.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+
+const props = defineProps({ classSubjects: Array, timeSlots: Array });
+
+const selectedClass = ref('');
+const selectedTimeSlot = ref('');
+const selectedDate = ref(new Date().toISOString().split('T')[0]);
+const students = ref([]);
+const attendances = ref({});
+const loadingStudents = ref(false);
+
+const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.teacher?.name})`;
+
+const loadStudents = async () => {
+    if (!selectedClass.value) return;
+    loadingStudents.value = true;
+    try {
+        const res = await fetch(`/admin/bulk-attendance/students?class_subject_id=${selectedClass.value}`, {
+            headers: { 'Accept': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        });
+        students.value = await res.json();
+        attendances.value = {};
+        students.value.forEach(s => {
+            attendances.value[s.id] = { status: 'present', remarks: '' };
+        });
+    } catch {}
+    loadingStudents.value = false;
+};
+
+const markAllPresent = () => {
+    Object.keys(attendances.value).forEach(id => { attendances.value[id].status = 'present'; });
+};
+
+const form = useForm({});
+
+const submit = () => {
+    const data = {
+        class_subject_id: selectedClass.value,
+        date: selectedDate.value,
+        time_slot_id: selectedTimeSlot.value,
+        attendances: Object.entries(attendances.value).map(([studentId, data]) => ({
+            student_id: Number(studentId),
+            status: data.status,
+            remarks: data.remarks || null,
+        })),
+    };
+    router.post('/admin/bulk-attendance', data);
+};
+
+const statusColors = {
+    present: 'bg-emerald-100 text-emerald-700 border-emerald-300',
+    absent: 'bg-rose-100 text-rose-700 border-rose-300',
+    late: 'bg-amber-100 text-amber-700 border-amber-300',
+    excused: 'bg-sky-100 text-sky-700 border-sky-300',
+};
+</script>

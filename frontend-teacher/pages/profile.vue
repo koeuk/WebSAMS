@@ -1,22 +1,3 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const profile = ref<any>(null)
-const loading = ref(true)
-
-onMounted(async () => {
-  try { profile.value = await apiFetch('/teacher/profile') } catch {}
-  loading.value = false
-})
-
-const formatDate = (d: string) => d
-  ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
-  : '-'
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
@@ -109,5 +90,22 @@ const formatDate = (d: string) => d
         </table>
       </div>
     </template>
-  </div>
-</template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const profile = ref<any>(null)
+const loading = ref(true)
+
+onMounted(async () => {
+  try { profile.value = await apiFetch('/teacher/profile') } catch {}
+  loading.value = false
+})
+
+const formatDate = (d: string) => d
+  ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  : '-'
+</script>

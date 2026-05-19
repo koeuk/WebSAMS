@@ -1,40 +1,3 @@
-<script setup>
-import { reactiveOmit } from "@vueuse/core";
-import { X } from "lucide-vue-next";
-import {
-  DialogClose,
-  DialogContent,
-  DialogOverlay,
-  DialogPortal,
-  useForwardPropsEmits,
-} from "reka-ui";
-import { cn } from "@/lib/utils";
-
-const props = defineProps({
-  forceMount: { type: Boolean, required: false },
-  disableOutsidePointerEvents: { type: Boolean, required: false },
-  asChild: { type: Boolean, required: false },
-  as: { type: null, required: false },
-  class: {
-    type: [Boolean, null, String, Object, Array],
-    required: false,
-    skipCheck: true,
-  },
-});
-const emits = defineEmits([
-  "escapeKeyDown",
-  "pointerDownOutside",
-  "focusOutside",
-  "interactOutside",
-  "openAutoFocus",
-  "closeAutoFocus",
-]);
-
-const delegatedProps = reactiveOmit(props, "class");
-
-const forwarded = useForwardPropsEmits(delegatedProps, emits);
-</script>
-
 <template>
   <DialogPortal>
     <DialogOverlay
@@ -73,3 +36,40 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
     </DialogOverlay>
   </DialogPortal>
 </template>
+
+<script setup>
+import { reactiveOmit } from "@vueuse/core";
+import { X } from "lucide-vue-next";
+import {
+  DialogClose,
+  DialogContent,
+  DialogOverlay,
+  DialogPortal,
+  useForwardPropsEmits,
+} from "reka-ui";
+import { cn } from "@/lib/utils";
+
+const props = defineProps({
+  forceMount: { type: Boolean, required: false },
+  disableOutsidePointerEvents: { type: Boolean, required: false },
+  asChild: { type: Boolean, required: false },
+  as: { type: null, required: false },
+  class: {
+    type: [Boolean, null, String, Object, Array],
+    required: false,
+    skipCheck: true,
+  },
+});
+const emits = defineEmits([
+  "escapeKeyDown",
+  "pointerDownOutside",
+  "focusOutside",
+  "interactOutside",
+  "openAutoFocus",
+  "closeAutoFocus",
+]);
+
+const delegatedProps = reactiveOmit(props, "class");
+
+const forwarded = useForwardPropsEmits(delegatedProps, emits);
+</script>

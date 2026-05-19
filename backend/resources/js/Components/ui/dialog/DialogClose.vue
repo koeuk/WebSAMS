@@ -1,3 +1,9 @@
+<template>
+  <DialogClose v-bind="props">
+    <slot />
+  </DialogClose>
+</template>
+
 <script setup>
 import { DialogClose } from "reka-ui";
 
@@ -6,9 +12,3 @@ const props = defineProps({
   as: { type: null, required: false },
 });
 </script>
-
-<template>
-  <DialogClose v-bind="props">
-    <slot />
-  </DialogClose>
-</template>

@@ -7,26 +7,28 @@ use App\Models\Course;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class CourseController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Course::withCount('subjects');
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('code', 'like', "%{$search}%");
-            });
-        }
-
-        $courses = $query->latest()->paginate(15)->withQueryString();
+        $courses = QueryBuilder::for(Course::class)
+            ->withCount('subjects')
+            ->allowedFilters([
+                AllowedFilter::callback('search', fn ($q, $v) => $q->where(fn ($q) => $q
+                    ->where('name', 'like', "%{$v}%")
+                    ->orWhere('code', 'like', "%{$v}%")
+                )),
+            ])
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
         return Inertia::render('Courses/Index', [
             'courses' => $courses,
-            'filters' => $request->only(['search']),
+            'filters' => $request->input('filter', []),
         ]);
     }
 

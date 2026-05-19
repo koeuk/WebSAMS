@@ -1,22 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-
-const props = defineProps({ schoolClass: Object });
-
-const form = useForm({
-    name: props.schoolClass.name,
-    section: props.schoolClass.section || '',
-    academic_year: props.schoolClass.academic_year,
-});
-
-const submit = () => { form.put(`/admin/classes/${props.schoolClass.id}`); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -61,3 +42,22 @@ const submit = () => { form.put(`/admin/classes/${props.schoolClass.id}`); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+
+const props = defineProps({ schoolClass: Object });
+
+const form = useForm({
+    name: props.schoolClass.name,
+    section: props.schoolClass.section || '',
+    academic_year: props.schoolClass.academic_year,
+});
+
+const submit = () => { form.put(`/admin/classes/${props.schoolClass.id}`); };
+</script>

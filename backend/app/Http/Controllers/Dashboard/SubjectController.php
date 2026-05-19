@@ -8,31 +8,30 @@ use App\Models\Subject;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class SubjectController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Subject::with('course');
-
-        if ($request->filled('course_id')) {
-            $query->where('course_id', $request->course_id);
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('code', 'like', "%{$search}%");
-            });
-        }
-
-        $subjects = $query->latest()->paginate(15)->withQueryString();
+        $subjects = QueryBuilder::for(Subject::class)
+            ->allowedFilters([
+                AllowedFilter::exact('course_id'),
+                AllowedFilter::callback('search', fn ($q, $v) => $q->where(fn ($q) => $q
+                    ->where('name', 'like', "%{$v}%")
+                    ->orWhere('code', 'like', "%{$v}%")
+                )),
+            ])
+            ->with('course')
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
         return Inertia::render('Subjects/Index', [
             'subjects' => $subjects,
-            'courses' => Course::all(['id', 'name', 'code']),
-            'filters' => $request->only(['course_id', 'search']),
+            'courses'  => Course::all(['id', 'name', 'code']),
+            'filters'  => $request->input('filter', []),
         ]);
     }
 

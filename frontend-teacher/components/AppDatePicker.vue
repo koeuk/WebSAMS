@@ -1,3 +1,23 @@
+<template>
+  <Popover>
+    <PopoverTrigger as-child>
+      <button
+        type="button"
+        class="input-modern flex items-center gap-2"
+        :class="props.class"
+      >
+        <CalendarIcon class="h-4 w-4 text-slate-400 shrink-0" />
+        <span :class="calendarValue ? 'text-slate-900' : 'text-slate-400'">
+          {{ displayLabel }}
+        </span>
+      </button>
+    </PopoverTrigger>
+    <PopoverContent class="w-auto p-0" align="start" :side-offset="6">
+      <Calendar v-model="calendarValue" initial-focus />
+    </PopoverContent>
+  </Popover>
+</template>
+
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { CalendarDate, DateFormatter, getLocalTimeZone, parseDate, today } from '@internationalized/date'
@@ -33,23 +53,3 @@ const displayLabel = computed(() =>
     : props.placeholder
 )
 </script>
-
-<template>
-  <Popover>
-    <PopoverTrigger as-child>
-      <button
-        type="button"
-        class="input-modern flex items-center gap-2"
-        :class="props.class"
-      >
-        <CalendarIcon class="h-4 w-4 text-slate-400 shrink-0" />
-        <span :class="calendarValue ? 'text-slate-900' : 'text-slate-400'">
-          {{ displayLabel }}
-        </span>
-      </button>
-    </PopoverTrigger>
-    <PopoverContent class="w-auto p-0" align="start" :side-offset="6">
-      <Calendar v-model="calendarValue" initial-focus />
-    </PopoverContent>
-  </Popover>
-</template>

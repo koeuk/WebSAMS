@@ -1,80 +1,3 @@
-<script setup>
-import { ref, computed } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import SelectDropdown from '@/Components/SelectDropdown.vue';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Badge } from '@/Components/ui/badge';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
-
-const props = defineProps({
-    tracking: Array, semesters: Array, academicYears: Array, courses: Array, classes: Array, filters: Object, threshold: Number, summary: Object,
-});
-
-const semesterFilter = ref(props.filters?.semester_id || '');
-const yearFilter = ref(props.filters?.academic_year || '');
-const courseFilter = ref(props.filters?.course_id || '');
-const classFilter = ref(props.filters?.class_id || '');
-const yearLevelFilter = ref(props.filters?.year_level || '');
-const thresholdFilter = ref(props.threshold || 80);
-
-const applyFilters = () => {
-    router.get('/admin/student-tracking', {
-        semester_id: semesterFilter.value || undefined, academic_year: yearFilter.value || undefined, course_id: courseFilter.value || undefined, class_id: classFilter.value || undefined, year_level: yearLevelFilter.value || undefined, threshold: thresholdFilter.value,
-    }, { preserveState: true });
-};
-
-const hasActiveFilters = computed(() =>
-    semesterFilter.value || yearFilter.value || courseFilter.value ||
-    classFilter.value || yearLevelFilter.value || thresholdFilter.value != 80
-);
-
-const clearFilters = () => {
-    semesterFilter.value = '';
-    yearFilter.value = '';
-    courseFilter.value = '';
-    classFilter.value = '';
-    yearLevelFilter.value = '';
-    thresholdFilter.value = 80;
-    router.get('/admin/student-tracking', { threshold: 80 }, { preserveState: false });
-};
-
-const semesterOptions = computed(() => [
-    { value: '', label: 'All Time' },
-    ...(props.semesters?.map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })) ?? []),
-]);
-const yearOptions = computed(() => [
-    { value: '', label: 'All Years' },
-    ...(props.academicYears?.map(y => ({ value: y, label: y })) ?? []),
-]);
-const courseOptions = computed(() => [
-    { value: '', label: 'All Courses' },
-    ...(props.courses?.map(c => ({ value: c.id, label: c.name })) ?? []),
-]);
-const classOptions = computed(() => [
-    { value: '', label: 'All Classes' },
-    ...(props.classes?.map(c => ({ value: c.id, label: c.name })) ?? []),
-]);
-const yearLevelOptions = [
-    { value: '', label: 'All Years' },
-    { value: '1', label: 'Year 1' },
-    { value: '2', label: 'Year 2' },
-    { value: '3', label: 'Year 3' },
-    { value: '4', label: 'Year 4' },
-];
-
-const statusBadgeClass = (status) => ({
-    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'good',
-    'bg-amber-50 text-amber-700 ring-1 ring-amber-200': status === 'warning',
-    'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'danger',
-});
-
-const statusLabel = (status) => ({ good: 'Good', warning: 'At Risk', danger: 'Critical' }[status]);
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -211,3 +134,80 @@ const statusLabel = (status) => ({ good: 'Good', warning: 'At Risk', danger: 'Cr
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { ref, computed } from 'vue';
+import { Link, router } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import SelectDropdown from '@/Components/SelectDropdown.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Badge } from '@/Components/ui/badge';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+
+const props = defineProps({
+    tracking: Array, semesters: Array, academicYears: Array, courses: Array, classes: Array, filters: Object, threshold: Number, summary: Object,
+});
+
+const semesterFilter = ref(props.filters?.semester_id || '');
+const yearFilter = ref(props.filters?.academic_year || '');
+const courseFilter = ref(props.filters?.course_id || '');
+const classFilter = ref(props.filters?.class_id || '');
+const yearLevelFilter = ref(props.filters?.year_level || '');
+const thresholdFilter = ref(props.threshold || 80);
+
+const applyFilters = () => {
+    router.get('/admin/student-tracking', {
+        semester_id: semesterFilter.value || undefined, academic_year: yearFilter.value || undefined, course_id: courseFilter.value || undefined, class_id: classFilter.value || undefined, year_level: yearLevelFilter.value || undefined, threshold: thresholdFilter.value,
+    }, { preserveState: true });
+};
+
+const hasActiveFilters = computed(() =>
+    semesterFilter.value || yearFilter.value || courseFilter.value ||
+    classFilter.value || yearLevelFilter.value || thresholdFilter.value != 80
+);
+
+const clearFilters = () => {
+    semesterFilter.value = '';
+    yearFilter.value = '';
+    courseFilter.value = '';
+    classFilter.value = '';
+    yearLevelFilter.value = '';
+    thresholdFilter.value = 80;
+    router.get('/admin/student-tracking', { threshold: 80 }, { preserveState: false });
+};
+
+const semesterOptions = computed(() => [
+    { value: '', label: 'All Time' },
+    ...(props.semesters?.map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })) ?? []),
+]);
+const yearOptions = computed(() => [
+    { value: '', label: 'All Years' },
+    ...(props.academicYears?.map(y => ({ value: y, label: y })) ?? []),
+]);
+const courseOptions = computed(() => [
+    { value: '', label: 'All Courses' },
+    ...(props.courses?.map(c => ({ value: c.id, label: c.name })) ?? []),
+]);
+const classOptions = computed(() => [
+    { value: '', label: 'All Classes' },
+    ...(props.classes?.map(c => ({ value: c.id, label: c.name })) ?? []),
+]);
+const yearLevelOptions = [
+    { value: '', label: 'All Years' },
+    { value: '1', label: 'Year 1' },
+    { value: '2', label: 'Year 2' },
+    { value: '3', label: 'Year 3' },
+    { value: '4', label: 'Year 4' },
+];
+
+const statusBadgeClass = (status) => ({
+    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'good',
+    'bg-amber-50 text-amber-700 ring-1 ring-amber-200': status === 'warning',
+    'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'danger',
+});
+
+const statusLabel = (status) => ({ good: 'Good', warning: 'At Risk', danger: 'Critical' }[status]);
+</script>

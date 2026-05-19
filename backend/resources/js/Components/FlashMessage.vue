@@ -1,10 +1,3 @@
-<script setup>
-import { usePage } from '@inertiajs/vue3';
-import { computed } from 'vue';
-
-const flash = computed(() => usePage().props.flash);
-</script>
-
 <template>
     <div class="space-y-3 mb-5 empty:hidden">
         <div
@@ -29,3 +22,10 @@ const flash = computed(() => usePage().props.flash);
         </div>
     </div>
 </template>
+
+<script setup>
+import { usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const flash = computed(() => usePage().props.flash);
+</script>

@@ -1,36 +1,3 @@
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const route = useRoute()
-
-const token = ref((route.query.token as string) ?? '')
-const loading = ref(false)
-const success = ref('')
-const error = ref('')
-
-const attend = async () => {
-  if (!token.value.trim()) return
-  loading.value = true
-  success.value = ''
-  error.value = ''
-  try {
-    const res = await apiFetch('/student/attend', { method: 'POST', body: { token: token.value.trim() } })
-    success.value = (res as any).message ?? 'Attendance recorded!'
-    token.value = ''
-  } catch (e: any) {
-    error.value = e?.data?.message ?? 'Failed to record attendance. The QR code may be invalid or expired.'
-  }
-  loading.value = false
-}
-
-onMounted(() => {
-  if (token.value) attend()
-})
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
@@ -86,3 +53,36 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const route = useRoute()
+
+const token = ref((route.query.token as string) ?? '')
+const loading = ref(false)
+const success = ref('')
+const error = ref('')
+
+const attend = async () => {
+  if (!token.value.trim()) return
+  loading.value = true
+  success.value = ''
+  error.value = ''
+  try {
+    const res = await apiFetch('/student/attend', { method: 'POST', body: { token: token.value.trim() } })
+    success.value = (res as any).message ?? 'Attendance recorded!'
+    token.value = ''
+  } catch (e: any) {
+    error.value = e?.data?.message ?? 'Failed to record attendance. The QR code may be invalid or expired.'
+  }
+  loading.value = false
+}
+
+onMounted(() => {
+  if (token.value) attend()
+})
+</script>

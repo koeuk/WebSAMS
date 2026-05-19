@@ -1,15 +1,3 @@
-<script setup>
-import { cn } from "@/lib/utils";
-
-const props = defineProps({
-  class: {
-    type: [Boolean, null, String, Object, Array],
-    required: false,
-    skipCheck: true,
-  },
-});
-</script>
-
 <template>
   <tr
     :class="
@@ -22,3 +10,15 @@ const props = defineProps({
     <slot />
   </tr>
 </template>
+
+<script setup>
+import { cn } from "@/lib/utils";
+
+const props = defineProps({
+  class: {
+    type: [Boolean, null, String, Object, Array],
+    required: false,
+    skipCheck: true,
+  },
+});
+</script>

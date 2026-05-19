@@ -1,64 +1,3 @@
-<script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-const data = ref<any>({ data: [] })
-const loading = ref(true)
-const showForm = ref(false)
-
-const form = ref({ title: '', body: '', audience: 'students', class_id: '' })
-const saving = ref(false)
-const editing = ref<any>(null)
-
-onMounted(async () => {
-  try { data.value = await apiFetch('/teacher/announcements') } catch {}
-  loading.value = false
-})
-
-const announcements = computed(() => data.value?.data ?? [])
-
-const openNew = () => { editing.value = null; form.value = { title: '', body: '', audience: 'students', class_id: '' }; showForm.value = true }
-const openEdit = (a: any) => { editing.value = a; form.value = { title: a.title, body: a.body, audience: a.audience, class_id: a.class_id ?? '' }; showForm.value = true }
-
-const save = async () => {
-  saving.value = true
-  try {
-    if (editing.value) {
-      await apiFetch(`/teacher/announcements/${editing.value.id}`, { method: 'PUT', body: form.value })
-    } else {
-      await apiFetch('/teacher/announcements', { method: 'POST', body: form.value })
-    }
-    showForm.value = false
-    data.value = await apiFetch('/teacher/announcements')
-  } catch {}
-  saving.value = false
-}
-
-const remove = async (a: any) => {
-  if (!confirm('Delete this announcement?')) return
-  try {
-    await apiFetch(`/teacher/announcements/${a.id}`, { method: 'DELETE' })
-    data.value.data = data.value.data.filter((x: any) => x.id !== a.id)
-  } catch {}
-}
-
-const audienceOptions = [
-  { value: 'students', label: 'Students only' },
-  { value: 'teachers', label: 'Teachers only' },
-  { value: 'all', label: 'Everyone' },
-]
-
-const audienceConfig: Record<string, string> = {
-  all:      'bg-violet-50 text-violet-700 ring-1 ring-violet-200',
-  students: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
-  teachers: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
-}
-
-const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—'
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="flex items-center justify-between mb-7">
@@ -134,6 +73,67 @@ const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { 
     </Teleport>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+const data = ref<any>({ data: [] })
+const loading = ref(true)
+const showForm = ref(false)
+
+const form = ref({ title: '', body: '', audience: 'students', class_id: '' })
+const saving = ref(false)
+const editing = ref<any>(null)
+
+onMounted(async () => {
+  try { data.value = await apiFetch('/teacher/announcements') } catch {}
+  loading.value = false
+})
+
+const announcements = computed(() => data.value?.data ?? [])
+
+const openNew = () => { editing.value = null; form.value = { title: '', body: '', audience: 'students', class_id: '' }; showForm.value = true }
+const openEdit = (a: any) => { editing.value = a; form.value = { title: a.title, body: a.body, audience: a.audience, class_id: a.class_id ?? '' }; showForm.value = true }
+
+const save = async () => {
+  saving.value = true
+  try {
+    if (editing.value) {
+      await apiFetch(`/teacher/announcements/${editing.value.id}`, { method: 'PUT', body: form.value })
+    } else {
+      await apiFetch('/teacher/announcements', { method: 'POST', body: form.value })
+    }
+    showForm.value = false
+    data.value = await apiFetch('/teacher/announcements')
+  } catch {}
+  saving.value = false
+}
+
+const remove = async (a: any) => {
+  if (!confirm('Delete this announcement?')) return
+  try {
+    await apiFetch(`/teacher/announcements/${a.id}`, { method: 'DELETE' })
+    data.value.data = data.value.data.filter((x: any) => x.id !== a.id)
+  } catch {}
+}
+
+const audienceOptions = [
+  { value: 'students', label: 'Students only' },
+  { value: 'teachers', label: 'Teachers only' },
+  { value: 'all', label: 'Everyone' },
+]
+
+const audienceConfig: Record<string, string> = {
+  all:      'bg-violet-50 text-violet-700 ring-1 ring-violet-200',
+  students: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
+  teachers: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
+}
+
+const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—'
+</script>
 
 <style scoped>
 .modal-enter-active, .modal-leave-active { transition: opacity 0.2s; }

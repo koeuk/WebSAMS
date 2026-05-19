@@ -1,25 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Input } from '@/Components/ui/input';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
-
-const props = defineProps({ schedule: Object, classSubjects: Array, timeSlots: Array });
-
-const form = useForm({
-    class_subject_id: props.schedule.class_subject_id,
-    time_slot_id: props.schedule.time_slot_id,
-    day_of_week: props.schedule.day_of_week,
-    room: props.schedule.room || '',
-});
-
-const submit = () => { form.put(`/admin/schedules/${props.schedule.id}`); };
-const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.teacher?.name})`;
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -95,3 +73,25 @@ const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.te
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Input } from '@/Components/ui/input';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+
+const props = defineProps({ schedule: Object, classSubjects: Array, timeSlots: Array });
+
+const form = useForm({
+    class_subject_id: props.schedule.class_subject_id,
+    time_slot_id: props.schedule.time_slot_id,
+    day_of_week: props.schedule.day_of_week,
+    room: props.schedule.room || '',
+});
+
+const submit = () => { form.put(`/admin/schedules/${props.schedule.id}`); };
+const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.teacher?.name})`;
+</script>

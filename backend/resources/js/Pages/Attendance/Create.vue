@@ -1,28 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import DatePicker from '@/Components/DatePicker.vue';
-import { Button } from '@/Components/ui/button';
-import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
-
-const props = defineProps({ classSubjects: Array, students: Array, timeSlots: Array });
-
-const form = useForm({
-    class_subject_id: '',
-    student_id: '',
-    date: new Date().toISOString().split('T')[0],
-    time_slot_id: '',
-    status: 'present',
-    remarks: '',
-});
-
-const submit = () => { form.post('/admin/attendance'); };
-const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.teacher?.name})`;
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -114,3 +89,28 @@ const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.te
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import DatePicker from '@/Components/DatePicker.vue';
+import { Button } from '@/Components/ui/button';
+import { Label } from '@/Components/ui/label';
+import { Textarea } from '@/Components/ui/textarea';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+
+const props = defineProps({ classSubjects: Array, students: Array, timeSlots: Array });
+
+const form = useForm({
+    class_subject_id: '',
+    student_id: '',
+    date: new Date().toISOString().split('T')[0],
+    time_slot_id: '',
+    status: 'present',
+    remarks: '',
+});
+
+const submit = () => { form.post('/admin/attendance'); };
+const csLabel = (cs) => `${cs.school_class?.name} - ${cs.subject?.name} (${cs.teacher?.name})`;
+</script>

@@ -1,61 +1,3 @@
-<script setup>
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Bar } from 'vue-chartjs';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Badge } from '@/Components/ui/badge';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
-
-const props = defineProps({
-    stats: Object,
-    weeklyChart: Array,
-    recentAttendance: Array,
-});
-
-const chartData = {
-    labels: props.weeklyChart?.map(d => d.date) || [],
-    datasets: [
-        { label: 'Present', data: props.weeklyChart?.map(d => d.present) || [], backgroundColor: '#10b981', borderRadius: 6, borderSkipped: false },
-        { label: 'Absent', data: props.weeklyChart?.map(d => d.absent) || [], backgroundColor: '#f43f5e', borderRadius: 6, borderSkipped: false },
-        { label: 'Late', data: props.weeklyChart?.map(d => d.late) || [], backgroundColor: '#f59e0b', borderRadius: 6, borderSkipped: false },
-    ],
-};
-
-const chartOptions = {
-    responsive: true,
-    maintainAspectRatio: false,
-    plugins: {
-        legend: {
-            position: 'top',
-            align: 'end',
-            labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { size: 12, family: 'Plus Jakarta Sans', weight: '500' } }
-        },
-    },
-    scales: {
-        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 11, family: 'Plus Jakarta Sans' } } },
-        y: { stacked: true, grid: { color: '#f1f5f9' }, border: { dash: [4, 4] }, ticks: { font: { size: 11, family: 'Plus Jakarta Sans' } } },
-    },
-};
-
-const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
-
-const statusVariant = (status) => ({
-    present: 'default',
-    absent: 'destructive',
-    late: 'secondary',
-    excused: 'outline',
-}[status] || 'secondary');
-
-const statusClass = (status) => ({
-    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 hover:bg-emerald-50': status === 'present',
-    'bg-rose-50 text-rose-700 ring-1 ring-rose-200 hover:bg-rose-50': status === 'absent',
-    'bg-amber-50 text-amber-700 ring-1 ring-amber-200 hover:bg-amber-50': status === 'late',
-    'bg-sky-50 text-sky-700 ring-1 ring-sky-200 hover:bg-sky-50': status === 'excused',
-});
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -177,3 +119,61 @@ const statusClass = (status) => ({
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Bar } from 'vue-chartjs';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Badge } from '@/Components/ui/badge';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+const props = defineProps({
+    stats: Object,
+    weeklyChart: Array,
+    recentAttendance: Array,
+});
+
+const chartData = {
+    labels: props.weeklyChart?.map(d => d.date) || [],
+    datasets: [
+        { label: 'Present', data: props.weeklyChart?.map(d => d.present) || [], backgroundColor: '#10b981', borderRadius: 6, borderSkipped: false },
+        { label: 'Absent', data: props.weeklyChart?.map(d => d.absent) || [], backgroundColor: '#f43f5e', borderRadius: 6, borderSkipped: false },
+        { label: 'Late', data: props.weeklyChart?.map(d => d.late) || [], backgroundColor: '#f59e0b', borderRadius: 6, borderSkipped: false },
+    ],
+};
+
+const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+        legend: {
+            position: 'top',
+            align: 'end',
+            labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { size: 12, family: 'Plus Jakarta Sans', weight: '500' } }
+        },
+    },
+    scales: {
+        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 11, family: 'Plus Jakarta Sans' } } },
+        y: { stacked: true, grid: { color: '#f1f5f9' }, border: { dash: [4, 4] }, ticks: { font: { size: 11, family: 'Plus Jakarta Sans' } } },
+    },
+};
+
+const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
+
+const statusVariant = (status) => ({
+    present: 'default',
+    absent: 'destructive',
+    late: 'secondary',
+    excused: 'outline',
+}[status] || 'secondary');
+
+const statusClass = (status) => ({
+    'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 hover:bg-emerald-50': status === 'present',
+    'bg-rose-50 text-rose-700 ring-1 ring-rose-200 hover:bg-rose-50': status === 'absent',
+    'bg-amber-50 text-amber-700 ring-1 ring-amber-200 hover:bg-amber-50': status === 'late',
+    'bg-sky-50 text-sky-700 ring-1 ring-sky-200 hover:bg-sky-50': status === 'excused',
+});
+</script>

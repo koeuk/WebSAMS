@@ -6,24 +6,26 @@ use App\Http\Controllers\Controller;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class NotificationController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Notification::with('user')->latest();
-
-        if ($request->filled('type')) {
-            $query->where('type', $request->type);
-        }
-
-        if ($request->filled('search')) {
-            $query->whereHas('user', fn ($q) => $q->where('name', 'like', "%{$request->search}%"));
-        }
+        $notifications = QueryBuilder::for(Notification::class)
+            ->allowedFilters([
+                AllowedFilter::exact('type'),
+                AllowedFilter::callback('search', fn ($q, $v) => $q->whereHas('user', fn ($q) => $q->where('name', 'like', "%{$v}%"))),
+            ])
+            ->with('user')
+            ->latest()
+            ->paginate(20)
+            ->withQueryString();
 
         return Inertia::render('Notifications/Index', [
-            'notifications' => $query->paginate(20)->withQueryString(),
-            'filters' => $request->only(['type', 'search']),
+            'notifications' => $notifications,
+            'filters'       => $request->input('filter', []),
         ]);
     }
 }

@@ -1,19 +1,3 @@
-<script setup>
-import { Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
-
-const props = defineProps({ studentSummary: Array, overall: Object, semester: Object, filters: Object, classes: Array, subjects: Array, courses: Array });
-
-const className = props.classes?.find(c => c.id == props.filters?.class_id)?.name || 'All Classes';
-const subjectName = props.subjects?.find(s => s.id == props.filters?.subject_id)?.name || 'All Subjects';
-const courseName = props.courses?.find(c => c.id == props.filters?.course_id)?.name || 'All Courses';
-const statusLabel = props.filters?.status ? props.filters.status.charAt(0).toUpperCase() + props.filters.status.slice(1) : 'All Status';
-
-const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -112,3 +96,19 @@ const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'n
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+
+const props = defineProps({ studentSummary: Array, overall: Object, semester: Object, filters: Object, classes: Array, subjects: Array, courses: Array });
+
+const className = props.classes?.find(c => c.id == props.filters?.class_id)?.name || 'All Classes';
+const subjectName = props.subjects?.find(s => s.id == props.filters?.subject_id)?.name || 'All Subjects';
+const courseName = props.courses?.find(c => c.id == props.filters?.course_id)?.name || 'All Courses';
+const statusLabel = props.filters?.status ? props.filters.status.charAt(0).toUpperCase() + props.filters.status.slice(1) : 'All Status';
+
+const formatDate = (d) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '';
+</script>

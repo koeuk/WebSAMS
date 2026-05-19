@@ -1,30 +1,3 @@
-<script setup>
-import { Link, usePage } from '@inertiajs/vue3';
-import { ref } from 'vue';
-
-const page = usePage();
-const user = page.props.auth.user;
-const sidebarCollapsed = ref(false);
-
-const navigation = [
-    { name: 'Dashboard', href: '/admin/dashboard', icon: 'dashboard' },
-    { name: 'Users', href: '/admin/users', icon: 'users' },
-    { name: 'Courses', href: '/admin/courses', icon: 'courses' },
-    { name: 'Subjects', href: '/admin/subjects', icon: 'subjects' },
-    { name: 'Classes', href: '/admin/classes', icon: 'classes' },
-    { name: 'Semesters', href: '/admin/semesters', icon: 'semesters' },
-    { name: 'Attendance', href: '/admin/attendance', icon: 'attendance' },
-    { name: 'Time Slots', href: '/admin/time-slots', icon: 'timeslots' },
-    { name: 'Schedules', href: '/admin/schedules', icon: 'schedules' },
-    { name: 'Student Tracking', href: '/admin/student-tracking', icon: 'tracking' },
-    { name: 'Reports', href: '/admin/reports', icon: 'reports' },
-    { name: 'Notifications', href: '/admin/notifications', icon: 'notifications' },
-    { name: 'Settings', href: '/admin/settings', icon: 'settings' },
-];
-
-const isActive = (href) => page.url.startsWith(href);
-</script>
-
 <template>
     <div class="min-h-screen bg-page-bg">
         <!-- Sidebar -->
@@ -133,3 +106,30 @@ const isActive = (href) => page.url.startsWith(href);
         </div>
     </div>
 </template>
+
+<script setup>
+import { Link, usePage } from '@inertiajs/vue3';
+import { ref } from 'vue';
+
+const page = usePage();
+const user = page.props.auth.user;
+const sidebarCollapsed = ref(false);
+
+const navigation = [
+    { name: 'Dashboard', href: '/admin/dashboard', icon: 'dashboard' },
+    { name: 'Users', href: '/admin/users', icon: 'users' },
+    { name: 'Courses', href: '/admin/courses', icon: 'courses' },
+    { name: 'Subjects', href: '/admin/subjects', icon: 'subjects' },
+    { name: 'Classes', href: '/admin/classes', icon: 'classes' },
+    { name: 'Semesters', href: '/admin/semesters', icon: 'semesters' },
+    { name: 'Attendance', href: '/admin/attendance', icon: 'attendance' },
+    { name: 'Time Slots', href: '/admin/time-slots', icon: 'timeslots' },
+    { name: 'Schedules', href: '/admin/schedules', icon: 'schedules' },
+    { name: 'Student Tracking', href: '/admin/student-tracking', icon: 'tracking' },
+    { name: 'Reports', href: '/admin/reports', icon: 'reports' },
+    { name: 'Notifications', href: '/admin/notifications', icon: 'notifications' },
+    { name: 'Settings', href: '/admin/settings', icon: 'settings' },
+];
+
+const isActive = (href) => page.url.startsWith(href);
+</script>

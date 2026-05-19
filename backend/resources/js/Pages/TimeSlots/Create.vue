@@ -1,16 +1,3 @@
-<script setup>
-import { useForm, Link } from '@inertiajs/vue3';
-import AdminLayout from '@/Layouts/AdminLayout.vue';
-import { Button } from '@/Components/ui/button';
-import { Input } from '@/Components/ui/input';
-import { Label } from '@/Components/ui/label';
-import { Card, CardContent } from '@/Components/ui/card';
-import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
-
-const form = useForm({ name: '', start_time: '', end_time: '', type: 'morning' });
-const submit = () => { form.post('/admin/time-slots'); };
-</script>
-
 <template>
     <AdminLayout>
         <div class="animate-fade-in">
@@ -69,3 +56,16 @@ const submit = () => { form.post('/admin/time-slots'); };
         </div>
     </AdminLayout>
 </template>
+
+<script setup>
+import { useForm, Link } from '@inertiajs/vue3';
+import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { Button } from '@/Components/ui/button';
+import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
+import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+
+const form = useForm({ name: '', start_time: '', end_time: '', type: 'morning' });
+const submit = () => { form.post('/admin/time-slots'); };
+</script>

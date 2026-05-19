@@ -1,60 +1,3 @@
-<script setup lang="ts">
-import { computed } from 'vue'
-
-definePageMeta({ middleware: 'auth' })
-
-const { apiFetch } = useApi()
-
-const classes = ref<any[]>([])
-const attendance = ref<any>({ data: [] })
-const selectedClass = ref('')
-const dateFrom = ref('')
-const dateTo = ref('')
-const loading = ref(true)
-
-const classOptions = computed(() => [
-  { value: '', label: 'All Classes' },
-  ...classes.value.map((c: any) => ({
-    value: String(c.id),
-    label: `${c.school_class?.name} - ${c.subject?.name}`,
-  })),
-])
-
-onMounted(async () => {
-  try {
-    classes.value = await apiFetch('/teacher/classes')
-    await loadAttendance()
-  } catch {}
-  loading.value = false
-})
-
-const loadAttendance = async () => {
-  const params = new URLSearchParams()
-  if (selectedClass.value) params.set('class_subject_id', selectedClass.value)
-  if (dateFrom.value) params.set('date_from', dateFrom.value)
-  if (dateTo.value) params.set('date_to', dateTo.value)
-  try {
-    attendance.value = await apiFetch(`/teacher/attendance?${params.toString()}`)
-  } catch {}
-}
-
-const hasFilters = computed(() => !!(selectedClass.value || dateFrom.value || dateTo.value))
-
-const clearFilters = () => {
-  selectedClass.value = ''
-  dateFrom.value = ''
-  dateTo.value = ''
-  loadAttendance()
-}
-
-const statusClass = (status: string) => ({
-  'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'present',
-  'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'absent',
-  'bg-amber-50 text-amber-700 ring-1 ring-amber-200': status === 'late',
-  'bg-sky-50 text-sky-700 ring-1 ring-sky-200': status === 'excused',
-})
-</script>
-
 <template>
   <div class="animate-fade-in">
     <div class="mb-8">
@@ -124,3 +67,60 @@ const statusClass = (status: string) => ({
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue'
+
+definePageMeta({ middleware: 'auth' })
+
+const { apiFetch } = useApi()
+
+const classes = ref<any[]>([])
+const attendance = ref<any>({ data: [] })
+const selectedClass = ref('')
+const dateFrom = ref('')
+const dateTo = ref('')
+const loading = ref(true)
+
+const classOptions = computed(() => [
+  { value: '', label: 'All Classes' },
+  ...classes.value.map((c: any) => ({
+    value: String(c.id),
+    label: `${c.school_class?.name} - ${c.subject?.name}`,
+  })),
+])
+
+onMounted(async () => {
+  try {
+    classes.value = await apiFetch('/teacher/classes')
+    await loadAttendance()
+  } catch {}
+  loading.value = false
+})
+
+const loadAttendance = async () => {
+  const params = new URLSearchParams()
+  if (selectedClass.value) params.set('class_subject_id', selectedClass.value)
+  if (dateFrom.value) params.set('date_from', dateFrom.value)
+  if (dateTo.value) params.set('date_to', dateTo.value)
+  try {
+    attendance.value = await apiFetch(`/teacher/attendance?${params.toString()}`)
+  } catch {}
+}
+
+const hasFilters = computed(() => !!(selectedClass.value || dateFrom.value || dateTo.value))
+
+const clearFilters = () => {
+  selectedClass.value = ''
+  dateFrom.value = ''
+  dateTo.value = ''
+  loadAttendance()
+}
+
+const statusClass = (status: string) => ({
+  'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200': status === 'present',
+  'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'absent',
+  'bg-amber-50 text-amber-700 ring-1 ring-amber-200': status === 'late',
+  'bg-sky-50 text-sky-700 ring-1 ring-sky-200': status === 'excused',
+})
+</script>

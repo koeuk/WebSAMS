@@ -1,3 +1,12 @@
+<template>
+  <ListboxRoot
+    v-bind="forwarded"
+    :class="cn('flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground', props.class)"
+  >
+    <slot />
+  </ListboxRoot>
+</template>
+
 <script setup lang="ts">
 import type { ListboxRootEmits, ListboxRootProps } from "reka-ui"
 import type { HTMLAttributes } from "vue"
@@ -75,12 +84,3 @@ provideCommandContext({
   filterState,
 })
 </script>
-
-<template>
-  <ListboxRoot
-    v-bind="forwarded"
-    :class="cn('flex h-full w-full flex-col overflow-hidden rounded-md bg-popover text-popover-foreground', props.class)"
-  >
-    <slot />
-  </ListboxRoot>
-</template>

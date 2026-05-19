@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Enums\Gender;
+use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -9,45 +11,44 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rule;
 use Inertia\Inertia;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::query();
-
-        if ($request->filled('role')) {
-            $query->where('role', $request->role);
-        }
-
-        if ($request->filled('search')) {
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
-                $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%")
-                  ->orWhere('id_number', 'like', "%{$search}%");
-            });
-        }
-
-        if ($request->filled('year_level')) {
-            $query->where('year_level', $request->year_level);
-        }
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        $users = $query->latest()->paginate(15)->withQueryString();
+        $users = QueryBuilder::for(User::class)
+            ->allowedFilters([
+                AllowedFilter::exact('role'),
+                AllowedFilter::callback('search', fn ($q, $v) => $q->where(fn ($q) => $q
+                    ->where('name', 'like', "%{$v}%")
+                    ->orWhere('email', 'like', "%{$v}%")
+                    ->orWhere('id_number', 'like', "%{$v}%")
+                )),
+                AllowedFilter::exact('year_level'),
+                AllowedFilter::exact('status'),
+            ])
+            ->latest()
+            ->paginate(15)
+            ->withQueryString();
 
         return Inertia::render('Users/Index', [
-            'users' => $users,
-            'filters' => $request->only(['role', 'search', 'year_level', 'status']),
+            'users'    => $users,
+            'filters'  => $request->input('filter', []),
+            'roles'    => ['admin', 'teacher', 'student'],
+            'genders'  => Gender::cases(),
+            'statuses' => UserStatus::cases(),
         ]);
     }
 
     public function create()
     {
-        return Inertia::render('Users/Create');
+        return Inertia::render('Users/Create', [
+            'roles'    => ['admin', 'teacher', 'student'],
+            'genders'  => Gender::cases(),
+            'statuses' => UserStatus::cases(),
+        ]);
     }
 
     public function store(Request $request)
@@ -56,14 +57,14 @@ class UserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
-            'role' => 'required|in:admin,teacher,student',
-            'phone' => 'nullable|string|max:20',
-            'year_level' => 'nullable|integer|min:1|max:4',
-            'id_number' => 'nullable|string|max:50|unique:users,id_number',
-            'gender' => 'nullable|in:male,female',
+            'role'          => 'required|in:admin,teacher,student',
+            'phone'         => 'nullable|string|max:20',
+            'year_level'    => 'nullable|integer|min:1|max:4',
+            'id_number'     => 'nullable|string|max:50|unique:users,id_number',
+            'gender'        => ['nullable', Rule::enum(Gender::class)],
             'date_of_birth' => 'nullable|date',
-            'address' => 'nullable|string',
-            'status' => 'nullable|in:active,inactive,graduated,suspended',
+            'address'       => 'nullable|string',
+            'status'        => ['nullable', Rule::enum(UserStatus::class)],
             'guardian_name' => 'nullable|string|max:255',
             'guardian_phone' => 'nullable|string|max:20',
             'enrollment_date' => 'nullable|date',
@@ -94,7 +95,10 @@ class UserController extends Controller
     public function edit(User $user)
     {
         return Inertia::render('Users/Edit', [
-            'user' => $user,
+            'user'     => $user,
+            'roles'    => ['admin', 'teacher', 'student'],
+            'genders'  => Gender::cases(),
+            'statuses' => UserStatus::cases(),
         ]);
     }
 
@@ -107,11 +111,11 @@ class UserController extends Controller
             'role' => 'required|in:admin,teacher,student',
             'phone' => 'nullable|string|max:20',
             'year_level' => 'nullable|integer|min:1|max:4',
-            'id_number' => ['nullable', 'string', 'max:50', Rule::unique('users', 'id_number')->ignore($user->id)],
-            'gender' => 'nullable|in:male,female',
+            'id_number'     => ['nullable', 'string', 'max:50', Rule::unique('users', 'id_number')->ignore($user->id)],
+            'gender'        => ['nullable', Rule::enum(Gender::class)],
             'date_of_birth' => 'nullable|date',
-            'address' => 'nullable|string',
-            'status' => 'nullable|in:active,inactive,graduated,suspended',
+            'address'       => 'nullable|string',
+            'status'        => ['nullable', Rule::enum(UserStatus::class)],
             'guardian_name' => 'nullable|string|max:255',
             'guardian_phone' => 'nullable|string|max:20',
             'enrollment_date' => 'nullable|date',
