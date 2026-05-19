@@ -31,16 +31,16 @@ class SubjectController extends Controller
 
         return Inertia::render('Subjects/Index', [
             'subjects' => $subjects,
-            'courses'  => Course::all(['id', 'name', 'code'            ),
-            'filters'  => $request->input('filter', [            ),
-            );
+            'courses'  => Course::all(['id', 'name', 'code']),
+            'filters'  => $request->input('filter', []),
+        ]);
     }
 
     public function create()
     {
         return Inertia::render('Subjects/Create', [
-            'courses' => Course::all(['id', 'name', 'code'            ),
-            );
+            'courses' => Course::all(['id', 'name', 'code']),
+        ]);
     }
 
     public function store(Request $request)
@@ -50,7 +50,7 @@ class SubjectController extends Controller
             'name'        => 'required|string|max:255',
             'code'        => 'required|string|max:20|unique:subjects,code',
             'description' => 'nullable|string',
-            );
+        ]);
 
         DB::beginTransaction();
         try {
@@ -68,8 +68,8 @@ class SubjectController extends Controller
     {
         return Inertia::render('Subjects/Edit', [
             'subject' => $subject,
-            'courses' => Course::all(['id', 'name', 'code'            ),
-            );
+            'courses' => Course::all(['id', 'name', 'code']),
+        ]);
     }
 
     public function update(Request $request, Subject $subject)
@@ -79,7 +79,7 @@ class SubjectController extends Controller
             'name'        => 'required|string|max:255',
             'code'        => ['required', 'string', 'max:20', Rule::unique('subjects', 'code')->ignore($subject->id)],
             'description' => 'nullable|string',
-            );
+        ]);
 
         DB::beginTransaction();
         try {
@@ -95,7 +95,7 @@ class SubjectController extends Controller
 
     public function delete(Subject $subject)
     {
-        return Inertia::render('Subjects/Delete', ['subject' => $subject            );
+        return Inertia::render('Subjects/Delete', ['subject' => $subject]);
     }
 
     public function destroy(Subject $subject)

@@ -29,8 +29,8 @@ class CourseController extends Controller
 
         return Inertia::render('Courses/Index', [
             'courses' => $courses,
-            'filters' => $request->input('filter', [            ),
-            );
+            'filters' => $request->input('filter', []),
+        ]);
     }
 
     public function create()
@@ -44,7 +44,7 @@ class CourseController extends Controller
             'name'        => 'required|string|max:255',
             'code'        => 'required|string|max:20|unique:courses,code',
             'description' => 'nullable|string',
-            );
+        ]);
 
         DB::beginTransaction();
         try {
@@ -60,7 +60,7 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        return Inertia::render('Courses/Edit', ['course' => $course            );
+        return Inertia::render('Courses/Edit', ['course' => $course]);
     }
 
     public function update(Request $request, Course $course)
@@ -69,7 +69,7 @@ class CourseController extends Controller
             'name'        => 'required|string|max:255',
             'code'        => ['required', 'string', 'max:20', Rule::unique('courses', 'code')->ignore($course->id)],
             'description' => 'nullable|string',
-            );
+        ]);
 
         DB::beginTransaction();
         try {
@@ -85,7 +85,7 @@ class CourseController extends Controller
 
     public function delete(Course $course)
     {
-        return Inertia::render('Courses/Delete', ['course' => $course            );
+        return Inertia::render('Courses/Delete', ['course' => $course]);
     }
 
     public function destroy(Course $course)
