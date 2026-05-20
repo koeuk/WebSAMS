@@ -15,7 +15,7 @@
 
             <div class="space-y-4">
                 <div>
-                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name *</Label>
+                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
                     <Field name="name" v-slot="{ field, errorMessage }">
                         <Input v-bind="field" v-model="form.name" type="text" placeholder="e.g. Morning 1" />
                         <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
@@ -24,7 +24,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Start Time *</Label>
+                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Start Time <span class="text-rose-500">*</span></Label>
                         <Field name="start_time" v-slot="{ field, errorMessage }">
                             <Input v-bind="field" v-model="form.start_time" type="time" />
                             <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
@@ -32,7 +32,7 @@
                         <p v-if="form.errors.start_time" class="text-[12px] text-rose-500 mt-1">{{ form.errors.start_time }}</p>
                     </div>
                     <div>
-                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">End Time *</Label>
+                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">End Time <span class="text-rose-500">*</span></Label>
                         <Field name="end_time" v-slot="{ field, errorMessage }">
                             <Input v-bind="field" v-model="form.end_time" type="time" />
                             <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>

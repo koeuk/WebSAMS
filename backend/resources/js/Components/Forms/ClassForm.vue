@@ -15,7 +15,7 @@
 
             <div class="space-y-4">
                 <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Name *</Label>
+                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Name <span class="text-rose-500">*</span></Label>
                     <Field name="name" v-slot="{ field, errorMessage }">
                         <Input v-bind="field" v-model="form.name" type="text" placeholder="e.g. Year 1-A" />
                         <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
@@ -27,7 +27,7 @@
                     <Input v-model="form.section" type="text" placeholder="e.g. A" />
                 </div>
                 <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Academic Year *</Label>
+                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Academic Year <span class="text-rose-500">*</span></Label>
                     <Field name="academic_year" v-slot="{ field, errorMessage }">
                         <Input v-bind="field" v-model="form.academic_year" type="text" placeholder="e.g. 2025-2026" />
                         <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>

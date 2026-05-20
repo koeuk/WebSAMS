@@ -15,7 +15,7 @@
 
             <div class="space-y-4">
                 <div>
-                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name *</Label>
+                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
                     <Field name="name" v-slot="{ field, errorMessage }">
                         <Input v-bind="field" v-model="form.name" type="text" placeholder="e.g. Semester 1" />
                         <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
@@ -23,7 +23,7 @@
                     <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
                 </div>
                 <div>
-                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Academic Year *</Label>
+                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Academic Year <span class="text-rose-500">*</span></Label>
                     <Field name="academic_year" v-slot="{ field, errorMessage }">
                         <Input v-bind="field" v-model="form.academic_year" type="text" placeholder="e.g. 2025-2026" />
                         <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
@@ -32,12 +32,12 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Start Date *</Label>
+                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Start Date <span class="text-rose-500">*</span></Label>
                         <DatePicker v-model="form.start_date" placeholder="Pick start date" />
                         <p v-if="form.errors.start_date" class="text-[12px] text-rose-500 mt-1">{{ form.errors.start_date }}</p>
                     </div>
                     <div>
-                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">End Date *</Label>
+                        <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">End Date <span class="text-rose-500">*</span></Label>
                         <DatePicker v-model="form.end_date" placeholder="Pick end date" />
                         <p v-if="form.errors.end_date" class="text-[12px] text-rose-500 mt-1">{{ form.errors.end_date }}</p>
                     </div>

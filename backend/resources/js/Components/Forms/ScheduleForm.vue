@@ -15,7 +15,7 @@
 
             <div class="space-y-4">
                 <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Class – Subject *</Label>
+                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Class – Subject <span class="text-rose-500">*</span></Label>
                     <Select v-model="form.class_subject_id">
                         <SelectTrigger class="w-full">
                             <SelectValue placeholder="Select class &amp; subject" />
@@ -30,7 +30,7 @@
                 </div>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Time Slot *</Label>
+                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Time Slot <span class="text-rose-500">*</span></Label>
                         <Select v-model="form.time_slot_id">
                             <SelectTrigger class="w-full">
                                 <SelectValue placeholder="Select time slot" />
@@ -44,7 +44,7 @@
                         <p v-if="form.errors.time_slot_id" class="text-[12px] text-rose-500 mt-1">{{ form.errors.time_slot_id }}</p>
                     </div>
                     <div>
-                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Day *</Label>
+                        <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Day <span class="text-rose-500">*</span></Label>
                         <Select v-model="form.day_of_week">
                             <SelectTrigger class="w-full">
                                 <SelectValue placeholder="Select day" />
