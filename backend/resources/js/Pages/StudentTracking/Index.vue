@@ -105,8 +105,8 @@
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            <TableRow v-for="(row, index) in tracking" :key="row.student?.id" :class="row.status === 'danger' ? 'bg-rose-50/50' : row.status === 'warning' ? 'bg-amber-50/50' : ''">
-                                <TableCell class="text-slate-400 font-mono text-[13px]">{{ index + 1 }}</TableCell>
+                            <TableRow v-for="(row, index) in tracking.data" :key="row.student?.id" :class="row.status === 'danger' ? 'bg-rose-50/50' : row.status === 'warning' ? 'bg-amber-50/50' : ''">
+                                <TableCell class="text-slate-400 font-mono text-[13px]">{{ (tracking.from ?? 1) + index }}</TableCell>
                                 <TableCell class="font-semibold text-slate-900">{{ row.student?.name }}</TableCell>
                                 <TableCell>{{ row.student?.year_level ? 'Y' + row.student.year_level : '-' }}</TableCell>
                                 <TableCell>{{ row.student?.email }}</TableCell>
@@ -124,13 +124,15 @@
                                     </Button>
                                 </TableCell>
                             </TableRow>
-                            <TableRow v-if="!tracking?.length">
+                            <TableRow v-if="!tracking.data?.length">
                                 <TableCell colspan="11" class="text-center py-12 text-slate-400">No attendance data found.</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
                 </div>
             </Card>
+
+            <Pagination :pagination="tracking" />
         </div>
     </AdminLayout>
 </template>
@@ -140,6 +142,7 @@ import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import SelectDropdown from '@/Components/SelectDropdown.vue';
+import Pagination from '@/Components/Pagination.vue';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
 import { Label } from '@/Components/ui/label';
@@ -148,7 +151,7 @@ import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 
 const props = defineProps({
-    tracking: Array, semesters: Array, academicYears: Array, courses: Array, classes: Array, yearLevels: Array, filters: Object, threshold: Number, summary: Object,
+    tracking: Object, semesters: Array, academicYears: Array, courses: Array, classes: Array, yearLevels: Array, filters: Object, threshold: Number, summary: Object,
 });
 
 const semesterFilter = ref(props.filters?.semester_id || '');

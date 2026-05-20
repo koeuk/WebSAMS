@@ -26,7 +26,7 @@
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        <TableRow v-for="ts in timeSlots" :key="ts.id">
+                        <TableRow v-for="ts in timeSlots.data" :key="ts.id">
                             <TableCell class="font-semibold text-slate-900">{{ ts.name }}</TableCell>
                             <TableCell class="font-mono text-[13px]">{{ ts.start_time?.slice(0,5) }}</TableCell>
                             <TableCell class="font-mono text-[13px]">{{ ts.end_time?.slice(0,5) }}</TableCell>
@@ -40,7 +40,7 @@
                                 </div>
                             </TableCell>
                         </TableRow>
-                        <TableRow v-if="!timeSlots?.length">
+                        <TableRow v-if="!timeSlots.data?.length">
                             <TableCell colspan="5" class="p-0">
                                 <Empty class="border-0 rounded-none">
                                     <EmptyHeader>
@@ -55,6 +55,8 @@
                 </Table>
             </Card>
 
+            <Pagination :pagination="timeSlots" />
+
             <!-- Create / Edit Form -->
             <TimeSlotForm v-model:open="showForm" :time-slot="editingTimeSlot" :types="props.types" />
         </div>
@@ -66,6 +68,7 @@ import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
+import Pagination from '@/Components/Pagination.vue';
 import TimeSlotForm from '@/Components/Forms/TimeSlotForm.vue';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
@@ -74,7 +77,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
 import { Clock } from 'lucide-vue-next';
 
-const props = defineProps({ timeSlots: Array, types: Array });
+const props = defineProps({ timeSlots: Object, types: Array });
 
 // ── Create / Edit ─────────────────────────────────────────────────────────────
 const showForm = ref(false);

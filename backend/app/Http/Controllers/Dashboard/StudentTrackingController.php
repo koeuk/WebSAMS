@@ -10,6 +10,7 @@ use App\Models\SchoolClass;
 use App\Models\Semester;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Inertia\Inertia;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -91,8 +92,20 @@ class StudentTrackingController extends Controller
 
         $academicYears = SchoolClass::distinct()->pluck('academic_year');
 
+        $page    = (int) $request->input('page', 1);
+        $perPage = $this->limit();
+        $total   = count($tracking);
+        $items   = array_slice($tracking, ($page - 1) * $perPage, $perPage);
+        $paginatedTracking = new LengthAwarePaginator(
+            $items,
+            $total,
+            $perPage,
+            $page,
+            ['path' => $request->url(), 'query' => $request->query()]
+        );
+
         return Inertia::render('StudentTracking/Index', [
-            'tracking'      => $tracking,
+            'tracking'      => $paginatedTracking,
             'semesters'     => Semester::orderBy('start_date', 'desc')->get(),
             'academicYears' => $academicYears,
             'courses'       => Course::all(['id', 'name', 'code']),

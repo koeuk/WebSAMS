@@ -14,7 +14,7 @@ class TimeSlotController extends Controller
     public function index()
     {
         return Inertia::render('TimeSlots/Index', [
-            'timeSlots' => TimeSlot::orderBy('start_time')->get(),
+            'timeSlots' => TimeSlot::orderBy('start_time')->paginate($this->limit())->withQueryString(),
             'types'     => TimeSlotType::options(),
         ]);
     }
