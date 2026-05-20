@@ -3,7 +3,7 @@
     <PopoverTrigger as-child>
       <button
         type="button"
-        class="input-modern flex items-center gap-2"
+        class="input-modern flex cursor-pointer items-center gap-2"
         :class="props.class"
       >
         <CalendarIcon class="h-4 w-4 text-slate-400 shrink-0" />

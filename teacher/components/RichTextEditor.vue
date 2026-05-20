@@ -66,7 +66,7 @@ const btnClass = (name: string, attrs: Record<string, unknown> = {}) => {
 
 <style scoped>
 .toolbar-btn {
-  @apply flex items-center justify-center w-7 h-7 rounded text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors;
+  @apply flex cursor-pointer items-center justify-center w-7 h-7 rounded text-slate-500 hover:text-slate-900 hover:bg-slate-100 transition-colors;
 }
 .toolbar-btn-active {
   @apply bg-slate-100 text-slate-900;

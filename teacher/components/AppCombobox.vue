@@ -5,7 +5,7 @@
         type="button"
         role="combobox"
         :aria-expanded="open"
-        class="select-modern flex items-center justify-between gap-2"
+        class="select-modern flex cursor-pointer items-center justify-between gap-2"
         :class="props.class"
       >
         <span :class="modelValue ? 'text-slate-900' : 'text-slate-400'">{{ selectedLabel }}</span>

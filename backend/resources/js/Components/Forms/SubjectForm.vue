@@ -1,71 +1,61 @@
 <template>
-    <Form :validation-schema="schema" v-slot="{ setErrors, meta }" :initial-values="form">
-        <ModalForm :open="open" size="lg" @update:open="emit('update:open', $event)">
-            <template #title>
-                <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center">
-                        <BookMarked class="w-4 h-4 text-slate-600" />
-                    </div>
-                    <div>
-                        <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? 'Edit Subject' : 'Create Subject' }}</h2>
-                        <p class="text-xs text-slate-500">{{ isEdit ? `Update ${subject?.name}` : 'Add a new subject' }}</p>
-                    </div>
-                </div>
-            </template>
-
-            <div class="space-y-4">
-                <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Course <span class="text-rose-500">*</span></Label>
-                    <Select v-model="form.course_id">
-                        <SelectTrigger class="w-full">
-                            <SelectValue placeholder="Select a course" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectItem v-for="c in courses" :key="c.id" :value="String(c.id)">
-                                {{ c.name }} ({{ c.code }})
-                            </SelectItem>
-                        </SelectContent>
-                    </Select>
-                    <p v-if="form.errors.course_id" class="text-[12px] text-rose-500 mt-1">{{ form.errors.course_id }}</p>
+    <ModalForm :open="open" size="lg" @update:open="emit('update:open', $event)">
+        <template #title>
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-lg bg-slate-100 flex items-center justify-center">
+                    <BookMarked class="w-4 h-4 text-slate-600" />
                 </div>
                 <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
-                    <Field name="name" v-slot="{ field, errorMessage }">
-                        <Input v-bind="field" v-model="form.name" type="text" placeholder="e.g. Introduction to Programming" />
-                        <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
-                    </Field>
-                    <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
-                </div>
-                <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code <span class="text-rose-500">*</span></Label>
-                    <Field name="code" v-slot="{ field, errorMessage }">
-                        <Input v-bind="field" v-model="form.code" type="text" placeholder="e.g. CS101" />
-                        <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
-                    </Field>
-                    <p v-if="form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ form.errors.code }}</p>
-                </div>
-                <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Description</Label>
-                    <RichTextEditor v-model="form.description" placeholder="Optional description…" />
+                    <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? 'Edit Subject' : 'Create Subject' }}</h2>
+                    <p class="text-xs text-slate-500">{{ isEdit ? `Update ${subject?.name}` : 'Add a new subject' }}</p>
                 </div>
             </div>
+        </template>
 
-            <template #footer>
-                <Button variant="outline" type="button" @click="close">Cancel</Button>
-                <Button type="button" :disabled="!meta.valid || form.processing" @click="submit(setErrors)">
-                    <Loader2 v-if="form.processing" class="w-4 h-4 animate-spin" />
-                    {{ isEdit ? 'Save Changes' : 'Create Subject' }}
-                </Button>
-            </template>
-        </ModalForm>
-    </Form>
+        <div class="space-y-4">
+            <div>
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Course <span class="text-rose-500">*</span></Label>
+                <Select v-model="form.course_id">
+                    <SelectTrigger class="w-full">
+                        <SelectValue placeholder="Select a course" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem v-for="c in courses" :key="c.id" :value="String(c.id)">
+                            {{ c.name }} ({{ c.code }})
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
+                <p v-if="errors.course_id || form.errors.course_id" class="text-[12px] text-rose-500 mt-1">{{ errors.course_id || form.errors.course_id }}</p>
+            </div>
+            <div>
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
+                <Input v-model="form.name" type="text" placeholder="e.g. Introduction to Programming" />
+                <p v-if="errors.name || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ errors.name || form.errors.name }}</p>
+            </div>
+            <div>
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code <span class="text-rose-500">*</span></Label>
+                <Input v-model="form.code" type="text" placeholder="e.g. CS101" />
+                <p v-if="errors.code || form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ errors.code || form.errors.code }}</p>
+            </div>
+            <div>
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Description</Label>
+                <RichTextEditor v-model="form.description" placeholder="Optional description…" />
+            </div>
+        </div>
+
+        <template #footer>
+            <Button variant="outline" type="button" @click="close">Cancel</Button>
+            <Button type="button" :disabled="!canSubmit || form.processing" @click="submit">
+                <Loader2 v-if="form.processing" class="w-4 h-4 animate-spin" />
+                {{ isEdit ? 'Save Changes' : 'Create Subject' }}
+            </Button>
+        </template>
+    </ModalForm>
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
-import { Form, Field } from 'vee-validate'
-import * as yup from 'yup'
 import { BookMarked, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import ModalForm from '@/Components/ModalForm.vue'
@@ -83,32 +73,41 @@ const props = defineProps({
 const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.subject)
 
-const schema = yup.object({
-    name: yup.string().required('Name is required'),
-    code: yup.string().required('Code is required'),
-})
-
 const form = useForm({ course_id: '', name: '', code: '', description: '' })
+const errors = ref({})
 
 watch(() => props.subject, (s) => {
+    errors.value = {}
     if (s) { form.course_id = String(s.course_id); form.name = s.name; form.code = s.code; form.description = s.description || '' }
     else form.reset()
 }, { immediate: true })
 
+const canSubmit = computed(() => !!form.course_id && !!form.name?.trim() && !!form.code?.trim())
+
+const validate = () => {
+    const e = {}
+    if (!form.course_id) e.course_id = 'Course is required'
+    if (!form.name?.trim()) e.name = 'Name is required'
+    if (!form.code?.trim()) e.code = 'Code is required'
+    errors.value = e
+    return Object.keys(e).length === 0
+}
+
 const close = () => emit('update:open', false)
 
-const submit = (setErrors) => {
+const submit = () => {
+    if (!validate()) return
     if (isEdit.value) {
         form.put(route('admin.subjects.update', props.subject.id), {
             preserveScroll: true, preserveState: true,
             onSuccess: () => { toast.success('Subject updated successfully'); close() },
-            onError: (errors) => { toast.error('Failed to update subject'); setErrors(errors) },
+            onError: () => { toast.error('Failed to update subject') },
         })
     } else {
         form.post(route('admin.subjects.store'), {
             preserveScroll: true, preserveState: true,
             onSuccess: () => { toast.success('Subject created successfully'); close(); form.reset() },
-            onError: (errors) => { toast.error('Failed to create subject'); setErrors(errors) },
+            onError: () => { toast.error('Failed to create subject') },
         })
     }
 }

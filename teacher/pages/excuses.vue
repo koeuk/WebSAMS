@@ -10,7 +10,7 @@
       <button
         v-for="tab in ['pending', 'approved', 'rejected']" :key="tab"
         @click="filter = tab; load()"
-        class="px-4 py-1.5 rounded-lg text-[13px] font-medium capitalize transition-colors"
+        class="cursor-pointer px-4 py-1.5 rounded-lg text-[13px] font-medium capitalize transition-colors"
         :class="filter === tab ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-700'"
       >{{ tab }}</button>
     </div>

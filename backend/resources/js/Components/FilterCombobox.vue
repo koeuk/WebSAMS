@@ -3,7 +3,7 @@
         <PopoverTrigger as-child>
             <button
                 type="button"
-                class="flex items-center justify-between gap-2 h-[38px] min-w-[140px] px-3 py-2 text-[13px] font-medium border border-slate-200 rounded-lg bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all duration-150 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
+                class="flex cursor-pointer items-center justify-between gap-2 h-[38px] min-w-[140px] px-3 py-2 text-[13px] font-medium border border-slate-200 rounded-lg bg-white text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-all duration-150 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400"
                 :class="{ 'border-blue-400 text-blue-700 bg-blue-50/60': isSelected }"
             >
                 <span class="truncate max-w-[140px]">{{ selectedLabel }}</span>

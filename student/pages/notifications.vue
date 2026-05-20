@@ -21,7 +21,7 @@
             <p class="text-[13px] text-slate-600">{{ n.message }}</p>
             <p class="text-[12px] text-slate-400 mt-1.5">{{ formatDate(n.created_at) }}</p>
           </div>
-          <button v-if="!n.is_read" @click="markAsRead(n.id)" class="px-3 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors whitespace-nowrap">
+          <button v-if="!n.is_read" @click="markAsRead(n.id)" class="cursor-pointer px-3 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors whitespace-nowrap">
             Mark read
           </button>
         </div>
