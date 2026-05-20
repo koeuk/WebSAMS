@@ -61,7 +61,15 @@
             <TableCell><span class="badge" :class="statusClass(record.status)">{{ record.status }}</span></TableCell>
           </TableRow>
           <TableRow v-if="!attendance.data?.length">
-            <TableCell colspan="6" class="text-center py-12 text-slate-400">No attendance records found.</TableCell>
+            <TableCell colspan="6" class="p-0">
+              <Empty class="border-0 rounded-none">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon"><ClipboardList class="w-6 h-6" /></EmptyMedia>
+                  <EmptyTitle>No attendance records</EmptyTitle>
+                  <EmptyDescription>Try adjusting your filters to find records.</EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>

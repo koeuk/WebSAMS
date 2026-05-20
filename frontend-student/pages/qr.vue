@@ -24,26 +24,26 @@
           {{ error }}
         </div>
 
-        <div class="text-left mb-4">
-          <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">QR Token</label>
-          <input
+        <div class="text-left mb-4 space-y-1.5">
+          <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">QR Token</Label>
+          <Input
             v-model="token"
             type="text"
-            class="input-modern w-full font-mono text-[13px]"
+            class="font-mono text-[13px]"
             placeholder="Paste or type the QR token..."
             @keyup.enter="attend"
           />
         </div>
 
-        <button
+        <Button
           @click="attend"
           :disabled="!token.trim() || loading"
-          class="btn-primary w-full justify-center py-3 text-[14px]"
+          class="w-full justify-center py-3 h-auto text-[14px] flex items-center gap-2"
         >
           <svg v-if="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
           <svg v-else class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>
           {{ loading ? 'Recording...' : 'Mark Attendance' }}
-        </button>
+        </Button>
 
         <p class="mt-5 text-[12px] text-slate-400">
           When your teacher shows a QR code, you can also scan it with your phone camera.<br/>

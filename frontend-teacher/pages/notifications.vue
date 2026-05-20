@@ -9,9 +9,9 @@
           {{ notifications.length }} total
         </p>
       </div>
-      <button v-if="unreadCount" @click="markAllRead" class="btn-secondary py-2 text-[13px]">
+      <Button v-if="unreadCount" variant="outline" @click="markAllRead">
         Mark all read
-      </button>
+      </Button>
     </div>
 
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>

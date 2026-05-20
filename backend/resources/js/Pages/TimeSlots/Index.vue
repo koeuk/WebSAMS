@@ -41,7 +41,15 @@
                             </TableCell>
                         </TableRow>
                         <TableRow v-if="!timeSlots?.length">
-                            <TableCell colspan="5" class="text-center py-12 text-slate-400">No time slots.</TableCell>
+                            <TableCell colspan="5" class="p-0">
+                                <Empty class="border-0 rounded-none">
+                                    <EmptyHeader>
+                                        <EmptyMedia variant="icon"><Clock class="w-6 h-6" /></EmptyMedia>
+                                        <EmptyTitle>No time slots</EmptyTitle>
+                                        <EmptyDescription>Create a time slot to define class periods.</EmptyDescription>
+                                    </EmptyHeader>
+                                </Empty>
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -63,6 +71,8 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
+import { Clock } from 'lucide-vue-next';
 
 const props = defineProps({ timeSlots: Array, types: Array });
 

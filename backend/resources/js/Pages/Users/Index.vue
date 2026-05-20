@@ -90,7 +90,15 @@
                             </TableCell>
                         </TableRow>
                         <TableRow v-if="!users.data?.length">
-                            <TableCell colspan="7" class="text-center py-12 text-slate-400">No users found.</TableCell>
+                            <TableCell colspan="7" class="p-0">
+                                <Empty class="border-0 rounded-none">
+                                    <EmptyHeader>
+                                        <EmptyMedia variant="icon"><Users class="w-6 h-6" /></EmptyMedia>
+                                        <EmptyTitle>No users found</EmptyTitle>
+                                        <EmptyDescription>Try adjusting your filters or create a new user.</EmptyDescription>
+                                    </EmptyHeader>
+                                </Empty>
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -117,6 +125,8 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
+import { Users } from 'lucide-vue-next';
 
 const props = defineProps({
     users:      Object,

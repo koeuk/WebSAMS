@@ -76,18 +76,23 @@
           <span class="w-1.5 h-1.5 rounded-full" style="background:#d4a017;"></span>
           <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">Teaching Classes</h3>
         </div>
-        <table class="modern-table">
-          <thead><tr><th class="text-left">Class</th><th class="text-left">Subject</th></tr></thead>
-          <tbody>
-            <tr v-for="c in profile.teaching_classes" :key="c.id">
-              <td class="font-semibold text-slate-900">{{ c.class_name || '-' }}</td>
-              <td class="text-slate-600">{{ c.subject_name || '-' }}</td>
-            </tr>
-            <tr v-if="!profile.teaching_classes?.length">
-              <td colspan="2" class="!text-center !py-8 text-slate-400">No classes assigned.</td>
-            </tr>
-          </tbody>
-        </table>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Class</TableHead>
+              <TableHead>Subject</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="c in profile.teaching_classes" :key="c.id">
+              <TableCell class="font-semibold text-slate-900">{{ c.class_name || '-' }}</TableCell>
+              <TableCell class="text-slate-600">{{ c.subject_name || '-' }}</TableCell>
+            </TableRow>
+            <TableRow v-if="!profile.teaching_classes?.length">
+              <TableCell colspan="2" class="text-center py-8 text-slate-400">No classes assigned.</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
 

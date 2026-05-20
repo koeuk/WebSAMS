@@ -50,7 +50,15 @@
             </TableCell>
           </TableRow>
           <TableRow v-if="!requests.length">
-            <TableCell colspan="6" class="text-center py-12 text-slate-400">No {{ filter }} excuse requests.</TableCell>
+            <TableCell colspan="6" class="p-0">
+              <Empty class="border-0 rounded-none">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon"><FileText class="w-6 h-6" /></EmptyMedia>
+                  <EmptyTitle>No {{ filter }} excuse requests</EmptyTitle>
+                  <EmptyDescription>No excuse requests with this status at the moment.</EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            </TableCell>
           </TableRow>
         </TableBody>
       </Table>
@@ -66,7 +74,7 @@
         <div class="bg-slate-50 rounded-xl p-4 text-[13px] text-slate-700">{{ reviewing?.reason }}</div>
         <div class="space-y-1.5">
           <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Note (optional)</Label>
-          <Textarea v-model="reviewNote" rows="2" class="resize-none" placeholder="Add a note..." />
+          <RichTextEditor v-model="reviewNote" placeholder="Add a note..." />
         </div>
         <DialogFooter class="gap-2">
           <Button variant="outline" @click="reviewing = null">Cancel</Button>

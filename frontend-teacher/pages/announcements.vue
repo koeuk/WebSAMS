@@ -14,8 +14,14 @@
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
 
     <div v-else class="space-y-4">
-      <div v-if="!announcements.length" class="card p-12 text-center text-slate-400">
-        No announcements yet. Create your first one.
+      <div v-if="!announcements.length" class="card overflow-hidden">
+        <Empty class="border-0 rounded-none">
+          <EmptyHeader>
+            <EmptyMedia variant="icon"><Megaphone class="w-6 h-6" /></EmptyMedia>
+            <EmptyTitle>No announcements yet</EmptyTitle>
+            <EmptyDescription>Create your first announcement to notify your students.</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       </div>
       <div v-for="a in announcements" :key="a.id" class="card p-5 animate-fade-in-up">
         <div class="flex items-start justify-between gap-4">
@@ -48,7 +54,7 @@
           </div>
           <div class="space-y-1.5">
             <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Message</Label>
-            <Textarea v-model="form.body" :rows="4" class="resize-none" placeholder="Write your announcement..." />
+            <RichTextEditor v-model="form.body" placeholder="Write your announcement..." />
           </div>
           <div class="space-y-1.5">
             <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Audience</Label>

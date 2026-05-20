@@ -33,7 +33,15 @@
                         </TableCell>
                     </TableRow>
                     <TableRow v-if="!semesters.data?.length">
-                        <TableCell colspan="5" class="text-center py-8 text-gray-500">No semesters found.</TableCell>
+                        <TableCell colspan="5" class="p-0">
+                            <Empty class="border-0 rounded-none">
+                                <EmptyHeader>
+                                    <EmptyMedia variant="icon"><CalendarDays class="w-6 h-6" /></EmptyMedia>
+                                    <EmptyTitle>No semesters found</EmptyTitle>
+                                    <EmptyDescription>Create a semester to get started.</EmptyDescription>
+                                </EmptyHeader>
+                            </Empty>
+                        </TableCell>
                     </TableRow>
                 </TableBody>
             </Table>
@@ -55,6 +63,8 @@ import FlashMessage from '@/Components/FlashMessage.vue';
 import SemesterForm from '@/Components/Forms/SemesterForm.vue';
 import { Button } from '@/Components/ui/button';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
+import { CalendarDays } from 'lucide-vue-next';
 
 const props = defineProps({ semesters: Object });
 

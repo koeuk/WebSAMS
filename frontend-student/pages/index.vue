@@ -123,23 +123,23 @@
           <span class="w-1.5 h-1.5 rounded-full" style="background:#d4a017;"></span>
           <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">Attendance by Subject</h3>
         </div>
-        <table class="modern-table">
-          <thead>
-            <tr>
-              <th class="text-left">Subject</th>
-              <th class="text-center">Total</th>
-              <th class="text-center">Present</th>
-              <th class="text-center">Absent</th>
-              <th class="text-left" style="min-width:140px;">Rate</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="row in dashboard.bySubject" :key="row.subject">
-              <td class="font-semibold text-slate-900">{{ row.subject }}</td>
-              <td class="text-center font-mono text-slate-600">{{ row.total }}</td>
-              <td class="text-center font-mono text-emerald-600 font-semibold">{{ row.present }}</td>
-              <td class="text-center font-mono text-rose-600 font-semibold">{{ row.absent }}</td>
-              <td>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Subject</TableHead>
+              <TableHead class="text-center">Total</TableHead>
+              <TableHead class="text-center">Present</TableHead>
+              <TableHead class="text-center">Absent</TableHead>
+              <TableHead style="min-width:140px;">Rate</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="row in dashboard.bySubject" :key="row.subject">
+              <TableCell class="font-semibold text-slate-900">{{ row.subject }}</TableCell>
+              <TableCell class="text-center font-mono text-slate-600">{{ row.total }}</TableCell>
+              <TableCell class="text-center font-mono text-emerald-600 font-semibold">{{ row.present }}</TableCell>
+              <TableCell class="text-center font-mono text-rose-600 font-semibold">{{ row.absent }}</TableCell>
+              <TableCell>
                 <div class="flex items-center gap-2.5">
                   <div class="flex-1 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                     <div
@@ -151,13 +151,13 @@
                     {{ row.rate }}%
                   </span>
                 </div>
-              </td>
-            </tr>
-            <tr v-if="!dashboard.bySubject?.length">
-              <td colspan="5" class="!text-center !py-12 text-slate-400">No attendance data yet.</td>
-            </tr>
-          </tbody>
-        </table>
+              </TableCell>
+            </TableRow>
+            <TableRow v-if="!dashboard.bySubject?.length">
+              <TableCell colspan="5" class="text-center py-12 text-slate-400">No attendance data yet.</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
 
       <!-- Enrolled Classes -->
@@ -166,25 +166,25 @@
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
           <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">My Classes</h3>
         </div>
-        <table class="modern-table">
-          <thead>
-            <tr>
-              <th class="text-left">Class</th>
-              <th class="text-left">Section</th>
-              <th class="text-left">Academic Year</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="c in dashboard.enrolledClasses" :key="c.id">
-              <td class="font-semibold text-slate-900">{{ c.name }}</td>
-              <td>{{ c.section || '-' }}</td>
-              <td><span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">{{ c.academic_year }}</span></td>
-            </tr>
-            <tr v-if="!dashboard.enrolledClasses?.length">
-              <td colspan="3" class="!text-center !py-8 text-slate-400">Not enrolled in any classes.</td>
-            </tr>
-          </tbody>
-        </table>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Class</TableHead>
+              <TableHead>Section</TableHead>
+              <TableHead>Academic Year</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="c in dashboard.enrolledClasses" :key="c.id">
+              <TableCell class="font-semibold text-slate-900">{{ c.name }}</TableCell>
+              <TableCell>{{ c.section || '-' }}</TableCell>
+              <TableCell><span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">{{ c.academic_year }}</span></TableCell>
+            </TableRow>
+            <TableRow v-if="!dashboard.enrolledClasses?.length">
+              <TableCell colspan="3" class="text-center py-8 text-slate-400">Not enrolled in any classes.</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
 

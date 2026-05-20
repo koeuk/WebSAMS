@@ -63,7 +63,15 @@
                             </TableCell>
                         </TableRow>
                         <TableRow v-if="!classes.data?.length">
-                            <TableCell colspan="6" class="text-center py-12 text-slate-400">No classes found.</TableCell>
+                            <TableCell colspan="6" class="p-0">
+                                <Empty class="border-0 rounded-none">
+                                    <EmptyHeader>
+                                        <EmptyMedia variant="icon"><School class="w-6 h-6" /></EmptyMedia>
+                                        <EmptyTitle>No classes found</EmptyTitle>
+                                        <EmptyDescription>Try adjusting your search or create a new class.</EmptyDescription>
+                                    </EmptyHeader>
+                                </Empty>
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -88,6 +96,8 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Card, CardContent } from '@/Components/ui/card';
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
+import { School } from 'lucide-vue-next';
 
 const props = defineProps({ classes: Object, filters: Object });
 const search = ref(props.filters?.search || '');

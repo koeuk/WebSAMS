@@ -31,7 +31,7 @@
                             </div>
                             <div>
                                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Address</Label>
-                                <Textarea v-model="form.university_address" rows="2" />
+                                <RichTextEditor v-model="form.university_address" placeholder="Enter university address…" />
                             </div>
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
@@ -70,8 +70,8 @@ import FlashMessage from '@/Components/FlashMessage.vue';
 import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
 import { Card, CardContent } from '@/Components/ui/card';
+import RichTextEditor from '@/Components/RichTextEditor.vue';
 
 const props = defineProps({ settings: Object });
 
