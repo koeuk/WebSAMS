@@ -15,19 +15,19 @@
         <div class="space-y-4">
             <div>
                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" placeholder="e.g. Morning 1" />
-                <p v-if="errors.name || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ errors.name || form.errors.name }}</p>
+                <Input v-model="form.name" type="text" placeholder="e.g. Morning 1" @update:model-value="touch('name')" />
+                <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Start Time <span class="text-rose-500">*</span></Label>
-                    <Input v-model="form.start_time" type="time" />
-                    <p v-if="errors.start_time || form.errors.start_time" class="text-[12px] text-rose-500 mt-1">{{ errors.start_time || form.errors.start_time }}</p>
+                    <Input v-model="form.start_time" type="time" @update:model-value="touch('start_time')" />
+                    <p v-if="error('start_time') || form.errors.start_time" class="text-[12px] text-rose-500 mt-1">{{ error('start_time') || form.errors.start_time }}</p>
                 </div>
                 <div>
                     <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">End Time <span class="text-rose-500">*</span></Label>
-                    <Input v-model="form.end_time" type="time" />
-                    <p v-if="errors.end_time || form.errors.end_time" class="text-[12px] text-rose-500 mt-1">{{ errors.end_time || form.errors.end_time }}</p>
+                    <Input v-model="form.end_time" type="time" @update:model-value="touch('end_time')" />
+                    <p v-if="error('end_time') || form.errors.end_time" class="text-[12px] text-rose-500 mt-1">{{ error('end_time') || form.errors.end_time }}</p>
                 </div>
             </div>
             <div>
@@ -57,7 +57,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { Clock, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
@@ -66,6 +66,7 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
+import { useFormValidation } from '@/Composables/useFormValidation'
 
 const props = defineProps({
     open:     { type: Boolean, required: true },
@@ -76,29 +77,25 @@ const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.timeSlot)
 
 const form = useForm({ name: '', start_time: '', end_time: '', type: 'morning' })
-const errors = ref({})
+
+const { touch, markAllTouched, reset, error } = useFormValidation({
+    name:       () => !form.name?.trim() ? 'Name is required' : null,
+    start_time: () => !form.start_time ? 'Start time is required' : null,
+    end_time:   () => !form.end_time ? 'End time is required' : null,
+})
 
 watch(() => props.timeSlot, (ts) => {
-    errors.value = {}
+    reset()
     if (ts) { form.name = ts.name; form.start_time = ts.start_time?.slice(0, 5) || ''; form.end_time = ts.end_time?.slice(0, 5) || ''; form.type = ts.type || 'morning' }
     else { form.reset(); form.type = 'morning' }
 }, { immediate: true })
 
 const canSubmit = computed(() => !!form.name?.trim() && !!form.start_time && !!form.end_time)
 
-const validate = () => {
-    const e = {}
-    if (!form.name?.trim()) e.name = 'Name is required'
-    if (!form.start_time) e.start_time = 'Start time is required'
-    if (!form.end_time) e.end_time = 'End time is required'
-    errors.value = e
-    return Object.keys(e).length === 0
-}
-
 const close = () => emit('update:open', false)
 
 const submit = () => {
-    if (!validate()) return
+    if (!markAllTouched()) return
     if (isEdit.value) {
         form.put(route('admin.time-slots.update', props.timeSlot.id), {
             preserveScroll: true, preserveState: true,

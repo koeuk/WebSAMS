@@ -15,7 +15,7 @@
         <div class="space-y-4">
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Class – Subject <span class="text-rose-500">*</span></Label>
-                <Select v-model="form.class_subject_id">
+                <Select v-model="form.class_subject_id" @update:model-value="touch('class_subject_id')">
                     <SelectTrigger class="w-full">
                         <SelectValue placeholder="Select class &amp; subject" />
                     </SelectTrigger>
@@ -25,12 +25,12 @@
                         </SelectItem>
                     </SelectContent>
                 </Select>
-                <p v-if="errors.class_subject_id || form.errors.class_subject_id" class="text-[12px] text-rose-500 mt-1">{{ errors.class_subject_id || form.errors.class_subject_id }}</p>
+                <p v-if="error('class_subject_id') || form.errors.class_subject_id" class="text-[12px] text-rose-500 mt-1">{{ error('class_subject_id') || form.errors.class_subject_id }}</p>
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Time Slot <span class="text-rose-500">*</span></Label>
-                    <Select v-model="form.time_slot_id">
+                    <Select v-model="form.time_slot_id" @update:model-value="touch('time_slot_id')">
                         <SelectTrigger class="w-full">
                             <SelectValue placeholder="Select time slot" />
                         </SelectTrigger>
@@ -40,11 +40,11 @@
                             </SelectItem>
                         </SelectContent>
                     </Select>
-                    <p v-if="errors.time_slot_id || form.errors.time_slot_id" class="text-[12px] text-rose-500 mt-1">{{ errors.time_slot_id || form.errors.time_slot_id }}</p>
+                    <p v-if="error('time_slot_id') || form.errors.time_slot_id" class="text-[12px] text-rose-500 mt-1">{{ error('time_slot_id') || form.errors.time_slot_id }}</p>
                 </div>
                 <div>
                     <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Day <span class="text-rose-500">*</span></Label>
-                    <Select v-model="form.day_of_week">
+                    <Select v-model="form.day_of_week" @update:model-value="touch('day_of_week')">
                         <SelectTrigger class="w-full">
                             <SelectValue placeholder="Select day" />
                         </SelectTrigger>
@@ -54,7 +54,7 @@
                             </SelectItem>
                         </SelectContent>
                     </Select>
-                    <p v-if="errors.day_of_week || form.errors.day_of_week" class="text-[12px] text-rose-500 mt-1">{{ errors.day_of_week || form.errors.day_of_week }}</p>
+                    <p v-if="error('day_of_week') || form.errors.day_of_week" class="text-[12px] text-rose-500 mt-1">{{ error('day_of_week') || form.errors.day_of_week }}</p>
                 </div>
             </div>
             <div>
@@ -74,7 +74,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { CalendarClock, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
@@ -83,6 +83,7 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
+import { useFormValidation } from '@/Composables/useFormValidation'
 
 const props = defineProps({
     open:          { type: Boolean, required: true },
@@ -95,29 +96,25 @@ const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.schedule)
 
 const form = useForm({ class_subject_id: '', time_slot_id: '', day_of_week: '', room: '' })
-const errors = ref({})
+
+const { touch, markAllTouched, reset, error } = useFormValidation({
+    class_subject_id: () => !form.class_subject_id ? 'Class – Subject is required' : null,
+    time_slot_id:     () => !form.time_slot_id ? 'Time slot is required' : null,
+    day_of_week:      () => !form.day_of_week ? 'Day is required' : null,
+})
 
 watch(() => props.schedule, (s) => {
-    errors.value = {}
+    reset()
     if (s) { form.class_subject_id = String(s.class_subject_id); form.time_slot_id = String(s.time_slot_id); form.day_of_week = s.day_of_week; form.room = s.room || '' }
     else form.reset()
 }, { immediate: true })
 
 const canSubmit = computed(() => !!form.class_subject_id && !!form.time_slot_id && !!form.day_of_week)
 
-const validate = () => {
-    const e = {}
-    if (!form.class_subject_id) e.class_subject_id = 'Class – Subject is required'
-    if (!form.time_slot_id) e.time_slot_id = 'Time slot is required'
-    if (!form.day_of_week) e.day_of_week = 'Day is required'
-    errors.value = e
-    return Object.keys(e).length === 0
-}
-
 const close = () => emit('update:open', false)
 
 const submit = () => {
-    if (!validate()) return
+    if (!markAllTouched()) return
     if (isEdit.value) {
         form.put(route('admin.schedules.update', props.schedule.id), {
             preserveScroll: true, preserveState: true,

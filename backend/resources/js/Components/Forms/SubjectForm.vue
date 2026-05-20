@@ -15,7 +15,7 @@
         <div class="space-y-4">
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Course <span class="text-rose-500">*</span></Label>
-                <Select v-model="form.course_id">
+                <Select v-model="form.course_id" @update:model-value="touch('course_id')">
                     <SelectTrigger class="w-full">
                         <SelectValue placeholder="Select a course" />
                     </SelectTrigger>
@@ -25,17 +25,17 @@
                         </SelectItem>
                     </SelectContent>
                 </Select>
-                <p v-if="errors.course_id || form.errors.course_id" class="text-[12px] text-rose-500 mt-1">{{ errors.course_id || form.errors.course_id }}</p>
+                <p v-if="error('course_id') || form.errors.course_id" class="text-[12px] text-rose-500 mt-1">{{ error('course_id') || form.errors.course_id }}</p>
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" placeholder="e.g. Introduction to Programming" />
-                <p v-if="errors.name || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ errors.name || form.errors.name }}</p>
+                <Input v-model="form.name" type="text" placeholder="e.g. Introduction to Programming" @update:model-value="touch('name')" />
+                <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.code" type="text" placeholder="e.g. CS101" />
-                <p v-if="errors.code || form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ errors.code || form.errors.code }}</p>
+                <Input v-model="form.code" type="text" placeholder="e.g. CS101" @update:model-value="touch('code')" />
+                <p v-if="error('code') || form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ error('code') || form.errors.code }}</p>
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Description</Label>
@@ -54,7 +54,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { BookMarked, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
@@ -64,6 +64,7 @@ import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import RichTextEditor from '@/Components/RichTextEditor.vue'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
+import { useFormValidation } from '@/Composables/useFormValidation'
 
 const props = defineProps({
     open:    { type: Boolean, required: true },
@@ -74,29 +75,25 @@ const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.subject)
 
 const form = useForm({ course_id: '', name: '', code: '', description: '' })
-const errors = ref({})
+
+const { touch, markAllTouched, reset, error } = useFormValidation({
+    course_id: () => !form.course_id ? 'Course is required' : null,
+    name:      () => !form.name?.trim() ? 'Name is required' : null,
+    code:      () => !form.code?.trim() ? 'Code is required' : null,
+})
 
 watch(() => props.subject, (s) => {
-    errors.value = {}
+    reset()
     if (s) { form.course_id = String(s.course_id); form.name = s.name; form.code = s.code; form.description = s.description || '' }
     else form.reset()
 }, { immediate: true })
 
 const canSubmit = computed(() => !!form.course_id && !!form.name?.trim() && !!form.code?.trim())
 
-const validate = () => {
-    const e = {}
-    if (!form.course_id) e.course_id = 'Course is required'
-    if (!form.name?.trim()) e.name = 'Name is required'
-    if (!form.code?.trim()) e.code = 'Code is required'
-    errors.value = e
-    return Object.keys(e).length === 0
-}
-
 const close = () => emit('update:open', false)
 
 const submit = () => {
-    if (!validate()) return
+    if (!markAllTouched()) return
     if (isEdit.value) {
         form.put(route('admin.subjects.update', props.subject.id), {
             preserveScroll: true, preserveState: true,

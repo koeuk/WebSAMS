@@ -15,8 +15,8 @@
         <div class="space-y-4">
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Name <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" placeholder="e.g. Year 1-A" />
-                <p v-if="errors.name || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ errors.name || form.errors.name }}</p>
+                <Input v-model="form.name" type="text" placeholder="e.g. Year 1-A" @update:model-value="touch('name')" />
+                <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Section</Label>
@@ -24,8 +24,8 @@
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Academic Year <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.academic_year" type="text" placeholder="e.g. 2025-2026" />
-                <p v-if="errors.academic_year || form.errors.academic_year" class="text-[12px] text-rose-500 mt-1">{{ errors.academic_year || form.errors.academic_year }}</p>
+                <Input v-model="form.academic_year" type="text" placeholder="e.g. 2025-2026" @update:model-value="touch('academic_year')" />
+                <p v-if="error('academic_year') || form.errors.academic_year" class="text-[12px] text-rose-500 mt-1">{{ error('academic_year') || form.errors.academic_year }}</p>
             </div>
         </div>
 
@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { School, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
@@ -48,6 +48,7 @@ import ModalForm from '@/Components/ModalForm.vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
+import { useFormValidation } from '@/Composables/useFormValidation'
 
 const props = defineProps({
     open:        { type: Boolean, required: true },
@@ -57,28 +58,24 @@ const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.schoolClass)
 
 const form = useForm({ name: '', section: '', academic_year: '' })
-const errors = ref({})
+
+const { touch, markAllTouched, reset, error } = useFormValidation({
+    name:          () => !form.name?.trim() ? 'Name is required' : null,
+    academic_year: () => !form.academic_year?.trim() ? 'Academic year is required' : null,
+})
 
 watch(() => props.schoolClass, (c) => {
-    errors.value = {}
+    reset()
     if (c) { form.name = c.name; form.section = c.section || ''; form.academic_year = c.academic_year || '' }
     else form.reset()
 }, { immediate: true })
 
 const canSubmit = computed(() => !!form.name?.trim() && !!form.academic_year?.trim())
 
-const validate = () => {
-    const e = {}
-    if (!form.name?.trim()) e.name = 'Name is required'
-    if (!form.academic_year?.trim()) e.academic_year = 'Academic year is required'
-    errors.value = e
-    return Object.keys(e).length === 0
-}
-
 const close = () => emit('update:open', false)
 
 const submit = () => {
-    if (!validate()) return
+    if (!markAllTouched()) return
     if (isEdit.value) {
         form.put(route('admin.classes.update', props.schoolClass.id), {
             preserveScroll: true, preserveState: true,

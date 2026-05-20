@@ -15,13 +15,13 @@
         <div class="space-y-4">
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" placeholder="e.g. Computer Science" />
-                <p v-if="errors.name || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ errors.name || form.errors.name }}</p>
+                <Input v-model="form.name" type="text" placeholder="e.g. Computer Science" @update:model-value="touch('name')" />
+                <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.code" type="text" placeholder="e.g. CS" />
-                <p v-if="errors.code || form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ errors.code || form.errors.code }}</p>
+                <Input v-model="form.code" type="text" placeholder="e.g. CS" @update:model-value="touch('code')" />
+                <p v-if="error('code') || form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ error('code') || form.errors.code }}</p>
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Description</Label>
@@ -40,7 +40,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { BookOpen, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
@@ -49,6 +49,7 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import RichTextEditor from '@/Components/RichTextEditor.vue'
+import { useFormValidation } from '@/Composables/useFormValidation'
 
 const props = defineProps({
     open:   { type: Boolean, required: true },
@@ -58,29 +59,28 @@ const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.course)
 
 const form = useForm({ name: '', code: '', description: '' })
-const errors = ref({})
+
+const { touch, markAllTouched, reset, error } = useFormValidation({
+    name: () => {
+        if (!form.name?.trim()) return 'Name is required'
+        if (form.name.trim().length < 2) return 'At least 2 characters'
+        return null
+    },
+    code: () => !form.code?.trim() ? 'Code is required' : null,
+})
 
 watch(() => props.course, (c) => {
-    errors.value = {}
+    reset()
     if (c) { form.name = c.name; form.code = c.code; form.description = c.description || '' }
     else form.reset()
 }, { immediate: true })
 
-const canSubmit = computed(() => !!form.name?.trim() && !!form.code?.trim())
-
-const validate = () => {
-    const e = {}
-    if (!form.name?.trim()) e.name = 'Name is required'
-    else if (form.name.trim().length < 2) e.name = 'At least 2 characters'
-    if (!form.code?.trim()) e.code = 'Code is required'
-    errors.value = e
-    return Object.keys(e).length === 0
-}
+const canSubmit = computed(() => !!form.name?.trim() && form.name.trim().length >= 2 && !!form.code?.trim())
 
 const close = () => emit('update:open', false)
 
 const submit = () => {
-    if (!validate()) return
+    if (!markAllTouched()) return
     if (isEdit.value) {
         form.put(route('admin.courses.update', props.course.id), {
             preserveScroll: true, preserveState: true,

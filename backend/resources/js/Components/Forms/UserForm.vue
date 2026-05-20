@@ -23,13 +23,13 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
-                            <Input v-model="form.name" type="text" />
-                            <p v-if="errors.name || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ errors.name || form.errors.name }}</p>
+                            <Input v-model="form.name" type="text" @update:model-value="touch('name')" />
+                            <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
                         </div>
                         <div>
                             <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Email <span class="text-rose-500">*</span></Label>
-                            <Input v-model="form.email" type="email" />
-                            <p v-if="errors.email || form.errors.email" class="text-[12px] text-rose-500 mt-1">{{ errors.email || form.errors.email }}</p>
+                            <Input v-model="form.email" type="email" @update:model-value="touch('email')" />
+                            <p v-if="error('email') || form.errors.email" class="text-[12px] text-rose-500 mt-1">{{ error('email') || form.errors.email }}</p>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4">
@@ -39,8 +39,8 @@
                                 <span v-if="isEdit" class="text-slate-400 font-normal">(leave blank to keep)</span>
                                 <span v-else class="text-rose-500">*</span>
                             </Label>
-                            <Input v-model="form.password" type="password" :placeholder="isEdit ? '••••••••' : ''" />
-                            <p v-if="errors.password || form.errors.password" class="text-[12px] text-rose-500 mt-1">{{ errors.password || form.errors.password }}</p>
+                            <Input v-model="form.password" type="password" :placeholder="isEdit ? '••••••••' : ''" @update:model-value="touch('password')" />
+                            <p v-if="error('password') || form.errors.password" class="text-[12px] text-rose-500 mt-1">{{ error('password') || form.errors.password }}</p>
                         </div>
                         <div>
                             <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Role <span class="text-rose-500">*</span></Label>
@@ -175,7 +175,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { UserRound, Loader2 } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
@@ -186,6 +186,7 @@ import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import RichTextEditor from '@/Components/RichTextEditor.vue'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
+import { useFormValidation } from '@/Composables/useFormValidation'
 
 const props = defineProps({
     open:        { type: Boolean, required: true },
@@ -204,10 +205,21 @@ const form = useForm({
     guardian_name: '', guardian_phone: '', enrollment_date: '',
     department: '', qualification: '', hire_date: '',
 })
-const errors = ref({})
+
+const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+const { touch, markAllTouched, reset, error } = useFormValidation({
+    name:     () => !form.name?.trim() ? 'Name is required' : null,
+    email:    () => {
+        if (!form.email?.trim()) return 'Email is required'
+        if (!emailRe.test(form.email)) return 'Invalid email'
+        return null
+    },
+    password: () => (!isEdit.value && !form.password) ? 'Password is required' : null,
+})
 
 watch(() => props.user, (u) => {
-    errors.value = {}
+    reset()
     if (u) {
         form.name = u.name; form.email = u.email; form.password = ''; form.role = u.role
         form.phone = u.phone || ''; form.id_number = u.id_number || ''
@@ -224,8 +236,6 @@ watch(() => props.user, (u) => {
     }
 }, { immediate: true })
 
-const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 const canSubmit = computed(() => {
     if (!form.name?.trim()) return false
     if (!form.email?.trim() || !emailRe.test(form.email)) return false
@@ -233,20 +243,10 @@ const canSubmit = computed(() => {
     return true
 })
 
-const validate = () => {
-    const e = {}
-    if (!form.name?.trim()) e.name = 'Name is required'
-    if (!form.email?.trim()) e.email = 'Email is required'
-    else if (!emailRe.test(form.email)) e.email = 'Invalid email'
-    if (!isEdit.value && !form.password) e.password = 'Password is required'
-    errors.value = e
-    return Object.keys(e).length === 0
-}
-
 const close = () => emit('update:open', false)
 
 const submit = () => {
-    if (!validate()) return
+    if (!markAllTouched()) return
     if (isEdit.value) {
         form.put(route('admin.users.update', props.user.id), {
             preserveScroll: true, preserveState: true,
