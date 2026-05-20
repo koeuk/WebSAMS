@@ -32,7 +32,7 @@ class AttendanceController extends Controller
             ->with(['student', 'classSubject.subject.course', 'classSubject.schoolClass', 'recorder', 'timeSlot'])
             ->latest('date')
             ->latest('id')
-            ->paginate(20)
+            ->paginate($this->limit())
             ->withQueryString();
 
         $courseId = $request->input('filter.course_id');

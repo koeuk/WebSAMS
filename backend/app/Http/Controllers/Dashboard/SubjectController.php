@@ -26,7 +26,7 @@ class SubjectController extends Controller
             )
             ->with('course')
             ->latest()
-            ->paginate(15)
+            ->paginate($this->limit())
             ->withQueryString();
 
         return Inertia::render('Subjects/Index', [

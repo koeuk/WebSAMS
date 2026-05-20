@@ -23,7 +23,7 @@
                     <div class="space-y-4">
                         <div class="grid grid-cols-2 gap-4">
                             <div>
-                                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name *</Label>
+                                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
                                 <Field name="name" v-slot="{ field, errorMessage }">
                                     <Input v-bind="field" v-model="form.name" type="text" />
                                     <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
@@ -31,7 +31,7 @@
                                 <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
                             </div>
                             <div>
-                                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Email *</Label>
+                                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Email <span class="text-rose-500">*</span></Label>
                                 <Field name="email" v-slot="{ field, errorMessage }">
                                     <Input v-bind="field" v-model="form.email" type="email" />
                                     <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
@@ -44,13 +44,13 @@
                                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">
                                     Password
                                     <span v-if="isEdit" class="text-slate-400 font-normal">(leave blank to keep)</span>
-                                    <span v-else>*</span>
+                                    <span v-else class="text-rose-500">*</span>
                                 </Label>
                                 <Input v-model="form.password" type="password" :placeholder="isEdit ? '••••••••' : ''" />
                                 <p v-if="form.errors.password" class="text-[12px] text-rose-500 mt-1">{{ form.errors.password }}</p>
                             </div>
                             <div>
-                                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Role *</Label>
+                                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Role <span class="text-rose-500">*</span></Label>
                                 <Select v-model="form.role">
                                     <SelectTrigger class="w-full"><SelectValue placeholder="Select role" /></SelectTrigger>
                                     <SelectContent>

@@ -22,7 +22,7 @@ class SchoolClassController extends Controller
                 AllowedFilter::callback('search', fn ($q, $v) => $q->where('name', 'like', "%{$v}%")),
             )
             ->latest()
-            ->paginate(15)
+            ->paginate($this->limit())
             ->withQueryString();
 
         return Inertia::render('Classes/Index', [
