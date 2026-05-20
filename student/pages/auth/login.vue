@@ -61,11 +61,18 @@
     </div>
 
     <!-- Right panel — form -->
-    <div class="flex-1 flex items-center justify-center p-8 bg-slate-50">
-      <div class="w-full max-w-sm animate-fade-in">
+    <div
+      ref="pageRef"
+      class="login-page-wrapper flex-1 flex items-center justify-center p-8 bg-slate-50"
+      :style="spotlightStyle"
+    >
+      <div class="login-atmosphere" aria-hidden="true"></div>
+      <div class="login-spotlight" aria-hidden="true"></div>
+
+      <div class="w-full max-w-sm relative">
 
         <!-- Mobile logo -->
-        <div class="flex lg:hidden items-center justify-center gap-3 mb-8">
+        <div class="flex lg:hidden items-center justify-center gap-3 mb-8 login-entrance login-entrance-delay-1">
           <div class="w-10 h-10 rounded-xl overflow-hidden">
             <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
           </div>
@@ -75,7 +82,7 @@
           </div>
         </div>
 
-        <div class="mb-8">
+        <div class="mb-8 login-entrance login-entrance-delay-1">
           <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Welcome back</h2>
           <p class="text-sm text-slate-500 mt-1">Sign in to your student account</p>
         </div>
@@ -87,7 +94,7 @@
           {{ error }}
         </div>
 
-        <form @submit.prevent="submit" class="space-y-5">
+        <form @submit.prevent="submit" class="space-y-5 login-entrance login-entrance-delay-2">
           <div class="space-y-1.5">
             <Label class="text-[13px] font-semibold text-slate-600">Email address</Label>
             <Input
@@ -137,7 +144,7 @@
           </Button>
         </form>
 
-        <p class="text-center text-[12px] text-slate-400 mt-8">
+        <p class="text-center text-[12px] text-slate-400 mt-8 login-entrance login-entrance-delay-3">
           BELTEI International University &copy; 2025
         </p>
       </div>
@@ -146,7 +153,8 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useMouseInElement } from '@vueuse/core'
 
 definePageMeta({ layout: false, middleware: 'auth' })
 
@@ -155,6 +163,15 @@ const password = ref('')
 const error = ref('')
 const loading = ref(false)
 const showPassword = ref(false)
+
+const pageRef = ref<HTMLElement | null>(null)
+const { elementX, elementY, isOutside } = useMouseInElement(pageRef)
+
+const spotlightStyle = computed(() => ({
+  '--mouse-x': `${elementX.value}px`,
+  '--mouse-y': `${elementY.value}px`,
+  '--mouse-opacity': isOutside.value ? 0 : 1,
+}))
 
 const { login } = useAuth()
 
@@ -177,3 +194,72 @@ const features = [
   { icon: 'bell', text: 'Instant absence notifications' },
 ]
 </script>
+
+<style scoped>
+.login-page-wrapper {
+  position: relative;
+  isolation: isolate;
+}
+
+.login-atmosphere,
+.login-spotlight {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  overflow: clip;
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
+}
+
+.login-atmosphere::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+  background-size: 18px 18px;
+}
+
+.login-atmosphere::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(at top right, rgba(212, 160, 23, 0.20), transparent 55%),
+    radial-gradient(at bottom left, rgba(125, 175, 145, 0.16), transparent 55%);
+}
+
+.login-spotlight {
+  background: radial-gradient(
+    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(212, 160, 23, 0.22),
+    transparent 50%
+  );
+  opacity: var(--mouse-opacity, 0);
+  transition: opacity 220ms ease-out;
+}
+
+@keyframes login-entrance {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-entrance {
+  animation: login-entrance 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.login-entrance-delay-1 { animation-delay: 80ms; }
+.login-entrance-delay-2 { animation-delay: 180ms; }
+.login-entrance-delay-3 { animation-delay: 280ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .login-spotlight { display: none; }
+  .login-entrance { animation: none; }
+}
+</style>

@@ -1,7 +1,14 @@
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-linear-to-br from-slate-100 via-blue-50/30 to-slate-100">
-        <div class="w-full max-w-md animate-fade-in">
-            <Card class="shadow-xl border-0" style="box-shadow: 0 20px 60px rgba(30, 58, 110, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);">
+    <div
+        ref="pageRef"
+        class="login-page-wrapper flex items-center justify-center min-h-screen bg-linear-to-br from-slate-100 via-blue-50/30 to-slate-100"
+        :style="spotlightStyle"
+    >
+        <div class="login-atmosphere" aria-hidden="true"></div>
+        <div class="login-spotlight" aria-hidden="true"></div>
+
+        <div class="w-full max-w-md login-entrance login-entrance-delay-1 relative">
+            <Card class="shadow-xl border-0 login-entrance login-entrance-delay-2" style="box-shadow: 0 20px 60px rgba(30, 58, 110, 0.12), 0 4px 16px rgba(0, 0, 0, 0.06);">
                 <CardContent class="p-10">
                     <div class="text-center mb-8">
                         <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-lg mb-4 inline-block">
@@ -38,17 +45,28 @@
                 </CardContent>
             </Card>
 
-            <p class="text-center text-[12px] text-slate-400 mt-6">BELTEI International University</p>
+            <p class="text-center text-[12px] text-slate-400 mt-6 login-entrance login-entrance-delay-3">BELTEI International University</p>
         </div>
     </div>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue';
 import { useForm } from '@inertiajs/vue3';
+import { useMouseInElement } from '@vueuse/core';
 import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
 import { Card, CardContent } from '@/Components/ui/card';
+
+const pageRef = ref(null);
+const { elementX, elementY, isOutside } = useMouseInElement(pageRef);
+
+const spotlightStyle = computed(() => ({
+    '--mouse-x': `${elementX.value}px`,
+    '--mouse-y': `${elementY.value}px`,
+    '--mouse-opacity': isOutside.value ? 0 : 1,
+}));
 
 const form = useForm({ email: '', password: '' });
 
@@ -56,3 +74,72 @@ const submit = () => {
     form.post('/login', { onFinish: () => form.reset('password') });
 };
 </script>
+
+<style scoped>
+.login-page-wrapper {
+    position: relative;
+    isolation: isolate;
+}
+
+.login-atmosphere,
+.login-spotlight {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: -1;
+    overflow: clip;
+    -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
+            mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
+}
+
+.login-atmosphere::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(rgba(15, 23, 42, 0.08) 1px, transparent 1px);
+    background-size: 18px 18px;
+}
+
+.login-atmosphere::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(at top right, rgba(212, 160, 23, 0.18), transparent 55%),
+        radial-gradient(at bottom left, rgba(125, 175, 145, 0.14), transparent 55%);
+}
+
+.login-spotlight {
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(30, 58, 110, 0.22),
+        transparent 50%
+    );
+    opacity: var(--mouse-opacity, 0);
+    transition: opacity 220ms ease-out;
+}
+
+@keyframes login-entrance {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.login-entrance {
+    animation: login-entrance 600ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.login-entrance-delay-1 { animation-delay: 80ms; }
+.login-entrance-delay-2 { animation-delay: 180ms; }
+.login-entrance-delay-3 { animation-delay: 280ms; }
+
+@media (prefers-reduced-motion: reduce) {
+    .login-spotlight { display: none; }
+    .login-entrance { animation: none; }
+}
+</style>
