@@ -14,7 +14,24 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
+    '@nuxtjs/i18n',
   ],
+  i18n: {
+    strategy: 'no_prefix',
+    defaultLocale: 'en',
+    langDir: 'locales',
+    locales: [
+      { code: 'en', name: 'English', file: 'en.json' },
+      { code: 'km', name: 'ខ្មែរ', file: 'km.json' },
+      { code: 'zh', name: '中文', file: 'zh.json' },
+    ],
+    lazy: true,
+    detectBrowserLanguage: {
+      useCookie: true,
+      cookieKey: 'i18n_locale',
+      redirectOn: 'root',
+    },
+  },
   shadcn: {
     prefix: '',
     componentDir: './components/ui',

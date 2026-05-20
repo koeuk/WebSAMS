@@ -1,0 +1,163 @@
+{
+  "appName": "WebSAMS",
+  "university": "BELTEI International University",
+  "studentPortal": "Student Portal",
+  "studentRole": "Student",
+  "copyright": "BELTEI International University © 2025",
+  "common": {
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "submit": "Submit",
+    "submitting": "Submitting...",
+    "save": "Save",
+    "clear": "Clear",
+    "from": "From",
+    "to": "To",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "dash": "-",
+    "emDash": "—",
+    "noData": "No data",
+    "section": "Section",
+    "academicYear": "Academic Year",
+    "class": "Class",
+    "subject": "Subject",
+    "date": "Date",
+    "status": "Status",
+    "remarks": "Remarks",
+    "timeSlot": "Time Slot",
+    "action": "Action",
+    "reason": "Reason",
+    "note": "Note",
+    "rate": "Rate",
+    "total": "Total",
+    "present": "Present",
+    "absent": "Absent",
+    "late": "Late",
+    "excused": "Excused",
+    "noClassesEnrolled": "Not enrolled in any classes."
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "myAttendance": "My Attendance",
+    "excuseRequests": "Excuse Requests",
+    "qrAttend": "QR Attend",
+    "announcements": "Announcements",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "signOut": "Sign Out",
+    "language": "Language"
+  },
+  "login": {
+    "tagline": "Track your attendance, stay on track.",
+    "description": "View your records, monitor your rate, and never miss an alert — all from one place.",
+    "features": {
+      "tracking": "Real-time attendance tracking",
+      "chart": "Attendance rate by subject",
+      "alerts": "Instant absence notifications"
+    },
+    "welcomeBack": "Welcome back",
+    "signInPrompt": "Sign in to your student account",
+    "emailLabel": "Email address",
+    "emailPlaceholder": "student@websams.com",
+    "passwordLabel": "Password",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "Sign In",
+    "signingIn": "Signing in...",
+    "invalidCredentials": "Invalid credentials."
+  },
+  "dashboard": {
+    "greeting": "Good day, {name} 👋",
+    "subtitle": "Here's your attendance overview.",
+    "attendanceRate": "Attendance Rate",
+    "rate": "Rate",
+    "attendanceBySubject": "Attendance by Subject",
+    "myClasses": "My Classes",
+    "noAttendanceYet": "No attendance data yet."
+  },
+  "attendance": {
+    "title": "My Attendance",
+    "subtitle": "View and filter your attendance records",
+    "noRecords": "No attendance records",
+    "noRecordsDescription": "No records found for the selected date range."
+  },
+  "qr": {
+    "title": "QR Attendance",
+    "subtitle": "Scan your teacher's QR code or enter the token manually",
+    "tokenLabel": "QR Token",
+    "tokenPlaceholder": "Paste or type the QR token...",
+    "markAttendance": "Mark Attendance",
+    "recording": "Recording...",
+    "hint1": "When your teacher shows a QR code, you can also scan it with your phone camera.",
+    "hint2": "The token from the QR will auto-fill this page.",
+    "recordedDefault": "Attendance recorded!",
+    "failed": "Failed to record attendance. The QR code may be invalid or expired."
+  },
+  "excuses": {
+    "title": "Excuse Requests",
+    "subtitle": "Submit excuses for absent attendance records",
+    "absentRecords": "Absent Records",
+    "myRequests": "My Requests",
+    "requestExcuse": "Request Excuse",
+    "submitted": "Submitted",
+    "noAbsentRecords": "No absent records",
+    "noAbsentDescription": "You have no unexcused absences.",
+    "noRequestsSubmitted": "No requests submitted",
+    "noRequestsDescription": "Submit an excuse from the absent records above.",
+    "dialogTitle": "Request Excuse",
+    "reasonPlaceholder": "Explain your reason for absence...",
+    "submitRequest": "Submit Request",
+    "submitSuccess": "Excuse request submitted successfully.",
+    "status": {
+      "pending": "pending",
+      "approved": "approved",
+      "rejected": "rejected"
+    }
+  },
+  "announcements": {
+    "title": "Announcements",
+    "subtitle": "Important updates from your teachers",
+    "empty": "No announcements yet",
+    "emptyDescription": "Check back later for updates from your teachers.",
+    "audience": {
+      "all": "all",
+      "students": "students",
+      "teachers": "teachers"
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "subtitle": "Stay updated with your attendance alerts",
+    "markRead": "Mark read",
+    "empty": "No notifications",
+    "emptyDescription": "You're all caught up.",
+    "type": {
+      "absence": "absence",
+      "late": "late",
+      "general": "general"
+    }
+  },
+  "profile": {
+    "title": "My Profile",
+    "subtitle": "Your personal and academic information",
+    "noIdAssigned": "No ID assigned",
+    "personalInfo": "Personal Information",
+    "academicInfo": "Academic Information",
+    "enrolledClasses": "Enrolled Classes",
+    "phone": "Phone",
+    "gender": "Gender",
+    "dob": "Date of Birth",
+    "address": "Address",
+    "yearLevel": "Year Level",
+    "year": "Year {n}",
+    "enrollmentDate": "Enrollment Date",
+    "guardianName": "Guardian Name",
+    "guardianPhone": "Guardian Phone",
+    "userStatus": {
+      "active": "Active",
+      "inactive": "Inactive",
+      "graduated": "Graduated",
+      "suspended": "Suspended"
+    }
+  }
+}
