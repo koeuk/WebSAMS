@@ -15,7 +15,9 @@
       <div class="w-px bg-slate-200 mx-1 self-stretch"></div>
       <button type="button" @click="editor?.chain().focus().unsetAllMarks().clearNodes().run()" class="toolbar-btn" title="Clear formatting"><svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 19h4v-3H6v3zm14 0h-8v-3h4.97L20 10.45V5H4v5.45l5.03 10.55H10v3h4v-3h-1.38L10.03 14H18v5zm0-8H4V7h16v4z"/></svg></button>
     </div>
-    <EditorContent :editor="editor" class="editor-content" />
+    <div class="overflow-auto resize-y" :style="{ minHeight: minHeight ?? '120px' }">
+      <EditorContent :editor="editor" class="editor-content" />
+    </div>
   </div>
 </template>
 
@@ -26,7 +28,7 @@ import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import Placeholder from '@tiptap/extension-placeholder'
 
-const props = defineProps<{ modelValue?: string; placeholder?: string }>()
+const props = defineProps<{ modelValue?: string; placeholder?: string; minHeight?: string }>()
 const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
 
 const editor = useEditor({
@@ -37,7 +39,7 @@ const editor = useEditor({
     Placeholder.configure({ placeholder: props.placeholder ?? 'Write something...' }),
   ],
   editorProps: {
-    attributes: { class: 'prose prose-sm max-w-none focus:outline-none min-h-[80px] px-3 py-2' },
+    attributes: { class: 'prose prose-sm max-w-none focus:outline-none px-3 py-2' },
   },
   onUpdate: ({ editor }) => {
     const html = editor.getHTML()
