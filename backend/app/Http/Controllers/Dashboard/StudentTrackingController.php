@@ -19,7 +19,7 @@ class StudentTrackingController extends Controller
     public function index(Request $request)
     {
         $filters   = $request->input('filter', []);
-        $threshold = $filters['threshold'] ?? 80;
+        $threshold = max(0, min(100, (int) ($filters['threshold'] ?? 80)));
 
         $dateFrom = null;
         $dateTo   = null;
