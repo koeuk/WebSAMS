@@ -130,7 +130,15 @@
                                 </TableCell>
                             </TableRow>
                             <TableRow v-if="!attendance.data?.length">
-                                <TableCell colspan="10" class="text-center py-12 text-slate-400">No attendance records found.</TableCell>
+                                <TableCell colspan="10" class="p-0">
+                                    <Empty class="border-0 rounded-none">
+                                        <EmptyHeader>
+                                            <EmptyMedia variant="icon"><ClipboardList class="w-6 h-6" /></EmptyMedia>
+                                            <EmptyTitle>No attendance records</EmptyTitle>
+                                            <EmptyDescription>Try adjusting your filters to find records.</EmptyDescription>
+                                        </EmptyHeader>
+                                    </Empty>
+                                </TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -157,6 +165,8 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
+import { ClipboardList } from 'lucide-vue-next';
 
 const props = defineProps({
     attendance: Object,

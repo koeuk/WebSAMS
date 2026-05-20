@@ -52,10 +52,14 @@
                 </div>
             </div>
 
-            <Card v-if="!Object.keys(schedules || {}).length">
-                <CardContent class="p-12 text-center text-slate-400">
-                    No schedules created yet.
-                </CardContent>
+            <Card v-if="!Object.keys(schedules || {}).length" class="overflow-hidden">
+                <Empty class="border-0 rounded-none">
+                    <EmptyHeader>
+                        <EmptyMedia variant="icon"><CalendarDays class="w-6 h-6" /></EmptyMedia>
+                        <EmptyTitle>No schedules yet</EmptyTitle>
+                        <EmptyDescription>Create your first schedule to get started.</EmptyDescription>
+                    </EmptyHeader>
+                </Empty>
             </Card>
 
             <ScheduleForm v-model:open="showForm" :schedule="editingSchedule" :class-subjects="classSubjects" :time-slots="timeSlots" :days="props.days" />
@@ -73,6 +77,8 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Card, CardContent } from '@/Components/ui/card';
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
+import { CalendarDays } from 'lucide-vue-next';
 
 const props = defineProps({ schedules: Object, classSubjects: Array, timeSlots: Array, days: Array });
 

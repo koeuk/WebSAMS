@@ -19,27 +19,43 @@
           <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
           <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">Absent Records</h3>
         </div>
-        <table class="modern-table">
-          <thead><tr><th class="text-left">Date</th><th class="text-left">Class</th><th class="text-left">Subject</th><th class="text-left">Action</th></tr></thead>
-          <tbody>
-            <tr v-for="r in absences" :key="r.id">
-              <td class="font-semibold text-slate-900">{{ r.date }}</td>
-              <td>{{ r.class_subject?.school_class?.name }}</td>
-              <td>{{ r.class_subject?.subject?.name }}</td>
-              <td>
-                <button
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Date</TableHead>
+              <TableHead>Class</TableHead>
+              <TableHead>Subject</TableHead>
+              <TableHead>Action</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="r in absences" :key="r.id">
+              <TableCell class="font-semibold text-slate-900">{{ r.date }}</TableCell>
+              <TableCell>{{ r.class_subject?.school_class?.name }}</TableCell>
+              <TableCell>{{ r.class_subject?.subject?.name }}</TableCell>
+              <TableCell>
+                <Button
                   v-if="!pendingExcuseIds.has(r.id)"
+                  variant="outline"
+                  size="sm"
                   @click="openForm(r)"
-                  class="btn-secondary py-1 px-3 text-[12px]"
-                >Request Excuse</button>
+                >Request Excuse</Button>
                 <span v-else class="badge bg-amber-50 text-amber-700 ring-1 ring-amber-200">Submitted</span>
-              </td>
-            </tr>
-            <tr v-if="!absences.length">
-              <td colspan="4" class="!text-center !py-10 text-slate-400">No absent records found.</td>
-            </tr>
-          </tbody>
-        </table>
+              </TableCell>
+            </TableRow>
+            <TableRow v-if="!absences.length">
+              <TableCell colspan="4" class="p-0">
+                <Empty class="border-0 rounded-none py-10">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon"><ClipboardCheck class="w-6 h-6" /></EmptyMedia>
+                    <EmptyTitle>No absent records</EmptyTitle>
+                    <EmptyDescription>You have no unexcused absences.</EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
 
       <!-- Submitted requests -->
@@ -48,26 +64,72 @@
           <span class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></span>
           <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">My Requests</h3>
         </div>
-        <table class="modern-table">
-          <thead><tr><th class="text-left">Date</th><th class="text-left">Class</th><th class="text-left">Reason</th><th class="text-left">Status</th><th class="text-left">Note</th></tr></thead>
-          <tbody>
-            <tr v-for="e in requests" :key="e.id">
-              <td class="font-semibold text-slate-900">{{ formatDate(e.attendance?.date) }}</td>
-              <td>{{ e.attendance?.class_subject?.school_class?.name }}</td>
-              <td class="max-w-[180px] truncate text-slate-500">{{ e.reason }}</td>
-              <td><span class="badge" :class="statusConfig[e.status]">{{ e.status }}</span></td>
-              <td class="text-slate-400">{{ e.reviewer_note || '—' }}</td>
-            </tr>
-            <tr v-if="!requests.length">
-              <td colspan="5" class="!text-center !py-10 text-slate-400">No requests submitted yet.</td>
-            </tr>
-          </tbody>
-        </table>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Date</TableHead>
+              <TableHead>Class</TableHead>
+              <TableHead>Reason</TableHead>
+              <TableHead>Status</TableHead>
+              <TableHead>Note</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="e in requests" :key="e.id">
+              <TableCell class="font-semibold text-slate-900">{{ formatDate(e.attendance?.date) }}</TableCell>
+              <TableCell>{{ e.attendance?.class_subject?.school_class?.name }}</TableCell>
+              <TableCell class="max-w-[180px] truncate text-slate-500">{{ e.reason }}</TableCell>
+              <TableCell><span class="badge" :class="statusConfig[e.status]">{{ e.status }}</span></TableCell>
+              <TableCell class="text-slate-400">{{ e.reviewer_note || '—' }}</TableCell>
+            </TableRow>
+            <TableRow v-if="!requests.length">
+              <TableCell colspan="5" class="p-0">
+                <Empty class="border-0 rounded-none py-10">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon"><FileText class="w-6 h-6" /></EmptyMedia>
+                    <EmptyTitle>No requests submitted</EmptyTitle>
+                    <EmptyDescription>Submit an excuse from the absent records above.</EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
 
+    <!-- Excuse submission dialog -->
+    <Dialog :open="showForm" @update:open="(v) => !v && (showForm = false)">
+      <DialogContent class="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Request Excuse</DialogTitle>
+          <DialogDescription v-if="selectedAttendance">
+            {{ selectedAttendance.date }} · {{ selectedAttendance.class_subject?.subject?.name }}
+          </DialogDescription>
+        </DialogHeader>
+        <div class="space-y-1.5">
+          <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Reason</Label>
+          <Textarea
+            v-model="reason"
+            :rows="4"
+            class="resize-none"
+            placeholder="Explain your reason for absence..."
+          />
+        </div>
+        <DialogFooter class="gap-2">
+          <Button variant="outline" @click="showForm = false">Cancel</Button>
+          <Button :disabled="submitting || !reason.trim()" @click="submit">
+            {{ submitting ? 'Submitting...' : 'Submit Request' }}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  </div>
+</template>
+
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { ClipboardCheck, FileText } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 
@@ -131,8 +193,3 @@ const statusConfig: Record<string, string> = {
 
 const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'
 </script>
-
-<style scoped>
-.modal-enter-active, .modal-leave-active { transition: opacity 0.2s; }
-.modal-enter-from, .modal-leave-to { opacity: 0; }
-</style>

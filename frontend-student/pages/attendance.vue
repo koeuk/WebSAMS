@@ -16,13 +16,14 @@
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
           <DatePicker v-model="dateTo" placeholder="End date" @update:model-value="loadAttendance" />
         </div>
-        <button
+        <Button
           v-if="dateFrom || dateTo"
+          variant="outline"
           @click="dateFrom = ''; dateTo = ''; loadAttendance()"
-          class="btn-secondary py-2.5 text-[13px]"
+          class="flex items-center gap-2"
         >
           Clear
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -51,44 +52,48 @@
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
 
     <div v-else class="card overflow-hidden">
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th class="text-left">Date</th>
-            <th class="text-left">Time Slot</th>
-            <th class="text-left">Class</th>
-            <th class="text-left">Subject</th>
-            <th class="text-left">Status</th>
-            <th class="text-left">Remarks</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="record in records" :key="record.id">
-            <td class="font-semibold text-slate-900">{{ record.date }}</td>
-            <td class="text-slate-500">{{ record.time_slot?.name || '-' }}</td>
-            <td>{{ record.class_subject?.school_class?.name }}</td>
-            <td>{{ record.class_subject?.subject?.name }}</td>
-            <td>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Date</TableHead>
+            <TableHead>Time Slot</TableHead>
+            <TableHead>Class</TableHead>
+            <TableHead>Subject</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Remarks</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="record in records" :key="record.id">
+            <TableCell class="font-semibold text-slate-900">{{ record.date }}</TableCell>
+            <TableCell class="text-slate-500">{{ record.time_slot?.name || '-' }}</TableCell>
+            <TableCell>{{ record.class_subject?.school_class?.name }}</TableCell>
+            <TableCell>{{ record.class_subject?.subject?.name }}</TableCell>
+            <TableCell>
               <span class="badge" :class="statusConfig[record.status] ?? ''">{{ record.status }}</span>
-            </td>
-            <td class="text-slate-500">{{ record.remarks || '-' }}</td>
-          </tr>
-          <tr v-if="!records.length">
-            <td colspan="6" class="!text-center !py-14 text-slate-400">
-              <svg class="w-8 h-8 mx-auto mb-3 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              No attendance records found.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+            </TableCell>
+            <TableCell class="text-slate-500">{{ record.remarks || '-' }}</TableCell>
+          </TableRow>
+          <TableRow v-if="!records.length">
+            <TableCell colspan="6" class="p-0">
+              <Empty class="border-0 rounded-none">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon"><ClipboardList class="w-6 h-6" /></EmptyMedia>
+                  <EmptyTitle>No attendance records</EmptyTitle>
+                  <EmptyDescription>No records found for the selected date range.</EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { ClipboardList } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 

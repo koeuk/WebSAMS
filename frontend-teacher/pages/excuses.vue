@@ -18,71 +18,77 @@
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
 
     <div v-else class="card overflow-hidden">
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th class="text-left">Student</th>
-            <th class="text-left">Date</th>
-            <th class="text-left">Class / Subject</th>
-            <th class="text-left">Reason</th>
-            <th class="text-left">Status</th>
-            <th class="text-left">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="r in requests" :key="r.id">
-            <td class="font-semibold text-slate-900">{{ r.student?.name }}</td>
-            <td class="text-slate-500">{{ formatDate(r.attendance?.date) }}</td>
-            <td>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Student</TableHead>
+            <TableHead>Date</TableHead>
+            <TableHead>Class / Subject</TableHead>
+            <TableHead>Reason</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Action</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="r in requests" :key="r.id">
+            <TableCell class="font-semibold text-slate-900">{{ r.student?.name }}</TableCell>
+            <TableCell class="text-slate-500">{{ formatDate(r.attendance?.date) }}</TableCell>
+            <TableCell>
               <span class="font-medium text-slate-700">{{ r.attendance?.class_subject?.school_class?.name }}</span>
               <span class="text-slate-400"> · {{ r.attendance?.class_subject?.subject?.name }}</span>
-            </td>
-            <td class="max-w-[180px] truncate text-slate-500">{{ r.reason }}</td>
-            <td><span class="badge" :class="statusConfig[r.status]">{{ r.status }}</span></td>
-            <td>
-              <button
+            </TableCell>
+            <TableCell class="max-w-[180px] truncate text-slate-500">{{ r.reason }}</TableCell>
+            <TableCell><span class="badge" :class="statusConfig[r.status]">{{ r.status }}</span></TableCell>
+            <TableCell>
+              <Button
                 v-if="r.status === 'pending'"
+                variant="outline"
+                size="sm"
                 @click="openReview(r)"
-                class="btn-secondary py-1 px-3 text-[12px]"
-              >Review</button>
+              >Review</Button>
               <span v-else class="text-slate-400 text-[12px]">—</span>
-            </td>
-          </tr>
-          <tr v-if="!requests.length">
-            <td colspan="6" class="!text-center !py-12 text-slate-400">No {{ filter }} excuse requests.</td>
-          </tr>
-        </tbody>
-      </table>
+            </TableCell>
+          </TableRow>
+          <TableRow v-if="!requests.length">
+            <TableCell colspan="6" class="p-0">
+              <Empty class="border-0 rounded-none">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon"><FileText class="w-6 h-6" /></EmptyMedia>
+                  <EmptyTitle>No {{ filter }} excuse requests</EmptyTitle>
+                  <EmptyDescription>No excuse requests with this status at the moment.</EmptyDescription>
+                </EmptyHeader>
+              </Empty>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
 
-    <!-- Review modal -->
-    <Teleport to="body">
-      <Transition name="modal">
-        <div v-if="reviewing" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm" @click.self="reviewing = null">
-          <div class="w-full max-w-md bg-white rounded-2xl shadow-2xl p-6">
-            <h3 class="text-lg font-bold text-slate-900 mb-1">Review Excuse</h3>
-            <p class="text-[13px] text-slate-500 mb-4">{{ reviewing.student?.name }} — {{ formatDate(reviewing.attendance?.date) }}</p>
-            <div class="bg-slate-50 rounded-xl p-4 mb-4 text-[13px] text-slate-700">{{ reviewing.reason }}</div>
-            <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Note (optional)</label>
-            <textarea v-model="reviewNote" rows="2" class="input-modern w-full resize-none mb-5" placeholder="Add a note..."></textarea>
-            <div class="flex gap-3">
-              <button @click="submitReview('approved')" :disabled="submitting" class="btn-primary flex-1 justify-center py-2.5 text-[13px]">
-                Approve
-              </button>
-              <button @click="submitReview('rejected')" :disabled="submitting" class="flex-1 py-2.5 rounded-xl text-[13px] font-semibold bg-rose-500 text-white hover:bg-rose-600 transition-colors">
-                Reject
-              </button>
-              <button @click="reviewing = null" class="btn-secondary py-2.5 px-4 text-[13px]">Cancel</button>
-            </div>
-          </div>
+    <!-- Review dialog -->
+    <Dialog :open="!!reviewing" @update:open="(v) => !v && (reviewing = null)">
+      <DialogContent class="max-w-md">
+        <DialogHeader>
+          <DialogTitle>Review Excuse</DialogTitle>
+          <DialogDescription>{{ reviewing?.student?.name }} — {{ formatDate(reviewing?.attendance?.date) }}</DialogDescription>
+        </DialogHeader>
+        <div class="bg-slate-50 rounded-xl p-4 text-[13px] text-slate-700">{{ reviewing?.reason }}</div>
+        <div class="space-y-1.5">
+          <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Note (optional)</Label>
+          <RichTextEditor v-model="reviewNote" placeholder="Add a note..." />
         </div>
-      </Transition>
-    </Teleport>
+        <DialogFooter class="gap-2">
+          <Button variant="outline" @click="reviewing = null">Cancel</Button>
+          <Button variant="destructive" :disabled="submitting" @click="submitReview('rejected')">Reject</Button>
+          <Button :disabled="submitting" @click="submitReview('approved')">Approve</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { FileText } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 
@@ -129,8 +135,3 @@ const statusConfig: Record<string, string> = {
 
 const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'
 </script>
-
-<style scoped>
-.modal-enter-active, .modal-leave-active { transition: opacity 0.2s; }
-.modal-enter-from, .modal-leave-to { opacity: 0; }
-</style>

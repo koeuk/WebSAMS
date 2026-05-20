@@ -27,32 +27,32 @@
           <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
           </svg>
-          <input
+          <Input
             v-model="search"
             type="text"
             placeholder="Search students..."
-            class="input-modern pl-9"
+            class="pl-9"
           />
         </div>
       </div>
 
       <!-- Table -->
       <div class="card overflow-hidden">
-        <table class="modern-table">
-          <thead>
-            <tr>
-              <th class="text-left w-12">#</th>
-              <th class="text-left">Student</th>
-              <th class="text-left">Email</th>
-              <th class="text-left">ID Number</th>
-              <th class="text-left">Year</th>
-              <th class="text-left">Gender</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(student, index) in filtered" :key="student.id">
-              <td class="text-slate-400 font-mono text-[13px]">{{ index + 1 }}</td>
-              <td>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead class="w-12">#</TableHead>
+              <TableHead>Student</TableHead>
+              <TableHead>Email</TableHead>
+              <TableHead>ID Number</TableHead>
+              <TableHead>Year</TableHead>
+              <TableHead>Gender</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="(student, index) in filtered" :key="student.id">
+              <TableCell class="text-slate-400 font-mono text-[13px]">{{ index + 1 }}</TableCell>
+              <TableCell>
                 <div class="flex items-center gap-3">
                   <div
                     class="w-8 h-8 rounded-lg flex items-center justify-center text-white text-xs font-bold shrink-0"
@@ -62,24 +62,24 @@
                   </div>
                   <span class="font-semibold text-slate-900">{{ student.name }}</span>
                 </div>
-              </td>
-              <td class="text-slate-500">{{ student.email }}</td>
-              <td class="font-mono text-[13px] text-slate-400">{{ student.id_number || '-' }}</td>
-              <td>
+              </TableCell>
+              <TableCell class="text-slate-500">{{ student.email }}</TableCell>
+              <TableCell class="font-mono text-[13px] text-slate-400">{{ student.id_number || '-' }}</TableCell>
+              <TableCell>
                 <span v-if="student.year_level" class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">
                   Year {{ student.year_level }}
                 </span>
                 <span v-else class="text-slate-400">-</span>
-              </td>
-              <td class="capitalize text-slate-500">{{ student.gender || '-' }}</td>
-            </tr>
-            <tr v-if="!filtered.length">
-              <td colspan="6" class="!text-center !py-12 text-slate-400">
+              </TableCell>
+              <TableCell class="capitalize text-slate-500">{{ student.gender || '-' }}</TableCell>
+            </TableRow>
+            <TableRow v-if="!filtered.length">
+              <TableCell colspan="6" class="text-center py-12 text-slate-400">
                 {{ search ? 'No students match your search.' : 'No students enrolled.' }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
 

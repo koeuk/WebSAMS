@@ -29,13 +29,21 @@
       </NuxtLink>
     </div>
 
-    <div v-else class="card p-12 text-center text-slate-400">
-      No classes assigned to you.
+    <div v-else class="card overflow-hidden">
+      <Empty class="border-0 rounded-none">
+        <EmptyHeader>
+          <EmptyMedia variant="icon"><BookOpen class="w-6 h-6" /></EmptyMedia>
+          <EmptyTitle>No classes assigned</EmptyTitle>
+          <EmptyDescription>You have no classes assigned for this semester.</EmptyDescription>
+        </EmptyHeader>
+      </Empty>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { BookOpen } from 'lucide-vue-next'
+
 definePageMeta({ middleware: 'auth' })
 
 const { apiFetch } = useApi()

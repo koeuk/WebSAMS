@@ -27,14 +27,22 @@
         </div>
       </div>
 
-      <div v-if="!notifications.data?.length" class="card p-12 text-center text-slate-400">
-        No notifications.
+      <div v-if="!notifications.data?.length" class="card overflow-hidden">
+        <Empty class="border-0 rounded-none">
+          <EmptyHeader>
+            <EmptyMedia variant="icon"><Bell class="w-6 h-6" /></EmptyMedia>
+            <EmptyTitle>No notifications</EmptyTitle>
+            <EmptyDescription>You're all caught up.</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Bell } from 'lucide-vue-next'
+
 definePageMeta({ middleware: 'auth' })
 
 const { apiFetch } = useApi()

@@ -105,27 +105,27 @@
           <span class="w-1.5 h-1.5 rounded-full" style="background:#d4a017;"></span>
           <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">Enrolled Classes</h3>
         </div>
-        <table class="modern-table">
-          <thead>
-            <tr>
-              <th class="text-left">Class</th>
-              <th class="text-left">Section</th>
-              <th class="text-left">Academic Year</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="c in profile.enrolled_classes" :key="c.id">
-              <td class="font-semibold text-slate-900">{{ c.name }}</td>
-              <td>{{ c.section || '-' }}</td>
-              <td>
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Class</TableHead>
+              <TableHead>Section</TableHead>
+              <TableHead>Academic Year</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            <TableRow v-for="c in profile.enrolled_classes" :key="c.id">
+              <TableCell class="font-semibold text-slate-900">{{ c.name }}</TableCell>
+              <TableCell>{{ c.section || '-' }}</TableCell>
+              <TableCell>
                 <span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">{{ c.academic_year }}</span>
-              </td>
-            </tr>
-            <tr v-if="!profile.enrolled_classes?.length">
-              <td colspan="3" class="!text-center !py-8 text-slate-400">Not enrolled in any classes.</td>
-            </tr>
-          </tbody>
-        </table>
+              </TableCell>
+            </TableRow>
+            <TableRow v-if="!profile.enrolled_classes?.length">
+              <TableCell colspan="3" class="text-center py-8 text-slate-400">Not enrolled in any classes.</TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
       </div>
     </template>
 

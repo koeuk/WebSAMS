@@ -46,7 +46,7 @@
                 </div>
                 <div>
                     <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Description</Label>
-                    <Textarea v-model="form.description" rows="3" placeholder="Optional description…" />
+                    <RichTextEditor v-model="form.description" placeholder="Optional description…" />
                 </div>
             </div>
 
@@ -71,8 +71,8 @@ import { toast } from 'vue-sonner'
 import ModalForm from '@/Components/ModalForm.vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
-import { Textarea } from '@/Components/ui/textarea'
 import { Button } from '@/Components/ui/button'
+import RichTextEditor from '@/Components/RichTextEditor.vue'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
 
 const props = defineProps({

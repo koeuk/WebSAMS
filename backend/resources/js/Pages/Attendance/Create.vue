@@ -72,7 +72,7 @@
                         </div>
                         <div>
                             <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Remarks</Label>
-                            <Textarea v-model="form.remarks" rows="2" placeholder="Optional" />
+                            <RichTextEditor v-model="form.remarks" placeholder="Optional remarks…" />
                         </div>
                         <div class="pt-2">
                             <Button type="submit" :disabled="form.processing" class="flex items-center gap-2">
@@ -93,8 +93,8 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import DatePicker from '@/Components/DatePicker.vue';
 import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';
-import { Textarea } from '@/Components/ui/textarea';
 import { Card, CardContent } from '@/Components/ui/card';
+import RichTextEditor from '@/Components/RichTextEditor.vue';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 
 const props = defineProps({ classSubjects: Array, students: Array, timeSlots: Array, statuses: Array });

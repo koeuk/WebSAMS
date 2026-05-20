@@ -12,8 +12,8 @@
       <div class="card p-6 animate-fade-in-up">
         <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-5">Session Setup</h3>
         <div class="space-y-4">
-          <div>
-            <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Class / Subject</label>
+          <div class="space-y-1.5">
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Class / Subject</Label>
             <AppCombobox
               v-model="selectedClass"
               :options="classOptions"
@@ -22,12 +22,12 @@
               class="w-full"
             />
           </div>
-          <div>
-            <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Date</label>
+          <div class="space-y-1.5">
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Date</Label>
             <AppDatePicker v-model="selectedDate" class="w-full" />
           </div>
-          <div>
-            <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Time Slot (optional)</label>
+          <div class="space-y-1.5">
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Time Slot (optional)</Label>
             <AppCombobox
               v-model="selectedSlot"
               :options="timeSlotOptions"
@@ -36,18 +36,18 @@
               class="w-full"
             />
           </div>
-          <div>
-            <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Valid for (minutes)</label>
-            <input v-model.number="duration" type="number" min="5" max="120" class="input-modern w-full" />
+          <div class="space-y-1.5">
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Valid for (minutes)</Label>
+            <Input v-model.number="duration" type="number" min="5" max="120" class="w-full" />
           </div>
-          <button
+          <Button
             @click="generate"
             :disabled="!selectedClass || generating"
-            class="btn-primary w-full justify-center py-3 text-[14px] mt-2"
+            class="w-full justify-center py-3 h-auto text-[14px] mt-2 flex items-center gap-2"
           >
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/></svg>
             {{ generating ? 'Generating...' : 'Generate QR Code' }}
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -65,10 +65,21 @@
             class="rounded-xl shadow-lg mb-4 w-48 h-48"
           />
           <p class="text-[11px] font-mono text-slate-400 text-center break-all px-4 mb-4">{{ activeSession.token }}</p>
-          <button @click="deactivate" class="btn-secondary py-2 px-5 text-[13px] text-rose-600 hover:text-rose-700 hover:bg-rose-50">
+          <Button variant="outline" @click="deactivate" class="text-rose-600 hover:text-rose-700 hover:bg-rose-50">
             Deactivate
-          </button>
+          </Button>
         </template>
+        <template v-else>
+          <div class="text-center text-slate-400">
+            <svg class="w-16 h-16 mx-auto mb-3 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/></svg>
+            <p class="text-sm">No active session</p>
+            <p class="text-[12px] mt-1">Configure and generate a QR code</p>
+          </div>
+        </template>
+      </div>
+    </div>
+  </div>
+</template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'

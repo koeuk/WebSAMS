@@ -58,7 +58,15 @@
                             </TableCell>
                         </TableRow>
                         <TableRow v-if="!subjects.data?.length">
-                            <TableCell colspan="4" class="text-center py-12 text-slate-400">No subjects found.</TableCell>
+                            <TableCell colspan="4" class="p-0">
+                                <Empty class="border-0 rounded-none">
+                                    <EmptyHeader>
+                                        <EmptyMedia variant="icon"><Book class="w-6 h-6" /></EmptyMedia>
+                                        <EmptyTitle>No subjects found</EmptyTitle>
+                                        <EmptyDescription>Try adjusting your filters or create a new subject.</EmptyDescription>
+                                    </EmptyHeader>
+                                </Empty>
+                            </TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
@@ -84,6 +92,8 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
+import { Book } from 'lucide-vue-next';
 
 const props = defineProps({ subjects: Object, courses: Array, filters: Object });
 const search = ref(props.filters?.search || '');

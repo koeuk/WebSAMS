@@ -8,11 +8,14 @@
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
 
     <template v-else>
-      <div v-if="!announcements.length" class="card p-14 text-center text-slate-400">
-        <svg class="w-8 h-8 mx-auto mb-3 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-          <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.82a19.79 19.79 0 01-3.07-8.67A2 2 0 012 .18h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
-        </svg>
-        No announcements yet.
+      <div v-if="!announcements.length" class="card overflow-hidden">
+        <Empty class="border-0 rounded-none">
+          <EmptyHeader>
+            <EmptyMedia variant="icon"><Megaphone class="w-6 h-6" /></EmptyMedia>
+            <EmptyTitle>No announcements yet</EmptyTitle>
+            <EmptyDescription>Check back later for updates from your teachers.</EmptyDescription>
+          </EmptyHeader>
+        </Empty>
       </div>
 
       <div class="space-y-4 stagger-children">
@@ -31,8 +34,8 @@
                 {{ a.author?.name }} · {{ formatDate(a.published_at) }}
                 <span v-if="a.school_class"> · {{ a.school_class?.name }}</span>
               </p>
-              <p v-if="expanded !== a.id" class="text-[13px] text-slate-500 mt-2 line-clamp-2">{{ a.body }}</p>
-              <p v-else class="text-[13px] text-slate-600 mt-2 whitespace-pre-wrap leading-relaxed">{{ a.body }}</p>
+              <div v-if="expanded !== a.id" class="text-[13px] text-slate-500 mt-2 line-clamp-2 prose prose-sm max-w-none" v-html="a.body"></div>
+              <div v-else class="text-[13px] text-slate-600 mt-2 prose prose-sm max-w-none" v-html="a.body"></div>
             </div>
             <svg
               class="w-4 h-4 text-slate-400 shrink-0 transition-transform duration-200"
@@ -46,6 +49,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { Megaphone } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 
