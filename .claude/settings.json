@@ -19,7 +19,9 @@
       "Bash(sed -n '161,172p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Pages/Attendance/Index.vue)",
       "Bash(sed -n '150,165p' /home/koeuk/Projects/WebSAMS/backend/resources/js/Pages/StudentTracking/Index.vue)",
       "Bash(npx shadcn-vue@latest add popover calendar command radio-group)",
-      "Bash(yes N)"
+      "Bash(yes N)",
+      "Bash(npx shadcn-vue@latest add table badge separator textarea radio-group)",
+      "Bash(npx shadcn-vue@latest add table dialog textarea badge separator popover command)"
     ]
   }
 }
