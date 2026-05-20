@@ -43,6 +43,10 @@ class StudentTrackingController extends Controller
             ->allowedFilters(
                 AllowedFilter::callback('class_id', fn ($q, $v) => $q->whereHas('enrolledClasses', fn ($q) => $q->where('school_classes.id', $v))),
                 AllowedFilter::exact('year_level'),
+                AllowedFilter::callback('semester_id',    fn ($q, $v) => null),
+                AllowedFilter::callback('academic_year',  fn ($q, $v) => null),
+                AllowedFilter::callback('course_id',      fn ($q, $v) => null),
+                AllowedFilter::callback('threshold',      fn ($q, $v) => null),
             )
             ->get();
 
