@@ -59,20 +59,21 @@
                     <TableHeader>
                         <TableRow>
                             <TableHead>Student</TableHead>
-                            <TableHead class="text-center">Present</TableHead>
-                            <TableHead class="text-center">Absent</TableHead>
-                            <TableHead class="text-center">Late</TableHead>
-                            <TableHead class="text-center">Excused</TableHead>
+                            <TableHead>Status</TableHead>
                             <TableHead>Remarks</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         <TableRow v-for="student in students" :key="student.id">
                             <TableCell class="font-semibold text-slate-900">{{ student.name }}</TableCell>
-                            <TableCell class="text-center"><input type="radio" :name="`s-${student.id}`" value="present" v-model="attendances[student.id].status" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500" /></TableCell>
-                            <TableCell class="text-center"><input type="radio" :name="`s-${student.id}`" value="absent" v-model="attendances[student.id].status" class="w-4 h-4 text-rose-600 focus:ring-rose-500" /></TableCell>
-                            <TableCell class="text-center"><input type="radio" :name="`s-${student.id}`" value="late" v-model="attendances[student.id].status" class="w-4 h-4 text-amber-600 focus:ring-amber-500" /></TableCell>
-                            <TableCell class="text-center"><input type="radio" :name="`s-${student.id}`" value="excused" v-model="attendances[student.id].status" class="w-4 h-4 text-sky-600 focus:ring-sky-500" /></TableCell>
+                            <TableCell>
+                                <RadioGroup v-model="attendances[student.id].status" class="flex gap-4">
+                                    <div v-for="s in statusList" :key="s.value" class="flex items-center gap-1.5">
+                                        <RadioGroupItem :value="s.value" :id="`${s.value}-${student.id}`" :class="s.radioClass" />
+                                        <Label :for="`${s.value}-${student.id}`" class="text-[13px] cursor-pointer" :class="s.labelClass">{{ s.label }}</Label>
+                                    </div>
+                                </RadioGroup>
+                            </TableCell>
                             <TableCell><Input v-model="attendances[student.id].remarks" type="text" class="py-1.5 h-auto" placeholder="Optional" /></TableCell>
                         </TableRow>
                     </TableBody>
@@ -111,9 +112,11 @@ import FlashMessage from '@/Components/FlashMessage.vue';
 import DatePicker from '@/Components/DatePicker.vue';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
+import { Label } from '@/Components/ui/label';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group';
 
 const props = defineProps({ classSubjects: Array, timeSlots: Array });
 
@@ -162,10 +165,10 @@ const submit = () => {
     router.post('/admin/bulk-attendance', data);
 };
 
-const statusColors = {
-    present: 'bg-emerald-100 text-emerald-700 border-emerald-300',
-    absent: 'bg-rose-100 text-rose-700 border-rose-300',
-    late: 'bg-amber-100 text-amber-700 border-amber-300',
-    excused: 'bg-sky-100 text-sky-700 border-sky-300',
-};
+const statusList = [
+    { value: 'present', label: 'Present', radioClass: 'border-emerald-500 text-emerald-500', labelClass: 'text-emerald-700' },
+    { value: 'absent',  label: 'Absent',  radioClass: 'border-rose-500 text-rose-500',       labelClass: 'text-rose-700' },
+    { value: 'late',    label: 'Late',    radioClass: 'border-amber-500 text-amber-500',      labelClass: 'text-amber-700' },
+    { value: 'excused', label: 'Excused', radioClass: 'border-sky-500 text-sky-500',          labelClass: 'text-sky-700' },
+];
 </script>

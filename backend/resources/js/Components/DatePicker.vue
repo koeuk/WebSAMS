@@ -1,12 +1,12 @@
 <template>
-    <PopoverRoot :open="open" @update:open="(v) => open = v">
+    <Popover :open="open" @update:open="(v) => open = v">
         <PopoverTrigger as-child>
             <button
                 type="button"
                 class="flex items-center gap-2 h-[38px] px-3 py-2 text-[13px] border border-slate-200 rounded-lg bg-white hover:bg-slate-50 hover:border-slate-300 transition-all shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-400 min-w-[160px] w-full"
                 :class="modelValue ? 'text-slate-700 font-medium' : 'text-slate-400'"
             >
-                <Calendar class="w-4 h-4 shrink-0" :class="modelValue ? 'text-blue-500' : 'text-slate-400'" />
+                <CalendarIcon class="w-4 h-4 shrink-0" :class="modelValue ? 'text-blue-500' : 'text-slate-400'" />
                 <span class="flex-1 text-left">{{ displayValue || placeholder }}</span>
             </button>
         </PopoverTrigger>
@@ -14,7 +14,7 @@
         <PopoverContent
             :side-offset="4"
             align="start"
-            class="z-50 w-[272px] rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60 p-3 animate-fade-in"
+            class="z-50 w-[272px] rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-200/60 p-3"
         >
             <!-- Month navigation -->
             <div class="flex items-center justify-between mb-3">
@@ -65,16 +65,16 @@
                 </button>
             </div>
         </PopoverContent>
-    </PopoverRoot>
+    </Popover>
 </template>
 
 <script setup>
 import { ref, computed, watch } from 'vue';
-import { PopoverRoot, PopoverTrigger, PopoverContent } from 'reka-ui';
-import { Calendar, ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { Popover, PopoverTrigger, PopoverContent } from '@/Components/ui/popover';
+import { Calendar as CalendarIcon, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 
 const props = defineProps({
-    modelValue: { type: String, default: '' },
+    modelValue:  { type: String, default: '' },
     placeholder: { type: String, default: 'Pick a date' },
 });
 const emit = defineEmits(['update:modelValue']);
