@@ -38,42 +38,45 @@
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Date</label>
           <AppDatePicker v-model="selectedDate" />
         </div>
-        <button v-if="students.length" @click="markAllPresent" class="btn-secondary">
+        <Button v-if="students.length" variant="outline" @click="markAllPresent" class="flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
           Mark All Present
-        </button>
+        </Button>
       </div>
     </div>
 
     <!-- Student Table -->
     <div v-if="students.length" class="card overflow-hidden">
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th class="text-left">Student</th>
-            <th class="text-center">Present</th>
-            <th class="text-center">Absent</th>
-            <th class="text-center">Late</th>
-            <th class="text-center">Excused</th>
-            <th class="text-left">Remarks</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="student in students" :key="student.id">
-            <td class="font-semibold text-slate-900">{{ student.name }}</td>
-            <td class="text-center"><input type="radio" :name="`status-${student.id}`" value="present" v-model="attendances[student.id].status" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500" /></td>
-            <td class="text-center"><input type="radio" :name="`status-${student.id}`" value="absent" v-model="attendances[student.id].status" class="w-4 h-4 text-rose-600 focus:ring-rose-500" /></td>
-            <td class="text-center"><input type="radio" :name="`status-${student.id}`" value="late" v-model="attendances[student.id].status" class="w-4 h-4 text-amber-600 focus:ring-amber-500" /></td>
-            <td class="text-center"><input type="radio" :name="`status-${student.id}`" value="excused" v-model="attendances[student.id].status" class="w-4 h-4 text-sky-600 focus:ring-sky-500" /></td>
-            <td><input v-model="attendances[student.id].remarks" type="text" class="input-modern !py-1.5" placeholder="Optional" /></td>
-          </tr>
-        </tbody>
-      </table>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Student</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Remarks</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="student in students" :key="student.id">
+            <TableCell class="font-semibold text-slate-900">{{ student.name }}</TableCell>
+            <TableCell>
+              <RadioGroup v-model="attendances[student.id].status" class="flex gap-4">
+                <div v-for="s in statusList" :key="s.value" class="flex items-center gap-1.5">
+                  <RadioGroupItem :value="s.value" :id="`${s.value}-${student.id}`" :class="s.radioClass" />
+                  <Label :for="`${s.value}-${student.id}`" class="text-[13px] cursor-pointer" :class="s.labelClass">{{ s.label }}</Label>
+                </div>
+              </RadioGroup>
+            </TableCell>
+            <TableCell>
+              <Input v-model="attendances[student.id].remarks" type="text" class="py-1.5 h-auto" placeholder="Optional" />
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
       <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
-        <button @click="submit" :disabled="submitting" class="btn-primary">
+        <Button @click="submit" :disabled="submitting" class="flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
           {{ submitting ? 'Submitting...' : 'Submit Attendance' }}
-        </button>
+        </Button>
       </div>
     </div>
 
@@ -163,4 +166,11 @@ const submit = async () => {
   }
   submitting.value = false
 }
+
+const statusList = [
+  { value: 'present', label: 'Present', radioClass: 'border-emerald-500 text-emerald-500', labelClass: 'text-emerald-700' },
+  { value: 'absent',  label: 'Absent',  radioClass: 'border-rose-500 text-rose-500',       labelClass: 'text-rose-700' },
+  { value: 'late',    label: 'Late',    radioClass: 'border-amber-500 text-amber-500',      labelClass: 'text-amber-700' },
+  { value: 'excused', label: 'Excused', radioClass: 'border-sky-500 text-sky-500',          labelClass: 'text-sky-700' },
+]
 </script>

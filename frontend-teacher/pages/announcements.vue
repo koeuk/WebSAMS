@@ -5,10 +5,10 @@
         <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Announcements</h2>
         <p class="text-sm text-slate-500 mt-1">Post and manage class announcements</p>
       </div>
-      <button @click="openNew" class="btn-primary py-2.5 text-[13px]">
+      <Button @click="openNew" class="flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
         New Announcement
-      </button>
+      </Button>
     </div>
 
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
@@ -28,49 +28,47 @@
             <p class="text-[11px] text-slate-400 mt-2">Published {{ formatDate(a.published_at) }}</p>
           </div>
           <div class="flex gap-2 shrink-0">
-            <button @click="openEdit(a)" class="btn-secondary py-1.5 px-3 text-[12px]">Edit</button>
-            <button @click="remove(a)" class="py-1.5 px-3 rounded-lg text-[12px] font-medium text-rose-500 hover:bg-rose-50 transition-colors">Delete</button>
+            <Button variant="outline" size="sm" @click="openEdit(a)">Edit</Button>
+            <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="remove(a)">Delete</Button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Form modal -->
-    <Teleport to="body">
-      <Transition name="modal">
-        <div v-if="showForm" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm" @click.self="showForm = false">
-          <div class="w-full max-w-lg bg-white rounded-2xl shadow-2xl p-6">
-            <h3 class="text-lg font-bold text-slate-900 mb-5">{{ editing ? 'Edit' : 'New' }} Announcement</h3>
-            <div class="space-y-4">
-              <div>
-                <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Title</label>
-                <input v-model="form.title" type="text" class="input-modern w-full" placeholder="Announcement title..." />
-              </div>
-              <div>
-                <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Message</label>
-                <textarea v-model="form.body" rows="4" class="input-modern w-full resize-none" placeholder="Write your announcement..."></textarea>
-              </div>
-              <div>
-                <label class="block text-[12px] font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Audience</label>
-                <AppCombobox
-                  v-model="form.audience"
-                  :options="audienceOptions"
-                  placeholder="Select audience..."
-                  search-placeholder="Search..."
-                  class="w-full"
-                />
-              </div>
-            </div>
-            <div class="flex gap-3 mt-6">
-              <button @click="save" :disabled="saving || !form.title || !form.body" class="btn-primary flex-1 justify-center py-2.5 text-[13px]">
-                {{ saving ? 'Saving...' : (editing ? 'Update' : 'Publish') }}
-              </button>
-              <button @click="showForm = false" class="btn-secondary py-2.5 px-5 text-[13px]">Cancel</button>
-            </div>
+    <!-- Form dialog -->
+    <Dialog :open="showForm" @update:open="(v) => !v && (showForm = false)">
+      <DialogContent class="max-w-lg">
+        <DialogHeader>
+          <DialogTitle>{{ editing ? 'Edit' : 'New' }} Announcement</DialogTitle>
+        </DialogHeader>
+        <div class="space-y-4">
+          <div class="space-y-1.5">
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Title</Label>
+            <Input v-model="form.title" type="text" placeholder="Announcement title..." />
+          </div>
+          <div class="space-y-1.5">
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Message</Label>
+            <Textarea v-model="form.body" :rows="4" class="resize-none" placeholder="Write your announcement..." />
+          </div>
+          <div class="space-y-1.5">
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Audience</Label>
+            <AppCombobox
+              v-model="form.audience"
+              :options="audienceOptions"
+              placeholder="Select audience..."
+              search-placeholder="Search..."
+              class="w-full"
+            />
           </div>
         </div>
-      </Transition>
-    </Teleport>
+        <DialogFooter class="gap-2 mt-2">
+          <Button variant="outline" @click="showForm = false">Cancel</Button>
+          <Button @click="save" :disabled="saving || !form.title || !form.body">
+            {{ saving ? 'Saving...' : (editing ? 'Update' : 'Publish') }}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   </div>
 </template>
 
@@ -134,8 +132,3 @@ const audienceConfig: Record<string, string> = {
 
 const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '—'
 </script>
-
-<style scoped>
-.modal-enter-active, .modal-leave-active { transition: opacity 0.2s; }
-.modal-enter-from, .modal-leave-to { opacity: 0; }
-</style>

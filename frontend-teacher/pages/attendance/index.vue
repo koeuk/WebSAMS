@@ -25,45 +25,46 @@
           <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
           <AppDatePicker v-model="dateTo" placeholder="To date" @update:model-value="loadAttendance" />
         </div>
-        <button
+        <Button
           v-if="hasFilters"
+          variant="outline"
           @click="clearFilters"
-          class="btn-secondary self-end py-2.5 text-[13px] text-slate-500"
+          class="self-end flex items-center gap-2 text-slate-500"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
           Clear Filters
-        </button>
+        </Button>
       </div>
     </div>
 
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
 
     <div v-else class="card overflow-hidden">
-      <table class="modern-table">
-        <thead>
-          <tr>
-            <th class="text-left">Date</th>
-            <th class="text-left">Time Slot</th>
-            <th class="text-left">Student</th>
-            <th class="text-left">Class</th>
-            <th class="text-left">Subject</th>
-            <th class="text-left">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="record in attendance.data" :key="record.id">
-            <td class="font-medium text-slate-900">{{ record.date }}</td>
-            <td>{{ record.time_slot?.name || '-' }}</td>
-            <td class="font-semibold text-slate-900">{{ record.student?.name }}</td>
-            <td>{{ record.class_subject?.school_class?.name }}</td>
-            <td>{{ record.class_subject?.subject?.name }}</td>
-            <td><span class="badge" :class="statusClass(record.status)">{{ record.status }}</span></td>
-          </tr>
-          <tr v-if="!attendance.data?.length">
-            <td colspan="6" class="!text-center !py-12 text-slate-400">No attendance records found.</td>
-          </tr>
-        </tbody>
-      </table>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Date</TableHead>
+            <TableHead>Time Slot</TableHead>
+            <TableHead>Student</TableHead>
+            <TableHead>Class</TableHead>
+            <TableHead>Subject</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow v-for="record in attendance.data" :key="record.id">
+            <TableCell class="font-medium text-slate-900">{{ record.date }}</TableCell>
+            <TableCell>{{ record.time_slot?.name || '-' }}</TableCell>
+            <TableCell class="font-semibold text-slate-900">{{ record.student?.name }}</TableCell>
+            <TableCell>{{ record.class_subject?.school_class?.name }}</TableCell>
+            <TableCell>{{ record.class_subject?.subject?.name }}</TableCell>
+            <TableCell><span class="badge" :class="statusClass(record.status)">{{ record.status }}</span></TableCell>
+          </TableRow>
+          <TableRow v-if="!attendance.data?.length">
+            <TableCell colspan="6" class="text-center py-12 text-slate-400">No attendance records found.</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
     </div>
   </div>
 </template>

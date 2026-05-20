@@ -88,24 +88,21 @@
         </div>
 
         <form @submit.prevent="submit" class="space-y-5">
-          <div>
-            <label class="block text-[13px] font-semibold text-slate-600 mb-1.5">Email address</label>
-            <input
+          <div class="space-y-1.5">
+            <Label class="text-[13px] font-semibold text-slate-600">Email address</Label>
+            <Input
               v-model="email" type="email" required autofocus
-              class="input-modern"
               placeholder="student@websams.com"
             />
           </div>
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label class="block text-[13px] font-semibold text-slate-600">Password</label>
-            </div>
+          <div class="space-y-1.5">
+            <Label class="text-[13px] font-semibold text-slate-600">Password</Label>
             <div class="relative">
-              <input
+              <Input
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 required
-                class="input-modern pr-10"
+                class="pr-10"
                 placeholder="••••••••"
               />
               <button
@@ -124,10 +121,10 @@
             </div>
           </div>
 
-          <button
+          <Button
             type="submit"
             :disabled="loading"
-            class="btn-primary w-full justify-center py-3 text-[14px]"
+            class="w-full py-3 h-auto text-[14px]"
           >
             <svg v-if="!loading" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
               <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
@@ -137,7 +134,7 @@
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
             {{ loading ? 'Signing in...' : 'Sign In' }}
-          </button>
+          </Button>
         </form>
 
         <p class="text-center text-[12px] text-slate-400 mt-8">
