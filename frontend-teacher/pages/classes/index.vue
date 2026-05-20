@@ -42,6 +42,8 @@
 </template>
 
 <script setup lang="ts">
+import { BookOpen } from 'lucide-vue-next'
+
 definePageMeta({ middleware: 'auth' })
 
 const { apiFetch } = useApi()

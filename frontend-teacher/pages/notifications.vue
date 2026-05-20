@@ -17,12 +17,13 @@
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
 
     <div v-else class="card overflow-hidden">
-      <div v-if="!notifications.length" class="p-14 text-center text-slate-400">
-        <svg class="w-8 h-8 mx-auto mb-3 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-          <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
-        </svg>
-        No notifications yet.
-      </div>
+      <Empty v-if="!notifications.length" class="border-0 rounded-none">
+        <EmptyHeader>
+          <EmptyMedia variant="icon"><Bell class="w-6 h-6" /></EmptyMedia>
+          <EmptyTitle>No notifications yet</EmptyTitle>
+          <EmptyDescription>You're all caught up.</EmptyDescription>
+        </EmptyHeader>
+      </Empty>
       <div
         v-for="n in notifications" :key="n.id"
         class="flex items-start gap-4 px-5 py-4 border-b border-slate-50 last:border-0 cursor-pointer hover:bg-slate-50/70 transition-colors"
@@ -44,6 +45,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { Bell } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 

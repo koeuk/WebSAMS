@@ -75,11 +75,14 @@
             <TableCell class="text-slate-500">{{ record.remarks || '-' }}</TableCell>
           </TableRow>
           <TableRow v-if="!records.length">
-            <TableCell colspan="6" class="text-center py-14 text-slate-400">
-              <svg class="w-8 h-8 mx-auto mb-3 text-slate-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
-              </svg>
-              No attendance records found.
+            <TableCell colspan="6" class="p-0">
+              <Empty class="border-0 rounded-none">
+                <EmptyHeader>
+                  <EmptyMedia variant="icon"><ClipboardList class="w-6 h-6" /></EmptyMedia>
+                  <EmptyTitle>No attendance records</EmptyTitle>
+                  <EmptyDescription>No records found for the selected date range.</EmptyDescription>
+                </EmptyHeader>
+              </Empty>
             </TableCell>
           </TableRow>
         </TableBody>
@@ -90,6 +93,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { ClipboardList } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 

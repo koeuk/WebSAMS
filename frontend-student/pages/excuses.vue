@@ -44,7 +44,15 @@
               </TableCell>
             </TableRow>
             <TableRow v-if="!absences.length">
-              <TableCell colspan="4" class="text-center py-10 text-slate-400">No absent records found.</TableCell>
+              <TableCell colspan="4" class="p-0">
+                <Empty class="border-0 rounded-none py-10">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon"><ClipboardCheck class="w-6 h-6" /></EmptyMedia>
+                    <EmptyTitle>No absent records</EmptyTitle>
+                    <EmptyDescription>You have no unexcused absences.</EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -75,7 +83,15 @@
               <TableCell class="text-slate-400">{{ e.reviewer_note || '—' }}</TableCell>
             </TableRow>
             <TableRow v-if="!requests.length">
-              <TableCell colspan="5" class="text-center py-10 text-slate-400">No requests submitted yet.</TableCell>
+              <TableCell colspan="5" class="p-0">
+                <Empty class="border-0 rounded-none py-10">
+                  <EmptyHeader>
+                    <EmptyMedia variant="icon"><FileText class="w-6 h-6" /></EmptyMedia>
+                    <EmptyTitle>No requests submitted</EmptyTitle>
+                    <EmptyDescription>Submit an excuse from the absent records above.</EmptyDescription>
+                  </EmptyHeader>
+                </Empty>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -113,6 +129,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { ClipboardCheck, FileText } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 

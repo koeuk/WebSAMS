@@ -30,7 +30,7 @@
               <h3 class="font-semibold text-slate-900">{{ a.title }}</h3>
               <span class="badge" :class="audienceConfig[a.audience] ?? ''">{{ a.audience }}</span>
             </div>
-            <p class="text-[13px] text-slate-500 line-clamp-2">{{ a.body }}</p>
+            <div class="text-[13px] text-slate-500 line-clamp-2 prose prose-sm max-w-none" v-html="a.body"></div>
             <p class="text-[11px] text-slate-400 mt-2">Published {{ formatDate(a.published_at) }}</p>
           </div>
           <div class="flex gap-2 shrink-0">
@@ -80,6 +80,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { Megaphone } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 

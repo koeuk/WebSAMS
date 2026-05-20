@@ -79,6 +79,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
+import { ClipboardList } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 

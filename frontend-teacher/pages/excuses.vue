@@ -88,6 +88,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { FileText } from 'lucide-vue-next'
 
 definePageMeta({ middleware: 'auth' })
 
