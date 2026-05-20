@@ -49,28 +49,31 @@
 
             <!-- User section at bottom -->
             <div class="px-3 pb-4 pt-2 border-t border-white/[0.06]">
-                <Link :href="`/admin/users/${user.id}/edit`" class="flex items-center gap-3 px-3 py-3 rounded-xl hover:bg-white/[0.05] transition-colors">
-                    <div class="relative">
-                        <img v-if="user?.profile_photo" :src="`/storage/${user.profile_photo}`" class="h-9 w-9 rounded-lg object-cover ring-2 ring-white/10" />
-                        <div v-else class="h-9 w-9 rounded-lg bg-gradient-to-br from-beltei-gold to-beltei-gold-dark flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/10">
-                            {{ user?.name?.charAt(0) }}
+                <div class="flex items-center gap-2 px-2 py-2 rounded-xl hover:bg-white/[0.05] transition-colors">
+                    <Link :href="`/admin/users/${user.id}/edit`" class="flex items-center gap-3 flex-1 min-w-0">
+                        <div class="relative shrink-0">
+                            <img v-if="user?.profile_photo" :src="`/storage/${user.profile_photo}`" class="h-9 w-9 rounded-lg object-cover ring-2 ring-white/10" />
+                            <div v-else class="h-9 w-9 rounded-lg bg-gradient-to-br from-beltei-gold to-beltei-gold-dark flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/10">
+                                {{ user?.name?.charAt(0) }}
+                            </div>
+                            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-sidebar"></div>
                         </div>
-                        <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-sidebar"></div>
-                    </div>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-[13px] font-semibold text-white truncate">{{ user?.name }}</p>
-                        <p class="text-[11px] text-slate-500 truncate">Administrator</p>
-                    </div>
-                </Link>
-                <Link
-                    href="/logout"
-                    method="post"
-                    as="button"
-                    class="flex items-center gap-2 w-full mt-1 px-3 py-2 rounded-lg text-[12px] font-medium text-slate-500 hover:text-red-400 hover:bg-red-500/[0.08] transition-colors"
-                >
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                    Sign Out
-                </Link>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[13px] font-semibold text-white truncate">{{ user?.name }}</p>
+                            <p class="text-[11px] text-slate-500 truncate">Administrator</p>
+                        </div>
+                    </Link>
+                    <Link
+                        href="/logout"
+                        method="post"
+                        as="button"
+                        title="Sign Out"
+                        aria-label="Sign Out"
+                        class="shrink-0 p-2 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/[0.08] transition-colors"
+                    >
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                    </Link>
+                </div>
             </div>
         </aside>
 
