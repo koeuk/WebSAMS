@@ -15,7 +15,7 @@
 
             <div class="space-y-4">
                 <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Course *</Label>
+                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Course <span class="text-rose-500">*</span></Label>
                     <Select v-model="form.course_id">
                         <SelectTrigger class="w-full">
                             <SelectValue placeholder="Select a course" />
@@ -29,7 +29,7 @@
                     <p v-if="form.errors.course_id" class="text-[12px] text-rose-500 mt-1">{{ form.errors.course_id }}</p>
                 </div>
                 <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name *</Label>
+                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
                     <Field name="name" v-slot="{ field, errorMessage }">
                         <Input v-bind="field" v-model="form.name" type="text" placeholder="e.g. Introduction to Programming" />
                         <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
@@ -37,7 +37,7 @@
                     <p v-if="form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ form.errors.name }}</p>
                 </div>
                 <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code *</Label>
+                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code <span class="text-rose-500">*</span></Label>
                     <Field name="code" v-slot="{ field, errorMessage }">
                         <Input v-bind="field" v-model="form.code" type="text" placeholder="e.g. CS101" />
                         <p v-if="errorMessage" class="text-[12px] text-rose-500 mt-1">{{ errorMessage }}</p>
