@@ -13,8 +13,8 @@
 ```
 WebSAMS/
 ├── backend/              Laravel 13 + Inertia.js + Vue 3   → http://localhost:8000
-├── frontend-teacher/     Nuxt 3 + shadcn-vue               → http://localhost:3001
-├── frontend-student/     Nuxt 3 + shadcn-vue               → http://localhost:3002
+├── teacher/              Nuxt 3 + shadcn-vue               → http://localhost:3001
+├── student/              Nuxt 3 + shadcn-vue               → http://localhost:3002
 ├── CLAUDE.md             ← this file
 ├── WebSAMS-Overview.md   full feature/schema docs
 └── THESIS.md             full bachelor's thesis document
@@ -50,10 +50,10 @@ cd backend && php artisan serve                 # http://localhost:8000
 cd backend && npm run dev
 
 # Terminal 3 — Teacher frontend
-cd frontend-teacher && npm run dev              # http://localhost:3001
+cd teacher && npm run dev                       # http://localhost:3001
 
 # Terminal 4 — Student frontend
-cd frontend-student && npm run dev              # http://localhost:3002
+cd student && npm run dev                       # http://localhost:3002
 ```
 
 ### Fresh database
