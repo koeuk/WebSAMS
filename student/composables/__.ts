@@ -1,11 +1,13 @@
 import en from '~/locale/en.json'
 import km from '~/locale/km.json'
+import zh from '~/locale/zh.json'
 
-const messages: Record<string, any> = { en, km }
+const messages: Record<string, any> = { en, km, zh }
 
 const LOCALES = [
   { code: 'en', name: 'English' },
   { code: 'km', name: 'ខ្មែរ' },
+  { code: 'zh', name: '中文' },
 ]
 
 const get = (obj: any, path: string): unknown =>

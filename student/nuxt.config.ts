@@ -15,15 +15,16 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     'shadcn-nuxt',
   ],
-  components: [
-    {
-      path: '~/components/ui',
-      extensions: ['.vue'],
-      prefix: '',
-      pathPrefix: false,
-    },
-    '~/components',
-  ],
+  components: {
+    dirs: [
+      {
+        path: '~/components',
+        pathPrefix: false,
+        extensions: ['vue'],
+        ignore: ['**/ui/**'],
+      },
+    ],
+  },
   shadcn: {
     prefix: '',
     componentDir: './components/ui',
