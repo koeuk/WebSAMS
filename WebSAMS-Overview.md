@@ -74,8 +74,8 @@ WebSAMS/
 │   ├── resources/js/Pages/               ← Admin Vue pages
 │   ├── routes/web.php                    ← Admin routes (session auth)
 │   └── routes/api.php                    ← API routes (Sanctum token auth)
-├── frontend-teacher/     ← Nuxt 3 + shadcn-vue (port 3001)
-├── frontend-student/     ← Nuxt 3 + shadcn-vue (port 3002)
+├── teacher/              ← Nuxt 3 + shadcn-vue (port 3001)
+├── student/              ← Nuxt 3 + shadcn-vue (port 3002)
 ```
 
 ---
@@ -384,7 +384,7 @@ WebSAMS/
 │       ├── migrations/                              ← 13 migrations
 │       └── seeders/DatabaseSeeder.php               ← Test data
 │
-├── frontend-teacher/                               ← Nuxt 3 + shadcn-vue (port 3001)
+├── teacher/                                        ← Nuxt 3 + shadcn-vue (port 3001)
 │   ├── composables/useAuth.ts, useApi.ts
 │   ├── middleware/auth.ts
 │   ├── layouts/default.vue
@@ -393,7 +393,7 @@ WebSAMS/
 │       ├── classes/index.vue, [id].vue
 │       └── attendance/mark.vue, index.vue
 │
-├── frontend-student/                               ← Nuxt 3 + shadcn-vue (port 3002)
+├── student/                                        ← Nuxt 3 + shadcn-vue (port 3002)
 │   ├── composables/useAuth.ts, useApi.ts
 │   ├── middleware/auth.ts
 │   ├── layouts/default.vue
@@ -471,11 +471,11 @@ php artisan key:generate
 php artisan migrate --seed
 
 # Frontend Teacher
-cd frontend-teacher
+cd teacher
 npm install
 
 # Frontend Student
-cd frontend-student
+cd student
 npm install
 ```
 
@@ -488,10 +488,10 @@ cd backend && php artisan serve                # http://localhost:8000
 cd backend && npm run dev
 
 # Terminal 3: Teacher frontend
-cd frontend-teacher && npm run dev             # http://localhost:3001
+cd teacher && npm run dev                      # http://localhost:3001
 
 # Terminal 4: Student frontend
-cd frontend-student && npm run dev             # http://localhost:3002
+cd student && npm run dev                      # http://localhost:3002
 ```
 
 ### Test Credentials
