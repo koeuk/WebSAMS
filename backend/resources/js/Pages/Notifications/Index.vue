@@ -58,7 +58,7 @@
                 </Table>
             </Card>
 
-            <Pagination :links="notifications.links" />
+            <Pagination :pagination="notifications" />
         </div>
     </AdminLayout>
 </template>

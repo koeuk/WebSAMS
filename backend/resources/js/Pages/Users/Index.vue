@@ -104,7 +104,7 @@
                 </Table>
             </div>
 
-            <Pagination :links="users.links" />
+            <Pagination :pagination="users" />
 
             <UserForm v-model:open="showForm" :user="editingUser" :roles="props.roles" :genders="props.genders" :statuses="props.statuses" :year-levels="props.yearLevels" />
 

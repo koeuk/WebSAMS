@@ -77,7 +77,7 @@
                 </Table>
             </Card>
 
-            <Pagination :links="classes.links" />
+            <Pagination :pagination="classes" />
 
             <ClassForm v-model:open="showForm" :school-class="editingClass" />
         </div>

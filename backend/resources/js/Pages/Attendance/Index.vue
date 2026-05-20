@@ -145,7 +145,7 @@
                 </div>
             </Card>
 
-            <Pagination :links="attendance.links" />
+            <Pagination :pagination="attendance" />
 
             <Modal :show="showDeleteModal" title="Delete Attendance" message="Are you sure you want to delete this attendance record?" @confirm="deleteRecord" @cancel="showDeleteModal = false" />
         </div>

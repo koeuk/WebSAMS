@@ -70,7 +70,7 @@
                 </Table>
             </Card>
 
-            <Pagination :links="courses.links" />
+            <Pagination :pagination="courses" />
         </div>
 
         <CourseForm v-model:open="showForm" :course="editingCourse" />

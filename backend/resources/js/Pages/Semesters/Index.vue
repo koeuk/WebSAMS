@@ -47,7 +47,7 @@
             </Table>
         </div>
 
-        <Pagination :links="semesters.links" />
+        <Pagination :pagination="semesters" />
 
         <!-- Create / Edit Form -->
         <SemesterForm v-model:open="showForm" :semester="editingSemester" />

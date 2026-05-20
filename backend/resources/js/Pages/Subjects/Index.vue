@@ -72,7 +72,7 @@
                 </Table>
             </Card>
 
-            <Pagination :links="subjects.links" />
+            <Pagination :pagination="subjects" />
         </div>
 
         <SubjectForm v-model:open="showForm" :subject="editingSubject" :courses="courses" />
