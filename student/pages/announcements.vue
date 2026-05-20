@@ -1,19 +1,19 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Announcements</h2>
-      <p class="text-sm text-slate-500 mt-1">Important updates from your teachers</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('announcements.title') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('announcements.subtitle') }}</p>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('common.loading') }}</div>
 
     <template v-else>
       <div v-if="!announcements.length" class="card overflow-hidden">
         <Empty class="border-0 rounded-none">
           <EmptyHeader>
             <EmptyMedia variant="icon"><Megaphone class="w-6 h-6" /></EmptyMedia>
-            <EmptyTitle>No announcements yet</EmptyTitle>
-            <EmptyDescription>Check back later for updates from your teachers.</EmptyDescription>
+            <EmptyTitle>{{ __('announcements.empty') }}</EmptyTitle>
+            <EmptyDescription>{{ __('announcements.emptyDescription') }}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       </div>
@@ -28,7 +28,7 @@
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 mb-1 flex-wrap">
                 <h3 class="font-semibold text-slate-900">{{ a.title }}</h3>
-                <span class="badge" :class="audienceConfig[a.audience] ?? ''">{{ a.audience }}</span>
+                <span class="badge" :class="audienceConfig[a.audience] ?? ''">{{ __(`announcements.audience.${a.audience}`) }}</span>
               </div>
               <p class="text-[12px] text-slate-400">
                 {{ a.author?.name }} · {{ formatDate(a.published_at) }}
@@ -46,6 +46,8 @@
         </div>
       </div>
     </template>
+  </div>
+</template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
@@ -71,7 +73,9 @@ const audienceConfig: Record<string, string> = {
   teachers: 'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
 }
 
+const { locale } = useI18n()
+const dateLocale = computed(() => ({ en: 'en-US', km: 'km-KH', zh: 'zh-CN' } as Record<string, string>)[locale.value] ?? 'en-US')
 const formatDate = (d: string) => d
-  ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  ? new Date(d).toLocaleDateString(dateLocale.value, { year: 'numeric', month: 'long', day: 'numeric' })
   : ''
 </script>

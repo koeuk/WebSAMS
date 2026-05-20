@@ -1,20 +1,20 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">My Attendance</h2>
-      <p class="text-sm text-slate-500 mt-1">View and filter your attendance records</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('attendance.title') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('attendance.subtitle') }}</p>
     </div>
 
     <!-- Filters -->
     <div class="card p-4 mb-5">
       <div class="flex flex-wrap gap-3 items-end">
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
-          <DatePicker v-model="dateFrom" placeholder="Start date" @update:model-value="loadAttendance" />
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('common.from') }}</label>
+          <DatePicker v-model="dateFrom" :placeholder="__('common.startDate')" @update:model-value="loadAttendance" />
         </div>
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
-          <DatePicker v-model="dateTo" placeholder="End date" @update:model-value="loadAttendance" />
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('common.to') }}</label>
+          <DatePicker v-model="dateTo" :placeholder="__('common.endDate')" @update:model-value="loadAttendance" />
         </div>
         <Button
           v-if="dateFrom || dateTo"
@@ -22,7 +22,7 @@
           @click="dateFrom = ''; dateTo = ''; loadAttendance()"
           class="flex items-center gap-2"
         >
-          Clear
+          {{ __('common.clear') }}
         </Button>
       </div>
     </div>
@@ -30,37 +30,37 @@
     <!-- Mini stats (shown when data exists) -->
     <div v-if="!loading && stats.total > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 stagger-children">
       <div class="card stat-card stat-card-blue px-4 py-3 animate-fade-in-up">
-        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Total</p>
+        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">{{ __('common.total') }}</p>
         <p class="text-xl font-extrabold text-slate-900 mt-1">{{ stats.total }}</p>
       </div>
       <div class="card stat-card stat-card-emerald px-4 py-3 animate-fade-in-up">
-        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Present</p>
+        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">{{ __('common.present') }}</p>
         <p class="text-xl font-extrabold text-emerald-600 mt-1">{{ stats.present }}</p>
       </div>
       <div class="card stat-card stat-card-rose px-4 py-3 animate-fade-in-up">
-        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Absent</p>
+        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">{{ __('common.absent') }}</p>
         <p class="text-xl font-extrabold text-rose-600 mt-1">{{ stats.absent }}</p>
       </div>
       <div class="card stat-card stat-card-amber px-4 py-3 animate-fade-in-up">
-        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">Rate</p>
+        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">{{ __('common.rate') }}</p>
         <p class="text-xl font-extrabold mt-1" :class="stats.rate >= 80 ? 'text-emerald-600' : 'text-rose-600'">
           {{ stats.rate }}%
         </p>
       </div>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('common.loading') }}</div>
 
     <div v-else class="card overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Time Slot</TableHead>
-            <TableHead>Class</TableHead>
-            <TableHead>Subject</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Remarks</TableHead>
+            <TableHead>{{ __('common.date') }}</TableHead>
+            <TableHead>{{ __('common.timeSlot') }}</TableHead>
+            <TableHead>{{ __('common.class') }}</TableHead>
+            <TableHead>{{ __('common.subject') }}</TableHead>
+            <TableHead>{{ __('common.status') }}</TableHead>
+            <TableHead>{{ __('common.remarks') }}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -70,7 +70,7 @@
             <TableCell>{{ record.class_subject?.school_class?.name }}</TableCell>
             <TableCell>{{ record.class_subject?.subject?.name }}</TableCell>
             <TableCell>
-              <span class="badge" :class="statusConfig[record.status] ?? ''">{{ record.status }}</span>
+              <span class="badge" :class="statusConfig[record.status] ?? ''">{{ __(`common.${record.status}`) }}</span>
             </TableCell>
             <TableCell class="text-slate-500">{{ record.remarks || '-' }}</TableCell>
           </TableRow>
@@ -79,8 +79,8 @@
               <Empty class="border-0 rounded-none">
                 <EmptyHeader>
                   <EmptyMedia variant="icon"><ClipboardList class="w-6 h-6" /></EmptyMedia>
-                  <EmptyTitle>No attendance records</EmptyTitle>
-                  <EmptyDescription>No records found for the selected date range.</EmptyDescription>
+                  <EmptyTitle>{{ __('attendance.noRecords') }}</EmptyTitle>
+                  <EmptyDescription>{{ __('attendance.noRecordsDescription') }}</EmptyDescription>
                 </EmptyHeader>
               </Empty>
             </TableCell>

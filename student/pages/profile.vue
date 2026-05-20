@@ -1,11 +1,11 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">My Profile</h2>
-      <p class="text-sm text-slate-500 mt-1">Your personal and academic information</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('profile.title') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('profile.subtitle') }}</p>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('common.loading') }}</div>
 
     <template v-else-if="profile">
 
@@ -44,10 +44,10 @@
             <div class="flex items-start gap-3 flex-wrap">
               <h3 class="text-xl font-bold text-slate-900 leading-tight">{{ profile.name }}</h3>
               <span class="badge" :class="status(profile.status || 'active').pill">
-                {{ status(profile.status || 'active').label }}
+                {{ __(`profile.userStatus.${profile.status || 'active'}`) }}
               </span>
             </div>
-            <p class="text-[13px] font-mono text-slate-400 mt-0.5">{{ profile.id_number || 'No ID assigned' }}</p>
+            <p class="text-[13px] font-mono text-slate-400 mt-0.5">{{ profile.id_number || __('profile.noIdAssigned') }}</p>
             <p class="text-[13px] text-slate-500 mt-1">{{ profile.email }}</p>
           </div>
         </div>
@@ -60,15 +60,10 @@
         <div class="card p-6 animate-fade-in-up">
           <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></span>
-            Personal Information
+            {{ __('profile.personalInfo') }}
           </h4>
           <dl class="space-y-0 divide-y divide-slate-50">
-            <div v-for="row in [
-              { label: 'Phone', value: profile.phone || '-' },
-              { label: 'Gender', value: profile.gender || '-', capitalize: true },
-              { label: 'Date of Birth', value: formatDate(profile.date_of_birth) },
-              { label: 'Address', value: profile.address || '-' },
-            ]" :key="row.label" class="flex items-center justify-between py-3">
+            <div v-for="row in personalRows" :key="row.label" class="flex items-center justify-between py-3">
               <dt class="text-[13px] text-slate-500">{{ row.label }}</dt>
               <dd class="text-[13px] font-semibold text-slate-800 text-right max-w-[220px] truncate" :class="row.capitalize ? 'capitalize' : ''">
                 {{ row.value }}
@@ -81,15 +76,10 @@
         <div class="card p-6 animate-fade-in-up">
           <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            Academic Information
+            {{ __('profile.academicInfo') }}
           </h4>
           <dl class="space-y-0 divide-y divide-slate-50">
-            <div v-for="row in [
-              { label: 'Year Level', value: profile.year_level ? 'Year ' + profile.year_level : '-' },
-              { label: 'Enrollment Date', value: formatDate(profile.enrollment_date) },
-              { label: 'Guardian Name', value: profile.guardian_name || '-' },
-              { label: 'Guardian Phone', value: profile.guardian_phone || '-' },
-            ]" :key="row.label" class="flex items-center justify-between py-3">
+            <div v-for="row in academicRows" :key="row.label" class="flex items-center justify-between py-3">
               <dt class="text-[13px] text-slate-500">{{ row.label }}</dt>
               <dd class="text-[13px] font-semibold text-slate-800 text-right max-w-[220px] truncate">
                 {{ row.value }}
@@ -103,14 +93,14 @@
       <div class="card overflow-hidden animate-fade-in-up">
         <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
           <span class="w-1.5 h-1.5 rounded-full" style="background:#d4a017;"></span>
-          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">Enrolled Classes</h3>
+          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('profile.enrolledClasses') }}</h3>
         </div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Class</TableHead>
-              <TableHead>Section</TableHead>
-              <TableHead>Academic Year</TableHead>
+              <TableHead>{{ __('common.class') }}</TableHead>
+              <TableHead>{{ __('common.section') }}</TableHead>
+              <TableHead>{{ __('common.academicYear') }}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -122,15 +112,17 @@
               </TableCell>
             </TableRow>
             <TableRow v-if="!profile.enrolled_classes?.length">
-              <TableCell colspan="3" class="text-center py-8 text-slate-400">Not enrolled in any classes.</TableCell>
+              <TableCell colspan="3" class="text-center py-8 text-slate-400">{{ __('common.noClassesEnrolled') }}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
       </div>
     </template>
+  </div>
+</template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 
 definePageMeta({ middleware: 'auth' })
 
@@ -143,16 +135,32 @@ onMounted(async () => {
   loading.value = false
 })
 
+const { locale } = useI18n()
+const dateLocale = computed(() => ({ en: 'en-US', km: 'km-KH', zh: 'zh-CN' } as Record<string, string>)[locale.value] ?? 'en-US')
 const formatDate = (d: string) => d
-  ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+  ? new Date(d).toLocaleDateString(dateLocale.value, { year: 'numeric', month: 'long', day: 'numeric' })
   : '-'
 
-const statusConfig: Record<string, { pill: string; dot: string; label: string }> = {
-  active:    { pill: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200', dot: 'bg-emerald-400', label: 'Active' },
-  inactive:  { pill: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200',     dot: 'bg-slate-400',   label: 'Inactive' },
-  graduated: { pill: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',             dot: 'bg-sky-400',     label: 'Graduated' },
-  suspended: { pill: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',          dot: 'bg-rose-400',    label: 'Suspended' },
+const statusStyles: Record<string, { pill: string; dot: string }> = {
+  active:    { pill: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200', dot: 'bg-emerald-400' },
+  inactive:  { pill: 'bg-slate-100 text-slate-600 ring-1 ring-slate-200',      dot: 'bg-slate-400' },
+  graduated: { pill: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',             dot: 'bg-sky-400' },
+  suspended: { pill: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',          dot: 'bg-rose-400' },
 }
 
-const status = (s: string) => statusConfig[s] ?? statusConfig.active
+const status = (s: string) => statusStyles[s] ?? statusStyles.active
+
+const personalRows = computed(() => [
+  { label: __('profile.phone'),   value: profile.value?.phone || '-' },
+  { label: __('profile.gender'),  value: profile.value?.gender || '-', capitalize: true },
+  { label: __('profile.dob'),     value: formatDate(profile.value?.date_of_birth) },
+  { label: __('profile.address'), value: profile.value?.address || '-' },
+])
+
+const academicRows = computed(() => [
+  { label: __('profile.yearLevel'),       value: profile.value?.year_level ? __('profile.year', { n: profile.value.year_level }) : '-' },
+  { label: __('profile.enrollmentDate'),  value: formatDate(profile.value?.enrollment_date) },
+  { label: __('profile.guardianName'),    value: profile.value?.guardian_name || '-' },
+  { label: __('profile.guardianPhone'),   value: profile.value?.guardian_phone || '-' },
+])
 </script>

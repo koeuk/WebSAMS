@@ -23,7 +23,7 @@
         </div>
         <div>
           <h1 class="text-white font-bold text-base leading-tight tracking-tight">WebSAMS</h1>
-          <p class="text-[10px] text-white/40 uppercase tracking-widest">Student Portal</p>
+          <p class="text-[10px] text-white/40 uppercase tracking-widest">{{ __('studentPortal') }}</p>
         </div>
       </div>
 
@@ -31,13 +31,13 @@
       <div class="relative">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold text-white/60 border border-white/10 bg-white/5 mb-6">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          BELTEI International University
+          {{ __('university') }}
         </div>
         <h2 class="text-4xl font-bold text-white leading-[1.15] tracking-tight mb-4">
-          Track your<br />attendance,<br /><span style="color: #d4a017;">stay on track.</span>
+          {{ __('login.tagline') }}
         </h2>
         <p class="text-slate-400 text-[15px] leading-relaxed max-w-xs">
-          View your records, monitor your rate, and never miss an alert — all from one place.
+          {{ __('login.description') }}
         </p>
       </div>
 
@@ -78,13 +78,13 @@
           </div>
           <div>
             <h1 class="font-bold text-slate-900 text-base">WebSAMS</h1>
-            <p class="text-[11px] text-slate-400">Student Portal</p>
+            <p class="text-[11px] text-slate-400">{{ __('studentPortal') }}</p>
           </div>
         </div>
 
         <div class="mb-8 login-entrance login-entrance-delay-1">
-          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Welcome back</h2>
-          <p class="text-sm text-slate-500 mt-1">Sign in to your student account</p>
+          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('login.welcomeBack') }}</h2>
+          <p class="text-sm text-slate-500 mt-1">{{ __('login.signInPrompt') }}</p>
         </div>
 
         <div v-if="error" class="mb-5 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-rose-50 border border-rose-200 text-[13px] text-rose-700">
@@ -96,14 +96,14 @@
 
         <form @submit.prevent="submit" class="space-y-5 login-entrance login-entrance-delay-2">
           <div class="space-y-1.5">
-            <Label class="text-[13px] font-semibold text-slate-600">Email address</Label>
+            <Label class="text-[13px] font-semibold text-slate-600">{{ __('login.emailLabel') }}</Label>
             <Input
               v-model="email" type="email" required autofocus
               placeholder="student@websams.com"
             />
           </div>
           <div class="space-y-1.5">
-            <Label class="text-[13px] font-semibold text-slate-600">Password</Label>
+            <Label class="text-[13px] font-semibold text-slate-600">{{ __('login.passwordLabel') }}</Label>
             <div class="relative">
               <Input
                 v-model="password"
@@ -140,12 +140,12 @@
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            {{ loading ? 'Signing in...' : 'Sign In' }}
+            {{ loading ? __('login.signingIn') : __('login.signIn') }}
           </Button>
         </form>
 
         <p class="text-center text-[12px] text-slate-400 mt-8 login-entrance login-entrance-delay-3">
-          BELTEI International University &copy; 2025
+          {{ __('copyright') }}
         </p>
       </div>
     </div>
@@ -182,17 +182,17 @@ const submit = async () => {
     await login(email.value, password.value)
     navigateTo('/')
   } catch (e: any) {
-    error.value = e?.data?.message || 'Invalid credentials.'
+    error.value = e?.data?.message || __('login.invalidCredentials')
   } finally {
     loading.value = false
   }
 }
 
-const features = [
-  { icon: 'check', text: 'Real-time attendance tracking' },
-  { icon: 'chart', text: 'Attendance rate by subject' },
-  { icon: 'bell', text: 'Instant absence notifications' },
-]
+const features = computed(() => [
+  { icon: 'check', text: __('login.features.tracking') },
+  { icon: 'chart', text: __('login.features.chart') },
+  { icon: 'bell', text: __('login.features.alerts') },
+])
 </script>
 
 <style scoped>
