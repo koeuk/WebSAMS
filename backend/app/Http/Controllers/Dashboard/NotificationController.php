@@ -20,7 +20,7 @@ class NotificationController extends Controller
             )
             ->with('user')
             ->latest()
-            ->paginate(20)
+            ->paginate($this->limit())
             ->withQueryString();
 
         return Inertia::render('Notifications/Index', [

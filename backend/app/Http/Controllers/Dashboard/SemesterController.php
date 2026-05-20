@@ -12,7 +12,7 @@ class SemesterController extends Controller
 {
     public function index()
     {
-        $semesters = Semester::latest('start_date')->paginate(15);
+        $semesters = Semester::latest('start_date')->paginate($this->limit());
 
         return Inertia::render('Semesters/Index', ['semesters' => $semesters]);
     }

@@ -24,7 +24,7 @@ class CourseController extends Controller
                 )),
             )
             ->latest()
-            ->paginate(15)
+            ->paginate($this->limit())
             ->withQueryString();
 
         return Inertia::render('Courses/Index', [

@@ -32,7 +32,7 @@ class UserController extends Controller
                 AllowedFilter::exact('status'),
             )
             ->latest()
-            ->paginate(15)
+            ->paginate($this->limit())
             ->withQueryString();
 
         return Inertia::render('Users/Index', [
