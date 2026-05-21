@@ -10,8 +10,13 @@ const ALL_LOCALES = [
   { code: 'zh', name: '中文' },
 ]
 
-const get = (obj: any, path: string): unknown =>
-  path.split('.').reduce<any>((o, k) => (o == null ? o : o[k]), obj)
+// Direct flat-key lookup first (admin/Laravel convention: English string is the key).
+// Falls back to dotted-path lookup for nested keys if present.
+const get = (obj: any, path: string): unknown => {
+  if (obj == null) return undefined
+  if (Object.prototype.hasOwnProperty.call(obj, path)) return obj[path]
+  return path.split('.').reduce<any>((o, k) => (o == null ? o : o[k]), obj)
+}
 
 const fetchEnabled = async (enabled: Ref<string[]>) => {
   try {

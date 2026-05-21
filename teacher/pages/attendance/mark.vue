@@ -1,8 +1,8 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-8">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Mark Attendance</h2>
-      <p class="text-sm text-slate-500 mt-1">Record attendance for your class</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Mark Attendance') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('Record attendance for your class') }}</p>
     </div>
 
     <div v-if="success" class="mb-4 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[13px] text-emerald-700 flex items-center gap-2">
@@ -15,32 +15,32 @@
     <div class="card p-4 mb-6">
       <div class="flex flex-wrap gap-3 items-end">
         <div class="min-w-[250px]">
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class - Subject</label>
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Class') }} - {{ __('Subject') }}</label>
           <AppCombobox
             v-model="selectedClass"
             :options="classOptions"
-            placeholder="Select Class - Subject"
-            search-placeholder="Search class..."
+            :placeholder="__('Select Class - Subject')"
+            :search-placeholder="__('Search class...')"
             class="w-full"
             @update:model-value="loadStudents"
           />
         </div>
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Time Slot</label>
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Time Slot') }}</label>
           <AppCombobox
             v-model="selectedTimeSlot"
             :options="timeSlotOptions"
-            placeholder="Select Time Slot"
-            search-placeholder="Search time slot..."
+            :placeholder="__('Select Time Slot')"
+            :search-placeholder="__('Search time slot...')"
           />
         </div>
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Date</label>
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Date') }}</label>
           <AppDatePicker v-model="selectedDate" />
         </div>
         <Button v-if="students.length" variant="outline" @click="markAllPresent" class="flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-          Mark All Present
+          {{ __('Mark all present') }}
         </Button>
       </div>
     </div>
@@ -50,9 +50,9 @@
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Student</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Remarks</TableHead>
+            <TableHead>{{ __('Student') }}</TableHead>
+            <TableHead>{{ __('Status') }}</TableHead>
+            <TableHead>{{ __('Remarks') }}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -62,12 +62,12 @@
               <RadioGroup v-model="attendances[student.id].status" class="flex gap-4">
                 <div v-for="s in statusList" :key="s.value" class="flex items-center gap-1.5">
                   <RadioGroupItem :value="s.value" :id="`${s.value}-${student.id}`" :class="s.radioClass" />
-                  <Label :for="`${s.value}-${student.id}`" class="text-[13px] cursor-pointer" :class="s.labelClass">{{ s.label }}</Label>
+                  <Label :for="`${s.value}-${student.id}`" class="text-[13px] cursor-pointer" :class="s.labelClass">{{ __(s.label) }}</Label>
                 </div>
               </RadioGroup>
             </TableCell>
             <TableCell>
-              <Input v-model="attendances[student.id].remarks" type="text" class="py-1.5 h-auto" placeholder="Optional" />
+              <Input v-model="attendances[student.id].remarks" type="text" class="py-1.5 h-auto" :placeholder="__('Optional')" />
             </TableCell>
           </TableRow>
         </TableBody>
@@ -75,13 +75,13 @@
       <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
         <Button @click="submit" :disabled="submitting" class="flex items-center gap-2">
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
-          {{ submitting ? 'Submitting...' : 'Submit Attendance' }}
+          {{ submitting ? __('Saving...') : __('Save Attendance') }}
         </Button>
       </div>
     </div>
 
     <div v-else-if="selectedClass && !loading" class="card p-12 text-center text-slate-400">
-      No students found for this class.
+      {{ __('No students enrolled in this class.') }}
     </div>
   </div>
 </template>
@@ -160,9 +160,9 @@ const submit = async () => {
       })),
     }
     await apiFetch('/teacher/attendance', { method: 'POST', body: payload })
-    success.value = 'Attendance recorded successfully!'
+    success.value = __('Attendance saved')
   } catch (e: any) {
-    error.value = e?.data?.message || 'Failed to record attendance.'
+    error.value = e?.data?.message || ''
   }
   submitting.value = false
 }

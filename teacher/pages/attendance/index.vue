@@ -1,29 +1,29 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-8">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Attendance History</h2>
-      <p class="text-sm text-slate-500 mt-1">View past attendance records for your classes</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Attendance History') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('View past attendance records for your classes') }}</p>
     </div>
 
     <div class="card p-4 mb-6">
       <div class="flex flex-wrap gap-3 items-end">
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class</label>
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Class') }}</label>
           <AppCombobox
             v-model="selectedClass"
             :options="classOptions"
-            placeholder="All Classes"
-            search-placeholder="Search class..."
+            :placeholder="__('All Classes')"
+            :search-placeholder="__('Search class...')"
             @update:model-value="loadAttendance"
           />
         </div>
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
-          <AppDatePicker v-model="dateFrom" placeholder="From date" @update:model-value="loadAttendance" />
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('From') }}</label>
+          <AppDatePicker v-model="dateFrom" :placeholder="__('From date')" @update:model-value="loadAttendance" />
         </div>
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
-          <AppDatePicker v-model="dateTo" placeholder="To date" @update:model-value="loadAttendance" />
+          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('To') }}</label>
+          <AppDatePicker v-model="dateTo" :placeholder="__('To date')" @update:model-value="loadAttendance" />
         </div>
         <Button
           v-if="hasFilters"
@@ -32,23 +32,23 @@
           class="self-end flex items-center gap-2 text-slate-500"
         >
           <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
-          Clear Filters
+          {{ __('Clear Filters') }}
         </Button>
       </div>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
 
     <div v-else class="card overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Date</TableHead>
-            <TableHead>Time Slot</TableHead>
-            <TableHead>Student</TableHead>
-            <TableHead>Class</TableHead>
-            <TableHead>Subject</TableHead>
-            <TableHead>Status</TableHead>
+            <TableHead>{{ __('Date') }}</TableHead>
+            <TableHead>{{ __('Time Slot') }}</TableHead>
+            <TableHead>{{ __('Student') }}</TableHead>
+            <TableHead>{{ __('Class') }}</TableHead>
+            <TableHead>{{ __('Subject') }}</TableHead>
+            <TableHead>{{ __('Status') }}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -58,15 +58,15 @@
             <TableCell class="font-semibold text-slate-900">{{ record.student?.name }}</TableCell>
             <TableCell>{{ record.class_subject?.school_class?.name }}</TableCell>
             <TableCell>{{ record.class_subject?.subject?.name }}</TableCell>
-            <TableCell><span class="badge" :class="statusClass(record.status)">{{ record.status }}</span></TableCell>
+            <TableCell><span class="badge" :class="statusClass(record.status)">{{ __(statusLabel(record.status)) }}</span></TableCell>
           </TableRow>
           <TableRow v-if="!attendance.data?.length">
             <TableCell colspan="6" class="p-0">
               <Empty class="border-0 rounded-none">
                 <EmptyHeader>
                   <EmptyMedia variant="icon"><ClipboardList class="w-6 h-6" /></EmptyMedia>
-                  <EmptyTitle>No attendance records</EmptyTitle>
-                  <EmptyDescription>Try adjusting your filters to find records.</EmptyDescription>
+                  <EmptyTitle>{{ __('No attendance records') }}</EmptyTitle>
+                  <EmptyDescription>{{ __('Try adjusting your filters to find records.') }}</EmptyDescription>
                 </EmptyHeader>
               </Empty>
             </TableCell>
@@ -93,12 +93,19 @@ const dateTo = ref('')
 const loading = ref(true)
 
 const classOptions = computed(() => [
-  { value: '', label: 'All Classes' },
+  { value: '', label: __('All Classes') },
   ...classes.value.map((c: any) => ({
     value: String(c.id),
     label: `${c.school_class?.name} - ${c.subject?.name}`,
   })),
 ])
+
+const statusLabel = (s: string) => ({
+  present: 'Present',
+  absent:  'Absent',
+  late:    'Late',
+  excused: 'Excused',
+} as Record<string, string>)[s] ?? s
 
 onMounted(async () => {
   try {

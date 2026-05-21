@@ -15,7 +15,7 @@
                                 v-for="s in sections"
                                 :key="s.key"
                                 type="button"
-                                @click="active = s.key"
+                                @click="setSection(s.key)"
                                 :class="[
                                     'w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] font-medium transition-colors text-left',
                                     active === s.key
@@ -248,7 +248,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { useForm } from '@inertiajs/vue3'
+import { useForm, usePage } from '@inertiajs/vue3'
 import { toast } from 'vue-sonner'
 import { Building2, GraduationCap, Globe, Palette, ImagePlus, Loader2, Check } from 'lucide-vue-next'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
@@ -270,7 +270,23 @@ const sections = [
     { key: 'appearance',   label: 'Appearance',   icon: Palette },
 ]
 
-const active = ref('general')
+const validSections = sections.map((s) => s.key)
+const initialSection = () => {
+    const q = new URLSearchParams(usePage().url.split('?')[1] || '')
+    const s = q.get('section')
+    return validSections.includes(s) ? s : 'general'
+}
+
+const active = ref(initialSection())
+
+const setSection = (key) => {
+    active.value = key
+    if (typeof window !== 'undefined' && window.history?.replaceState) {
+        const url = new URL(window.location.href)
+        url.searchParams.set('section', key)
+        window.history.replaceState({}, '', url)
+    }
+}
 
 const emptyTranslations = () => ({ en: '', km: '', zh: '' })
 const readTranslations = (v) => v && typeof v === 'object' ? { ...emptyTranslations(), ...v } : emptyTranslations()

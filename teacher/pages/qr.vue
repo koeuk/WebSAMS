@@ -1,43 +1,43 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">QR Attendance</h2>
-      <p class="text-sm text-slate-500 mt-1">Generate a QR code for students to scan</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('QR Attendance Session') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('Generate a token for your students to mark attendance') }}</p>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
 
     <div v-else class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- Config card -->
       <div class="card p-6 animate-fade-in-up">
-        <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-5">Session Setup</h3>
+        <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider mb-5">{{ __('Generate Session') }}</h3>
         <div class="space-y-4">
           <div class="space-y-1.5">
-            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Class / Subject</Label>
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('Class') }} / {{ __('Subject') }}</Label>
             <AppCombobox
               v-model="selectedClass"
               :options="classOptions"
-              placeholder="Select a class..."
-              search-placeholder="Search class..."
+              :placeholder="__('Select a class...')"
+              :search-placeholder="__('Search class...')"
               class="w-full"
             />
           </div>
           <div class="space-y-1.5">
-            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Date</Label>
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('Date') }}</Label>
             <AppDatePicker v-model="selectedDate" class="w-full" />
           </div>
           <div class="space-y-1.5">
-            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Time Slot (optional)</Label>
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('Time Slot') }}</Label>
             <AppCombobox
               v-model="selectedSlot"
               :options="timeSlotOptions"
-              placeholder="None"
-              search-placeholder="Search time slot..."
+              :placeholder="__('None')"
+              :search-placeholder="__('Search time slot...')"
               class="w-full"
             />
           </div>
           <div class="space-y-1.5">
-            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Valid for (minutes)</Label>
+            <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('Duration') }} ({{ __('minutes') }})</Label>
             <Input v-model.number="duration" type="number" min="5" max="120" class="w-full" />
           </div>
           <Button
@@ -46,7 +46,7 @@
             class="w-full justify-center py-3 h-auto text-[14px] mt-2 flex items-center gap-2"
           >
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/></svg>
-            {{ generating ? 'Generating...' : 'Generate QR Code' }}
+            {{ generating ? __('Saving...') : __('Generate Session') }}
           </Button>
         </div>
       </div>
@@ -55,8 +55,8 @@
       <div class="card p-6 animate-fade-in-up flex flex-col items-center justify-center min-h-[320px]">
         <template v-if="activeSession">
           <div class="text-center mb-4">
-            <span class="badge bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 mb-2">Active · {{ expiresIn }}</span>
-            <p class="text-[12px] text-slate-400">Show this to your students</p>
+            <span class="badge bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200 mb-2">{{ __('Active Session') }} · {{ expiresIn }}</span>
+            <p class="text-[12px] text-slate-400">{{ __('Show this to your students') }}</p>
           </div>
           <!-- QR rendered via external service using token-based URL -->
           <img
@@ -66,14 +66,14 @@
           />
           <p class="text-[11px] font-mono text-slate-400 text-center break-all px-4 mb-4">{{ activeSession.token }}</p>
           <Button variant="outline" @click="deactivate" class="text-rose-600 hover:text-rose-700 hover:bg-rose-50">
-            Deactivate
+            {{ __('End Session') }}
           </Button>
         </template>
         <template v-else>
           <div class="text-center text-slate-400">
             <svg class="w-16 h-16 mx-auto mb-3 opacity-30" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/></svg>
-            <p class="text-sm">No active session</p>
-            <p class="text-[12px] mt-1">Configure and generate a QR code</p>
+            <p class="text-sm">{{ __('No active session.') }}</p>
+            <p class="text-[12px] mt-1">{{ __('Configure and generate a token to share with your students.') }}</p>
           </div>
         </template>
       </div>
@@ -149,7 +149,7 @@ const classOptions = computed(() =>
   }))
 )
 const timeSlotOptions = computed(() => [
-  { value: '', label: 'None' },
+  { value: '', label: __('None') },
   ...timeSlots.value.map((t: any) => ({
     value: String(t.id),
     label: `${t.name} (${t.start_time}–${t.end_time})`,

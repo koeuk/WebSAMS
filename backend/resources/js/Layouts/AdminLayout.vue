@@ -48,32 +48,71 @@
             </nav>
 
             <!-- User section at bottom -->
-            <div class="px-3 pb-4 pt-2 border-t border-white/[0.06]">
-                <div class="flex items-center gap-2 px-2 py-2 rounded-xl hover:bg-white/[0.05] transition-colors">
-                    <Link :href="`/admin/users/${user.id}/edit`" class="flex items-center gap-3 flex-1 min-w-0">
-                        <div class="relative shrink-0">
-                            <img v-if="user?.profile_photo" :src="`/storage/${user.profile_photo}`" class="h-9 w-9 rounded-lg object-cover ring-2 ring-white/10" />
-                            <div v-else class="h-9 w-9 rounded-lg bg-gradient-to-br from-beltei-gold to-beltei-gold-dark flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/10">
-                                {{ user?.name?.charAt(0) }}
-                            </div>
-                            <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-sidebar"></div>
+            <div class="relative px-3 pb-4 pt-2 border-t border-white/[0.06]" v-click-outside="() => (userMenuOpen = false)">
+                <button
+                    type="button"
+                    @click="userMenuOpen = !userMenuOpen"
+                    class="w-full flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-white/[0.05] transition-colors text-left cursor-pointer"
+                    :class="{ 'bg-white/[0.05]': userMenuOpen }"
+                >
+                    <div class="relative shrink-0">
+                        <img v-if="user?.profile_photo" :src="`/storage/${user.profile_photo}`" class="h-9 w-9 rounded-lg object-cover ring-2 ring-white/10" />
+                        <div v-else class="h-9 w-9 rounded-lg bg-gradient-to-br from-beltei-gold to-beltei-gold-dark flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/10">
+                            {{ user?.name?.charAt(0) }}
                         </div>
-                        <div class="flex-1 min-w-0">
-                            <p class="text-[13px] font-semibold text-white truncate">{{ user?.name }}</p>
-                            <p class="text-[11px] text-slate-500 truncate">{{ __('Administrator') }}</p>
-                        </div>
-                    </Link>
-                    <Link
-                        href="/logout"
-                        method="post"
-                        as="button"
-                        :title="__('Sign Out')"
-                        :aria-label="__('Sign Out')"
-                        class="shrink-0 p-2 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/[0.08] transition-colors"
+                        <div class="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-emerald-400 rounded-full border-2 border-sidebar"></div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-[13px] font-semibold text-white truncate">{{ user?.name }}</p>
+                        <p class="text-[11px] text-slate-500 truncate">{{ __('Administrator') }}</p>
+                    </div>
+                    <svg
+                        class="w-4 h-4 text-slate-400 transition-transform shrink-0"
+                        :class="{ 'rotate-180': userMenuOpen }"
+                        fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"
+                    ><path d="M18 15l-6-6-6 6"/></svg>
+                </button>
+
+                <Transition
+                    enter-active-class="transition duration-150 ease-out"
+                    enter-from-class="opacity-0 translate-y-1"
+                    enter-to-class="opacity-100 translate-y-0"
+                    leave-active-class="transition duration-100 ease-in"
+                    leave-from-class="opacity-100 translate-y-0"
+                    leave-to-class="opacity-0 translate-y-1"
+                >
+                    <div
+                        v-if="userMenuOpen"
+                        class="absolute left-3 right-3 bottom-[calc(100%-8px)] rounded-xl border border-slate-200 bg-white shadow-2xl overflow-hidden z-50"
                     >
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-                    </Link>
-                </div>
+                        <Link
+                            href="/admin/settings?section=general"
+                            @click="userMenuOpen = false"
+                            class="flex items-center gap-3 px-4 py-2.5 text-[13px] text-slate-700 hover:bg-slate-50 transition-colors"
+                        >
+                            <svg class="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+                            {{ __('Settings') }}
+                        </Link>
+                        <Link
+                            :href="`/admin/users/${user.id}/edit`"
+                            @click="userMenuOpen = false"
+                            class="flex items-center gap-3 px-4 py-2.5 text-[13px] text-slate-700 hover:bg-slate-50 transition-colors border-t border-slate-100"
+                        >
+                            <svg class="w-4 h-4 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            {{ __('Profile') }}
+                        </Link>
+                        <Link
+                            href="/logout"
+                            method="post"
+                            as="button"
+                            @click="userMenuOpen = false"
+                            class="w-full flex items-center gap-3 px-4 py-2.5 text-[13px] text-rose-600 hover:bg-rose-50 transition-colors border-t border-slate-100"
+                        >
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            {{ __('Sign Out') }}
+                        </Link>
+                    </div>
+                </Transition>
             </div>
         </aside>
 
@@ -150,6 +189,7 @@ const user = page.props.auth.user;
 
 const { locale, locales, setLocale } = useI18n();
 const langOpen = ref(false);
+const userMenuOpen = ref(false);
 
 const navigation = computed(() => [
     { name: __('Dashboard'),         href: '/admin/dashboard',        icon: 'dashboard' },
@@ -164,10 +204,14 @@ const navigation = computed(() => [
     { name: __('Student Tracking'), href: '/admin/student-tracking', icon: 'tracking' },
     { name: __('Reports'),           href: '/admin/reports',          icon: 'reports' },
     { name: __('Notifications'),     href: '/admin/notifications',    icon: 'notifications' },
-    { name: __('Settings'),          href: '/admin/settings',         icon: 'settings' },
+    { name: __('Settings'),          href: '/admin/settings?section=general', icon: 'settings' },
 ]);
 
-const isActive = (href) => page.url.startsWith(href);
+const isActive = (href) => {
+    const currentPath = page.url.split('?')[0];
+    const hrefPath = href.split('?')[0];
+    return currentPath.startsWith(hrefPath);
+};
 
 const vClickOutside = {
     beforeMount(el, binding) {

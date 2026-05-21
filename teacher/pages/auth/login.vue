@@ -20,7 +20,7 @@
         </div>
         <div>
           <h1 class="text-white font-bold text-base leading-tight tracking-tight">WebSAMS</h1>
-          <p class="text-[10px] text-white/40 uppercase tracking-widest">{{ __('teacherPortal') }}</p>
+          <p class="text-[10px] text-white/40 uppercase tracking-widest">{{ __('Teacher Portal') }}</p>
         </div>
       </div>
 
@@ -28,13 +28,13 @@
       <div class="relative">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold text-white/60 border border-white/10 bg-white/5 mb-6">
           <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-          {{ __('university') }}
+          {{ __('BELTEI International University') }}
         </div>
         <h2 class="text-4xl font-bold text-white leading-[1.15] tracking-tight mb-4">
-          {{ __('login.tagline') }}
+          {{ __('Mark attendance in seconds, not minutes.') }}
         </h2>
         <p class="text-slate-400 text-[15px] leading-relaxed max-w-xs">
-          {{ __('login.description') }}
+          {{ __('Batch record attendance, view your schedule, and keep your class records organised — effortlessly.') }}
         </p>
       </div>
 
@@ -75,13 +75,13 @@
           </div>
           <div>
             <h1 class="font-bold text-slate-900 text-base">WebSAMS</h1>
-            <p class="text-[11px] text-slate-400">{{ __('teacherPortal') }}</p>
+            <p class="text-[11px] text-slate-400">{{ __('Teacher Portal') }}</p>
           </div>
         </div>
 
         <div class="mb-8 login-entrance login-entrance-delay-1">
-          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('login.welcomeBack') }}</h2>
-          <p class="text-sm text-slate-500 mt-1">{{ __('login.signInPrompt') }}</p>
+          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Welcome back') }}</h2>
+          <p class="text-sm text-slate-500 mt-1">{{ __('Sign in to your teacher account') }}</p>
         </div>
 
         <div v-if="error" class="mb-5 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-rose-50 border border-rose-200 text-[13px] text-rose-700">
@@ -93,14 +93,14 @@
 
         <form @submit.prevent="submit" class="space-y-5 login-entrance login-entrance-delay-2">
           <div class="space-y-1.5">
-            <Label class="text-[13px] font-semibold text-slate-600">{{ __('login.emailLabel') }}</Label>
+            <Label class="text-[13px] font-semibold text-slate-600">{{ __('Email address') }}</Label>
             <Input
               v-model="email" type="email" required autofocus
               placeholder="teacher@websams.com"
             />
           </div>
           <div class="space-y-1.5">
-            <Label class="text-[13px] font-semibold text-slate-600">{{ __('login.passwordLabel') }}</Label>
+            <Label class="text-[13px] font-semibold text-slate-600">{{ __('Password') }}</Label>
             <div class="relative">
               <Input
                 v-model="password"
@@ -137,12 +137,12 @@
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            {{ loading ? __('login.signingIn') : __('login.signIn') }}
+            {{ loading ? __('Signing in...') : __('Sign In') }}
           </Button>
         </form>
 
         <p class="text-center text-[12px] text-slate-400 mt-8 login-entrance login-entrance-delay-3">
-          {{ __('copyright') }}
+          {{ __('BELTEI International University © 2025') }}
         </p>
       </div>
     </div>
@@ -179,16 +179,16 @@ const submit = async () => {
     await login(email.value, password.value)
     navigateTo('/')
   } catch (e: any) {
-    error.value = e?.data?.message || __('login.invalidCredentials')
+    error.value = e?.data?.message || __('Invalid credentials.')
   } finally {
     loading.value = false
   }
 }
 
 const features = computed(() => [
-  { icon: 'check',    text: __('login.features.manage') },
-  { icon: 'schedule', text: __('login.features.schedule') },
-  { icon: 'history',  text: __('login.features.history') },
+  { icon: 'check',    text: __('Manage attendance for all your classes') },
+  { icon: 'schedule', text: __("Today's schedule at a glance") },
+  { icon: 'history',  text: __('Full attendance history & reports') },
 ])
 </script>
 

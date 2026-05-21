@@ -1,32 +1,32 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Excuse Requests</h2>
-      <p class="text-sm text-slate-500 mt-1">Review and manage student excuse submissions</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Excuse Requests') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('Review and approve student excuse requests') }}</p>
     </div>
 
     <!-- Filter tabs -->
     <div class="card p-1 mb-5 inline-flex gap-1">
       <button
-        v-for="tab in ['pending', 'approved', 'rejected']" :key="tab"
-        @click="filter = tab; load()"
-        class="cursor-pointer px-4 py-1.5 rounded-lg text-[13px] font-medium capitalize transition-colors"
-        :class="filter === tab ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-700'"
-      >{{ tab }}</button>
+        v-for="tab in tabs" :key="tab.value"
+        @click="filter = tab.value; load()"
+        class="cursor-pointer px-4 py-1.5 rounded-lg text-[13px] font-medium transition-colors"
+        :class="filter === tab.value ? 'bg-slate-900 text-white' : 'text-slate-500 hover:text-slate-700'"
+      >{{ __(tab.label) }}</button>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
 
     <div v-else class="card overflow-hidden">
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Student</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Class / Subject</TableHead>
-            <TableHead>Reason</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Action</TableHead>
+            <TableHead>{{ __('Student') }}</TableHead>
+            <TableHead>{{ __('Date') }}</TableHead>
+            <TableHead>{{ __('Class') }} / {{ __('Subject') }}</TableHead>
+            <TableHead>{{ __('Reason') }}</TableHead>
+            <TableHead>{{ __('Status') }}</TableHead>
+            <TableHead>{{ __('Action') }}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -38,14 +38,14 @@
               <span class="text-slate-400"> · {{ r.attendance?.class_subject?.subject?.name }}</span>
             </TableCell>
             <TableCell class="max-w-[180px] truncate text-slate-500">{{ r.reason }}</TableCell>
-            <TableCell><span class="badge" :class="statusConfig[r.status]">{{ r.status }}</span></TableCell>
+            <TableCell><span class="badge" :class="statusConfig[r.status]">{{ __(statusLabel(r.status)) }}</span></TableCell>
             <TableCell>
               <Button
                 v-if="r.status === 'pending'"
                 variant="outline"
                 size="sm"
                 @click="openReview(r)"
-              >Review</Button>
+              >{{ __('Review') }}</Button>
               <span v-else class="text-slate-400 text-[12px]">—</span>
             </TableCell>
           </TableRow>
@@ -54,8 +54,8 @@
               <Empty class="border-0 rounded-none">
                 <EmptyHeader>
                   <EmptyMedia variant="icon"><FileText class="w-6 h-6" /></EmptyMedia>
-                  <EmptyTitle>No {{ filter }} excuse requests</EmptyTitle>
-                  <EmptyDescription>No excuse requests with this status at the moment.</EmptyDescription>
+                  <EmptyTitle>{{ __('No pending requests') }}</EmptyTitle>
+                  <EmptyDescription>{{ __('All caught up.') }}</EmptyDescription>
                 </EmptyHeader>
               </Empty>
             </TableCell>

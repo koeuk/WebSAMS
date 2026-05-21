@@ -7,18 +7,18 @@
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
-        {{ __('classes.backToClasses') }}
+        {{ __('Classes') }}
       </NuxtLink>
       <div class="h-4 w-px bg-slate-200"></div>
       <div>
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('classes.studentList') }}</h2>
+        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Student List') }}</h2>
         <p class="text-sm text-slate-500 mt-0.5">
-          {{ __('classes.studentsEnrolled', { n: students.length }) }}
+          {{ __('{n} students enrolled', { n: students.length }) }}
         </p>
       </div>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('common.loading') }}</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
 
     <template v-else>
       <!-- Search -->
@@ -30,7 +30,7 @@
           <Input
             v-model="search"
             type="text"
-            :placeholder="__('classes.searchStudents')"
+            :placeholder="__('Search students...')"
             class="pl-9"
           />
         </div>
@@ -42,11 +42,11 @@
           <TableHeader>
             <TableRow>
               <TableHead class="w-12">#</TableHead>
-              <TableHead>{{ __('fields.student') }}</TableHead>
-              <TableHead>{{ __('fields.email') }}</TableHead>
-              <TableHead>{{ __('fields.idNumber') }}</TableHead>
-              <TableHead>{{ __('fields.year') }}</TableHead>
-              <TableHead>{{ __('fields.gender') }}</TableHead>
+              <TableHead>{{ __('Student') }}</TableHead>
+              <TableHead>{{ __('Email') }}</TableHead>
+              <TableHead>{{ __('ID Number') }}</TableHead>
+              <TableHead>{{ __('Year') }}</TableHead>
+              <TableHead>{{ __('Gender') }}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -67,7 +67,7 @@
               <TableCell class="font-mono text-[13px] text-slate-400">{{ student.id_number || '-' }}</TableCell>
               <TableCell>
                 <span v-if="student.year_level" class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">
-                  {{ __('fields.yearN', { n: student.year_level }) }}
+                  {{ __('Year {n}', { n: student.year_level }) }}
                 </span>
                 <span v-else class="text-slate-400">-</span>
               </TableCell>
@@ -75,7 +75,7 @@
             </TableRow>
             <TableRow v-if="!filtered.length">
               <TableCell colspan="6" class="text-center py-12 text-slate-400">
-                {{ search ? 'No students match your search.' : 'No students enrolled.' }}
+                {{ search ? __('No students match your search.') : __('No students enrolled.') }}
               </TableCell>
             </TableRow>
           </TableBody>
