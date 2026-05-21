@@ -128,13 +128,13 @@ const submit = () => {
     if (isEdit.value) {
         form.put(route('admin.time-slots.update', props.timeSlot.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('Time slot updated successfully')); close() },
+            onSuccess: () => { close() },
             onError: () => { toast.error(__('Failed to update time slot')) },
         })
     } else {
         form.post(route('admin.time-slots.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('Time slot created successfully')); close(); form.reset(); form.type = 'morning' },
+            onSuccess: () => { close(); form.reset(); form.type = 'morning' },
             onError: () => { toast.error(__('Failed to create time slot')) },
         })
     }

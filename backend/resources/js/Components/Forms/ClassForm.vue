@@ -106,13 +106,13 @@ const submit = () => {
     if (isEdit.value) {
         form.put(route('admin.classes.update', props.schoolClass.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('Class updated successfully')); close() },
+            onSuccess: () => { close() },
             onError: () => { toast.error(__('Failed to update class')) },
         })
     } else {
         form.post(route('admin.classes.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('Class created successfully')); close(); form.reset() },
+            onSuccess: () => { close(); form.reset() },
             onError: () => { toast.error(__('Failed to create class')) },
         })
     }

@@ -15,7 +15,7 @@
         <div class="flex items-start justify-between">
           <div>
             <div class="flex items-center gap-2 mb-1.5">
-              <span class="badge" :class="typeBadgeClass(n.type)">{{ __(`notifications.type.${n.type}`) }}</span>
+              <span class="badge" :class="typeBadgeClass(n.type)">{{ __(n.type) }}</span>
               <h3 class="text-[13px] font-semibold text-slate-900">{{ n.title }}</h3>
             </div>
             <p class="text-[13px] text-slate-600">{{ n.message }}</p>

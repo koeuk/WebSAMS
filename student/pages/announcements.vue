@@ -28,7 +28,7 @@
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 mb-1 flex-wrap">
                 <h3 class="font-semibold text-slate-900">{{ a.title }}</h3>
-                <span class="badge" :class="audienceConfig[a.audience] ?? ''">{{ __(`announcements.audience.${a.audience}`) }}</span>
+                <span class="badge" :class="audienceConfig[a.audience] ?? ''">{{ __(a.audience) }}</span>
               </div>
               <p class="text-[12px] text-slate-400">
                 {{ a.author?.name }} · {{ formatDate(a.published_at) }}

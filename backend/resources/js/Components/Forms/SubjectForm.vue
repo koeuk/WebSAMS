@@ -130,13 +130,13 @@ const submit = () => {
     if (isEdit.value) {
         form.put(route('admin.subjects.update', props.subject.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('Subject updated successfully')); close() },
+            onSuccess: () => { close() },
             onError: () => { toast.error(__('Failed to update subject')) },
         })
     } else {
         form.post(route('admin.subjects.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('Subject created successfully')); close(); form.reset() },
+            onSuccess: () => { close(); form.reset() },
             onError: () => { toast.error(__('Failed to create subject')) },
         })
     }

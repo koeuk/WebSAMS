@@ -70,7 +70,7 @@
             <TableCell>{{ record.class_subject?.school_class?.name }}</TableCell>
             <TableCell>{{ record.class_subject?.subject?.name }}</TableCell>
             <TableCell>
-              <span class="badge" :class="statusConfig[record.status] ?? ''">{{ __(`common.${record.status}`) }}</span>
+              <span class="badge" :class="statusConfig[record.status] ?? ''">{{ __(({ present: 'Present', absent: 'Absent', late: 'Late', excused: 'Excused' } as Record<string, string>)[record.status] ?? record.status) }}</span>
             </TableCell>
             <TableCell class="text-slate-500">{{ record.remarks || '-' }}</TableCell>
           </TableRow>

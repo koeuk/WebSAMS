@@ -44,7 +44,7 @@
             <div class="flex items-start gap-3 flex-wrap">
               <h3 class="text-xl font-bold text-slate-900 leading-tight">{{ profile.name }}</h3>
               <span class="badge" :class="status(profile.status || 'active').pill">
-                {{ __(`profile.userStatus.${profile.status || 'active'}`) }}
+                {{ __(({ active: 'Active', inactive: 'Inactive', graduated: 'Graduated', suspended: 'Suspended' } as Record<string, string>)[profile.status || 'active'] ?? 'Active') }}
               </span>
             </div>
             <p class="text-[13px] font-mono text-slate-400 mt-0.5">{{ profile.id_number || __('No ID assigned') }}</p>

@@ -118,13 +118,13 @@ const submit = () => {
     if (isEdit.value) {
         form.put(route('admin.semesters.update', props.semester.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('Semester updated successfully')); close() },
+            onSuccess: () => { close() },
             onError: () => { toast.error(__('Failed to update semester')) },
         })
     } else {
         form.post(route('admin.semesters.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('Semester created successfully')); close(); form.reset() },
+            onSuccess: () => { close(); form.reset() },
             onError: () => { toast.error(__('Failed to create semester')) },
         })
     }
