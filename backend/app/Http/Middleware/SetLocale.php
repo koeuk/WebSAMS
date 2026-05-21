@@ -11,9 +11,11 @@ class SetLocale
 
     public function handle(Request $request, Closure $next)
     {
+        $sessionLocale = $request->hasSession() ? $request->session()->get('locale') : null;
+
         $locale = $request->header('X-Locale')
             ?? $request->cookie('locale')
-            ?? $request->session()->get('locale')
+            ?? $sessionLocale
             ?? config('app.locale');
 
         if (!in_array($locale, self::SUPPORTED, true)) {
@@ -21,7 +23,10 @@ class SetLocale
         }
 
         app()->setLocale($locale);
-        $request->session()->put('locale', $locale);
+
+        if ($request->hasSession()) {
+            $request->session()->put('locale', $locale);
+        }
 
         return $next($request);
     }
