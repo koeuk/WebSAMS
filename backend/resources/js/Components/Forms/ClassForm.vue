@@ -14,9 +14,10 @@
 
         <div class="space-y-4">
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
                 <TranslatableInput
                     v-model="form.name"
+                    :label="__('Name')"
+                    required
                     :placeholder="{ en: 'e.g. Year 1 - A', km: 'ឧ. ឆ្នាំ​ទី​១ - A', zh: '例如:一年级 - A' }"
                     @update:model-value="touch('name')"
                 />

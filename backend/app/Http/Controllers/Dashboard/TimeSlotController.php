@@ -29,7 +29,10 @@ class TimeSlotController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'       => 'required|string|max:255',
+            'name'       => 'required|array',
+            'name.en'    => 'required|string|max:255',
+            'name.km'    => 'nullable|string|max:255',
+            'name.zh'    => 'nullable|string|max:255',
             'start_time' => 'required|date_format:H:i',
             'end_time'   => 'required|date_format:H:i|after:start_time',
             'type'       => 'required|in:morning,afternoon,evening',
@@ -50,7 +53,9 @@ class TimeSlotController extends Controller
     public function edit(TimeSlot $timeSlot)
     {
         return Inertia::render('TimeSlots/Edit', [
-            'timeSlot' => $timeSlot,
+            'timeSlot' => array_merge($timeSlot->toArray(), [
+                'name_translations' => $timeSlot->getTranslations('name'),
+            ]),
             'types'    => TimeSlotType::options(),
         ]);
     }
@@ -58,7 +63,10 @@ class TimeSlotController extends Controller
     public function update(Request $request, TimeSlot $timeSlot)
     {
         $validated = $request->validate([
-            'name'       => 'required|string|max:255',
+            'name'       => 'required|array',
+            'name.en'    => 'required|string|max:255',
+            'name.km'    => 'nullable|string|max:255',
+            'name.zh'    => 'nullable|string|max:255',
             'start_time' => 'required|date_format:H:i',
             'end_time'   => 'required|date_format:H:i|after:start_time',
             'type'       => 'required|in:morning,afternoon,evening',

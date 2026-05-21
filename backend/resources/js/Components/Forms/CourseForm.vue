@@ -14,9 +14,10 @@
 
         <div class="space-y-4">
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
                 <TranslatableInput
                     v-model="form.name"
+                    :label="__('Name')"
+                    required
                     :placeholder="{ en: 'e.g. Computer Science', km: 'ឧ. វិទ្យាសាស្ត្រ​កុំព្យូទ័រ', zh: '例如:计算机科学' }"
                     @update:model-value="touch('name')"
                 />
@@ -28,9 +29,9 @@
                 <p v-if="error('code') || form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ error('code') || form.errors.code }}</p>
             </div>
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Description') }}</Label>
                 <TranslatableRichText
                     v-model="form.description"
+                    :label="__('Description')"
                     :placeholder="__('Optional description…')"
                 />
             </div>

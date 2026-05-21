@@ -28,9 +28,10 @@
                 <p v-if="error('course_id') || form.errors.course_id" class="text-[12px] text-rose-500 mt-1">{{ error('course_id') || form.errors.course_id }}</p>
             </div>
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
                 <TranslatableInput
                     v-model="form.name"
+                    :label="__('Name')"
+                    required
                     :placeholder="{ en: 'e.g. Introduction to Programming', km: 'ឧ. មូលដ្ឋាន​ការ​សរសេរ​កម្មវិធី', zh: '例如:编程入门' }"
                     @update:model-value="touch('name')"
                 />

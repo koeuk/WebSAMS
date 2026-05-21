@@ -4,12 +4,12 @@
             <div class="flex items-center gap-4 mb-8">
                 <Link href="/admin/attendance" class="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition-colors">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"/></svg>
-                    Back
+                    {{ __('Back') }}
                 </Link>
                 <div class="h-5 w-px bg-slate-200"></div>
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Bulk Mark Attendance</h2>
-                    <p class="text-sm text-slate-500 mt-0.5">Mark attendance for an entire class at once</p>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Bulk Mark Attendance') }}</h2>
+                    <p class="text-sm text-slate-500 mt-0.5">{{ __('Mark attendance for an entire class at once') }}</p>
                 </div>
             </div>
 
@@ -20,10 +20,10 @@
                 <CardContent class="p-4">
                     <div class="flex flex-wrap gap-3 items-end">
                         <div class="min-w-[250px]">
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class - Subject</label>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Class - Subject') }}</label>
                             <Select v-model="selectedClass" @update:model-value="loadStudents">
                                 <SelectTrigger class="w-full">
-                                    <SelectValue placeholder="Select Class - Subject" />
+                                    <SelectValue :placeholder="__('Select Class - Subject')" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem v-for="cs in classSubjects" :key="cs.id" :value="String(cs.id)">{{ csLabel(cs) }}</SelectItem>
@@ -31,10 +31,10 @@
                             </Select>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Time Slot</label>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Time Slot') }}</label>
                             <Select v-model="selectedTimeSlot">
                                 <SelectTrigger class="w-[220px]">
-                                    <SelectValue placeholder="Select Time Slot" />
+                                    <SelectValue :placeholder="__('Select Time Slot')" />
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem v-for="ts in timeSlots" :key="ts.id" :value="String(ts.id)">{{ ts.name }} ({{ ts.start_time?.slice(0,5) }} - {{ ts.end_time?.slice(0,5) }})</SelectItem>
@@ -42,12 +42,12 @@
                             </Select>
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Date</label>
-                            <DatePicker v-model="selectedDate" placeholder="Select date" />
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Date') }}</label>
+                            <DatePicker v-model="selectedDate" :placeholder="__('Select date')" />
                         </div>
                         <Button v-if="students.length" variant="outline" @click="markAllPresent" class="flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                            Mark All Present
+                            {{ __('Mark All Present') }}
                         </Button>
                     </div>
                 </CardContent>
@@ -58,9 +58,9 @@
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Student</TableHead>
-                            <TableHead>Status</TableHead>
-                            <TableHead>Remarks</TableHead>
+                            <TableHead>{{ __('Student') }}</TableHead>
+                            <TableHead>{{ __('Status') }}</TableHead>
+                            <TableHead>{{ __('Remarks') }}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -74,14 +74,14 @@
                                     </div>
                                 </RadioGroup>
                             </TableCell>
-                            <TableCell><Input v-model="attendances[student.id].remarks" type="text" class="py-1.5 h-auto" placeholder="Optional" /></TableCell>
+                            <TableCell><Input v-model="attendances[student.id].remarks" type="text" class="py-1.5 h-auto" :placeholder="__('Optional')" /></TableCell>
                         </TableRow>
                     </TableBody>
                 </Table>
                 <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
                     <Button @click="submit" class="flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>
-                        Submit Attendance
+                        {{ __('Submit Attendance') }}
                     </Button>
                 </div>
             </Card>
@@ -90,14 +90,14 @@
                 <CardContent class="p-12 text-center">
                     <div class="inline-flex items-center gap-2 text-sm text-slate-400">
                         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-                        Loading students...
+                        {{ __('Loading students...') }}
                     </div>
                 </CardContent>
             </Card>
 
             <Card v-else-if="selectedClass && !loadingStudents">
                 <CardContent class="p-12 text-center text-slate-400">
-                    No students found for this class.
+                    {{ __('No students found for this class.') }}
                 </CardContent>
             </Card>
         </div>
@@ -117,6 +117,7 @@ import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/Components/ui/radio-group';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({ classSubjects: Array, timeSlots: Array });
 
@@ -166,9 +167,9 @@ const submit = () => {
 };
 
 const statusList = [
-    { value: 'present', label: 'Present', radioClass: 'border-emerald-500 text-emerald-500', labelClass: 'text-emerald-700' },
-    { value: 'absent',  label: 'Absent',  radioClass: 'border-rose-500 text-rose-500',       labelClass: 'text-rose-700' },
-    { value: 'late',    label: 'Late',    radioClass: 'border-amber-500 text-amber-500',      labelClass: 'text-amber-700' },
-    { value: 'excused', label: 'Excused', radioClass: 'border-sky-500 text-sky-500',          labelClass: 'text-sky-700' },
+    { value: 'present', label: __('Present'), radioClass: 'border-emerald-500 text-emerald-500', labelClass: 'text-emerald-700' },
+    { value: 'absent',  label: __('Absent'),  radioClass: 'border-rose-500 text-rose-500',       labelClass: 'text-rose-700' },
+    { value: 'late',    label: __('Late'),    radioClass: 'border-amber-500 text-amber-500',      labelClass: 'text-amber-700' },
+    { value: 'excused', label: __('Excused'), radioClass: 'border-sky-500 text-sky-500',          labelClass: 'text-sky-700' },
 ];
 </script>

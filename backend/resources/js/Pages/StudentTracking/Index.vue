@@ -2,8 +2,8 @@
     <AdminLayout>
         <div class="animate-fade-in">
             <div class="mb-8">
-                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Student Tracking</h2>
-                <p class="text-sm text-slate-500 mt-1">Monitor student attendance rates and identify at-risk students</p>
+                <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Student Tracking') }}</h2>
+                <p class="text-sm text-slate-500 mt-1">{{ __('Monitor student attendance rates and identify at-risk students') }}</p>
             </div>
 
             <!-- Summary Cards -->
@@ -12,7 +12,7 @@
                     <CardContent class="p-0">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-[13px] font-medium text-slate-500">Total Students</p>
+                                <p class="text-[13px] font-medium text-slate-500">{{ __('Total Students') }}</p>
                                 <p class="text-3xl font-bold text-slate-900 mt-1.5 tracking-tight">{{ summary?.totalStudents }}</p>
                             </div>
                             <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
@@ -25,7 +25,7 @@
                     <CardContent class="p-0">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-[13px] font-medium text-slate-500">Low Attendance (&lt;{{ threshold }}%)</p>
+                                <p class="text-[13px] font-medium text-slate-500">{{ __('Low Attendance (<{n}%)', { n: threshold }) }}</p>
                                 <p class="text-3xl font-bold text-rose-600 mt-1.5 tracking-tight">{{ summary?.lowAttendance }}</p>
                             </div>
                             <div class="w-12 h-12 rounded-2xl bg-rose-50 flex items-center justify-center">
@@ -38,7 +38,7 @@
                     <CardContent class="p-0">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-[13px] font-medium text-slate-500">Average Attendance Rate</p>
+                                <p class="text-[13px] font-medium text-slate-500">{{ __('Average Attendance Rate') }}</p>
                                 <p class="text-3xl font-bold mt-1.5 tracking-tight" :class="(summary?.averageRate ?? 0) >= threshold ? 'text-emerald-600' : 'text-rose-600'">{{ summary?.averageRate }}%</p>
                             </div>
                             <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center">
@@ -54,32 +54,32 @@
                 <CardContent class="p-4">
                     <div class="flex flex-wrap gap-3 items-end">
                         <div class="flex flex-col gap-1.5">
-                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Semester</Label>
-                            <SelectDropdown v-model="semesterFilter" :options="semesterOptions" placeholder="All Time" @change="yearFilter = ''; applyFilters()" />
+                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('Semester') }}</Label>
+                            <SelectDropdown v-model="semesterFilter" :options="semesterOptions" :placeholder="__('All Time')" @change="yearFilter = ''; applyFilters()" />
                         </div>
                         <div class="flex flex-col gap-1.5">
-                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Academic Year</Label>
-                            <SelectDropdown v-model="yearFilter" :options="yearOptions" placeholder="All Years" @change="semesterFilter = ''; applyFilters()" />
+                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('Academic Year') }}</Label>
+                            <SelectDropdown v-model="yearFilter" :options="yearOptions" :placeholder="__('All Years')" @change="semesterFilter = ''; applyFilters()" />
                         </div>
                         <div class="flex flex-col gap-1.5">
-                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Course</Label>
-                            <SelectDropdown v-model="courseFilter" :options="courseOptions" placeholder="All Courses" @change="applyFilters()" />
+                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('Course') }}</Label>
+                            <SelectDropdown v-model="courseFilter" :options="courseOptions" :placeholder="__('All Courses')" @change="applyFilters()" />
                         </div>
                         <div class="flex flex-col gap-1.5">
-                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Class</Label>
-                            <SelectDropdown v-model="classFilter" :options="classOptions" placeholder="All Classes" @change="applyFilters()" />
+                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('Class') }}</Label>
+                            <SelectDropdown v-model="classFilter" :options="classOptions" :placeholder="__('All Classes')" @change="applyFilters()" />
                         </div>
                         <div class="flex flex-col gap-1.5">
-                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Year Level</Label>
-                            <SelectDropdown v-model="yearLevelFilter" :options="yearLevelOptions" placeholder="All Years" @change="applyFilters()" />
+                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('Year Level') }}</Label>
+                            <SelectDropdown v-model="yearLevelFilter" :options="yearLevelOptions" :placeholder="__('All Years')" @change="applyFilters()" />
                         </div>
                         <div class="flex flex-col gap-1.5">
-                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Threshold (%)</Label>
+                            <Label class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('Threshold (%)') }}</Label>
                             <Input v-model="thresholdFilter" type="number" min="0" max="100" class="w-24" @change="applyFilters()" />
                         </div>
                         <Button v-if="hasActiveFilters" variant="outline" size="sm" @click="clearFilters" class="flex items-center gap-1.5 self-end">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                            Clear
+                            {{ __('Clear') }}
                         </Button>
                     </div>
                 </CardContent>
@@ -92,23 +92,23 @@
                         <TableHeader>
                             <TableRow>
                                 <TableHead>#</TableHead>
-                                <TableHead>Student</TableHead>
-                                <TableHead>Year</TableHead>
-                                <TableHead>Email</TableHead>
-                                <TableHead class="text-center">Total</TableHead>
-                                <TableHead class="text-center">Present</TableHead>
-                                <TableHead class="text-center">Absent</TableHead>
-                                <TableHead class="text-center">Late</TableHead>
-                                <TableHead class="text-center">Rate</TableHead>
-                                <TableHead class="text-center">Status</TableHead>
-                                <TableHead class="text-right">Action</TableHead>
+                                <TableHead>{{ __('Student') }}</TableHead>
+                                <TableHead>{{ __('Year') }}</TableHead>
+                                <TableHead>{{ __('Email') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Total') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Present') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Absent') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Late') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Rate') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Status') }}</TableHead>
+                                <TableHead class="text-right">{{ __('Action') }}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             <TableRow v-for="(row, index) in tracking.data" :key="row.student?.id" :class="row.status === 'danger' ? 'bg-rose-50/50' : row.status === 'warning' ? 'bg-amber-50/50' : ''">
                                 <TableCell class="text-slate-400 font-mono text-[13px]">{{ (tracking.from ?? 1) + index }}</TableCell>
                                 <TableCell class="font-semibold text-slate-900">{{ row.student?.name }}</TableCell>
-                                <TableCell>{{ row.student?.year_level ? 'Y' + row.student.year_level : '-' }}</TableCell>
+                                <TableCell>{{ row.student?.year_level ? __('Y{n}', { n: row.student.year_level }) : '-' }}</TableCell>
                                 <TableCell>{{ row.student?.email }}</TableCell>
                                 <TableCell class="text-center font-mono">{{ row.total }}</TableCell>
                                 <TableCell class="text-center font-mono text-emerald-600">{{ row.present }}</TableCell>
@@ -120,7 +120,7 @@
                                 </TableCell>
                                 <TableCell class="text-right">
                                     <Button variant="ghost" size="sm" as-child class="text-blue-600 hover:text-blue-700 hover:bg-blue-50">
-                                        <Link :href="`/admin/student-tracking/${row.student?.id}${semesterFilter ? '?semester_id=' + semesterFilter : ''}`">View Detail</Link>
+                                        <Link :href="`/admin/student-tracking/${row.student?.id}${semesterFilter ? '?semester_id=' + semesterFilter : ''}`">{{ __('View Detail') }}</Link>
                                     </Button>
                                 </TableCell>
                             </TableRow>

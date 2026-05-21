@@ -2,8 +2,8 @@
     <AdminLayout>
         <Modal
             :show="isOpen"
-            title="Delete Semester"
-            :message="`Delete '${semester.name}' (${semester.academic_year})?`"
+            :title="__('Delete Semester')"
+            :message="__(`Delete '{name}' ({year})?`, { name: semester.name, year: semester.academic_year })"
             :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
@@ -16,6 +16,7 @@ import { ref } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import Modal from '@/Components/Modal.vue'
+import { __ } from '@/Composables/useTranslate'
 
 const props = defineProps({ semester: Object })
 

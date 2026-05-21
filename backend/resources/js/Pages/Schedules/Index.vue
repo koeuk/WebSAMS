@@ -3,12 +3,12 @@
         <div class="animate-fade-in">
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Schedules</h2>
-                    <p class="text-sm text-slate-500 mt-1">Weekly class schedules overview</p>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Schedules') }}</h2>
+                    <p class="text-sm text-slate-500 mt-1">{{ __('Weekly class schedules overview') }}</p>
                 </div>
                 <Button @click="openCreate" class="flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                    Create Schedule
+                    {{ __('Create Schedule') }}
                 </Button>
             </div>
 
@@ -24,12 +24,12 @@
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Time</TableHead>
-                                    <TableHead>Class</TableHead>
-                                    <TableHead>Subject</TableHead>
-                                    <TableHead>Teacher</TableHead>
-                                    <TableHead>Room</TableHead>
-                                    <TableHead class="text-right">Actions</TableHead>
+                                    <TableHead>{{ __('Time') }}</TableHead>
+                                    <TableHead>{{ __('Class') }}</TableHead>
+                                    <TableHead>{{ __('Subject') }}</TableHead>
+                                    <TableHead>{{ __('Teacher') }}</TableHead>
+                                    <TableHead>{{ __('Room') }}</TableHead>
+                                    <TableHead class="text-right">{{ __('Actions') }}</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -41,8 +41,8 @@
                                     <TableCell>{{ s.room || '-' }}</TableCell>
                                     <TableCell class="text-right">
                                         <div class="flex items-center justify-end gap-1">
-                                            <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(s)">Edit</Button>
-                                            <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/schedules/${s.id}/delete`, { preserveState: true, preserveScroll: true })">Delete</Button>
+                                            <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(s)">{{ __('Edit') }}</Button>
+                                            <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/schedules/${s.id}/delete`, { preserveState: true, preserveScroll: true })">{{ __('Delete') }}</Button>
                                         </div>
                                     </TableCell>
                                 </TableRow>
@@ -56,8 +56,8 @@
                 <Empty class="border-0 rounded-none">
                     <EmptyHeader>
                         <EmptyMedia variant="icon"><CalendarDays class="w-6 h-6" /></EmptyMedia>
-                        <EmptyTitle>No schedules yet</EmptyTitle>
-                        <EmptyDescription>Create your first schedule to get started.</EmptyDescription>
+                        <EmptyTitle>{{ __('No schedules yet') }}</EmptyTitle>
+                        <EmptyDescription>{{ __('Create your first schedule to get started.') }}</EmptyDescription>
                     </EmptyHeader>
                 </Empty>
             </Card>
@@ -79,10 +79,11 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@
 import { Card, CardContent } from '@/Components/ui/card';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
 import { CalendarDays } from 'lucide-vue-next';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({ schedules: Object, classSubjects: Array, timeSlots: Array, days: Array });
 
-const dayLabels = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' };
+const dayLabels = { mon: __('Monday'), tue: __('Tuesday'), wed: __('Wednesday'), thu: __('Thursday'), fri: __('Friday'), sat: __('Saturday'), sun: __('Sunday') };
 const dayColors = { mon: 'bg-blue-50 text-blue-700', tue: 'bg-emerald-50 text-emerald-700', wed: 'bg-amber-50 text-amber-700', thu: 'bg-violet-50 text-violet-700', fri: 'bg-rose-50 text-rose-700', sat: 'bg-sky-50 text-sky-700', sun: 'bg-slate-100 text-slate-600' };
 
 // ── Form (create & edit) ─────────────────────────────────

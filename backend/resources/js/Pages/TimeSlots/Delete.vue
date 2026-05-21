@@ -2,8 +2,8 @@
     <AdminLayout>
         <Modal
             :show="isOpen"
-            title="Delete Time Slot"
-            :message="`Delete '${timeSlot.name}' (${timeSlot.start_time} – ${timeSlot.end_time})?`"
+            :title="__('Delete Time Slot')"
+            :message="__(`Delete '{name}' ({start} – {end})?`, { name: timeSlot.name, start: timeSlot.start_time, end: timeSlot.end_time })"
             :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
@@ -16,6 +16,7 @@ import { ref } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import Modal from '@/Components/Modal.vue'
+import { __ } from '@/Composables/useTranslate'
 
 const props = defineProps({ timeSlot: Object })
 

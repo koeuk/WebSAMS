@@ -14,9 +14,14 @@
 
         <div class="space-y-4">
             <div>
-                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" :placeholder="__('e.g. Morning 1')" @update:model-value="touch('name')" />
-                <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
+                <TranslatableInput
+                    v-model="form.name"
+                    :label="__('Name')"
+                    required
+                    :placeholder="{ en: 'e.g. Morning 1', km: 'ឧ. ព្រឹក ១', zh: '例如:上午 1' }"
+                    @update:model-value="touch('name')"
+                />
+                <p v-if="error('name') || nameError" class="text-[12px] text-rose-500 mt-1">{{ error('name') || nameError }}</p>
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
@@ -66,6 +71,7 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
+import TranslatableInput from '@/Components/Forms/TranslatableInput.vue'
 import { useFormValidation } from '@/Composables/useFormValidation'
 import { __ } from '@/Composables/useTranslate'
 
@@ -77,21 +83,43 @@ const props = defineProps({
 const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.timeSlot)
 
-const form = useForm({ name: '', start_time: '', end_time: '', type: 'morning' })
+const emptyTranslations = () => ({ en: '', km: '', zh: '' })
+
+const form = useForm({ name: emptyTranslations(), start_time: '', end_time: '', type: 'morning' })
+
+const nameError = computed(() => {
+    const en = (form.name?.en ?? '').trim()
+    if (!en) return __('English name is required')
+    return null
+})
 
 const { touch, markAllTouched, reset, error } = useFormValidation({
-    name:       () => !form.name?.trim() ? __('Name is required') : null,
+    name:       () => nameError.value,
     start_time: () => !form.start_time ? __('Start time is required') : null,
     end_time:   () => !form.end_time ? __('End time is required') : null,
 })
 
+const readTranslations = (value) => {
+    if (!value) return emptyTranslations()
+    if (typeof value === 'string') return { ...emptyTranslations(), en: value }
+    return { ...emptyTranslations(), ...value }
+}
+
 watch(() => props.timeSlot, (ts) => {
     reset()
-    if (ts) { form.name = ts.name; form.start_time = ts.start_time?.slice(0, 5) || ''; form.end_time = ts.end_time?.slice(0, 5) || ''; form.type = ts.type || 'morning' }
-    else { form.reset(); form.type = 'morning' }
+    if (ts) {
+        form.name = readTranslations(ts.name_translations ?? ts.name)
+        form.start_time = ts.start_time?.slice(0, 5) || ''
+        form.end_time = ts.end_time?.slice(0, 5) || ''
+        form.type = ts.type || 'morning'
+    } else {
+        form.reset()
+        form.name = emptyTranslations()
+        form.type = 'morning'
+    }
 }, { immediate: true })
 
-const canSubmit = computed(() => !!form.name?.trim() && !!form.start_time && !!form.end_time)
+const canSubmit = computed(() => !nameError.value && !!form.start_time && !!form.end_time)
 
 const close = () => emit('update:open', false)
 

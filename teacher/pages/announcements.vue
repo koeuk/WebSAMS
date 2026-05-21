@@ -50,11 +50,11 @@
         <div class="space-y-4">
           <div class="space-y-1.5">
             <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Title</Label>
-            <Input v-model="form.title" type="text" placeholder="Announcement title..." />
+            <TranslatableInput v-model="form.title" :placeholder="{ en: 'Announcement title...', km: 'ចំណង​ជើង​សេចក្តី​ប្រកាស...', zh: '公告标题...' }" />
           </div>
           <div class="space-y-1.5">
             <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Message</Label>
-            <RichTextEditor v-model="form.body" placeholder="Write your announcement..." />
+            <TranslatableRichText v-model="form.body" :placeholder="{ en: 'Write your announcement...', km: 'សរសេរ​សេចក្តី​ប្រកាស​របស់​អ្នក...', zh: '撰写您的公告...' }" />
           </div>
           <div class="space-y-1.5">
             <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Audience</Label>
@@ -69,7 +69,7 @@
         </div>
         <DialogFooter class="gap-2 mt-2">
           <Button variant="outline" @click="showForm = false">Cancel</Button>
-          <Button @click="save" :disabled="saving || !form.title || !form.body">
+          <Button @click="save" :disabled="saving || !(form.title?.en || '').trim() || !(form.body?.en || '').trim()">
             {{ saving ? 'Saving...' : (editing ? 'Update' : 'Publish') }}
           </Button>
         </DialogFooter>
@@ -81,6 +81,8 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { Megaphone } from 'lucide-vue-next'
+import TranslatableInput from '~/components/TranslatableInput.vue'
+import TranslatableRichText from '~/components/TranslatableRichText.vue'
 
 definePageMeta({ middleware: 'auth' })
 
@@ -89,7 +91,19 @@ const data = ref<any>({ data: [] })
 const loading = ref(true)
 const showForm = ref(false)
 
-const form = ref({ title: '', body: '', audience: 'students', class_id: '' })
+const emptyTr = () => ({ en: '', km: '', zh: '' })
+const readTr = (v: any) => {
+  if (!v) return emptyTr()
+  if (typeof v === 'string') return { ...emptyTr(), en: v }
+  return { ...emptyTr(), ...v }
+}
+
+const form = ref<{ title: Record<string, string>, body: Record<string, string>, audience: string, class_id: string | number }>({
+  title: emptyTr(),
+  body: emptyTr(),
+  audience: 'students',
+  class_id: '',
+})
 const saving = ref(false)
 const editing = ref<any>(null)
 
@@ -100,8 +114,21 @@ onMounted(async () => {
 
 const announcements = computed(() => data.value?.data ?? [])
 
-const openNew = () => { editing.value = null; form.value = { title: '', body: '', audience: 'students', class_id: '' }; showForm.value = true }
-const openEdit = (a: any) => { editing.value = a; form.value = { title: a.title, body: a.body, audience: a.audience, class_id: a.class_id ?? '' }; showForm.value = true }
+const openNew = () => {
+  editing.value = null
+  form.value = { title: emptyTr(), body: emptyTr(), audience: 'students', class_id: '' }
+  showForm.value = true
+}
+const openEdit = (a: any) => {
+  editing.value = a
+  form.value = {
+    title: readTr(a.title_translations ?? a.title),
+    body: readTr(a.body_translations ?? a.body),
+    audience: a.audience,
+    class_id: a.class_id ?? '',
+  }
+  showForm.value = true
+}
 
 const save = async () => {
   saving.value = true

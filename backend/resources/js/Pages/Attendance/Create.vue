@@ -96,6 +96,7 @@ import { Label } from '@/Components/ui/label';
 import { Card, CardContent } from '@/Components/ui/card';
 import RichTextEditor from '@/Components/RichTextEditor.vue';
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({ classSubjects: Array, students: Array, timeSlots: Array, statuses: Array });
 

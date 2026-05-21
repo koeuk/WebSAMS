@@ -20,8 +20,14 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'title'        => 'required|string|max:255',
-            'body'         => 'required|string',
+            'title'        => 'required|array',
+            'title.en'     => 'required|string|max:255',
+            'title.km'     => 'nullable|string|max:255',
+            'title.zh'     => 'nullable|string|max:255',
+            'body'         => 'required|array',
+            'body.en'      => 'required|string',
+            'body.km'      => 'nullable|string',
+            'body.zh'      => 'nullable|string',
             'audience'     => 'in:all,teachers,students',
             'class_id'     => 'nullable|exists:school_classes,id',
             'published_at' => 'nullable|date',
@@ -32,7 +38,7 @@ class AnnouncementController extends Controller
             'published_at' => $data['published_at'] ?? now(),
         ]));
 
-        return response()->json($announcement, 201);
+        return response()->json($this->withTranslations($announcement), 201);
     }
 
     public function update(Request $request, Announcement $announcement)
@@ -40,14 +46,28 @@ class AnnouncementController extends Controller
         if ($announcement->author_id !== $request->user()->id) abort(403);
 
         $data = $request->validate([
-            'title'    => 'sometimes|string|max:255',
-            'body'     => 'sometimes|string',
+            'title'    => 'sometimes|array',
+            'title.en' => 'sometimes|string|max:255',
+            'title.km' => 'nullable|string|max:255',
+            'title.zh' => 'nullable|string|max:255',
+            'body'     => 'sometimes|array',
+            'body.en'  => 'sometimes|string',
+            'body.km'  => 'nullable|string',
+            'body.zh'  => 'nullable|string',
             'audience' => 'sometimes|in:all,teachers,students',
             'class_id' => 'nullable|exists:school_classes,id',
         ]);
 
         $announcement->update($data);
-        return response()->json($announcement);
+        return response()->json($this->withTranslations($announcement->refresh()));
+    }
+
+    private function withTranslations(Announcement $a): array
+    {
+        return array_merge($a->toArray(), [
+            'title_translations' => $a->getTranslations('title'),
+            'body_translations'  => $a->getTranslations('body'),
+        ]);
     }
 
     public function destroy(Request $request, Announcement $announcement)

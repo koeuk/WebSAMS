@@ -3,12 +3,12 @@
         <div class="animate-fade-in">
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Time Slots</h2>
-                    <p class="text-sm text-slate-500 mt-1">Manage class time periods</p>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Time Slots') }}</h2>
+                    <p class="text-sm text-slate-500 mt-1">{{ __('Manage class time periods') }}</p>
                 </div>
                 <Button @click="openCreate" class="flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                    Create Time Slot
+                    {{ __('Create Time Slot') }}
                 </Button>
             </div>
 
@@ -18,11 +18,11 @@
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Start</TableHead>
-                            <TableHead>End</TableHead>
-                            <TableHead>Type</TableHead>
-                            <TableHead class="text-right">Actions</TableHead>
+                            <TableHead>{{ __('Name') }}</TableHead>
+                            <TableHead>{{ __('Start') }}</TableHead>
+                            <TableHead>{{ __('End') }}</TableHead>
+                            <TableHead>{{ __('Type') }}</TableHead>
+                            <TableHead class="text-right">{{ __('Actions') }}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -35,8 +35,8 @@
                             </TableCell>
                             <TableCell class="text-right">
                                 <div class="flex items-center justify-end gap-1">
-                                    <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(ts)">Edit</Button>
-                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/time-slots/${ts.id}/delete`, { preserveState: true, preserveScroll: true })">Delete</Button>
+                                    <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(ts)">{{ __('Edit') }}</Button>
+                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/time-slots/${ts.id}/delete`, { preserveState: true, preserveScroll: true })">{{ __('Delete') }}</Button>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -45,8 +45,8 @@
                                 <Empty class="border-0 rounded-none">
                                     <EmptyHeader>
                                         <EmptyMedia variant="icon"><Clock class="w-6 h-6" /></EmptyMedia>
-                                        <EmptyTitle>No time slots</EmptyTitle>
-                                        <EmptyDescription>Create a time slot to define class periods.</EmptyDescription>
+                                        <EmptyTitle>{{ __('No time slots') }}</EmptyTitle>
+                                        <EmptyDescription>{{ __('Create a time slot to define class periods.') }}</EmptyDescription>
                                     </EmptyHeader>
                                 </Empty>
                             </TableCell>
@@ -76,6 +76,7 @@ import { Card } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
 import { Clock } from 'lucide-vue-next';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({ timeSlots: Object, types: Array });
 

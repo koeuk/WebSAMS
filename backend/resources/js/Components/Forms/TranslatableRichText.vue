@@ -1,26 +1,32 @@
 <template>
     <div>
-        <!-- Sliding tabs -->
-        <div class="relative inline-flex p-1 mb-1.5 bg-slate-100 rounded-lg">
-            <div
-                class="absolute top-1 bottom-1 left-1 bg-white shadow-sm rounded-md transition-transform duration-300 ease-out"
-                :style="{
-                    width: `calc((100% - 8px) / ${locales.length})`,
-                    transform: `translateX(${activeIndex * 100}%)`,
-                }"
-            />
-            <button
-                v-for="loc in locales"
-                :key="loc.code"
-                type="button"
-                @click="active = loc.code"
-                :class="[
-                    'relative z-10 cursor-pointer min-w-[52px] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider rounded-md transition-colors',
-                    active === loc.code ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700',
-                ]"
-            >
-                {{ loc.code }}
-            </button>
+        <div class="flex items-center justify-between mb-1.5 gap-3">
+            <label v-if="label" class="text-[13px] font-medium text-slate-600">
+                {{ label }}<span v-if="required" class="text-rose-500 ml-0.5">*</span>
+            </label>
+            <span v-else></span>
+            <!-- Sliding tabs -->
+            <div class="relative inline-flex p-1 bg-slate-100 rounded-lg">
+                <div
+                    class="absolute top-1 bottom-1 left-1 bg-white shadow-sm rounded-md transition-transform duration-300 ease-out"
+                    :style="{
+                        width: `calc((100% - 8px) / ${locales.length})`,
+                        transform: `translateX(${activeIndex * 100}%)`,
+                    }"
+                />
+                <button
+                    v-for="loc in locales"
+                    :key="loc.code"
+                    type="button"
+                    @click="active = loc.code"
+                    :class="[
+                        'relative z-10 cursor-pointer min-w-[52px] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider rounded-md transition-colors',
+                        active === loc.code ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700',
+                    ]"
+                >
+                    {{ loc.code }}
+                </button>
+            </div>
         </div>
 
         <!-- Keep all editors mounted; only the active one is visible. -->
@@ -43,6 +49,8 @@ import RichTextEditor from '@/Components/RichTextEditor.vue'
 const props = defineProps({
     modelValue:  { type: Object, default: () => ({}) },
     placeholder: { type: [String, Object], default: '' },
+    label:       { type: String, default: '' },
+    required:    { type: Boolean, default: false },
     locales:     { type: Array, default: () => [
         { code: 'km', name: 'ខ្មែរ' },
         { code: 'en', name: 'English' },
