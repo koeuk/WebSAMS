@@ -21,17 +21,37 @@ use Illuminate\Support\Facades\Route;
 // Public
 Route::post('/login', [AuthController::class, 'login']);
 
-Route::get('/locales', function () {
-    $enabled = \App\Http\Controllers\Dashboard\SettingController::enabledLanguages();
-    return response()->json([
+$buildLocaleResponse = function (array $enabled, string $default): array {
+    return [
         'enabled_languages' => $enabled,
-        'default_language'  => \App\Models\Setting::get('default_language', 'en'),
+        'default_language'  => $default,
         'locales' => collect([
             ['code' => 'en', 'name' => 'English'],
             ['code' => 'km', 'name' => 'ខ្មែរ'],
             ['code' => 'zh', 'name' => '中文'],
         ])->whereIn('code', $enabled)->values()->all(),
-    ]);
+    ];
+};
+
+Route::get('/locales', function () use ($buildLocaleResponse) {
+    return response()->json($buildLocaleResponse(
+        \App\Http\Controllers\Dashboard\SettingController::enabledLanguages(),
+        \App\Models\Setting::get('default_language', 'en'),
+    ));
+});
+
+Route::get('/teacher/locales', function () use ($buildLocaleResponse) {
+    return response()->json($buildLocaleResponse(
+        \App\Http\Controllers\Dashboard\SettingController::teacherEnabledLanguages(),
+        \App\Http\Controllers\Dashboard\SettingController::teacherDefaultLanguage(),
+    ));
+});
+
+Route::get('/student/locales', function () use ($buildLocaleResponse) {
+    return response()->json($buildLocaleResponse(
+        \App\Http\Controllers\Dashboard\SettingController::studentEnabledLanguages(),
+        \App\Http\Controllers\Dashboard\SettingController::studentDefaultLanguage(),
+    ));
 });
 
 // Authenticated

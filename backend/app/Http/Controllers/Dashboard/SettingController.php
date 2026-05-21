@@ -22,8 +22,12 @@ class SettingController extends Controller
                 'university_logo'        => Setting::get('university_logo', ''),
                 'late_threshold_minutes' => (int) Setting::get('late_threshold_minutes', 10),
                 'token_expiry_minutes'   => (int) Setting::get('token_expiry_minutes', 30),
-                'default_language'       => Setting::get('default_language', 'en'),
-                'enabled_languages'      => $this->readEnabledLanguages(),
+                'default_language'           => Setting::get('default_language', 'en'),
+                'enabled_languages'          => $this->readEnabledLanguages(),
+                'teacher_default_language'   => Setting::get('teacher_default_language', Setting::get('default_language', 'en')),
+                'teacher_enabled_languages'  => self::teacherEnabledLanguages(),
+                'student_default_language'   => Setting::get('student_default_language', Setting::get('default_language', 'en')),
+                'student_enabled_languages'  => self::studentEnabledLanguages(),
                 'timezone'               => Setting::get('timezone', config('app.timezone', 'UTC')),
                 'date_format'            => Setting::get('date_format', 'Y-m-d'),
                 'theme_primary_color'    => Setting::get('theme_primary_color', '#D4A017'),
@@ -51,9 +55,15 @@ class SettingController extends Controller
             'favicon'                => 'nullable|image|max:1024',
             'late_threshold_minutes' => 'nullable|integer|min:0|max:120',
             'token_expiry_minutes'   => 'nullable|integer|min:1|max:1440',
-            'default_language'       => 'nullable|in:en,km,zh',
-            'enabled_languages'      => 'nullable|array',
-            'enabled_languages.*'    => 'in:en,km,zh',
+            'default_language'             => 'nullable|in:en,km,zh',
+            'enabled_languages'            => 'nullable|array',
+            'enabled_languages.*'          => 'in:en,km,zh',
+            'teacher_default_language'     => 'nullable|in:en,km,zh',
+            'teacher_enabled_languages'    => 'nullable|array',
+            'teacher_enabled_languages.*'  => 'in:en,km,zh',
+            'student_default_language'     => 'nullable|in:en,km,zh',
+            'student_enabled_languages'    => 'nullable|array',
+            'student_enabled_languages.*'  => 'in:en,km,zh',
             'timezone'               => 'nullable|string|max:64',
             'date_format'            => 'nullable|string|max:32',
             'theme_primary_color'    => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
@@ -69,7 +79,8 @@ class SettingController extends Controller
         foreach ([
             'university_phone', 'university_email', 'university_website',
             'late_threshold_minutes', 'token_expiry_minutes',
-            'default_language', 'timezone', 'date_format', 'theme_primary_color',
+            'default_language', 'teacher_default_language', 'student_default_language',
+            'timezone', 'date_format', 'theme_primary_color',
         ] as $key) {
             if ($request->has($key)) {
                 Setting::set($key, (string) $request->input($key));
@@ -80,13 +91,15 @@ class SettingController extends Controller
             Setting::set('dark_mode_default', $request->boolean('dark_mode_default') ? '1' : '0');
         }
 
-        if ($request->has('enabled_languages')) {
-            $codes = array_values(array_unique(array_intersect(
-                ['en', 'km', 'zh'],
-                (array) $request->input('enabled_languages', []),
-            )));
-            if (!in_array('en', $codes, true)) $codes[] = 'en';
-            Setting::set('enabled_languages', json_encode(array_values($codes)));
+        foreach (['enabled_languages', 'teacher_enabled_languages', 'student_enabled_languages'] as $key) {
+            if ($request->has($key)) {
+                $codes = array_values(array_unique(array_intersect(
+                    ['en', 'km', 'zh'],
+                    (array) $request->input($key, []),
+                )));
+                if (!in_array('en', $codes, true)) $codes[] = 'en';
+                Setting::set($key, json_encode(array_values($codes)));
+            }
         }
 
         $this->handleUpload($request, 'university_logo', 'settings');
@@ -97,11 +110,42 @@ class SettingController extends Controller
 
     public static function enabledLanguages(): array
     {
-        $raw = Setting::get('enabled_languages');
+        return self::readLanguageList('enabled_languages');
+    }
+
+    public static function teacherEnabledLanguages(): array
+    {
+        return self::readLanguageList('teacher_enabled_languages');
+    }
+
+    public static function studentEnabledLanguages(): array
+    {
+        return self::readLanguageList('student_enabled_languages');
+    }
+
+    public static function teacherDefaultLanguage(): string
+    {
+        return self::pickDefaultLanguage('teacher_default_language', self::teacherEnabledLanguages());
+    }
+
+    public static function studentDefaultLanguage(): string
+    {
+        return self::pickDefaultLanguage('student_default_language', self::studentEnabledLanguages());
+    }
+
+    private static function readLanguageList(string $key): array
+    {
+        $raw = Setting::get($key);
         $decoded = $raw ? json_decode($raw, true) : null;
         $list = is_array($decoded) ? array_values(array_intersect(['en', 'km', 'zh'], $decoded)) : ['en', 'km', 'zh'];
         if (!in_array('en', $list, true)) $list[] = 'en';
         return array_values($list);
+    }
+
+    private static function pickDefaultLanguage(string $settingKey, array $enabled): string
+    {
+        $value = Setting::get($settingKey) ?: Setting::get('default_language', 'en');
+        return in_array($value, $enabled, true) ? $value : ($enabled[0] ?? 'en');
     }
 
     private function readEnabledLanguages(): array

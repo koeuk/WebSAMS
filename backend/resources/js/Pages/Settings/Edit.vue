@@ -150,6 +150,108 @@
                                         </SelectContent>
                                     </Select>
                                 </div>
+
+                                <!-- Teacher portal languages -->
+                                <div class="pt-4 border-t border-slate-100">
+                                    <Label class="block text-[13px] font-medium text-slate-600 mb-2">{{ __('Teacher Portal Languages') }}</Label>
+                                    <p class="text-[12px] text-slate-400 mb-3">{{ __('Languages teachers can switch to in the teacher portal.') }}</p>
+                                    <div class="space-y-2">
+                                        <label
+                                            v-for="lang in allLanguages"
+                                            :key="`teacher-${lang.code}`"
+                                            class="flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 cursor-pointer hover:bg-slate-50 transition-colors"
+                                            :class="{ 'opacity-60 cursor-not-allowed': lang.code === 'en' }"
+                                        >
+                                            <div class="flex items-center gap-3">
+                                                <span class="inline-flex items-center justify-center min-w-[36px] px-2 py-1 rounded-md bg-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-700">{{ lang.code }}</span>
+                                                <span class="text-[13px] font-medium text-slate-700">{{ lang.name }}</span>
+                                                <span v-if="lang.code === 'en'" class="text-[11px] text-slate-400">{{ __('Always on') }}</span>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                @click="togglePortalLanguage('teacher', lang.code)"
+                                                :disabled="lang.code === 'en'"
+                                                :class="[
+                                                    'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                                                    form.teacher_enabled_languages.includes(lang.code) ? 'bg-slate-900' : 'bg-slate-200',
+                                                    lang.code === 'en' ? 'cursor-not-allowed' : '',
+                                                ]"
+                                            >
+                                                <span :class="[
+                                                    'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                                                    form.teacher_enabled_languages.includes(lang.code) ? 'translate-x-6' : 'translate-x-1',
+                                                ]" />
+                                            </button>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Teacher Default Language') }}</Label>
+                                    <Select v-model="form.teacher_default_language">
+                                        <SelectTrigger class="w-full">
+                                            <SelectValue :placeholder="__('Select language')" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem
+                                                v-for="lang in allLanguages.filter((l) => form.teacher_enabled_languages.includes(l.code))"
+                                                :key="`teacher-default-${lang.code}`"
+                                                :value="lang.code"
+                                            >{{ lang.name }}</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <!-- Student portal languages -->
+                                <div class="pt-4 border-t border-slate-100">
+                                    <Label class="block text-[13px] font-medium text-slate-600 mb-2">{{ __('Student Portal Languages') }}</Label>
+                                    <p class="text-[12px] text-slate-400 mb-3">{{ __('Languages students can switch to in the student portal.') }}</p>
+                                    <div class="space-y-2">
+                                        <label
+                                            v-for="lang in allLanguages"
+                                            :key="`student-${lang.code}`"
+                                            class="flex items-center justify-between rounded-lg border border-slate-200 px-4 py-3 cursor-pointer hover:bg-slate-50 transition-colors"
+                                            :class="{ 'opacity-60 cursor-not-allowed': lang.code === 'en' }"
+                                        >
+                                            <div class="flex items-center gap-3">
+                                                <span class="inline-flex items-center justify-center min-w-[36px] px-2 py-1 rounded-md bg-slate-100 text-[11px] font-bold uppercase tracking-wider text-slate-700">{{ lang.code }}</span>
+                                                <span class="text-[13px] font-medium text-slate-700">{{ lang.name }}</span>
+                                                <span v-if="lang.code === 'en'" class="text-[11px] text-slate-400">{{ __('Always on') }}</span>
+                                            </div>
+                                            <button
+                                                type="button"
+                                                @click="togglePortalLanguage('student', lang.code)"
+                                                :disabled="lang.code === 'en'"
+                                                :class="[
+                                                    'relative inline-flex h-6 w-11 items-center rounded-full transition-colors',
+                                                    form.student_enabled_languages.includes(lang.code) ? 'bg-slate-900' : 'bg-slate-200',
+                                                    lang.code === 'en' ? 'cursor-not-allowed' : '',
+                                                ]"
+                                            >
+                                                <span :class="[
+                                                    'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                                                    form.student_enabled_languages.includes(lang.code) ? 'translate-x-6' : 'translate-x-1',
+                                                ]" />
+                                            </button>
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Student Default Language') }}</Label>
+                                    <Select v-model="form.student_default_language">
+                                        <SelectTrigger class="w-full">
+                                            <SelectValue :placeholder="__('Select language')" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem
+                                                v-for="lang in allLanguages.filter((l) => form.student_enabled_languages.includes(l.code))"
+                                                :key="`student-default-${lang.code}`"
+                                                :value="lang.code"
+                                            >{{ lang.name }}</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
                                 <div>
                                     <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Timezone') }}</Label>
                                     <Select v-model="form.timezone">
@@ -304,6 +406,10 @@ const form = useForm({
     token_expiry_minutes:   props.settings.token_expiry_minutes ?? 30,
     default_language:       props.settings.default_language || 'en',
     enabled_languages:      Array.isArray(props.settings.enabled_languages) && props.settings.enabled_languages.length ? [...props.settings.enabled_languages] : ['en', 'km', 'zh'],
+    teacher_default_language: props.settings.teacher_default_language || props.settings.default_language || 'en',
+    teacher_enabled_languages: Array.isArray(props.settings.teacher_enabled_languages) && props.settings.teacher_enabled_languages.length ? [...props.settings.teacher_enabled_languages] : ['en', 'km', 'zh'],
+    student_default_language: props.settings.student_default_language || props.settings.default_language || 'en',
+    student_enabled_languages: Array.isArray(props.settings.student_enabled_languages) && props.settings.student_enabled_languages.length ? [...props.settings.student_enabled_languages] : ['en', 'km', 'zh'],
     timezone:               props.settings.timezone || 'UTC',
     date_format:            props.settings.date_format || 'Y-m-d',
     theme_primary_color:    props.settings.theme_primary_color || '#D4A017',
@@ -347,6 +453,18 @@ const toggleLanguage = (code) => {
     form.enabled_languages = list
     if (!list.includes(form.default_language)) {
         form.default_language = list[0] ?? 'en'
+    }
+}
+
+const togglePortalLanguage = (portal, code) => {
+    if (code === 'en') return
+    const enabledKey = `${portal}_enabled_languages`
+    const defaultKey = `${portal}_default_language`
+    const current = form[enabledKey] ?? []
+    const list = current.includes(code) ? current.filter((c) => c !== code) : [...current, code]
+    form[enabledKey] = list
+    if (!list.includes(form[defaultKey])) {
+        form[defaultKey] = list[0] ?? 'en'
     }
 }
 
