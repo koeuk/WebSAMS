@@ -204,7 +204,6 @@ const navigation = computed(() => [
     { name: __('Student Tracking'), href: '/admin/student-tracking', icon: 'tracking' },
     { name: __('Reports'),           href: '/admin/reports',          icon: 'reports' },
     { name: __('Notifications'),     href: '/admin/notifications',    icon: 'notifications' },
-    { name: __('Settings'),          href: '/admin/settings?section=general', icon: 'settings' },
 ]);
 
 const isActive = (href) => {

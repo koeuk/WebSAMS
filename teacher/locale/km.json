@@ -176,9 +176,16 @@
 
   "My Profile": "ប្រវត្តិរូបរបស់ខ្ញុំ",
   "Your personal and professional information": "ព័ត៌មានផ្ទាល់ខ្លួន និងវិជ្ជាជីវៈរបស់អ្នក",
+  "Your personal and teaching information": "ព័ត៌មានផ្ទាល់ខ្លួន និងការបង្រៀនរបស់អ្នក",
   "No ID assigned": "មិនមានលេខសម្គាល់",
   "Personal Information": "ព័ត៌មានផ្ទាល់ខ្លួន",
   "Professional Information": "ព័ត៌មានវិជ្ជាជីវៈ",
+  "Teaching Information": "ព័ត៌មានការបង្រៀន",
+  "Teaching Classes": "ថ្នាក់ដែលបង្រៀន",
+  "No classes assigned.": "មិនមានថ្នាក់ត្រូវបានកំណត់។",
+  "Configure and generate a token to share with your students.": "កំណត់​រចនាសម្ព័ន្ធ និងបង្កើតលេខសម្គាល់ដើម្បីចែករំលែកជាមួយសិស្ស។",
+  "Show this to your students": "បង្ហាញវាដល់សិស្សរបស់អ្នក",
+  "Review": "ពិនិត្យ",
   "Subjects": "មុខវិជ្ជា",
   "View Roster": "មើលបញ្ជីសិស្ស",
   "Back": "ត្រឡប់ក្រោយ"

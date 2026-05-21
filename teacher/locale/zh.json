@@ -176,9 +176,16 @@
 
   "My Profile": "我的资料",
   "Your personal and professional information": "您的个人和职业信息",
+  "Your personal and teaching information": "您的个人和教学信息",
   "No ID assigned": "未分配学号",
   "Personal Information": "个人信息",
   "Professional Information": "职业信息",
+  "Teaching Information": "教学信息",
+  "Teaching Classes": "教学班级",
+  "No classes assigned.": "未分配班级。",
+  "Configure and generate a token to share with your students.": "配置并生成令牌与您的学生分享。",
+  "Show this to your students": "向您的学生展示此项",
+  "Review": "审核",
   "Subjects": "科目",
   "View Roster": "查看学生名单",
   "Back": "返回"

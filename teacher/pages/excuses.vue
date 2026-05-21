@@ -68,18 +68,18 @@
     <Dialog :open="!!reviewing" @update:open="(v) => !v && (reviewing = null)">
       <DialogContent class="max-w-md">
         <DialogHeader>
-          <DialogTitle>Review Excuse</DialogTitle>
+          <DialogTitle>{{ __('Review') }}</DialogTitle>
           <DialogDescription>{{ reviewing?.student?.name }} — {{ formatDate(reviewing?.attendance?.date) }}</DialogDescription>
         </DialogHeader>
         <div class="bg-slate-50 rounded-xl p-4 text-[13px] text-slate-700">{{ reviewing?.reason }}</div>
         <div class="space-y-1.5">
-          <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">Note (optional)</Label>
-          <RichTextEditor v-model="reviewNote" placeholder="Add a note..." />
+          <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('Note') }}</Label>
+          <RichTextEditor v-model="reviewNote" :placeholder="__('Add a note...')" />
         </div>
         <DialogFooter class="gap-2">
-          <Button variant="outline" @click="reviewing = null">Cancel</Button>
-          <Button variant="destructive" :disabled="submitting" @click="submitReview('rejected')">Reject</Button>
-          <Button :disabled="submitting" @click="submitReview('approved')">Approve</Button>
+          <Button variant="outline" @click="reviewing = null">{{ __('Cancel') }}</Button>
+          <Button variant="destructive" :disabled="submitting" @click="submitReview('rejected')">{{ __('Reject') }}</Button>
+          <Button :disabled="submitting" @click="submitReview('approved')">{{ __('Approve') }}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -133,5 +133,15 @@ const statusConfig: Record<string, string> = {
   rejected: 'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
 }
 
-const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : '-'
+const tabs = [
+  { value: 'pending',  label: 'Pending' },
+  { value: 'approved', label: 'Approved' },
+  { value: 'rejected', label: 'Rejected' },
+]
+
+const statusLabel = (s: string) => ({ pending: 'Pending', approved: 'Approved', rejected: 'Rejected' } as Record<string, string>)[s] ?? s
+
+const { locale } = useI18n()
+const dateLocale = computed(() => ({ en: 'en-US', km: 'km-KH', zh: 'zh-CN' } as Record<string, string>)[locale.value] ?? 'en-US')
+const formatDate = (d: string) => d ? new Date(d).toLocaleDateString(dateLocale.value, { year: 'numeric', month: 'short', day: 'numeric' }) : '-'
 </script>

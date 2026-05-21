@@ -2,26 +2,22 @@
   <div class="animate-fade-in">
     <div class="flex items-center justify-between mb-7">
       <div>
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Notifications</h2>
-        <p class="text-sm text-slate-500 mt-1">
-          <span v-if="unreadCount" class="font-semibold text-slate-700">{{ unreadCount }}</span>
-          <span v-if="unreadCount"> unread · </span>
-          {{ notifications.length }} total
-        </p>
+        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Notifications') }}</h2>
+        <p class="text-sm text-slate-500 mt-1">{{ __('Stay updated with system alerts') }}</p>
       </div>
       <Button v-if="unreadCount" variant="outline" @click="markAllRead">
-        Mark all read
+        {{ __('Mark read') }}
       </Button>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
 
     <div v-else class="card overflow-hidden">
       <Empty v-if="!notifications.length" class="border-0 rounded-none">
         <EmptyHeader>
           <EmptyMedia variant="icon"><Bell class="w-6 h-6" /></EmptyMedia>
-          <EmptyTitle>No notifications yet</EmptyTitle>
-          <EmptyDescription>You're all caught up.</EmptyDescription>
+          <EmptyTitle>{{ __('No notifications') }}</EmptyTitle>
+          <EmptyDescription>{{ __("You're all caught up.") }}</EmptyDescription>
         </EmptyHeader>
       </Empty>
       <div
@@ -83,5 +79,7 @@ const typeConfig: Record<string, string> = {
   info:    'bg-slate-100 text-slate-600 ring-1 ring-slate-200',
 }
 
-const formatDate = (d: string) => d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''
+const { locale } = useI18n()
+const dateLocale = computed(() => ({ en: 'en-US', km: 'km-KH', zh: 'zh-CN' } as Record<string, string>)[locale.value] ?? 'en-US')
+const formatDate = (d: string) => d ? new Date(d).toLocaleDateString(dateLocale.value, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''
 </script>
