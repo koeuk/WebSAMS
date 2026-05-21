@@ -21,6 +21,19 @@ use Illuminate\Support\Facades\Route;
 // Public
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/locales', function () {
+    $enabled = \App\Http\Controllers\Dashboard\SettingController::enabledLanguages();
+    return response()->json([
+        'enabled_languages' => $enabled,
+        'default_language'  => \App\Models\Setting::get('default_language', 'en'),
+        'locales' => collect([
+            ['code' => 'en', 'name' => 'English'],
+            ['code' => 'km', 'name' => 'ខ្មែរ'],
+            ['code' => 'zh', 'name' => '中文'],
+        ])->whereIn('code', $enabled)->values()->all(),
+    ]);
+});
+
 // Authenticated
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);

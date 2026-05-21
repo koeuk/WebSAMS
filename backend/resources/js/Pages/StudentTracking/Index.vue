@@ -125,7 +125,7 @@
                                 </TableCell>
                             </TableRow>
                             <TableRow v-if="!tracking.data?.length">
-                                <TableCell colspan="11" class="text-center py-12 text-slate-400">No attendance data found.</TableCell>
+                                <TableCell colspan="11" class="text-center py-12 text-slate-400">{{ __('No attendance data found.') }}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -149,6 +149,7 @@ import { Label } from '@/Components/ui/label';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({
     tracking: Object, semesters: Array, academicYears: Array, courses: Array, classes: Array, yearLevels: Array, filters: Object, threshold: Number, summary: Object,
@@ -183,23 +184,23 @@ const clearFilters = () => {
 };
 
 const semesterOptions = computed(() => [
-    { value: '', label: 'All Time' },
+    { value: '', label: __('All Time') },
     ...(props.semesters?.map(s => ({ value: s.id, label: `${s.name} (${s.academic_year})` })) ?? []),
 ]);
 const yearOptions = computed(() => [
-    { value: '', label: 'All Years' },
+    { value: '', label: __('All Years') },
     ...(props.academicYears?.map(y => ({ value: y, label: y })) ?? []),
 ]);
 const courseOptions = computed(() => [
-    { value: '', label: 'All Courses' },
+    { value: '', label: __('All Courses') },
     ...(props.courses?.map(c => ({ value: c.id, label: c.name })) ?? []),
 ]);
 const classOptions = computed(() => [
-    { value: '', label: 'All Classes' },
+    { value: '', label: __('All Classes') },
     ...(props.classes?.map(c => ({ value: c.id, label: c.name })) ?? []),
 ]);
 const yearLevelOptions = computed(() => [
-    { value: '', label: 'All Years' },
+    { value: '', label: __('All Years') },
     ...(props.yearLevels ?? []),
 ]);
 
@@ -209,5 +210,5 @@ const statusBadgeClass = (status) => ({
     'bg-rose-50 text-rose-700 ring-1 ring-rose-200': status === 'danger',
 });
 
-const statusLabel = (status) => ({ good: 'Good', warning: 'At Risk', danger: 'Critical' }[status]);
+const statusLabel = (status) => ({ good: __('Good'), warning: __('At Risk'), danger: __('Critical') }[status]);
 </script>

@@ -1,11 +1,11 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-8">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">My Classes</h2>
-      <p class="text-sm text-slate-500 mt-1">Classes assigned to you this semester</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('classes.title') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('classes.subtitle') }}</p>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('common.loading') }}</div>
 
     <div v-else-if="classes.length" class="grid gap-4 md:grid-cols-2 stagger-children">
       <NuxtLink
@@ -33,8 +33,8 @@
       <Empty class="border-0 rounded-none">
         <EmptyHeader>
           <EmptyMedia variant="icon"><BookOpen class="w-6 h-6" /></EmptyMedia>
-          <EmptyTitle>No classes assigned</EmptyTitle>
-          <EmptyDescription>You have no classes assigned for this semester.</EmptyDescription>
+          <EmptyTitle>{{ __('classes.noClasses') }}</EmptyTitle>
+          <EmptyDescription>{{ __('classes.noClassesDescription') }}</EmptyDescription>
         </EmptyHeader>
       </Empty>
     </div>

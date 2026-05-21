@@ -5,56 +5,56 @@
                 <div class="flex items-center gap-4">
                     <Link href="/admin/student-tracking" class="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition-colors">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"/></svg>
-                        Back
+                        {{ __('Back') }}
                     </Link>
                     <div class="h-5 w-px bg-slate-200"></div>
                     <div>
                         <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ student.name }}</h2>
-                        <p class="text-sm text-slate-500 mt-0.5">{{ student.email }} | {{ student.phone || 'No phone' }}</p>
+                        <p class="text-sm text-slate-500 mt-0.5">{{ student.email }} | {{ student.phone || __('No phone') }}</p>
                     </div>
                 </div>
                 <div>
-                    <FilterCombobox v-model="semesterFilter" :options="semesterOptions" placeholder="All Time" @update:model-value="changeSemester" />
+                    <FilterCombobox v-model="semesterFilter" :options="semesterOptions" :placeholder="__('All Time')" @update:model-value="changeSemester" />
                 </div>
             </div>
 
-            <p v-if="semester" class="text-sm text-slate-500 mb-6">Showing data for: <span class="font-medium text-slate-700">{{ semester.name }} ({{ semester.academic_year }})</span></p>
+            <p v-if="semester" class="text-sm text-slate-500 mb-6">{{ __('Showing data for:') }} <span class="font-medium text-slate-700">{{ semester.name }} ({{ semester.academic_year }})</span></p>
 
             <!-- Overall Summary -->
             <div class="grid grid-cols-2 md:grid-cols-6 gap-4 mb-8 stagger-children">
                 <Card class="animate-fade-in-up">
                     <CardContent class="p-4 text-center">
-                        <p class="text-[13px] text-slate-500">Total</p>
+                        <p class="text-[13px] text-slate-500">{{ __('Total') }}</p>
                         <p class="text-2xl font-bold text-slate-900 mt-1">{{ overall?.total }}</p>
                     </CardContent>
                 </Card>
                 <Card class="animate-fade-in-up">
                     <CardContent class="p-4 text-center">
-                        <p class="text-[13px] text-slate-500">Present</p>
+                        <p class="text-[13px] text-slate-500">{{ __('Present') }}</p>
                         <p class="text-2xl font-bold text-emerald-600 mt-1">{{ overall?.present }}</p>
                     </CardContent>
                 </Card>
                 <Card class="animate-fade-in-up">
                     <CardContent class="p-4 text-center">
-                        <p class="text-[13px] text-slate-500">Absent</p>
+                        <p class="text-[13px] text-slate-500">{{ __('Absent') }}</p>
                         <p class="text-2xl font-bold text-rose-600 mt-1">{{ overall?.absent }}</p>
                     </CardContent>
                 </Card>
                 <Card class="animate-fade-in-up">
                     <CardContent class="p-4 text-center">
-                        <p class="text-[13px] text-slate-500">Late</p>
+                        <p class="text-[13px] text-slate-500">{{ __('Late') }}</p>
                         <p class="text-2xl font-bold text-amber-600 mt-1">{{ overall?.late }}</p>
                     </CardContent>
                 </Card>
                 <Card class="animate-fade-in-up">
                     <CardContent class="p-4 text-center">
-                        <p class="text-[13px] text-slate-500">Excused</p>
+                        <p class="text-[13px] text-slate-500">{{ __('Excused') }}</p>
                         <p class="text-2xl font-bold text-sky-600 mt-1">{{ overall?.excused }}</p>
                     </CardContent>
                 </Card>
                 <Card class="animate-fade-in-up">
                     <CardContent class="p-4 text-center">
-                        <p class="text-[13px] text-slate-500">Rate</p>
+                        <p class="text-[13px] text-slate-500">{{ __('Rate') }}</p>
                         <p class="text-2xl font-bold mt-1" :class="(overall?.rate ?? 0) >= 80 ? 'text-emerald-600' : (overall?.rate ?? 0) >= 60 ? 'text-amber-600' : 'text-rose-600'">{{ overall?.rate }}%</p>
                     </CardContent>
                 </Card>
@@ -66,18 +66,18 @@
                     <div class="px-6 py-5 border-b border-slate-100">
                         <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                             <div class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></div>
-                            Attendance by Subject
+                            {{ __('Attendance by Subject') }}
                         </h3>
                     </div>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Subject</TableHead>
-                                <TableHead>Course</TableHead>
-                                <TableHead class="text-center">Present</TableHead>
-                                <TableHead class="text-center">Absent</TableHead>
-                                <TableHead class="text-center">Late</TableHead>
-                                <TableHead class="text-center">Rate</TableHead>
+                                <TableHead>{{ __('Subject') }}</TableHead>
+                                <TableHead>{{ __('Course') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Present') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Absent') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Late') }}</TableHead>
+                                <TableHead class="text-center">{{ __('Rate') }}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -90,7 +90,7 @@
                                 <TableCell class="text-center font-bold" :class="row.rate >= 80 ? 'text-emerald-600' : row.rate >= 60 ? 'text-amber-600' : 'text-rose-600'">{{ row.rate }}%</TableCell>
                             </TableRow>
                             <TableRow v-if="!bySubject?.length">
-                                <TableCell colspan="6" class="text-center py-8 text-slate-400">No data.</TableCell>
+                                <TableCell colspan="6" class="text-center py-8 text-slate-400">{{ __('No data.') }}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -101,15 +101,15 @@
                     <div class="px-6 py-5 border-b border-slate-100">
                         <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                             <div class="w-1.5 h-1.5 rounded-full bg-emerald-400"></div>
-                            Enrolled Classes
+                            {{ __('Enrolled Classes') }}
                         </h3>
                     </div>
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Class</TableHead>
-                                <TableHead>Section</TableHead>
-                                <TableHead>Year</TableHead>
+                                <TableHead>{{ __('Class') }}</TableHead>
+                                <TableHead>{{ __('Section') }}</TableHead>
+                                <TableHead>{{ __('Year') }}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -128,22 +128,22 @@
                 <div class="px-6 py-5 border-b border-slate-100">
                     <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider flex items-center gap-2">
                         <div class="w-1.5 h-1.5 rounded-full bg-sky-400"></div>
-                        Recent Attendance Records
+                        {{ __('Recent Attendance Records') }}
                     </h3>
                 </div>
                 <div class="overflow-x-auto">
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Student</TableHead>
-                                <TableHead>Academic Year</TableHead>
-                                <TableHead>Semester</TableHead>
-                                <TableHead>Course</TableHead>
-                                <TableHead>Subject</TableHead>
-                                <TableHead>Class</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Remarks</TableHead>
+                                <TableHead>{{ __('Date') }}</TableHead>
+                                <TableHead>{{ __('Student') }}</TableHead>
+                                <TableHead>{{ __('Academic Year') }}</TableHead>
+                                <TableHead>{{ __('Semester') }}</TableHead>
+                                <TableHead>{{ __('Course') }}</TableHead>
+                                <TableHead>{{ __('Subject') }}</TableHead>
+                                <TableHead>{{ __('Class') }}</TableHead>
+                                <TableHead>{{ __('Status') }}</TableHead>
+                                <TableHead>{{ __('Remarks') }}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -161,7 +161,7 @@
                                 <TableCell>{{ r.remarks || '-' }}</TableCell>
                             </TableRow>
                             <TableRow v-if="!recentRecords?.length">
-                                <TableCell colspan="9" class="text-center py-8 text-slate-400">No records.</TableCell>
+                                <TableCell colspan="9" class="text-center py-8 text-slate-400">{{ __('No records.') }}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -179,6 +179,7 @@ import FilterCombobox from '@/Components/FilterCombobox.vue';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({ student: Object, bySubject: Array, overall: Object, recentRecords: Array, semester: Object, semesters: Array, filters: Object });
 

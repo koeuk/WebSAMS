@@ -22,7 +22,7 @@
         </div>
         <div>
           <h1 class="text-[15px] font-bold text-white tracking-tight">WebSAMS</h1>
-          <p class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Teacher Portal</p>
+          <p class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">{{ __('teacherPortal') }}</p>
         </div>
         <button class="ml-auto cursor-pointer lg:hidden text-slate-400 hover:text-white" @click="sidebarOpen = false">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
@@ -33,7 +33,7 @@
       <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
         <NuxtLink
           v-for="item in navigation"
-          :key="item.name"
+          :key="item.key"
           :to="item.href"
           class="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200"
           :class="isActive(item)
@@ -65,12 +65,12 @@
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-[13px] font-semibold text-white truncate">{{ user?.name }}</p>
-            <p class="text-[11px] text-slate-500 truncate">Teacher</p>
+            <p class="text-[11px] text-slate-500 truncate">{{ __('teacherRole') }}</p>
           </div>
           <button
             @click="handleLogout"
-            title="Sign Out"
-            aria-label="Sign Out"
+            :title="__('nav.signOut')"
+            :aria-label="__('nav.signOut')"
             class="shrink-0 cursor-pointer flex items-center justify-center h-9 w-9 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/[0.08] transition-colors"
           >
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -93,14 +93,37 @@
           </button>
           <div class="h-8 w-1 rounded-full bg-gradient-to-b from-[#d4a017] to-beltei hidden lg:block"></div>
           <div>
-            <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider hidden lg:block">BELTEI International University</p>
-            <p class="text-[13px] font-medium text-slate-600">Teacher Portal</p>
+            <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider hidden lg:block">{{ __('university') }}</p>
+            <p class="text-[13px] font-medium text-slate-600">{{ __('teacherPortal') }}</p>
           </div>
         </div>
         <div class="flex items-center gap-3">
+          <!-- Language switcher -->
+          <Popover>
+            <PopoverTrigger as-child>
+              <button class="flex cursor-pointer items-center gap-1.5 h-9 px-3 rounded-lg text-[12px] font-medium text-slate-600 hover:bg-slate-100 transition-colors">
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>
+                {{ currentLocaleName }}
+                <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+              </button>
+            </PopoverTrigger>
+            <PopoverContent class="w-36 p-1" align="end">
+              <button
+                v-for="loc in locales"
+                :key="loc.code"
+                @click="setLocale(loc.code)"
+                class="w-full flex items-center justify-between gap-2 cursor-pointer px-3 py-2 text-[13px] rounded-md transition-colors"
+                :class="loc.code === locale ? 'bg-slate-100 text-slate-900 font-semibold' : 'text-slate-600 hover:bg-slate-50'"
+              >
+                {{ loc.name }}
+                <svg v-if="loc.code === locale" class="w-3.5 h-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+              </button>
+            </PopoverContent>
+          </Popover>
+
           <div class="text-right mr-2 hidden sm:block">
             <p class="text-[13px] font-semibold text-slate-700">{{ user?.name }}</p>
-            <p class="text-[11px] text-slate-400">Teacher</p>
+            <p class="text-[11px] text-slate-400">{{ __('teacherRole') }}</p>
           </div>
           <div class="h-9 w-9 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-500 text-sm font-bold">
             {{ user?.name?.charAt(0) }}
@@ -116,21 +139,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 
 const { user, logout } = useAuth()
+const { locale, locales, setLocale } = useI18n()
 
-const navigation = [
-  { name: 'Dashboard',        href: '/',                icon: 'dashboard', exact: true },
-  { name: 'My Classes',       href: '/classes',         icon: 'classes' },
-  { name: 'Mark Attendance',  href: '/attendance/mark', icon: 'mark' },
-  { name: 'History',          href: '/attendance',      icon: 'history',   exact: true },
-  { name: 'QR Attendance',    href: '/qr',              icon: 'qr' },
-  { name: 'Excuse Requests',  href: '/excuses',         icon: 'excuse' },
-  { name: 'Announcements',    href: '/announcements',   icon: 'announce' },
-  { name: 'Notifications',    href: '/notifications',   icon: 'bell' },
-  { name: 'Profile',          href: '/profile',         icon: 'profile' },
-]
+const navigation = computed(() => [
+  { key: 'dashboard',      name: __('nav.dashboard'),      href: '/',                icon: 'dashboard', exact: true },
+  { key: 'classes',        name: __('nav.classes'),        href: '/classes',         icon: 'classes' },
+  { key: 'markAttendance', name: __('nav.markAttendance'), href: '/attendance/mark', icon: 'mark' },
+  { key: 'history',        name: __('nav.history'),        href: '/attendance',      icon: 'history',   exact: true },
+  { key: 'qrSession',      name: __('nav.qrSession'),      href: '/qr',              icon: 'qr' },
+  { key: 'excuses',        name: __('nav.excuses'),        href: '/excuses',         icon: 'excuse' },
+  { key: 'announcements',  name: __('nav.announcements'),  href: '/announcements',   icon: 'announce' },
+  { key: 'notifications',  name: __('nav.notifications'),  href: '/notifications',   icon: 'bell' },
+  { key: 'profile',        name: __('nav.profile'),        href: '/profile',         icon: 'profile' },
+])
+
+const currentLocaleName = computed(() => {
+  const found = (locales.value as any[]).find((l) => l.code === locale.value)
+  return found?.name ?? locale.value
+})
 
 const route = useRoute()
 const isActive = (item: { href: string; exact?: boolean }) =>

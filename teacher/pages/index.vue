@@ -2,18 +2,18 @@
   <div class="animate-fade-in">
     <div class="flex items-center justify-between mb-8">
       <div>
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Dashboard</h2>
-        <p class="text-sm text-slate-500 mt-1">Welcome back! Here's your overview for today.</p>
+        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('dashboard.title') }}</h2>
+        <p class="text-sm text-slate-500 mt-1">{{ __('dashboard.subtitle') }}</p>
       </div>
       <div class="text-sm text-slate-400 font-medium">
-        {{ new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
+        {{ new Date().toLocaleDateString(dateLocale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
       </div>
     </div>
 
     <div v-if="loading" class="card p-12 text-center">
       <div class="inline-flex items-center gap-2 text-sm text-slate-400">
         <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
-        Loading...
+        {{ __('common.loading') }}
       </div>
     </div>
 
@@ -23,7 +23,7 @@
         <div class="card stat-card stat-card-blue p-6 animate-fade-in-up">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-[13px] font-medium text-slate-500">My Classes</p>
+              <p class="text-[13px] font-medium text-slate-500">{{ __('dashboard.myClasses') }}</p>
               <p class="text-3xl font-bold text-slate-900 mt-1.5 tracking-tight">{{ dashboard?.stats?.totalClasses ?? 0 }}</p>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
@@ -34,7 +34,7 @@
         <div class="card stat-card stat-card-emerald p-6 animate-fade-in-up">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-[13px] font-medium text-slate-500">Total Students</p>
+              <p class="text-[13px] font-medium text-slate-500">{{ __('dashboard.totalStudents') }}</p>
               <p class="text-3xl font-bold text-slate-900 mt-1.5 tracking-tight">{{ dashboard?.stats?.totalStudents ?? 0 }}</p>
             </div>
             <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center">
@@ -45,7 +45,7 @@
         <div class="card stat-card stat-card-violet p-6 animate-fade-in-up">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-[13px] font-medium text-slate-500">Today's Attendance</p>
+              <p class="text-[13px] font-medium text-slate-500">{{ __('dashboard.todayAttendance') }}</p>
               <p class="text-3xl font-bold mt-1.5 tracking-tight" :class="(dashboard?.stats?.todayAttendance ?? 0) >= 80 ? 'text-emerald-600' : 'text-rose-600'">
                 {{ dashboard?.stats?.todayAttendance ?? 0 }}%
               </p>
@@ -58,8 +58,8 @@
       </div>
 
       <div class="flex items-center gap-3 mb-4">
-        <h3 class="text-base font-semibold text-slate-900">Today's Schedule</h3>
-        <span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">{{ days[dashboard?.today] || 'No classes today' }}</span>
+        <h3 class="text-base font-semibold text-slate-900">{{ __('dashboard.todaySchedule') }}</h3>
+        <span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">{{ dashboard?.today ? __(`days.${dashboard.today}`) : __('dashboard.noClassesTodayBadge') }}</span>
       </div>
 
       <div v-if="dashboard?.schedule?.length" class="grid gap-4 stagger-children">
@@ -84,7 +84,7 @@
       </div>
 
       <div v-else class="card p-12 text-center text-slate-400">
-        No classes scheduled for today.
+        {{ __('dashboard.noClassesToday') }}
       </div>
     </template>
 
@@ -93,9 +93,12 @@ definePageMeta({ middleware: 'auth' })
 
 const { apiFetch } = useApi()
 const { fetchUser } = useAuth()
+const { locale } = useI18n()
 
 const dashboard = ref<any>(null)
 const loading = ref(true)
+
+const dateLocale = computed(() => ({ en: 'en-US', km: 'km-KH', zh: 'zh-CN' } as Record<string, string>)[locale.value] ?? 'en-US')
 
 onMounted(async () => {
   await fetchUser()
@@ -104,6 +107,4 @@ onMounted(async () => {
   } catch {}
   loading.value = false
 })
-
-const days: Record<string, string> = { mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday', fri: 'Friday', sat: 'Saturday', sun: 'Sunday' }
 </script>

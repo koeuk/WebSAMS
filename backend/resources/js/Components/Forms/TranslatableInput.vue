@@ -44,7 +44,10 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { useEnabledLocales } from '@/Composables/useTranslate'
+
+const enabledLocales = useEnabledLocales()
 
 const props = defineProps({
     modelValue:  { type: Object, default: () => ({}) },
@@ -52,19 +55,21 @@ const props = defineProps({
     placeholder: { type: [String, Object], default: '' },
     label:       { type: String, default: '' },
     required:    { type: Boolean, default: false },
-    locales:     { type: Array, default: () => [
-        { code: 'km', name: 'ខ្មែរ' },
-        { code: 'en', name: 'English' },
-        { code: 'zh', name: '中文' },
-    ] },
+    locales:     { type: Array, default: null },
 })
 
 const emit = defineEmits(['update:modelValue'])
 
-const active = ref(props.locales[0]?.code ?? 'en')
+const locales = computed(() => props.locales ?? enabledLocales.value)
+
+const active = ref(locales.value[0]?.code ?? 'en')
+
+watch(locales, (list) => {
+    if (!list.find((l) => l.code === active.value)) active.value = list[0]?.code ?? 'en'
+})
 
 const activeIndex = computed(() =>
-    Math.max(0, props.locales.findIndex((l) => l.code === active.value))
+    Math.max(0, locales.value.findIndex((l) => l.code === active.value))
 )
 
 const placeholderFor = (code) => {

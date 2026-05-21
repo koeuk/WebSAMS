@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Controllers\Dashboard\SettingController;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
@@ -31,11 +32,12 @@ class HandleInertiaRequests extends Middleware
                 'location' => $request->url(),
             ],
             'locale' => fn () => app()->getLocale(),
-            'locales' => fn () => [
+            'enabled_languages' => fn () => SettingController::enabledLanguages(),
+            'locales' => fn () => collect([
                 ['code' => 'en', 'name' => 'English'],
                 ['code' => 'km', 'name' => 'ខ្មែរ'],
                 ['code' => 'zh', 'name' => '中文'],
-            ],
+            ])->whereIn('code', SettingController::enabledLanguages())->values()->all(),
         ];
     }
 }

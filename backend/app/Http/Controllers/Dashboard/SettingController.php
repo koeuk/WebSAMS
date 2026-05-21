@@ -14,12 +14,21 @@ class SettingController extends Controller
     {
         return Inertia::render('Settings/Edit', [
             'settings' => [
-                'university_name' => Setting::get('university_name', ''),
-                'university_address' => Setting::get('university_address', ''),
-                'university_phone' => Setting::get('university_phone', ''),
-                'university_email' => Setting::get('university_email', ''),
-                'university_website' => Setting::get('university_website', ''),
-                'university_logo' => Setting::get('university_logo', ''),
+                'university_name'        => $this->readTranslatable('university_name'),
+                'university_address'     => $this->readTranslatable('university_address'),
+                'university_phone'       => Setting::get('university_phone', ''),
+                'university_email'       => Setting::get('university_email', ''),
+                'university_website'     => Setting::get('university_website', ''),
+                'university_logo'        => Setting::get('university_logo', ''),
+                'late_threshold_minutes' => (int) Setting::get('late_threshold_minutes', 10),
+                'token_expiry_minutes'   => (int) Setting::get('token_expiry_minutes', 30),
+                'default_language'       => Setting::get('default_language', 'en'),
+                'enabled_languages'      => $this->readEnabledLanguages(),
+                'timezone'               => Setting::get('timezone', config('app.timezone', 'UTC')),
+                'date_format'            => Setting::get('date_format', 'Y-m-d'),
+                'theme_primary_color'    => Setting::get('theme_primary_color', '#D4A017'),
+                'dark_mode_default'      => Setting::get('dark_mode_default', '0') === '1',
+                'favicon'                => Setting::get('favicon', ''),
             ],
         ]);
     }
@@ -27,29 +36,94 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         $request->validate([
-            'university_name' => 'nullable|string|max:255',
-            'university_address' => 'nullable|string',
-            'university_phone' => 'nullable|string|max:20',
-            'university_email' => 'nullable|email',
-            'university_website' => 'nullable|string|max:255',
-            'university_logo' => 'nullable|image|max:2048',
+            'university_name'        => 'nullable|array',
+            'university_name.en'     => 'nullable|string|max:255',
+            'university_name.km'     => 'nullable|string|max:255',
+            'university_name.zh'     => 'nullable|string|max:255',
+            'university_address'     => 'nullable|array',
+            'university_address.en'  => 'nullable|string',
+            'university_address.km'  => 'nullable|string',
+            'university_address.zh'  => 'nullable|string',
+            'university_phone'       => 'nullable|string|max:20',
+            'university_email'       => 'nullable|email',
+            'university_website'     => 'nullable|string|max:255',
+            'university_logo'        => 'nullable|image|max:2048',
+            'favicon'                => 'nullable|image|max:1024',
+            'late_threshold_minutes' => 'nullable|integer|min:0|max:120',
+            'token_expiry_minutes'   => 'nullable|integer|min:1|max:1440',
+            'default_language'       => 'nullable|in:en,km,zh',
+            'enabled_languages'      => 'nullable|array',
+            'enabled_languages.*'    => 'in:en,km,zh',
+            'timezone'               => 'nullable|string|max:64',
+            'date_format'            => 'nullable|string|max:32',
+            'theme_primary_color'    => 'nullable|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'dark_mode_default'      => 'nullable|boolean',
         ]);
 
-        Setting::set('university_name', $request->university_name);
-        Setting::set('university_address', $request->university_address);
-        Setting::set('university_phone', $request->university_phone);
-        Setting::set('university_email', $request->university_email);
-        Setting::set('university_website', $request->university_website);
-
-        if ($request->hasFile('university_logo')) {
-            $oldLogo = Setting::get('university_logo');
-            if ($oldLogo) {
-                Storage::disk('public')->delete($oldLogo);
+        foreach (['university_name', 'university_address'] as $key) {
+            if ($request->has($key)) {
+                Setting::set($key, json_encode($request->input($key) ?: []));
             }
-            $path = $request->file('university_logo')->store('settings', 'public');
-            Setting::set('university_logo', $path);
         }
 
+        foreach ([
+            'university_phone', 'university_email', 'university_website',
+            'late_threshold_minutes', 'token_expiry_minutes',
+            'default_language', 'timezone', 'date_format', 'theme_primary_color',
+        ] as $key) {
+            if ($request->has($key)) {
+                Setting::set($key, (string) $request->input($key));
+            }
+        }
+
+        if ($request->has('dark_mode_default')) {
+            Setting::set('dark_mode_default', $request->boolean('dark_mode_default') ? '1' : '0');
+        }
+
+        if ($request->has('enabled_languages')) {
+            $codes = array_values(array_unique(array_intersect(
+                ['en', 'km', 'zh'],
+                (array) $request->input('enabled_languages', []),
+            )));
+            if (!in_array('en', $codes, true)) $codes[] = 'en';
+            Setting::set('enabled_languages', json_encode(array_values($codes)));
+        }
+
+        $this->handleUpload($request, 'university_logo', 'settings');
+        $this->handleUpload($request, 'favicon', 'settings');
+
         return back()->with('success', 'Settings updated successfully.');
+    }
+
+    public static function enabledLanguages(): array
+    {
+        $raw = Setting::get('enabled_languages');
+        $decoded = $raw ? json_decode($raw, true) : null;
+        $list = is_array($decoded) ? array_values(array_intersect(['en', 'km', 'zh'], $decoded)) : ['en', 'km', 'zh'];
+        if (!in_array('en', $list, true)) $list[] = 'en';
+        return array_values($list);
+    }
+
+    private function readEnabledLanguages(): array
+    {
+        return self::enabledLanguages();
+    }
+
+    private function readTranslatable(string $key): array
+    {
+        $raw = Setting::get($key, '');
+        if (!$raw) return ['en' => '', 'km' => '', 'zh' => ''];
+        $decoded = json_decode($raw, true);
+        if (!is_array($decoded)) return ['en' => (string) $raw, 'km' => '', 'zh' => ''];
+        return array_merge(['en' => '', 'km' => '', 'zh' => ''], $decoded);
+    }
+
+    private function handleUpload(Request $request, string $key, string $dir): void
+    {
+        if (!$request->hasFile($key)) return;
+        $old = Setting::get($key);
+        if ($old) Storage::disk('public')->delete($old);
+        $path = $request->file($key)->store($dir, 'public');
+        Setting::set($key, $path);
     }
 }

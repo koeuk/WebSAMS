@@ -7,18 +7,18 @@
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
         </svg>
-        Classes
+        {{ __('classes.backToClasses') }}
       </NuxtLink>
       <div class="h-4 w-px bg-slate-200"></div>
       <div>
-        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Student List</h2>
+        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('classes.studentList') }}</h2>
         <p class="text-sm text-slate-500 mt-0.5">
-          <span class="font-semibold text-slate-700">{{ students.length }}</span> students enrolled
+          {{ __('classes.studentsEnrolled', { n: students.length }) }}
         </p>
       </div>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">Loading...</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('common.loading') }}</div>
 
     <template v-else>
       <!-- Search -->
@@ -30,7 +30,7 @@
           <Input
             v-model="search"
             type="text"
-            placeholder="Search students..."
+            :placeholder="__('classes.searchStudents')"
             class="pl-9"
           />
         </div>
@@ -42,11 +42,11 @@
           <TableHeader>
             <TableRow>
               <TableHead class="w-12">#</TableHead>
-              <TableHead>Student</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>ID Number</TableHead>
-              <TableHead>Year</TableHead>
-              <TableHead>Gender</TableHead>
+              <TableHead>{{ __('fields.student') }}</TableHead>
+              <TableHead>{{ __('fields.email') }}</TableHead>
+              <TableHead>{{ __('fields.idNumber') }}</TableHead>
+              <TableHead>{{ __('fields.year') }}</TableHead>
+              <TableHead>{{ __('fields.gender') }}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -67,7 +67,7 @@
               <TableCell class="font-mono text-[13px] text-slate-400">{{ student.id_number || '-' }}</TableCell>
               <TableCell>
                 <span v-if="student.year_level" class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">
-                  Year {{ student.year_level }}
+                  {{ __('fields.yearN', { n: student.year_level }) }}
                 </span>
                 <span v-else class="text-slate-400">-</span>
               </TableCell>

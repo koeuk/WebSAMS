@@ -39,8 +39,9 @@
   "nav": {
     "dashboard": "仪表板",
     "classes": "我的班级",
-    "attendance": "考勤",
-    "qrSession": "二维码会话",
+    "markAttendance": "记录考勤",
+    "history": "考勤历史",
+    "qrSession": "二维码考勤",
     "excuses": "请假申请",
     "announcements": "公告",
     "notifications": "通知",
@@ -67,17 +68,36 @@
     "invalidCredentials": "凭据无效。"
   },
   "dashboard": {
+    "title": "仪表板",
     "greeting": "您好,{name} 👋",
-    "subtitle": "这是您今天的日程安排。",
+    "subtitle": "欢迎回来!这是您今天的概览。",
     "todaySchedule": "今日日程",
     "noClassesToday": "今天没有安排课程。",
-    "myClasses": "我的班级"
+    "myClasses": "我的班级",
+    "totalStudents": "学生总数",
+    "todayAttendance": "今日考勤",
+    "noClassesTodayBadge": "今天无课"
+  },
+  "days": {
+    "mon": "星期一",
+    "tue": "星期二",
+    "wed": "星期三",
+    "thu": "星期四",
+    "fri": "星期五",
+    "sat": "星期六",
+    "sun": "星期日"
   },
   "classes": {
     "title": "我的班级",
-    "subtitle": "您所教授的班级和科目",
+    "subtitle": "本学期分配给您的班级",
     "students": "学生",
+    "studentList": "学生名单",
+    "studentsEnrolled": "已注册 {n} 名学生",
+    "searchStudents": "搜索学生...",
+    "noMatches": "没有匹配的学生。",
+    "noEnrollment": "暂无学生注册。",
     "viewRoster": "查看学生名单",
+    "backToClasses": "班级",
     "noClasses": "未分配班级",
     "noClassesDescription": "请联系管理员为您分配班级。"
   },

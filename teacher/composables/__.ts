@@ -4,7 +4,7 @@ import zh from '~/locale/zh.json'
 
 const messages: Record<string, any> = { en, km, zh }
 
-const LOCALES = [
+const ALL_LOCALES = [
   { code: 'en', name: 'English' },
   { code: 'km', name: 'ខ្មែរ' },
   { code: 'zh', name: '中文' },
@@ -13,12 +13,37 @@ const LOCALES = [
 const get = (obj: any, path: string): unknown =>
   path.split('.').reduce<any>((o, k) => (o == null ? o : o[k]), obj)
 
+const fetchEnabled = async (enabled: Ref<string[]>) => {
+  try {
+    const config = useRuntimeConfig()
+    const apiBase = (config.public as any).apiBase as string
+    const res = await $fetch<{ enabled_languages: string[] }>(`${apiBase}/locales`)
+    if (Array.isArray(res?.enabled_languages) && res.enabled_languages.length) {
+      enabled.value = res.enabled_languages.filter((c) => messages[c])
+    }
+  } catch {
+    // keep defaults if fetch fails
+  }
+}
+
 export const useI18n = () => {
   const locale = useCookie<string>('locale', { default: () => 'en' })
+  const enabled = useState<string[]>('enabledLanguages', () => ['en', 'km', 'zh'])
+  const fetched = useState<boolean>('enabledLanguagesFetched', () => false)
+  if (!fetched.value) {
+    fetched.value = true
+    fetchEnabled(enabled)
+  }
+  const locales = computed(() => ALL_LOCALES.filter((l) => enabled.value.includes(l.code)))
+  watch(enabled, (list) => {
+    if (!list.includes(locale.value)) locale.value = list[0] ?? 'en'
+  })
   return {
     locale,
-    locales: ref(LOCALES),
-    setLocale: (code: string) => { locale.value = code },
+    locales,
+    setLocale: (code: string) => {
+      if (enabled.value.includes(code)) locale.value = code
+    },
   }
 }
 
