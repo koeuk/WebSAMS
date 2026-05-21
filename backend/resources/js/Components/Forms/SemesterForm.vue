@@ -15,8 +15,12 @@
         <div class="space-y-4">
             <div>
                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" :placeholder="__('e.g. Semester 1')" @update:model-value="touch('name')" />
-                <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
+                <TranslatableInput
+                    v-model="form.name"
+                    :placeholder="{ en: 'e.g. Semester 1', km: 'ឧ. ឆមាស ១', zh: '例如:第一学期' }"
+                    @update:model-value="touch('name')"
+                />
+                <p v-if="error('name') || nameError" class="text-[12px] text-rose-500 mt-1">{{ error('name') || nameError }}</p>
             </div>
             <div>
                 <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Academic Year') }} <span class="text-rose-500">*</span></Label>
@@ -57,6 +61,7 @@ import DatePicker from '@/Components/DatePicker.vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
+import TranslatableInput from '@/Components/Forms/TranslatableInput.vue'
 import { useFormValidation } from '@/Composables/useFormValidation'
 import { __ } from '@/Composables/useTranslate'
 
@@ -67,22 +72,43 @@ const props = defineProps({
 const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.semester)
 
-const form = useForm({ name: '', academic_year: '', start_date: '', end_date: '' })
+const emptyTranslations = () => ({ en: '', km: '', zh: '' })
+
+const form = useForm({ name: emptyTranslations(), academic_year: '', start_date: '', end_date: '' })
+
+const nameError = computed(() => {
+    const en = (form.name?.en ?? '').trim()
+    if (!en) return __('English name is required')
+    return null
+})
 
 const { touch, markAllTouched, reset, error } = useFormValidation({
-    name:          () => !form.name?.trim() ? __('Name is required') : null,
+    name:          () => nameError.value,
     academic_year: () => !form.academic_year?.trim() ? __('Academic year is required') : null,
     start_date:    () => !form.start_date ? __('Start date is required') : null,
     end_date:      () => !form.end_date ? __('End date is required') : null,
 })
 
+const readTranslations = (value) => {
+    if (!value) return emptyTranslations()
+    if (typeof value === 'string') return { ...emptyTranslations(), en: value }
+    return { ...emptyTranslations(), ...value }
+}
+
 watch(() => props.semester, (s) => {
     reset()
-    if (s) { form.name = s.name; form.academic_year = s.academic_year || ''; form.start_date = s.start_date?.split('T')[0] || ''; form.end_date = s.end_date?.split('T')[0] || '' }
-    else form.reset()
+    if (s) {
+        form.name = readTranslations(s.name_translations ?? s.name)
+        form.academic_year = s.academic_year || ''
+        form.start_date = s.start_date?.split('T')[0] || ''
+        form.end_date = s.end_date?.split('T')[0] || ''
+    } else {
+        form.reset()
+        form.name = emptyTranslations()
+    }
 }, { immediate: true })
 
-const canSubmit = computed(() => !!form.name?.trim() && !!form.academic_year?.trim() && !!form.start_date && !!form.end_date)
+const canSubmit = computed(() => !nameError.value && !!form.academic_year?.trim() && !!form.start_date && !!form.end_date)
 
 const close = () => emit('update:open', false)
 

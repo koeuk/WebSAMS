@@ -29,8 +29,12 @@
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" :placeholder="__('e.g. Introduction to Programming')" @update:model-value="touch('name')" />
-                <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
+                <TranslatableInput
+                    v-model="form.name"
+                    :placeholder="{ en: 'e.g. Introduction to Programming', km: 'ឧ. មូលដ្ឋាន​ការ​សរសេរ​កម្មវិធី', zh: '例如:编程入门' }"
+                    @update:model-value="touch('name')"
+                />
+                <p v-if="error('name') || nameError" class="text-[12px] text-rose-500 mt-1">{{ error('name') || nameError }}</p>
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Code') }} <span class="text-rose-500">*</span></Label>
@@ -63,6 +67,7 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import RichTextEditor from '@/Components/RichTextEditor.vue'
+import TranslatableInput from '@/Components/Forms/TranslatableInput.vue'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
 import { useFormValidation } from '@/Composables/useFormValidation'
 import { __ } from '@/Composables/useTranslate'
@@ -75,21 +80,47 @@ const props = defineProps({
 const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.subject)
 
-const form = useForm({ course_id: '', name: '', code: '', description: '' })
+const emptyTranslations = () => ({ en: '', km: '', zh: '' })
+
+const form = useForm({
+    course_id: '',
+    name: emptyTranslations(),
+    code: '',
+    description: '',
+})
+
+const nameError = computed(() => {
+    const en = (form.name?.en ?? '').trim()
+    if (!en) return __('English name is required')
+    return null
+})
 
 const { touch, markAllTouched, reset, error } = useFormValidation({
     course_id: () => !form.course_id ? __('Course is required') : null,
-    name:      () => !form.name?.trim() ? __('Name is required') : null,
+    name:      () => nameError.value,
     code:      () => !form.code?.trim() ? __('Code is required') : null,
 })
 
+const readTranslations = (value) => {
+    if (!value) return emptyTranslations()
+    if (typeof value === 'string') return { ...emptyTranslations(), en: value }
+    return { ...emptyTranslations(), ...value }
+}
+
 watch(() => props.subject, (s) => {
     reset()
-    if (s) { form.course_id = String(s.course_id); form.name = s.name; form.code = s.code; form.description = s.description || '' }
-    else form.reset()
+    if (s) {
+        form.course_id = String(s.course_id)
+        form.name = readTranslations(s.name_translations ?? s.name)
+        form.code = s.code
+        form.description = s.description || ''
+    } else {
+        form.reset()
+        form.name = emptyTranslations()
+    }
 }, { immediate: true })
 
-const canSubmit = computed(() => !!form.course_id && !!form.name?.trim() && !!form.code?.trim())
+const canSubmit = computed(() => !!form.course_id && !nameError.value && !!form.code?.trim())
 
 const close = () => emit('update:open', false)
 

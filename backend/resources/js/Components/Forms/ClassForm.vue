@@ -15,8 +15,12 @@
         <div class="space-y-4">
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" :placeholder="__('e.g. Year 1-A')" @update:model-value="touch('name')" />
-                <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
+                <TranslatableInput
+                    v-model="form.name"
+                    :placeholder="{ en: 'e.g. Year 1 - A', km: 'ឧ. ឆ្នាំ​ទី​១ - A', zh: '例如:一年级 - A' }"
+                    @update:model-value="touch('name')"
+                />
+                <p v-if="error('name') || nameError" class="text-[12px] text-rose-500 mt-1">{{ error('name') || nameError }}</p>
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">{{ __('Section') }}</Label>
@@ -48,6 +52,7 @@ import ModalForm from '@/Components/ModalForm.vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
+import TranslatableInput from '@/Components/Forms/TranslatableInput.vue'
 import { useFormValidation } from '@/Composables/useFormValidation'
 import { __ } from '@/Composables/useTranslate'
 
@@ -58,20 +63,40 @@ const props = defineProps({
 const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.schoolClass)
 
-const form = useForm({ name: '', section: '', academic_year: '' })
+const emptyTranslations = () => ({ en: '', km: '', zh: '' })
+
+const form = useForm({ name: emptyTranslations(), section: '', academic_year: '' })
+
+const nameError = computed(() => {
+    const en = (form.name?.en ?? '').trim()
+    if (!en) return __('English name is required')
+    return null
+})
 
 const { touch, markAllTouched, reset, error } = useFormValidation({
-    name:          () => !form.name?.trim() ? __('Name is required') : null,
+    name:          () => nameError.value,
     academic_year: () => !form.academic_year?.trim() ? __('Academic year is required') : null,
 })
 
+const readTranslations = (value) => {
+    if (!value) return emptyTranslations()
+    if (typeof value === 'string') return { ...emptyTranslations(), en: value }
+    return { ...emptyTranslations(), ...value }
+}
+
 watch(() => props.schoolClass, (c) => {
     reset()
-    if (c) { form.name = c.name; form.section = c.section || ''; form.academic_year = c.academic_year || '' }
-    else form.reset()
+    if (c) {
+        form.name = readTranslations(c.name_translations ?? c.name)
+        form.section = c.section || ''
+        form.academic_year = c.academic_year || ''
+    } else {
+        form.reset()
+        form.name = emptyTranslations()
+    }
 }, { immediate: true })
 
-const canSubmit = computed(() => !!form.name?.trim() && !!form.academic_year?.trim())
+const canSubmit = computed(() => !nameError.value && !!form.academic_year?.trim())
 
 const close = () => emit('update:open', false)
 

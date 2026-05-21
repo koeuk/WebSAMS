@@ -39,7 +39,10 @@ class SchoolClassController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'          => 'required|string|max:255',
+            'name'          => 'required|array',
+            'name.en'       => 'required|string|max:255',
+            'name.km'       => 'nullable|string|max:255',
+            'name.zh'       => 'nullable|string|max:255',
             'section'       => 'nullable|string|max:50',
             'academic_year' => 'required|string|max:20',
         ]);
@@ -72,13 +75,20 @@ class SchoolClassController extends Controller
 
     public function edit(SchoolClass $class)
     {
-        return Inertia::render('Classes/Edit', ['schoolClass' => $class]);
+        return Inertia::render('Classes/Edit', [
+            'schoolClass' => array_merge($class->toArray(), [
+                'name_translations' => $class->getTranslations('name'),
+            ]),
+        ]);
     }
 
     public function update(Request $request, SchoolClass $class)
     {
         $validated = $request->validate([
-            'name'          => 'required|string|max:255',
+            'name'          => 'required|array',
+            'name.en'       => 'required|string|max:255',
+            'name.km'       => 'nullable|string|max:255',
+            'name.zh'       => 'nullable|string|max:255',
             'section'       => 'nullable|string|max:50',
             'academic_year' => 'required|string|max:20',
         ]);

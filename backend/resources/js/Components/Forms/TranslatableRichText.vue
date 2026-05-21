@@ -1,0 +1,69 @@
+<template>
+    <div>
+        <!-- Sliding tabs -->
+        <div class="relative inline-flex p-1 mb-1.5 bg-slate-100 rounded-lg">
+            <div
+                class="absolute top-1 bottom-1 left-1 bg-white shadow-sm rounded-md transition-transform duration-300 ease-out"
+                :style="{
+                    width: `calc((100% - 8px) / ${locales.length})`,
+                    transform: `translateX(${activeIndex * 100}%)`,
+                }"
+            />
+            <button
+                v-for="loc in locales"
+                :key="loc.code"
+                type="button"
+                @click="active = loc.code"
+                :class="[
+                    'relative z-10 cursor-pointer min-w-[52px] px-3 py-1 text-[11px] font-semibold uppercase tracking-wider rounded-md transition-colors',
+                    active === loc.code ? 'text-slate-900' : 'text-slate-500 hover:text-slate-700',
+                ]"
+            >
+                {{ loc.code }}
+            </button>
+        </div>
+
+        <!-- Keep all editors mounted; only the active one is visible. -->
+        <div class="relative">
+            <div v-for="loc in locales" :key="loc.code" v-show="active === loc.code">
+                <RichTextEditor
+                    :model-value="modelValue?.[loc.code] ?? ''"
+                    @update:model-value="(v) => updateLocale(loc.code, v)"
+                    :placeholder="placeholderFor(loc.code)"
+                />
+            </div>
+        </div>
+    </div>
+</template>
+
+<script setup>
+import { computed, ref } from 'vue'
+import RichTextEditor from '@/Components/RichTextEditor.vue'
+
+const props = defineProps({
+    modelValue:  { type: Object, default: () => ({}) },
+    placeholder: { type: [String, Object], default: '' },
+    locales:     { type: Array, default: () => [
+        { code: 'km', name: 'ខ្មែរ' },
+        { code: 'en', name: 'English' },
+        { code: 'zh', name: '中文' },
+    ] },
+})
+
+const emit = defineEmits(['update:modelValue'])
+
+const active = ref(props.locales[0]?.code ?? 'en')
+
+const activeIndex = computed(() =>
+    Math.max(0, props.locales.findIndex((l) => l.code === active.value))
+)
+
+const placeholderFor = (code) => {
+    if (typeof props.placeholder === 'string') return props.placeholder
+    return props.placeholder?.[code] ?? ''
+}
+
+const updateLocale = (code, value) => {
+    emit('update:modelValue', { ...(props.modelValue ?? {}), [code]: value })
+}
+</script>

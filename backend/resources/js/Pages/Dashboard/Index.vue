@@ -3,8 +3,8 @@
         <div class="animate-fade-in">
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Dashboard</h2>
-                    <p class="text-sm text-slate-500 mt-1">Welcome back! Here's what's happening today.</p>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Dashboard') }}</h2>
+                    <p class="text-sm text-slate-500 mt-1">{{ __("Welcome back! Here's what's happening today.") }}</p>
                 </div>
                 <div class="text-sm text-slate-400 font-medium">
                     {{ new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
@@ -17,7 +17,7 @@
                     <CardContent class="p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-[13px] font-medium text-slate-500">Total Students</p>
+                                <p class="text-[13px] font-medium text-slate-500">{{ __('Total Students') }}</p>
                                 <p class="text-3xl font-bold text-slate-900 mt-1.5 tracking-tight">{{ stats?.totalStudents ?? 0 }}</p>
                             </div>
                             <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
@@ -30,7 +30,7 @@
                     <CardContent class="p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-[13px] font-medium text-slate-500">Total Teachers</p>
+                                <p class="text-[13px] font-medium text-slate-500">{{ __('Total Teachers') }}</p>
                                 <p class="text-3xl font-bold text-slate-900 mt-1.5 tracking-tight">{{ stats?.totalTeachers ?? 0 }}</p>
                             </div>
                             <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center">
@@ -43,7 +43,7 @@
                     <CardContent class="p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-[13px] font-medium text-slate-500">Total Classes</p>
+                                <p class="text-[13px] font-medium text-slate-500">{{ __('Total Classes') }}</p>
                                 <p class="text-3xl font-bold text-slate-900 mt-1.5 tracking-tight">{{ stats?.totalClasses ?? 0 }}</p>
                             </div>
                             <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center">
@@ -56,7 +56,7 @@
                     <CardContent class="p-6">
                         <div class="flex items-center justify-between">
                             <div>
-                                <p class="text-[13px] font-medium text-slate-500">Today's Attendance</p>
+                                <p class="text-[13px] font-medium text-slate-500">{{ __("Today's Attendance") }}</p>
                                 <p class="text-3xl font-bold mt-1.5 tracking-tight" :class="(stats?.todayAttendance ?? 0) >= 80 ? 'text-emerald-600' : 'text-rose-600'">{{ stats?.todayAttendance ?? 0 }}%</p>
                             </div>
                             <div class="w-12 h-12 rounded-2xl bg-violet-50 flex items-center justify-center">
@@ -72,8 +72,8 @@
                 <CardContent class="p-6">
                     <div class="flex items-center justify-between mb-6">
                         <div>
-                            <h3 class="text-base font-semibold text-slate-900">Weekly Attendance</h3>
-                            <p class="text-[13px] text-slate-500 mt-0.5">Attendance overview for the past week</p>
+                            <h3 class="text-base font-semibold text-slate-900">{{ __('Weekly Attendance') }}</h3>
+                            <p class="text-[13px] text-slate-500 mt-0.5">{{ __('Attendance overview for the past week') }}</p>
                         </div>
                     </div>
                     <div style="height: 280px;">
@@ -85,18 +85,18 @@
             <!-- Recent Attendance -->
             <Card class="overflow-hidden animate-fade-in-up" style="animation-delay: 300ms;">
                 <div class="px-6 py-5 border-b border-slate-100">
-                    <h3 class="text-base font-semibold text-slate-900">Recent Attendance</h3>
-                    <p class="text-[13px] text-slate-500 mt-0.5">Latest attendance records across all classes</p>
+                    <h3 class="text-base font-semibold text-slate-900">{{ __('Recent Attendance') }}</h3>
+                    <p class="text-[13px] text-slate-500 mt-0.5">{{ __('Latest attendance records across all classes') }}</p>
                 </div>
                 <div class="overflow-x-auto">
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Student</TableHead>
-                                <TableHead>Class</TableHead>
-                                <TableHead>Subject</TableHead>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Status</TableHead>
+                                <TableHead>{{ __('Student') }}</TableHead>
+                                <TableHead>{{ __('Class') }}</TableHead>
+                                <TableHead>{{ __('Subject') }}</TableHead>
+                                <TableHead>{{ __('Date') }}</TableHead>
+                                <TableHead>{{ __('Status') }}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -110,7 +110,7 @@
                                 </TableCell>
                             </TableRow>
                             <TableRow v-if="!recentAttendance?.length">
-                                <TableCell colspan="5" class="text-center py-12 text-slate-400">No attendance records yet.</TableCell>
+                                <TableCell colspan="5" class="text-center py-12 text-slate-400">{{ __('No attendance records yet.') }}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -127,6 +127,7 @@ import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Toolti
 import { Card, CardContent } from '@/Components/ui/card';
 import { Badge } from '@/Components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
+import { __ } from '@/Composables/useTranslate';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -139,9 +140,9 @@ const props = defineProps({
 const chartData = {
     labels: props.weeklyChart?.map(d => d.date) || [],
     datasets: [
-        { label: 'Present', data: props.weeklyChart?.map(d => d.present) || [], backgroundColor: '#10b981', borderRadius: 6, borderSkipped: false },
-        { label: 'Absent', data: props.weeklyChart?.map(d => d.absent) || [], backgroundColor: '#f43f5e', borderRadius: 6, borderSkipped: false },
-        { label: 'Late', data: props.weeklyChart?.map(d => d.late) || [], backgroundColor: '#f59e0b', borderRadius: 6, borderSkipped: false },
+        { label: __('Present'), data: props.weeklyChart?.map(d => d.present) || [], backgroundColor: '#10b981', borderRadius: 6, borderSkipped: false },
+        { label: __('Absent'), data: props.weeklyChart?.map(d => d.absent) || [], backgroundColor: '#f43f5e', borderRadius: 6, borderSkipped: false },
+        { label: __('Late'), data: props.weeklyChart?.map(d => d.late) || [], backgroundColor: '#f59e0b', borderRadius: 6, borderSkipped: false },
     ],
 };
 

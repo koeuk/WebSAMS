@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\SerializesCurrentLocale;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
 class Semester extends Model
 {
-    use HasTranslations;
+    use HasTranslations, SerializesCurrentLocale;
 
     protected $fillable = ['name', 'academic_year', 'start_date', 'end_date'];
 

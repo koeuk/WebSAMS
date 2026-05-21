@@ -5,18 +5,18 @@
                 <div class="flex items-center gap-4">
                     <Link href="/admin/attendance" class="flex items-center gap-1.5 text-sm text-slate-400 hover:text-slate-600 transition-colors">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M15 19l-7-7 7-7"/></svg>
-                        Back
+                        {{ __('Back') }}
                     </Link>
                     <div class="h-5 w-px bg-slate-200"></div>
                     <div>
-                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Attendance Detail</h2>
+                        <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Attendance Detail') }}</h2>
                         <p class="text-sm text-slate-500 mt-0.5">{{ record.student?.name }} - {{ formatDate(record.date) }}</p>
                     </div>
                 </div>
                 <Button as-child>
                     <Link :href="`/admin/attendance/${record.id}/edit`" class="flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
-                        Edit
+                        {{ __('Edit') }}
                     </Link>
                 </Button>
             </div>
@@ -25,44 +25,44 @@
                 <CardContent class="p-6">
                     <div class="space-y-4">
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
-                            <p class="text-[13px] text-slate-500">Student</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Student') }}</p>
                             <p class="text-[13px] font-semibold text-slate-900">{{ record.student?.name }}</p>
                         </div>
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
-                            <p class="text-[13px] text-slate-500">Date</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Date') }}</p>
                             <p class="text-[13px] font-semibold text-slate-900">{{ formatDate(record.date) }}</p>
                         </div>
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
-                            <p class="text-[13px] text-slate-500">Time Slot</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Time Slot') }}</p>
                             <p class="text-[13px] font-semibold text-slate-900">{{ record.time_slot?.name }} ({{ record.time_slot?.start_time?.slice(0,5) }} - {{ record.time_slot?.end_time?.slice(0,5) }})</p>
                         </div>
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
-                            <p class="text-[13px] text-slate-500">Year Level</p>
-                            <p class="text-[13px] font-semibold text-slate-900">{{ record.student?.year_level ? 'Year ' + record.student.year_level : '-' }}</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Year Level') }}</p>
+                            <p class="text-[13px] font-semibold text-slate-900">{{ record.student?.year_level ? __('Year {n}', { n: record.student.year_level }) : '-' }}</p>
                         </div>
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
-                            <p class="text-[13px] text-slate-500">Class</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Class') }}</p>
                             <p class="text-[13px] font-semibold text-slate-900">{{ record.class_subject?.school_class?.name }}</p>
                         </div>
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
-                            <p class="text-[13px] text-slate-500">Subject</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Subject') }}</p>
                             <p class="text-[13px] font-semibold text-slate-900">{{ record.class_subject?.subject?.name }}</p>
                         </div>
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
-                            <p class="text-[13px] text-slate-500">Course</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Course') }}</p>
                             <p class="text-[13px] font-semibold text-slate-900">{{ record.class_subject?.subject?.course?.name }}</p>
                         </div>
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
-                            <p class="text-[13px] text-slate-500">Status</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Status') }}</p>
                             <Badge class="capitalize" :class="statusClass(record.status)">{{ record.status }}</Badge>
                         </div>
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
-                            <p class="text-[13px] text-slate-500">Recorded By</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Recorded By') }}</p>
                             <p class="text-[13px] font-semibold text-slate-900">{{ record.recorder?.name }}</p>
                         </div>
                         <div class="flex items-center justify-between py-2.5">
-                            <p class="text-[13px] text-slate-500">Remarks</p>
-                            <p class="text-[13px] font-semibold text-slate-900">{{ record.remarks || 'None' }}</p>
+                            <p class="text-[13px] text-slate-500">{{ __('Remarks') }}</p>
+                            <p class="text-[13px] font-semibold text-slate-900">{{ record.remarks || __('None') }}</p>
                         </div>
                     </div>
                 </CardContent>
@@ -77,6 +77,7 @@ import AdminLayout from '@/Layouts/AdminLayout.vue';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({ record: Object });
 

@@ -3,12 +3,12 @@
         <div class="animate-fade-in">
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Users</h2>
-                    <p class="text-sm text-slate-500 mt-1">Manage students, teachers, and administrators</p>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Users') }}</h2>
+                    <p class="text-sm text-slate-500 mt-1">{{ __('Manage students, teachers, and administrators') }}</p>
                 </div>
                 <Button @click="openCreate" class="flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                    Create User
+                    {{ __('Create User') }}
                 </Button>
             </div>
 
@@ -18,25 +18,25 @@
             <div class="card p-4 mb-6">
                 <div class="flex flex-wrap gap-3 items-end">
                     <div class="flex-1 min-w-50">
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Search</label>
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Search') }}</label>
                         <Input
                             v-model="search"
                             type="text"
-                            placeholder="Search by name or email..."
+                            :placeholder="__('Search by name or email...')"
                             @keyup.enter="applyFilters"
                         />
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Role</label>
-                        <FilterCombobox v-model="roleFilter" :options="roleOptions" placeholder="All Roles" @update:model-value="applyFilters" />
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Role') }}</label>
+                        <FilterCombobox v-model="roleFilter" :options="roleOptions" :placeholder="__('All Roles')" @update:model-value="applyFilters" />
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Year Level</label>
-                        <FilterCombobox v-model="yearFilter" :options="yearOptions" placeholder="All Years" @update:model-value="applyFilters" />
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Year Level') }}</label>
+                        <FilterCombobox v-model="yearFilter" :options="yearOptions" :placeholder="__('All Years')" @update:model-value="applyFilters" />
                     </div>
                     <div>
-                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
-                        <FilterCombobox v-model="statusFilter" :options="statusOptions" placeholder="All Status" @update:model-value="applyFilters" />
+                        <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Status') }}</label>
+                        <FilterCombobox v-model="statusFilter" :options="statusOptions" :placeholder="__('All Status')" @update:model-value="applyFilters" />
                     </div>
                     <Button
                         v-if="search || roleFilter || yearFilter || statusFilter"
@@ -46,7 +46,7 @@
                         class="self-end flex items-center gap-1.5"
                     >
                         <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                        Clear
+                        {{ __('Clear') }}
                     </Button>
                 </div>
             </div>
@@ -56,13 +56,13 @@
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead class="text-left">ID</TableHead>
-                            <TableHead class="text-left">Name</TableHead>
-                            <TableHead class="text-left">Email</TableHead>
-                            <TableHead class="text-left">Role</TableHead>
-                            <TableHead class="text-left">Gender</TableHead>
-                            <TableHead class="text-left">Status</TableHead>
-                            <TableHead class="text-right">Actions</TableHead>
+                            <TableHead class="text-left">{{ __('ID') }}</TableHead>
+                            <TableHead class="text-left">{{ __('Name') }}</TableHead>
+                            <TableHead class="text-left">{{ __('Email') }}</TableHead>
+                            <TableHead class="text-left">{{ __('Role') }}</TableHead>
+                            <TableHead class="text-left">{{ __('Gender') }}</TableHead>
+                            <TableHead class="text-left">{{ __('Status') }}</TableHead>
+                            <TableHead class="text-right">{{ __('Actions') }}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -82,10 +82,10 @@
                             <TableCell class="text-right">
                                 <div class="flex items-center justify-end gap-1">
                                     <Button variant="ghost" size="sm" as-child>
-                                        <Link :href="`/admin/users/${user.id}`">View</Link>
+                                        <Link :href="`/admin/users/${user.id}`">{{ __('View') }}</Link>
                                     </Button>
-                                    <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(user)">Edit</Button>
-                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/users/${user.id}/delete`, { preserveState: true, preserveScroll: true })">Delete</Button>
+                                    <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(user)">{{ __('Edit') }}</Button>
+                                    <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="router.visit(`/admin/users/${user.id}/delete`, { preserveState: true, preserveScroll: true })">{{ __('Delete') }}</Button>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -94,8 +94,8 @@
                                 <Empty class="border-0 rounded-none">
                                     <EmptyHeader>
                                         <EmptyMedia variant="icon"><Users class="w-6 h-6" /></EmptyMedia>
-                                        <EmptyTitle>No users found</EmptyTitle>
-                                        <EmptyDescription>Try adjusting your filters or create a new user.</EmptyDescription>
+                                        <EmptyTitle>{{ __('No users found') }}</EmptyTitle>
+                                        <EmptyDescription>{{ __('Try adjusting your filters or create a new user.') }}</EmptyDescription>
                                     </EmptyHeader>
                                 </Empty>
                             </TableCell>
@@ -127,6 +127,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
 import { Users } from 'lucide-vue-next';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({
     users:      Object,

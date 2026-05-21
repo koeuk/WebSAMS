@@ -25,7 +25,10 @@ class SemesterController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'          => 'required|string|max:255',
+            'name'          => 'required|array',
+            'name.en'       => 'required|string|max:255',
+            'name.km'       => 'nullable|string|max:255',
+            'name.zh'       => 'nullable|string|max:255',
             'academic_year' => 'required|string|max:20',
             'start_date'    => 'required|date',
             'end_date'      => 'required|date|after:start_date',
@@ -45,13 +48,20 @@ class SemesterController extends Controller
 
     public function edit(Semester $semester)
     {
-        return Inertia::render('Semesters/Edit', ['semester' => $semester]);
+        return Inertia::render('Semesters/Edit', [
+            'semester' => array_merge($semester->toArray(), [
+                'name_translations' => $semester->getTranslations('name'),
+            ]),
+        ]);
     }
 
     public function update(Request $request, Semester $semester)
     {
         $validated = $request->validate([
-            'name'          => 'required|string|max:255',
+            'name'          => 'required|array',
+            'name.en'       => 'required|string|max:255',
+            'name.km'       => 'nullable|string|max:255',
+            'name.zh'       => 'nullable|string|max:255',
             'academic_year' => 'required|string|max:20',
             'start_date'    => 'required|date',
             'end_date'      => 'required|date|after:start_date',

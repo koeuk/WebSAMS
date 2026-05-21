@@ -2,8 +2,8 @@
     <AdminLayout>
         <Modal
             :show="isOpen"
-            title="Delete Subject"
-            :message="`Delete '${subject.name}' (${subject.code})?`"
+            :title="__('Delete Subject')"
+            :message="__(`Delete '{name}' ({code})?`, { name: subject.name, code: subject.code })"
             :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
@@ -16,6 +16,7 @@ import { ref } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import Modal from '@/Components/Modal.vue'
+import { __ } from '@/Composables/useTranslate'
 
 const props = defineProps({ subject: Object })
 

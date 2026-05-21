@@ -3,12 +3,12 @@
         <div class="animate-fade-in">
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Subjects</h2>
-                    <p class="text-sm text-slate-500 mt-1">Manage subjects across courses</p>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Subjects') }}</h2>
+                    <p class="text-sm text-slate-500 mt-1">{{ __('Manage subjects across courses') }}</p>
                 </div>
                 <Button @click="openCreate" class="flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                    Create Subject
+                    {{ __('Create Subject') }}
                 </Button>
             </div>
 
@@ -18,16 +18,16 @@
                 <CardContent class="p-4">
                     <div class="flex flex-wrap gap-3 items-end">
                         <div class="flex-1 min-w-[200px]">
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Search</label>
-                            <Input v-model="search" type="text" placeholder="Search subjects..." @keyup.enter="applyFilters" />
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Search') }}</label>
+                            <Input v-model="search" type="text" :placeholder="__('Search subjects...')" @keyup.enter="applyFilters" />
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Course</label>
-                            <FilterCombobox v-model="courseFilter" :options="courseOptions" placeholder="All Courses" @update:model-value="applyFilters" />
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Course') }}</label>
+                            <FilterCombobox v-model="courseFilter" :options="courseOptions" :placeholder="__('All Courses')" @update:model-value="applyFilters" />
                         </div>
                         <Button v-if="search || courseFilter" variant="outline" size="sm" @click="clearFilters" class="flex items-center gap-1.5 self-end">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                            Clear
+                            {{ __('Clear') }}
                         </Button>
                     </div>
                 </CardContent>
@@ -37,10 +37,10 @@
                 <Table>
                     <TableHeader>
                         <TableRow>
-                            <TableHead>Name</TableHead>
-                            <TableHead>Code</TableHead>
-                            <TableHead>Course</TableHead>
-                            <TableHead class="text-right">Actions</TableHead>
+                            <TableHead>{{ __('Name') }}</TableHead>
+                            <TableHead>{{ __('Code') }}</TableHead>
+                            <TableHead>{{ __('Course') }}</TableHead>
+                            <TableHead class="text-right">{{ __('Actions') }}</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -52,8 +52,8 @@
                             <TableCell>{{ subject.course?.name }}</TableCell>
                             <TableCell class="text-right">
                                 <div class="flex items-center justify-end gap-1">
-                                    <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700" @click="openEdit(subject)">Edit</Button>
-                                    <Button variant="ghost" size="sm" @click="router.visit(`/admin/subjects/${subject.id}/delete`, { preserveState: true, preserveScroll: true })" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50">Delete</Button>
+                                    <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700" @click="openEdit(subject)">{{ __('Edit') }}</Button>
+                                    <Button variant="ghost" size="sm" @click="router.visit(`/admin/subjects/${subject.id}/delete`, { preserveState: true, preserveScroll: true })" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50">{{ __('Delete') }}</Button>
                                 </div>
                             </TableCell>
                         </TableRow>
@@ -62,8 +62,8 @@
                                 <Empty class="border-0 rounded-none">
                                     <EmptyHeader>
                                         <EmptyMedia variant="icon"><Book class="w-6 h-6" /></EmptyMedia>
-                                        <EmptyTitle>No subjects found</EmptyTitle>
-                                        <EmptyDescription>Try adjusting your filters or create a new subject.</EmptyDescription>
+                                        <EmptyTitle>{{ __('No subjects found') }}</EmptyTitle>
+                                        <EmptyDescription>{{ __('Try adjusting your filters or create a new subject.') }}</EmptyDescription>
                                     </EmptyHeader>
                                 </Empty>
                             </TableCell>
@@ -94,6 +94,7 @@ import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
 import { Book } from 'lucide-vue-next';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({ subjects: Object, courses: Array, filters: Object });
 const search = ref(props.filters?.search || '');

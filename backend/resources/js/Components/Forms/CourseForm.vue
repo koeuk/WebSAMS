@@ -15,8 +15,12 @@
         <div class="space-y-4">
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" :placeholder="__('e.g. Computer Science')" @update:model-value="touch('name')" />
-                <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
+                <TranslatableInput
+                    v-model="form.name"
+                    :placeholder="{ en: 'e.g. Computer Science', km: 'ឧ. វិទ្យាសាស្ត្រ​កុំព្យូទ័រ', zh: '例如:计算机科学' }"
+                    @update:model-value="touch('name')"
+                />
+                <p v-if="error('name') || nameError" class="text-[12px] text-rose-500 mt-1">{{ error('name') || nameError }}</p>
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Code') }} <span class="text-rose-500">*</span></Label>
@@ -25,7 +29,10 @@
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Description') }}</Label>
-                <RichTextEditor v-model="form.description" :placeholder="__('Optional description…')" />
+                <TranslatableRichText
+                    v-model="form.description"
+                    :placeholder="__('Optional description…')"
+                />
             </div>
         </div>
 
@@ -48,7 +55,8 @@ import ModalForm from '@/Components/ModalForm.vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
-import RichTextEditor from '@/Components/RichTextEditor.vue'
+import TranslatableInput from '@/Components/Forms/TranslatableInput.vue'
+import TranslatableRichText from '@/Components/Forms/TranslatableRichText.vue'
 import { useFormValidation } from '@/Composables/useFormValidation'
 import { __ } from '@/Composables/useTranslate'
 
@@ -59,24 +67,46 @@ const props = defineProps({
 const emit = defineEmits(['update:open'])
 const isEdit = computed(() => !!props.course)
 
-const form = useForm({ name: '', code: '', description: '' })
+const emptyTranslations = () => ({ en: '', km: '', zh: '' })
+
+const form = useForm({
+    name: emptyTranslations(),
+    code: '',
+    description: emptyTranslations(),
+})
+
+const nameError = computed(() => {
+    const en = (form.name?.en ?? '').trim()
+    if (!en) return __('English name is required')
+    if (en.length < 2) return __('At least 2 characters')
+    return null
+})
 
 const { touch, markAllTouched, reset, error } = useFormValidation({
-    name: () => {
-        if (!form.name?.trim()) return __('Name is required')
-        if (form.name.trim().length < 2) return __('At least 2 characters')
-        return null
-    },
+    name: () => nameError.value,
     code: () => !form.code?.trim() ? __('Code is required') : null,
 })
 
+const readTranslations = (value) => {
+    if (!value) return emptyTranslations()
+    if (typeof value === 'string') return { ...emptyTranslations(), en: value }
+    return { ...emptyTranslations(), ...value }
+}
+
 watch(() => props.course, (c) => {
     reset()
-    if (c) { form.name = c.name; form.code = c.code; form.description = c.description || '' }
-    else form.reset()
+    if (c) {
+        form.name = readTranslations(c.name_translations ?? c.name)
+        form.code = c.code
+        form.description = readTranslations(c.description_translations ?? c.description)
+    } else {
+        form.reset()
+        form.name = emptyTranslations()
+        form.description = emptyTranslations()
+    }
 }, { immediate: true })
 
-const canSubmit = computed(() => !!form.name?.trim() && form.name.trim().length >= 2 && !!form.code?.trim())
+const canSubmit = computed(() => !nameError.value && !!form.code?.trim())
 
 const close = () => emit('update:open', false)
 

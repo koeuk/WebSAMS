@@ -3,20 +3,20 @@
         <div class="animate-fade-in">
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">Attendance Records</h2>
-                    <p class="text-sm text-slate-500 mt-1">Track and manage student attendance</p>
+                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Attendance Records') }}</h2>
+                    <p class="text-sm text-slate-500 mt-1">{{ __('Track and manage student attendance') }}</p>
                 </div>
                 <div class="flex items-center gap-3">
                     <Button variant="outline" as-child>
                         <Link href="/admin/bulk-attendance" class="flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
-                            Bulk Mark
+                            {{ __('Bulk Mark') }}
                         </Link>
                     </Button>
                     <Button as-child>
                         <Link href="/admin/attendance/create" class="flex items-center gap-2">
                             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                            Create Attendance
+                            {{ __('Create Attendance') }}
                         </Link>
                     </Button>
                 </div>
@@ -29,48 +29,48 @@
                 <CardContent class="p-4">
                     <div class="flex flex-wrap gap-3 items-end">
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Course</label>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Course') }}</label>
                             <FilterCombobox
                                 v-model="courseFilter"
                                 :options="courseOptions"
-                                placeholder="All Courses"
+                                :placeholder="__('All Courses')"
                                 @update:model-value="applyFilters(true)"
                             />
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Class</label>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Class') }}</label>
                             <FilterCombobox
                                 v-model="classFilter"
                                 :options="classOptions"
-                                placeholder="All Classes"
+                                :placeholder="__('All Classes')"
                                 @update:model-value="applyFilters()"
                             />
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Subject</label>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Subject') }}</label>
                             <FilterCombobox
                                 v-model="subjectFilter"
                                 :options="subjectOptions"
-                                placeholder="All Subjects"
+                                :placeholder="__('All Subjects')"
                                 @update:model-value="applyFilters()"
                             />
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('Status') }}</label>
                             <FilterCombobox
                                 v-model="statusFilter"
                                 :options="statusOptions"
-                                placeholder="All Status"
+                                :placeholder="__('All Status')"
                                 @update:model-value="applyFilters()"
                             />
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">From</label>
-                            <DatePicker v-model="dateFrom" placeholder="Start date" @update:model-value="applyFilters()" />
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('From') }}</label>
+                            <DatePicker v-model="dateFrom" :placeholder="__('Start date')" @update:model-value="applyFilters()" />
                         </div>
                         <div>
-                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">To</label>
-                            <DatePicker v-model="dateTo" placeholder="End date" @update:model-value="applyFilters()" />
+                            <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('To') }}</label>
+                            <DatePicker v-model="dateTo" :placeholder="__('End date')" @update:model-value="applyFilters()" />
                         </div>
                         <Button
                             v-if="courseFilter || classFilter || subjectFilter || statusFilter || dateFrom || dateTo"
@@ -80,7 +80,7 @@
                             class="flex items-center gap-1.5"
                         >
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M6 18L18 6M6 6l12 12"/></svg>
-                            Clear
+                            {{ __('Clear') }}
                         </Button>
                     </div>
                 </CardContent>
@@ -92,16 +92,16 @@
                     <Table>
                         <TableHeader>
                             <TableRow>
-                                <TableHead>Date</TableHead>
-                                <TableHead>Time Slot</TableHead>
-                                <TableHead>Student</TableHead>
-                                <TableHead>Year</TableHead>
-                                <TableHead>Class</TableHead>
-                                <TableHead>Course</TableHead>
-                                <TableHead>Subject</TableHead>
-                                <TableHead>Status</TableHead>
-                                <TableHead>Recorded By</TableHead>
-                                <TableHead class="text-right">Actions</TableHead>
+                                <TableHead>{{ __('Date') }}</TableHead>
+                                <TableHead>{{ __('Time Slot') }}</TableHead>
+                                <TableHead>{{ __('Student') }}</TableHead>
+                                <TableHead>{{ __('Year') }}</TableHead>
+                                <TableHead>{{ __('Class') }}</TableHead>
+                                <TableHead>{{ __('Course') }}</TableHead>
+                                <TableHead>{{ __('Subject') }}</TableHead>
+                                <TableHead>{{ __('Status') }}</TableHead>
+                                <TableHead>{{ __('Recorded By') }}</TableHead>
+                                <TableHead class="text-right">{{ __('Actions') }}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -109,7 +109,7 @@
                                 <TableCell class="whitespace-nowrap font-medium text-slate-900">{{ formatDate(record.date) }}</TableCell>
                                 <TableCell class="whitespace-nowrap">{{ record.time_slot?.name || '-' }}</TableCell>
                                 <TableCell class="font-semibold text-slate-900">{{ record.student?.name }}</TableCell>
-                                <TableCell>{{ record.student?.year_level ? 'Year ' + record.student.year_level : '-' }}</TableCell>
+                                <TableCell>{{ record.student?.year_level ? __('Year {n}', { n: record.student.year_level }) : '-' }}</TableCell>
                                 <TableCell>{{ record.class_subject?.school_class?.name }}</TableCell>
                                 <TableCell>{{ record.class_subject?.subject?.course?.name }}</TableCell>
                                 <TableCell>{{ record.class_subject?.subject?.name }}</TableCell>
@@ -120,12 +120,12 @@
                                 <TableCell class="text-right">
                                     <div class="flex items-center justify-end gap-1">
                                         <Button variant="ghost" size="sm" as-child>
-                                            <Link :href="`/admin/attendance/${record.id}`">View</Link>
+                                            <Link :href="`/admin/attendance/${record.id}`">{{ __('View') }}</Link>
                                         </Button>
                                         <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" as-child>
-                                            <Link :href="`/admin/attendance/${record.id}/edit`">Edit</Link>
+                                            <Link :href="`/admin/attendance/${record.id}/edit`">{{ __('Edit') }}</Link>
                                         </Button>
-                                        <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="confirmDelete(record)">Delete</Button>
+                                        <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="confirmDelete(record)">{{ __('Delete') }}</Button>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -134,8 +134,8 @@
                                     <Empty class="border-0 rounded-none">
                                         <EmptyHeader>
                                             <EmptyMedia variant="icon"><ClipboardList class="w-6 h-6" /></EmptyMedia>
-                                            <EmptyTitle>No attendance records</EmptyTitle>
-                                            <EmptyDescription>Try adjusting your filters to find records.</EmptyDescription>
+                                            <EmptyTitle>{{ __('No attendance records') }}</EmptyTitle>
+                                            <EmptyDescription>{{ __('Try adjusting your filters to find records.') }}</EmptyDescription>
                                         </EmptyHeader>
                                     </Empty>
                                 </TableCell>
@@ -147,7 +147,7 @@
 
             <Pagination :pagination="attendance" />
 
-            <Modal :show="showDeleteModal" title="Delete Attendance" message="Are you sure you want to delete this attendance record?" :loading="deleting" @confirm="deleteRecord" @cancel="showDeleteModal = false" />
+            <Modal :show="showDeleteModal" :title="__('Delete Attendance')" :message="__('Are you sure you want to delete this attendance record?')" :loading="deleting" @confirm="deleteRecord" @cancel="showDeleteModal = false" />
         </div>
     </AdminLayout>
 </template>
@@ -167,6 +167,7 @@ import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
 import { ClipboardList } from 'lucide-vue-next';
+import { __ } from '@/Composables/useTranslate';
 
 const props = defineProps({
     attendance: Object,

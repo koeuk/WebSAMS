@@ -47,7 +47,10 @@ class SubjectController extends Controller
     {
         $validated = $request->validate([
             'course_id'   => 'required|exists:courses,id',
-            'name'        => 'required|string|max:255',
+            'name'        => 'required|array',
+            'name.en'     => 'required|string|max:255',
+            'name.km'     => 'nullable|string|max:255',
+            'name.zh'     => 'nullable|string|max:255',
             'code'        => 'required|string|max:20|unique:subjects,code',
             'description' => 'nullable|string',
         ]);
@@ -67,7 +70,9 @@ class SubjectController extends Controller
     public function edit(Subject $subject)
     {
         return Inertia::render('Subjects/Edit', [
-            'subject' => $subject,
+            'subject' => array_merge($subject->toArray(), [
+                'name_translations' => $subject->getTranslations('name'),
+            ]),
             'courses' => Course::all(['id', 'name', 'code']),
         ]);
     }
@@ -76,7 +81,10 @@ class SubjectController extends Controller
     {
         $validated = $request->validate([
             'course_id'   => 'required|exists:courses,id',
-            'name'        => 'required|string|max:255',
+            'name'        => 'required|array',
+            'name.en'     => 'required|string|max:255',
+            'name.km'     => 'nullable|string|max:255',
+            'name.zh'     => 'nullable|string|max:255',
             'code'        => ['required', 'string', 'max:20', Rule::unique('subjects', 'code')->ignore($subject->id)],
             'description' => 'nullable|string',
         ]);

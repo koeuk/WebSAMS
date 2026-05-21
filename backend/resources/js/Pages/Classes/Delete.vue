@@ -2,8 +2,8 @@
     <AdminLayout>
         <Modal
             :show="isOpen"
-            title="Delete Class"
-            :message="`Delete '${schoolClass.name}'? All enrolled students and subjects will be unlinked.`"
+            :title="__('Delete Class')"
+            :message="__(`Delete '{name}'? All enrolled students and subjects will be unlinked.`, { name: schoolClass.name })"
             :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
@@ -16,6 +16,7 @@ import { ref } from 'vue'
 import { useForm, router } from '@inertiajs/vue3'
 import AdminLayout from '@/Layouts/AdminLayout.vue'
 import Modal from '@/Components/Modal.vue'
+import { __ } from '@/Composables/useTranslate'
 
 const props = defineProps({ schoolClass: Object })
 

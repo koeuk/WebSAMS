@@ -41,9 +41,15 @@ class CourseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'code'        => 'required|string|max:20|unique:courses,code',
-            'description' => 'nullable|string',
+            'name'              => 'required|array',
+            'name.en'           => 'required|string|max:255',
+            'name.km'           => 'nullable|string|max:255',
+            'name.zh'           => 'nullable|string|max:255',
+            'code'              => 'required|string|max:20|unique:courses,code',
+            'description'       => 'nullable|array',
+            'description.en'    => 'nullable|string',
+            'description.km'    => 'nullable|string',
+            'description.zh'    => 'nullable|string',
         ]);
 
         DB::beginTransaction();
@@ -60,15 +66,26 @@ class CourseController extends Controller
 
     public function edit(Course $course)
     {
-        return Inertia::render('Courses/Edit', ['course' => $course]);
+        return Inertia::render('Courses/Edit', [
+            'course' => array_merge($course->toArray(), [
+                'name_translations'        => $course->getTranslations('name'),
+                'description_translations' => $course->getTranslations('description'),
+            ]),
+        ]);
     }
 
     public function update(Request $request, Course $course)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
-            'code'        => ['required', 'string', 'max:20', Rule::unique('courses', 'code')->ignore($course->id)],
-            'description' => 'nullable|string',
+            'name'              => 'required|array',
+            'name.en'           => 'required|string|max:255',
+            'name.km'           => 'nullable|string|max:255',
+            'name.zh'           => 'nullable|string|max:255',
+            'code'              => ['required', 'string', 'max:20', Rule::unique('courses', 'code')->ignore($course->id)],
+            'description'       => 'nullable|array',
+            'description.en'    => 'nullable|string',
+            'description.km'    => 'nullable|string',
+            'description.zh'    => 'nullable|string',
         ]);
 
         DB::beginTransaction();

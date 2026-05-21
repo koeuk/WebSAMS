@@ -119,14 +119,14 @@ const submit = () => {
     if (isEdit.value) {
         form.put(route('admin.schedules.update', props.schedule.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success('Schedule updated successfully'); close() },
-            onError: () => { toast.error('Failed to update schedule') },
+            onSuccess: () => { toast.success(__('Schedule updated successfully')); close() },
+            onError: () => { toast.error(__('Failed to update schedule')) },
         })
     } else {
         form.post(route('admin.schedules.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success('Schedule created successfully'); close(); form.reset() },
-            onError: () => { toast.error('Failed to create schedule') },
+            onSuccess: () => { toast.success(__('Schedule created successfully')); close(); form.reset() },
+            onError: () => { toast.error(__('Failed to create schedule')) },
         })
     }
 }
