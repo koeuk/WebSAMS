@@ -321,5 +321,5 @@
 
 /* Sidebar nav glow effect on active */
 .nav-active-glow {
-    box-shadow: inset 3px 0 0 var(--color-beltei-gold), 0 0 12px rgba(212, 160, 23, 0.08);
+    box-shadow: 0 0 12px rgba(212, 160, 23, 0.08);
 }
