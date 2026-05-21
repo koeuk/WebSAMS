@@ -1,8 +1,8 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('excuses.title') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __('excuses.subtitle') }}</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Excuse Requests') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('Submit excuses for absent attendance records') }}</p>
     </div>
 
     <div v-if="successMsg" class="mb-5 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[13px] text-emerald-700 animate-fade-in">
@@ -10,22 +10,22 @@
       {{ successMsg }}
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('common.loading') }}</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
 
     <template v-else>
       <!-- Absences to excuse -->
       <div class="card overflow-hidden mb-6">
         <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
           <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
-          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('excuses.absentRecords') }}</h3>
+          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('Absent Records') }}</h3>
         </div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{{ __('common.date') }}</TableHead>
-              <TableHead>{{ __('common.class') }}</TableHead>
-              <TableHead>{{ __('common.subject') }}</TableHead>
-              <TableHead>{{ __('common.action') }}</TableHead>
+              <TableHead>{{ __('Date') }}</TableHead>
+              <TableHead>{{ __('Class') }}</TableHead>
+              <TableHead>{{ __('Subject') }}</TableHead>
+              <TableHead>{{ __('Action') }}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -39,8 +39,8 @@
                   variant="outline"
                   size="sm"
                   @click="openForm(r)"
-                >{{ __('excuses.requestExcuse') }}</Button>
-                <span v-else class="badge bg-amber-50 text-amber-700 ring-1 ring-amber-200">{{ __('excuses.submitted') }}</span>
+                >{{ __('Request Excuse') }}</Button>
+                <span v-else class="badge bg-amber-50 text-amber-700 ring-1 ring-amber-200">{{ __('Submitted') }}</span>
               </TableCell>
             </TableRow>
             <TableRow v-if="!absences.length">
@@ -48,8 +48,8 @@
                 <Empty class="border-0 rounded-none py-10">
                   <EmptyHeader>
                     <EmptyMedia variant="icon"><ClipboardCheck class="w-6 h-6" /></EmptyMedia>
-                    <EmptyTitle>{{ __('excuses.noAbsentRecords') }}</EmptyTitle>
-                    <EmptyDescription>{{ __('excuses.noAbsentDescription') }}</EmptyDescription>
+                    <EmptyTitle>{{ __('No absent records') }}</EmptyTitle>
+                    <EmptyDescription>{{ __('You have no unexcused absences.') }}</EmptyDescription>
                   </EmptyHeader>
                 </Empty>
               </TableCell>
@@ -62,16 +62,16 @@
       <div class="card overflow-hidden">
         <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
           <span class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></span>
-          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('excuses.myRequests') }}</h3>
+          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('My Requests') }}</h3>
         </div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{{ __('common.date') }}</TableHead>
-              <TableHead>{{ __('common.class') }}</TableHead>
-              <TableHead>{{ __('common.reason') }}</TableHead>
-              <TableHead>{{ __('common.status') }}</TableHead>
-              <TableHead>{{ __('common.note') }}</TableHead>
+              <TableHead>{{ __('Date') }}</TableHead>
+              <TableHead>{{ __('Class') }}</TableHead>
+              <TableHead>{{ __('Reason') }}</TableHead>
+              <TableHead>{{ __('Status') }}</TableHead>
+              <TableHead>{{ __('Note') }}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -79,7 +79,7 @@
               <TableCell class="font-semibold text-slate-900">{{ formatDate(e.attendance?.date) }}</TableCell>
               <TableCell>{{ e.attendance?.class_subject?.school_class?.name }}</TableCell>
               <TableCell class="max-w-[180px] truncate text-slate-500">{{ e.reason }}</TableCell>
-              <TableCell><span class="badge" :class="statusConfig[e.status]">{{ __(`excuses.status.${e.status}`) }}</span></TableCell>
+              <TableCell><span class="badge" :class="statusConfig[e.status]">{{ __(e.status) }}</span></TableCell>
               <TableCell class="text-slate-400">{{ e.reviewer_note || '—' }}</TableCell>
             </TableRow>
             <TableRow v-if="!requests.length">
@@ -87,8 +87,8 @@
                 <Empty class="border-0 rounded-none py-10">
                   <EmptyHeader>
                     <EmptyMedia variant="icon"><FileText class="w-6 h-6" /></EmptyMedia>
-                    <EmptyTitle>{{ __('excuses.noRequestsSubmitted') }}</EmptyTitle>
-                    <EmptyDescription>{{ __('excuses.noRequestsDescription') }}</EmptyDescription>
+                    <EmptyTitle>{{ __('No requests submitted') }}</EmptyTitle>
+                    <EmptyDescription>{{ __('Submit an excuse from the absent records above.') }}</EmptyDescription>
                   </EmptyHeader>
                 </Empty>
               </TableCell>
@@ -102,24 +102,24 @@
     <Dialog :open="showForm" @update:open="(v) => !v && (showForm = false)">
       <DialogContent class="max-w-md">
         <DialogHeader>
-          <DialogTitle>{{ __('excuses.dialogTitle') }}</DialogTitle>
+          <DialogTitle>{{ __('Request Excuse') }}</DialogTitle>
           <DialogDescription v-if="selectedAttendance">
             {{ selectedAttendance.date }} · {{ selectedAttendance.class_subject?.subject?.name }}
           </DialogDescription>
         </DialogHeader>
         <div class="space-y-1.5">
-          <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('common.reason') }}</Label>
+          <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('Reason') }}</Label>
           <Textarea
             v-model="reason"
             :rows="4"
             class="resize-none"
-            :placeholder="__('excuses.reasonPlaceholder')"
+            :placeholder="__('Explain your reason for absence...')"
           />
         </div>
         <DialogFooter class="gap-2">
-          <Button variant="outline" @click="showForm = false">{{ __('common.cancel') }}</Button>
+          <Button variant="outline" @click="showForm = false">{{ __('Cancel') }}</Button>
           <Button :disabled="submitting || !reason.trim()" @click="submit">
-            {{ submitting ? __('common.submitting') : __('excuses.submitRequest') }}
+            {{ submitting ? __('Submitting...') : __('Submit Request') }}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -178,7 +178,7 @@ const submit = async () => {
       body: { attendance_id: selectedAttendance.value.id, reason: reason.value },
     })
     showForm.value = false
-    successMsg.value = __('excuses.submitSuccess')
+    successMsg.value = __('Excuse request submitted successfully.')
     excuses.value = await apiFetch('/student/excuse-requests')
     setTimeout(() => { successMsg.value = '' }, 4000)
   } catch {}

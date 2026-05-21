@@ -1,8 +1,8 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('qr.title') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __('qr.subtitle') }}</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('QR Attendance') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __("Scan your teacher's QR code or enter the token manually") }}</p>
     </div>
 
     <div class="max-w-md mx-auto">
@@ -25,12 +25,12 @@
         </div>
 
         <div class="text-left mb-4 space-y-1.5">
-          <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('qr.tokenLabel') }}</Label>
+          <Label class="text-[12px] font-semibold text-slate-500 uppercase tracking-wider">{{ __('QR Token') }}</Label>
           <Input
             v-model="token"
             type="text"
             class="font-mono text-[13px]"
-            :placeholder="__('qr.tokenPlaceholder')"
+            :placeholder="__('Paste or type the QR token...')"
             @keyup.enter="attend"
           />
         </div>
@@ -42,12 +42,12 @@
         >
           <svg v-if="loading" class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
           <svg v-else class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/></svg>
-          {{ loading ? __('qr.recording') : __('qr.markAttendance') }}
+          {{ loading ? __('Recording...') : __('Mark Attendance') }}
         </Button>
 
         <p class="mt-5 text-[12px] text-slate-400">
-          {{ __('qr.hint1') }}<br/>
-          {{ __('qr.hint2') }}
+          {{ __('When your teacher shows a QR code, you can also scan it with your phone camera.') }}<br/>
+          {{ __('The token from the QR will auto-fill this page.') }}
         </p>
       </div>
     </div>
@@ -74,10 +74,10 @@ const attend = async () => {
   error.value = ''
   try {
     const res = await apiFetch('/student/attend', { method: 'POST', body: { token: token.value.trim() } })
-    success.value = (res as any).message ?? __('qr.recordedDefault')
+    success.value = (res as any).message ?? __('Attendance recorded!')
     token.value = ''
   } catch (e: any) {
-    error.value = e?.data?.message ?? __('qr.failed')
+    error.value = e?.data?.message ?? __('Failed to record attendance. The QR code may be invalid or expired.')
   }
   loading.value = false
 }

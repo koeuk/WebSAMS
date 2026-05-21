@@ -1,19 +1,19 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('announcements.title') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __('announcements.subtitle') }}</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Announcements') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('Important updates from your teachers') }}</p>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('common.loading') }}</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
 
     <template v-else>
       <div v-if="!announcements.length" class="card overflow-hidden">
         <Empty class="border-0 rounded-none">
           <EmptyHeader>
             <EmptyMedia variant="icon"><Megaphone class="w-6 h-6" /></EmptyMedia>
-            <EmptyTitle>{{ __('announcements.empty') }}</EmptyTitle>
-            <EmptyDescription>{{ __('announcements.emptyDescription') }}</EmptyDescription>
+            <EmptyTitle>{{ __('No announcements yet') }}</EmptyTitle>
+            <EmptyDescription>{{ __('Check back later for updates from your teachers.') }}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       </div>

@@ -1,11 +1,11 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('profile.title') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __('profile.subtitle') }}</p>
+      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('My Profile') }}</h2>
+      <p class="text-sm text-slate-500 mt-1">{{ __('Your personal and academic information') }}</p>
     </div>
 
-    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('common.loading') }}</div>
+    <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
 
     <template v-else-if="profile">
 
@@ -47,7 +47,7 @@
                 {{ __(`profile.userStatus.${profile.status || 'active'}`) }}
               </span>
             </div>
-            <p class="text-[13px] font-mono text-slate-400 mt-0.5">{{ profile.id_number || __('profile.noIdAssigned') }}</p>
+            <p class="text-[13px] font-mono text-slate-400 mt-0.5">{{ profile.id_number || __('No ID assigned') }}</p>
             <p class="text-[13px] text-slate-500 mt-1">{{ profile.email }}</p>
           </div>
         </div>
@@ -60,7 +60,7 @@
         <div class="card p-6 animate-fade-in-up">
           <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></span>
-            {{ __('profile.personalInfo') }}
+            {{ __('Personal Information') }}
           </h4>
           <dl class="space-y-0 divide-y divide-slate-50">
             <div v-for="row in personalRows" :key="row.label" class="flex items-center justify-between py-3">
@@ -76,7 +76,7 @@
         <div class="card p-6 animate-fade-in-up">
           <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
             <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-            {{ __('profile.academicInfo') }}
+            {{ __('Academic Information') }}
           </h4>
           <dl class="space-y-0 divide-y divide-slate-50">
             <div v-for="row in academicRows" :key="row.label" class="flex items-center justify-between py-3">
@@ -93,14 +93,14 @@
       <div class="card overflow-hidden animate-fade-in-up">
         <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
           <span class="w-1.5 h-1.5 rounded-full" style="background:#d4a017;"></span>
-          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('profile.enrolledClasses') }}</h3>
+          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('Enrolled Classes') }}</h3>
         </div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>{{ __('common.class') }}</TableHead>
-              <TableHead>{{ __('common.section') }}</TableHead>
-              <TableHead>{{ __('common.academicYear') }}</TableHead>
+              <TableHead>{{ __('Class') }}</TableHead>
+              <TableHead>{{ __('Section') }}</TableHead>
+              <TableHead>{{ __('Academic Year') }}</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -112,7 +112,7 @@
               </TableCell>
             </TableRow>
             <TableRow v-if="!profile.enrolled_classes?.length">
-              <TableCell colspan="3" class="text-center py-8 text-slate-400">{{ __('common.noClassesEnrolled') }}</TableCell>
+              <TableCell colspan="3" class="text-center py-8 text-slate-400">{{ __('Not enrolled in any classes.') }}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -151,16 +151,16 @@ const statusStyles: Record<string, { pill: string; dot: string }> = {
 const status = (s: string) => statusStyles[s] ?? statusStyles.active
 
 const personalRows = computed(() => [
-  { label: __('profile.phone'),   value: profile.value?.phone || '-' },
-  { label: __('profile.gender'),  value: profile.value?.gender || '-', capitalize: true },
-  { label: __('profile.dob'),     value: formatDate(profile.value?.date_of_birth) },
-  { label: __('profile.address'), value: profile.value?.address || '-' },
+  { label: __('Phone'),   value: profile.value?.phone || '-' },
+  { label: __('Gender'),  value: profile.value?.gender || '-', capitalize: true },
+  { label: __('Date of Birth'),     value: formatDate(profile.value?.date_of_birth) },
+  { label: __('Address'), value: profile.value?.address || '-' },
 ])
 
 const academicRows = computed(() => [
-  { label: __('profile.yearLevel'),       value: profile.value?.year_level ? __('profile.year', { n: profile.value.year_level }) : '-' },
-  { label: __('profile.enrollmentDate'),  value: formatDate(profile.value?.enrollment_date) },
-  { label: __('profile.guardianName'),    value: profile.value?.guardian_name || '-' },
-  { label: __('profile.guardianPhone'),   value: profile.value?.guardian_phone || '-' },
+  { label: __('Year Level'),       value: profile.value?.year_level ? __('Year {n}', { n: profile.value.year_level }) : '-' },
+  { label: __('Enrollment Date'),  value: formatDate(profile.value?.enrollment_date) },
+  { label: __('Guardian Name'),    value: profile.value?.guardian_name || '-' },
+  { label: __('Guardian Phone'),   value: profile.value?.guardian_phone || '-' },
 ])
 </script>
