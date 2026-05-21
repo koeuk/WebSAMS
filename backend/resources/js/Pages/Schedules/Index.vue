@@ -12,7 +12,6 @@
                 </Button>
             </div>
 
-            <FlashMessage />
 
             <div class="space-y-6 stagger-children">
                 <div v-for="(daySchedules, day) in schedules" :key="day" class="animate-fade-in-up">
@@ -71,7 +70,6 @@
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import ScheduleForm from '@/Components/Forms/ScheduleForm.vue';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';

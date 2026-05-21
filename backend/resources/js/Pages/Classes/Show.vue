@@ -13,7 +13,6 @@
                 </div>
             </div>
 
-            <FlashMessage />
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 stagger-children">
                 <!-- Subjects & Teachers -->
@@ -127,7 +126,6 @@
 import { ref } from 'vue';
 import { Link, useForm, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import Modal from '@/Components/Modal.vue';
 import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';

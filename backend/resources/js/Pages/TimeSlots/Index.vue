@@ -12,7 +12,6 @@
                 </Button>
             </div>
 
-            <FlashMessage />
 
             <Card class="overflow-hidden">
                 <Table>
@@ -67,7 +66,6 @@
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import Pagination from '@/Components/Pagination.vue';
 import TimeSlotForm from '@/Components/Forms/TimeSlotForm.vue';
 import { Button } from '@/Components/ui/button';

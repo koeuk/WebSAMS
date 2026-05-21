@@ -22,7 +22,6 @@
                 </div>
             </div>
 
-            <FlashMessage />
 
             <!-- Filters -->
             <Card class="mb-6">
@@ -157,7 +156,6 @@ import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import Modal from '@/Components/Modal.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
 import DatePicker from '@/Components/DatePicker.vue';

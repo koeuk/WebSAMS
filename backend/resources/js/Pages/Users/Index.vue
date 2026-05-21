@@ -12,7 +12,6 @@
                 </Button>
             </div>
 
-            <FlashMessage />
 
             <!-- Filters -->
             <div class="card p-4 mb-6">
@@ -117,7 +116,6 @@ import { ref, computed } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
 import UserForm from '@/Components/Forms/UserForm.vue';
 import { Input } from '@/Components/ui/input';

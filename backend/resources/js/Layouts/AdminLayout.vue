@@ -182,12 +182,14 @@
             :duration="4000"
             :offset="{ bottom: '24px', right: '24px' }"
         />
+        <FlashMessage />
     </div>
 </template>
 
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
 import Toaster from '@/Components/ui/sonner/Sonner.vue';
+import FlashMessage from '@/Components/FlashMessage.vue';
 import { ref, computed } from 'vue';
 import { __, useI18n } from '@/Composables/useTranslate';
 

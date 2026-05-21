@@ -6,7 +6,6 @@
                 <p class="text-sm text-slate-500 mt-1">{{ __('Manage your personal information and password') }}</p>
             </div>
 
-            <FlashMessage />
 
             <div class="max-w-xl space-y-6">
                 <Card>
@@ -94,7 +93,6 @@
 import { useForm, Link } from '@inertiajs/vue3';
 import { ref } from 'vue';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';
 import { Label } from '@/Components/ui/label';

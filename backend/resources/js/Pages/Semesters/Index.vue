@@ -8,7 +8,6 @@
             </Button>
         </div>
 
-        <FlashMessage />
 
         <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
             <Table>
@@ -59,7 +58,6 @@ import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import SemesterForm from '@/Components/Forms/SemesterForm.vue';
 import { Button } from '@/Components/ui/button';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';

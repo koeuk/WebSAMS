@@ -12,7 +12,6 @@
                 </Button>
             </div>
 
-            <FlashMessage />
 
             <Card class="mb-6">
                 <CardContent class="p-4">
@@ -82,7 +81,6 @@ import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import CourseForm from '@/Components/Forms/CourseForm.vue';
 import { Input } from '@/Components/ui/input';
 import { Button } from '@/Components/ui/button';

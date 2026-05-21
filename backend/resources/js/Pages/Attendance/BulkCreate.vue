@@ -13,7 +13,6 @@
                 </div>
             </div>
 
-            <FlashMessage />
 
             <!-- Selection Controls -->
             <Card class="mb-6">
@@ -108,7 +107,6 @@
 import { ref } from 'vue';
 import { useForm, Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
-import FlashMessage from '@/Components/FlashMessage.vue';
 import DatePicker from '@/Components/DatePicker.vue';
 import { Button } from '@/Components/ui/button';
 import { Input } from '@/Components/ui/input';
