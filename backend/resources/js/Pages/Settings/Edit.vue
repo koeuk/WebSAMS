@@ -367,7 +367,6 @@ const submit = () => {
     form.post('/admin/settings', {
         forceFormData: true,
         preserveScroll: true,
-        onSuccess: () => { toast.success(__('Settings saved successfully')) },
         onError: () => { toast.error(__('Failed to save settings')) },
     })
 }

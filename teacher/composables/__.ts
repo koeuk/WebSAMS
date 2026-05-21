@@ -2,21 +2,13 @@ import en from '~/locale/en.json'
 import km from '~/locale/km.json'
 import zh from '~/locale/zh.json'
 
-const messages: Record<string, any> = { en, km, zh }
+const messages: Record<string, Record<string, string>> = { en, km, zh }
 
 const ALL_LOCALES = [
   { code: 'en', name: 'English' },
   { code: 'km', name: 'ខ្មែរ' },
   { code: 'zh', name: '中文' },
 ]
-
-// Direct flat-key lookup first (admin/Laravel convention: English string is the key).
-// Falls back to dotted-path lookup for nested keys if present.
-const get = (obj: any, path: string): unknown => {
-  if (obj == null) return undefined
-  if (Object.prototype.hasOwnProperty.call(obj, path)) return obj[path]
-  return path.split('.').reduce<any>((o, k) => (o == null ? o : o[k]), obj)
-}
 
 const fetchEnabled = async (enabled: Ref<string[]>) => {
   try {
@@ -57,8 +49,7 @@ export const useLocale = () => useI18n().locale
 export const __ = (key: string, params?: Record<string, string | number>): string => {
   const { locale } = useI18n()
   const dict = messages[locale.value] ?? messages.en
-  const value = get(dict, key) ?? get(messages.en, key)
-  let str = typeof value === 'string' ? value : key
+  let str = dict[key] ?? key
   if (params) {
     for (const [k, v] of Object.entries(params)) {
       str = str.replace(new RegExp(`\\{${k}\\}`, 'g'), String(v))

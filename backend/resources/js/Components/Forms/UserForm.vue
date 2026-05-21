@@ -251,13 +251,13 @@ const submit = () => {
     if (isEdit.value) {
         form.put(route('admin.users.update', props.user.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('User updated successfully')); close() },
+            onSuccess: () => { close() },
             onError: () => { toast.error(__('Failed to update user')) },
         })
     } else {
         form.post(route('admin.users.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success(__('User created successfully')); close(); form.reset(); form.role = 'student'; form.status = 'active' },
+            onSuccess: () => { close(); form.reset(); form.role = 'student'; form.status = 'active' },
             onError: () => { toast.error(__('Failed to create user')) },
         })
     }
