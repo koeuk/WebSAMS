@@ -65,7 +65,7 @@
         </TableHeader>
         <TableBody>
           <TableRow v-for="record in records" :key="record.id">
-            <TableCell class="font-semibold text-slate-900">{{ record.date }}</TableCell>
+            <TableCell class="font-semibold text-slate-900">{{ formatDate(record.date) }}</TableCell>
             <TableCell class="text-slate-500">{{ record.time_slot?.name || '-' }}</TableCell>
             <TableCell>{{ record.class_subject?.school_class?.name }}</TableCell>
             <TableCell>{{ record.class_subject?.subject?.name }}</TableCell>
@@ -133,5 +133,14 @@ const statusConfig: Record<string, string> = {
   absent:  'bg-rose-50 text-rose-700 ring-1 ring-rose-200',
   late:    'bg-amber-50 text-amber-700 ring-1 ring-amber-200',
   excused: 'bg-sky-50 text-sky-700 ring-1 ring-sky-200',
+}
+
+const { locale } = useI18n()
+const dateLocale = computed(() => ({ en: 'en-US', km: 'km-KH', zh: 'zh-CN' } as Record<string, string>)[locale.value] ?? 'en-US')
+const formatDate = (d: string | null | undefined) => {
+  if (!d) return '-'
+  const date = new Date(d)
+  if (isNaN(date.getTime())) return d
+  return date.toLocaleDateString(dateLocale.value, { year: 'numeric', month: 'short', day: 'numeric' })
 }
 </script>

@@ -1,0 +1,25 @@
+{
+  "appName": "WebSAMS",
+  "adminPortal": "ផតថលអ្នកគ្រប់គ្រង",
+  "adminRole": "អ្នកគ្រប់គ្រង",
+  "administrator": "អ្នកគ្រប់គ្រងប្រព័ន្ធ",
+  "university": "សាកលវិទ្យាល័យអន្តរជាតិបែលធី",
+  "sasm": "ប្រព័ន្ធគ្រប់គ្រងវត្តមានសិស្ស",
+  "nav": {
+    "dashboard": "ផ្ទាំងគ្រប់គ្រង",
+    "users": "អ្នកប្រើប្រាស់",
+    "courses": "វគ្គសិក្សា",
+    "subjects": "មុខវិជ្ជា",
+    "classes": "ថ្នាក់រៀន",
+    "semesters": "ឆមាស",
+    "attendance": "វត្តមាន",
+    "timeSlots": "ម៉ោងសិក្សា",
+    "schedules": "កាលវិភាគ",
+    "studentTracking": "តាមដានសិស្ស",
+    "reports": "របាយការណ៍",
+    "notifications": "ការជូនដំណឹង",
+    "settings": "ការកំណត់",
+    "signOut": "ចាកចេញ",
+    "language": "ភាសា"
+  }
+}

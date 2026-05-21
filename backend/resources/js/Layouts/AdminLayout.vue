@@ -8,8 +8,8 @@
                     <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
                 </div>
                 <div>
-                    <h1 class="text-[15px] font-bold text-white tracking-tight">WebSAMS</h1>
-                    <p class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">Admin Portal</p>
+                    <h1 class="text-[15px] font-bold text-white tracking-tight">{{ __('appName') }}</h1>
+                    <p class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">{{ __('adminPortal') }}</p>
                 </div>
             </div>
 
@@ -60,15 +60,15 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-[13px] font-semibold text-white truncate">{{ user?.name }}</p>
-                            <p class="text-[11px] text-slate-500 truncate">Administrator</p>
+                            <p class="text-[11px] text-slate-500 truncate">{{ __('administrator') }}</p>
                         </div>
                     </Link>
                     <Link
                         href="/logout"
                         method="post"
                         as="button"
-                        title="Sign Out"
-                        aria-label="Sign Out"
+                        :title="__('nav.signOut')"
+                        :aria-label="__('nav.signOut')"
                         class="shrink-0 p-2 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/[0.08] transition-colors"
                     >
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>

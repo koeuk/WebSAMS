@@ -1,0 +1,25 @@
+{
+  "appName": "WebSAMS",
+  "adminPortal": "Admin Portal",
+  "adminRole": "Admin",
+  "administrator": "Administrator",
+  "university": "BELTEI International University",
+  "sasm": "Student Attendance Management System",
+  "nav": {
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "courses": "Courses",
+    "subjects": "Subjects",
+    "classes": "Classes",
+    "semesters": "Semesters",
+    "attendance": "Attendance",
+    "timeSlots": "Time Slots",
+    "schedules": "Schedules",
+    "studentTracking": "Student Tracking",
+    "reports": "Reports",
+    "notifications": "Notifications",
+    "settings": "Settings",
+    "signOut": "Sign Out",
+    "language": "Language"
+  }
+}

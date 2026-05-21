@@ -1,0 +1,170 @@
+{
+  "appName": "WebSAMS",
+  "university": "贝尔泰国际大学",
+  "teacherPortal": "教师门户",
+  "teacherRole": "教师",
+  "copyright": "贝尔泰国际大学 © 2025",
+  "common": {
+    "loading": "加载中...",
+    "cancel": "取消",
+    "submit": "提交",
+    "submitting": "提交中...",
+    "save": "保存",
+    "clear": "清除",
+    "from": "从",
+    "to": "至",
+    "startDate": "开始日期",
+    "endDate": "结束日期",
+    "dash": "-",
+    "emDash": "—",
+    "noData": "暂无数据",
+    "section": "班级组",
+    "academicYear": "学年",
+    "class": "班级",
+    "subject": "科目",
+    "date": "日期",
+    "status": "状态",
+    "remarks": "备注",
+    "timeSlot": "时段",
+    "action": "操作",
+    "reason": "原因",
+    "note": "注释",
+    "rate": "出勤率",
+    "total": "总数",
+    "present": "出席",
+    "absent": "缺席",
+    "late": "迟到",
+    "excused": "请假"
+  },
+  "nav": {
+    "dashboard": "仪表板",
+    "classes": "我的班级",
+    "attendance": "考勤",
+    "qrSession": "二维码会话",
+    "excuses": "请假申请",
+    "announcements": "公告",
+    "notifications": "通知",
+    "profile": "个人资料",
+    "signOut": "退出登录",
+    "language": "语言"
+  },
+  "login": {
+    "tagline": "几秒钟即可完成考勤,而不是几分钟。",
+    "description": "批量记录考勤、查看您的日程,并轻松保持班级记录井井有条。",
+    "features": {
+      "manage": "管理您所有班级的考勤",
+      "schedule": "一目了然查看今日日程",
+      "history": "完整的考勤历史和报告"
+    },
+    "welcomeBack": "欢迎回来",
+    "signInPrompt": "登录您的教师账户",
+    "emailLabel": "邮箱地址",
+    "emailPlaceholder": "teacher@websams.com",
+    "passwordLabel": "密码",
+    "passwordPlaceholder": "••••••••",
+    "signIn": "登录",
+    "signingIn": "登录中...",
+    "invalidCredentials": "凭据无效。"
+  },
+  "dashboard": {
+    "greeting": "您好,{name} 👋",
+    "subtitle": "这是您今天的日程安排。",
+    "todaySchedule": "今日日程",
+    "noClassesToday": "今天没有安排课程。",
+    "myClasses": "我的班级"
+  },
+  "classes": {
+    "title": "我的班级",
+    "subtitle": "您所教授的班级和科目",
+    "students": "学生",
+    "viewRoster": "查看学生名单",
+    "noClasses": "未分配班级",
+    "noClassesDescription": "请联系管理员为您分配班级。"
+  },
+  "attendance": {
+    "title": "记录考勤",
+    "subtitle": "为您的班级记录考勤",
+    "selectClass": "选择班级",
+    "selectDate": "选择日期",
+    "selectTimeSlot": "选择时段",
+    "markAll": "全部标记为出席",
+    "saveAttendance": "保存考勤",
+    "saved": "考勤已保存",
+    "noStudents": "此班级没有注册的学生。"
+  },
+  "qr": {
+    "title": "二维码考勤会话",
+    "subtitle": "为您的学生生成考勤令牌",
+    "generateSession": "生成会话",
+    "activeSession": "活动会话",
+    "expiresIn": "到期时间",
+    "durationLabel": "时长",
+    "minutes": "分钟",
+    "tokenDisplay": "令牌",
+    "noActiveSession": "无活动会话。",
+    "endSession": "结束会话"
+  },
+  "excuses": {
+    "title": "请假申请",
+    "subtitle": "审核并批准学生的请假申请",
+    "pending": "待审批",
+    "approved": "已批准",
+    "rejected": "已拒绝",
+    "approve": "批准",
+    "reject": "拒绝",
+    "noPending": "无待审批申请",
+    "noPendingDescription": "已全部处理完毕。",
+    "status": {
+      "pending": "待审批",
+      "approved": "已批准",
+      "rejected": "已拒绝"
+    }
+  },
+  "announcements": {
+    "title": "公告",
+    "subtitle": "为您的学生发布更新",
+    "create": "创建公告",
+    "titleLabel": "标题",
+    "bodyLabel": "内容",
+    "audienceLabel": "受众",
+    "post": "发布",
+    "empty": "暂无公告",
+    "emptyDescription": "创建一个以与学生分享更新。",
+    "audience": {
+      "all": "全部",
+      "students": "学生",
+      "teachers": "教师"
+    }
+  },
+  "notifications": {
+    "title": "通知",
+    "subtitle": "及时了解系统提醒",
+    "markRead": "标为已读",
+    "empty": "暂无通知",
+    "emptyDescription": "您已查看完所有通知。",
+    "type": {
+      "general": "一般",
+      "request": "申请",
+      "alert": "提醒"
+    }
+  },
+  "profile": {
+    "title": "我的资料",
+    "subtitle": "您的个人和职业信息",
+    "noIdAssigned": "未分配工号",
+    "personalInfo": "个人信息",
+    "professionalInfo": "职业信息",
+    "phone": "电话",
+    "gender": "性别",
+    "dob": "出生日期",
+    "address": "地址",
+    "department": "部门",
+    "qualification": "资格证书",
+    "hireDate": "入职日期",
+    "userStatus": {
+      "active": "活跃",
+      "inactive": "未激活",
+      "suspended": "已停职"
+    }
+  }
+}

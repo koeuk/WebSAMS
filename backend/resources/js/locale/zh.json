@@ -1,0 +1,25 @@
+{
+  "appName": "WebSAMS",
+  "adminPortal": "管理员门户",
+  "adminRole": "管理员",
+  "administrator": "系统管理员",
+  "university": "贝尔泰国际大学",
+  "sasm": "学生考勤管理系统",
+  "nav": {
+    "dashboard": "仪表板",
+    "users": "用户",
+    "courses": "课程",
+    "subjects": "科目",
+    "classes": "班级",
+    "semesters": "学期",
+    "attendance": "考勤",
+    "timeSlots": "时段",
+    "schedules": "日程",
+    "studentTracking": "学生追踪",
+    "reports": "报告",
+    "notifications": "通知",
+    "settings": "设置",
+    "signOut": "退出登录",
+    "language": "语言"
+  }
+}

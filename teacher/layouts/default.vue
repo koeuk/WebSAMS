@@ -67,14 +67,15 @@
             <p class="text-[13px] font-semibold text-white truncate">{{ user?.name }}</p>
             <p class="text-[11px] text-slate-500 truncate">Teacher</p>
           </div>
+          <button
+            @click="handleLogout"
+            title="Sign Out"
+            aria-label="Sign Out"
+            class="shrink-0 cursor-pointer flex items-center justify-center h-9 w-9 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/[0.08] transition-colors"
+          >
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </button>
         </div>
-        <button
-          @click="handleLogout"
-          class="flex cursor-pointer items-center gap-2 w-full mt-1 px-3 py-2 rounded-lg text-[12px] font-medium text-slate-500 hover:text-red-400 hover:bg-red-500/[0.08] transition-colors"
-        >
-          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-          Sign Out
-        </button>
       </div>
     </aside>
 
