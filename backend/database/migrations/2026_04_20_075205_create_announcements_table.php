@@ -11,8 +11,8 @@ return new class extends Migration
         Schema::create('announcements', function (Blueprint $table) {
             $table->id();
             $table->foreignId('author_id')->constrained('users')->cascadeOnDelete();
-            $table->string('title');
-            $table->text('body');
+            $table->json('title');
+            $table->json('body');
             $table->enum('audience', ['all', 'teachers', 'students'])->default('all');
             $table->foreignId('class_id')->nullable()->constrained('school_classes')->nullOnDelete();
             $table->timestamp('published_at')->nullable();

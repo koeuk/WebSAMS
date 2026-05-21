@@ -20,8 +20,6 @@ const setLocale = (code) => {
     if (typeof window !== 'undefined') window.localStorage.setItem('locale', code)
 }
 
-const get = (obj, path) => path.split('.').reduce((o, k) => (o == null ? o : o[k]), obj)
-
 export const useI18n = () => ({
     locale,
     locales: ref(LOCALES),
@@ -31,9 +29,8 @@ export const useI18n = () => ({
 export const useLocale = () => locale
 
 export const __ = (key, params) => {
-    const dict = messages[locale.value] ?? messages.en
-    const value = get(dict, key) ?? get(messages.en, key)
-    let str = typeof value === 'string' ? value : key
+    const dict = messages[locale.value] ?? {}
+    let str = dict[key] ?? key
     if (params) {
         for (const [k, v] of Object.entries(params)) {
             str = str.replace(new RegExp(`\\{${k}\\}`, 'g'), String(v))

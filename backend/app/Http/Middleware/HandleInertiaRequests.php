@@ -30,6 +30,12 @@ class HandleInertiaRequests extends Middleware
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
+            'locale' => fn () => app()->getLocale(),
+            'locales' => fn () => [
+                ['code' => 'en', 'name' => 'English'],
+                ['code' => 'km', 'name' => 'ខ្មែរ'],
+                ['code' => 'zh', 'name' => '中文'],
+            ],
         ];
     }
 }

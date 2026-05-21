@@ -6,18 +6,18 @@
                     <BookMarked class="w-4 h-4 text-slate-600" />
                 </div>
                 <div>
-                    <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? 'Edit Subject' : 'Create Subject' }}</h2>
-                    <p class="text-xs text-slate-500">{{ isEdit ? `Update ${subject?.name}` : 'Add a new subject' }}</p>
+                    <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? __('Edit Subject') : __('Create Subject') }}</h2>
+                    <p class="text-xs text-slate-500">{{ isEdit ? __('Update {name}', { name: subject?.name }) : __('Add a new subject') }}</p>
                 </div>
             </div>
         </template>
 
         <div class="space-y-4">
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Course <span class="text-rose-500">*</span></Label>
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Course') }} <span class="text-rose-500">*</span></Label>
                 <Select v-model="form.course_id" @update:model-value="touch('course_id')">
                     <SelectTrigger class="w-full">
-                        <SelectValue placeholder="Select a course" />
+                        <SelectValue :placeholder="__('Select a course')" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem v-for="c in courses" :key="c.id" :value="String(c.id)">
@@ -28,26 +28,26 @@
                 <p v-if="error('course_id') || form.errors.course_id" class="text-[12px] text-rose-500 mt-1">{{ error('course_id') || form.errors.course_id }}</p>
             </div>
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" placeholder="e.g. Introduction to Programming" @update:model-value="touch('name')" />
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
+                <Input v-model="form.name" type="text" :placeholder="__('e.g. Introduction to Programming')" @update:model-value="touch('name')" />
                 <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
             </div>
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.code" type="text" placeholder="e.g. CS101" @update:model-value="touch('code')" />
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Code') }} <span class="text-rose-500">*</span></Label>
+                <Input v-model="form.code" type="text" :placeholder="__('e.g. CS101')" @update:model-value="touch('code')" />
                 <p v-if="error('code') || form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ error('code') || form.errors.code }}</p>
             </div>
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Description</Label>
-                <RichTextEditor v-model="form.description" placeholder="Optional description…" />
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Description') }}</Label>
+                <RichTextEditor v-model="form.description" :placeholder="__('Optional description…')" />
             </div>
         </div>
 
         <template #footer>
-            <Button variant="outline" type="button" @click="close">Cancel</Button>
+            <Button variant="outline" type="button" @click="close">{{ __('Cancel') }}</Button>
             <Button type="button" :disabled="!canSubmit || form.processing" @click="submit">
                 <Loader2 v-if="form.processing" class="w-4 h-4 animate-spin" />
-                {{ isEdit ? 'Save Changes' : 'Create Subject' }}
+                {{ isEdit ? __('Save Changes') : __('Create Subject') }}
             </Button>
         </template>
     </ModalForm>
@@ -65,6 +65,7 @@ import { Button } from '@/Components/ui/button'
 import RichTextEditor from '@/Components/RichTextEditor.vue'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
 import { useFormValidation } from '@/Composables/useFormValidation'
+import { __ } from '@/Composables/useTranslate'
 
 const props = defineProps({
     open:    { type: Boolean, required: true },
@@ -77,9 +78,9 @@ const isEdit = computed(() => !!props.subject)
 const form = useForm({ course_id: '', name: '', code: '', description: '' })
 
 const { touch, markAllTouched, reset, error } = useFormValidation({
-    course_id: () => !form.course_id ? 'Course is required' : null,
-    name:      () => !form.name?.trim() ? 'Name is required' : null,
-    code:      () => !form.code?.trim() ? 'Code is required' : null,
+    course_id: () => !form.course_id ? __('Course is required') : null,
+    name:      () => !form.name?.trim() ? __('Name is required') : null,
+    code:      () => !form.code?.trim() ? __('Code is required') : null,
 })
 
 watch(() => props.subject, (s) => {
@@ -97,14 +98,14 @@ const submit = () => {
     if (isEdit.value) {
         form.put(route('admin.subjects.update', props.subject.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success('Subject updated successfully'); close() },
-            onError: () => { toast.error('Failed to update subject') },
+            onSuccess: () => { toast.success(__('Subject updated successfully')); close() },
+            onError: () => { toast.error(__('Failed to update subject')) },
         })
     } else {
         form.post(route('admin.subjects.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success('Subject created successfully'); close(); form.reset() },
-            onError: () => { toast.error('Failed to create subject') },
+            onSuccess: () => { toast.success(__('Subject created successfully')); close(); form.reset() },
+            onError: () => { toast.error(__('Failed to create subject')) },
         })
     }
 }

@@ -5,17 +5,17 @@
     >
         <div class="flex flex-wrap items-center gap-4 text-[13px] text-slate-500">
             <span v-if="pagination.total > 0">
-                Showing
+                {{ __('Showing') }}
                 <span class="font-semibold text-slate-700">{{ pagination.from }}</span>
-                to
+                {{ __('to') }}
                 <span class="font-semibold text-slate-700">{{ pagination.to }}</span>
-                of
+                {{ __('of') }}
                 <span class="font-semibold text-slate-700">{{ pagination.total }}</span>
             </span>
-            <span v-else>No results</span>
+            <span v-else>{{ __('No results') }}</span>
 
             <div class="flex items-center gap-2">
-                <span>Per page</span>
+                <span>{{ __('Per page') }}</span>
                 <Select :model-value="String(pagination.per_page)" @update:model-value="onPerPageChange">
                     <SelectTrigger class="h-8 w-[78px]">
                         <SelectValue />
@@ -35,7 +35,7 @@
                 class="w-8 h-8 inline-flex items-center justify-center rounded-lg border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 transition-colors"
                 preserve-scroll
                 preserve-state
-                aria-label="Previous page"
+                :aria-label="__('Previous page')"
             >
                 <ChevronLeft class="w-4 h-4" />
             </Link>
@@ -77,7 +77,7 @@
                 class="w-8 h-8 inline-flex items-center justify-center rounded-lg border bg-white text-slate-600 border-slate-200 hover:bg-slate-50 transition-colors"
                 preserve-scroll
                 preserve-state
-                aria-label="Next page"
+                :aria-label="__('Next page')"
             >
                 <ChevronRight class="w-4 h-4" />
             </Link>
@@ -97,6 +97,7 @@ import { computed } from 'vue'
 import { Link, router } from '@inertiajs/vue3'
 import { ChevronLeft, ChevronRight } from 'lucide-vue-next'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
+import { __ } from '@/Composables/useTranslate'
 
 const props = defineProps({
     pagination: { type: Object, required: true },

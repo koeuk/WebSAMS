@@ -6,42 +6,42 @@
                     <CalendarDays class="w-4 h-4 text-slate-600" />
                 </div>
                 <div>
-                    <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? 'Edit Semester' : 'Create Semester' }}</h2>
-                    <p class="text-xs text-slate-500">{{ isEdit ? `Update ${semester?.name}` : 'Add a new academic semester' }}</p>
+                    <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? __('Edit Semester') : __('Create Semester') }}</h2>
+                    <p class="text-xs text-slate-500">{{ isEdit ? __('Update {name}', { name: semester?.name }) : __('Add a new academic semester') }}</p>
                 </div>
             </div>
         </template>
 
         <div class="space-y-4">
             <div>
-                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" placeholder="e.g. Semester 1" @update:model-value="touch('name')" />
+                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
+                <Input v-model="form.name" type="text" :placeholder="__('e.g. Semester 1')" @update:model-value="touch('name')" />
                 <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
             </div>
             <div>
-                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Academic Year <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.academic_year" type="text" placeholder="e.g. 2025-2026" @update:model-value="touch('academic_year')" />
+                <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Academic Year') }} <span class="text-rose-500">*</span></Label>
+                <Input v-model="form.academic_year" type="text" :placeholder="__('e.g. 2025-2026')" @update:model-value="touch('academic_year')" />
                 <p v-if="error('academic_year') || form.errors.academic_year" class="text-[12px] text-rose-500 mt-1">{{ error('academic_year') || form.errors.academic_year }}</p>
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">Start Date <span class="text-rose-500">*</span></Label>
-                    <DatePicker v-model="form.start_date" placeholder="Pick start date" @update:model-value="touch('start_date')" />
+                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Start Date') }} <span class="text-rose-500">*</span></Label>
+                    <DatePicker v-model="form.start_date" :placeholder="__('Pick start date')" @update:model-value="touch('start_date')" />
                     <p v-if="error('start_date') || form.errors.start_date" class="text-[12px] text-rose-500 mt-1">{{ error('start_date') || form.errors.start_date }}</p>
                 </div>
                 <div>
-                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">End Date <span class="text-rose-500">*</span></Label>
-                    <DatePicker v-model="form.end_date" placeholder="Pick end date" @update:model-value="touch('end_date')" />
+                    <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('End Date') }} <span class="text-rose-500">*</span></Label>
+                    <DatePicker v-model="form.end_date" :placeholder="__('Pick end date')" @update:model-value="touch('end_date')" />
                     <p v-if="error('end_date') || form.errors.end_date" class="text-[12px] text-rose-500 mt-1">{{ error('end_date') || form.errors.end_date }}</p>
                 </div>
             </div>
         </div>
 
         <template #footer>
-            <Button variant="outline" type="button" @click="close">Cancel</Button>
+            <Button variant="outline" type="button" @click="close">{{ __('Cancel') }}</Button>
             <Button type="button" :disabled="!canSubmit || form.processing" @click="submit">
                 <Loader2 v-if="form.processing" class="w-4 h-4 animate-spin" />
-                {{ isEdit ? 'Save Changes' : 'Create Semester' }}
+                {{ isEdit ? __('Save Changes') : __('Create Semester') }}
             </Button>
         </template>
     </ModalForm>
@@ -58,6 +58,7 @@ import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import { useFormValidation } from '@/Composables/useFormValidation'
+import { __ } from '@/Composables/useTranslate'
 
 const props = defineProps({
     open:     { type: Boolean, required: true },
@@ -69,10 +70,10 @@ const isEdit = computed(() => !!props.semester)
 const form = useForm({ name: '', academic_year: '', start_date: '', end_date: '' })
 
 const { touch, markAllTouched, reset, error } = useFormValidation({
-    name:          () => !form.name?.trim() ? 'Name is required' : null,
-    academic_year: () => !form.academic_year?.trim() ? 'Academic year is required' : null,
-    start_date:    () => !form.start_date ? 'Start date is required' : null,
-    end_date:      () => !form.end_date ? 'End date is required' : null,
+    name:          () => !form.name?.trim() ? __('Name is required') : null,
+    academic_year: () => !form.academic_year?.trim() ? __('Academic year is required') : null,
+    start_date:    () => !form.start_date ? __('Start date is required') : null,
+    end_date:      () => !form.end_date ? __('End date is required') : null,
 })
 
 watch(() => props.semester, (s) => {
@@ -90,14 +91,14 @@ const submit = () => {
     if (isEdit.value) {
         form.put(route('admin.semesters.update', props.semester.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success('Semester updated successfully'); close() },
-            onError: () => { toast.error('Failed to update semester') },
+            onSuccess: () => { toast.success(__('Semester updated successfully')); close() },
+            onError: () => { toast.error(__('Failed to update semester')) },
         })
     } else {
         form.post(route('admin.semesters.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success('Semester created successfully'); close(); form.reset() },
-            onError: () => { toast.error('Failed to create semester') },
+            onSuccess: () => { toast.success(__('Semester created successfully')); close(); form.reset() },
+            onError: () => { toast.error(__('Failed to create semester')) },
         })
     }
 }

@@ -4,6 +4,7 @@
             :show="isOpen"
             title="Delete Course"
             :message="`Delete '${course.name}' (${course.code})? This will also remove all subjects under it.`"
+            :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
         />

@@ -118,7 +118,7 @@
                 </Card>
             </div>
 
-            <Modal :show="showDeleteModal" title="Confirm Removal" :message="deleteMessage" @confirm="executeDelete" @cancel="showDeleteModal = false" />
+            <Modal :show="showDeleteModal" title="Confirm Removal" :message="deleteMessage" :loading="deleting" @confirm="executeDelete" @cancel="showDeleteModal = false" />
         </div>
     </AdminLayout>
 </template>
@@ -168,6 +168,7 @@ const enrollStudent = () => {
 const showDeleteModal = ref(false);
 const deleteUrl = ref('');
 const deleteMessage = ref('');
+const deleting = ref(false);
 
 const confirmRemoveSubject = (cs) => {
     deleteUrl.value = `/admin/class-subjects/${cs.id}`;
@@ -182,8 +183,9 @@ const confirmRemoveStudent = (cs) => {
 };
 
 const executeDelete = () => {
+    deleting.value = true;
     router.delete(deleteUrl.value, {
-        onFinish: () => { showDeleteModal.value = false; },
+        onFinish: () => { showDeleteModal.value = false; deleting.value = false; },
     });
 };
 </script>

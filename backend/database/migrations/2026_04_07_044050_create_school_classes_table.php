@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('school_classes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->json('name');
             $table->string('section')->nullable();
             $table->string('academic_year');
             $table->timestamps();

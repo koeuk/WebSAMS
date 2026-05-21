@@ -20,18 +20,18 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         // Time Slots
-        $morning1 = TimeSlot::create(['name' => 'Morning 1', 'start_time' => '08:00', 'end_time' => '09:30', 'type' => 'morning']);
-        $morning2 = TimeSlot::create(['name' => 'Morning 2', 'start_time' => '10:00', 'end_time' => '11:30', 'type' => 'morning']);
-        $afternoon1 = TimeSlot::create(['name' => 'Afternoon 1', 'start_time' => '13:00', 'end_time' => '14:30', 'type' => 'afternoon']);
-        $afternoon2 = TimeSlot::create(['name' => 'Afternoon 2', 'start_time' => '15:00', 'end_time' => '17:00', 'type' => 'afternoon']);
-        $evening1 = TimeSlot::create(['name' => 'Evening 1', 'start_time' => '17:30', 'end_time' => '19:00', 'type' => 'evening']);
-        $evening2 = TimeSlot::create(['name' => 'Evening 2', 'start_time' => '19:30', 'end_time' => '20:30', 'type' => 'evening']);
+        $morning1   = TimeSlot::create(['name' => ['en' => 'Morning 1',   'km' => 'ព្រឹក ១',   'zh' => '上午 1'], 'start_time' => '08:00', 'end_time' => '09:30', 'type' => 'morning']);
+        $morning2   = TimeSlot::create(['name' => ['en' => 'Morning 2',   'km' => 'ព្រឹក ២',   'zh' => '上午 2'], 'start_time' => '10:00', 'end_time' => '11:30', 'type' => 'morning']);
+        $afternoon1 = TimeSlot::create(['name' => ['en' => 'Afternoon 1', 'km' => 'រសៀល ១', 'zh' => '下午 1'], 'start_time' => '13:00', 'end_time' => '14:30', 'type' => 'afternoon']);
+        $afternoon2 = TimeSlot::create(['name' => ['en' => 'Afternoon 2', 'km' => 'រសៀល ២', 'zh' => '下午 2'], 'start_time' => '15:00', 'end_time' => '17:00', 'type' => 'afternoon']);
+        $evening1   = TimeSlot::create(['name' => ['en' => 'Evening 1',   'km' => 'ល្ងាច ១', 'zh' => '晚上 1'], 'start_time' => '17:30', 'end_time' => '19:00', 'type' => 'evening']);
+        $evening2   = TimeSlot::create(['name' => ['en' => 'Evening 2',   'km' => 'ល្ងាច ២', 'zh' => '晚上 2'], 'start_time' => '19:30', 'end_time' => '20:30', 'type' => 'evening']);
 
         $allTimeSlots = [$morning1, $morning2, $afternoon1, $afternoon2, $evening1, $evening2];
 
         // Semesters
-        Semester::create(['name' => 'Semester 1', 'academic_year' => '2025-2026', 'start_date' => '2025-09-01', 'end_date' => '2026-01-31']);
-        Semester::create(['name' => 'Semester 2', 'academic_year' => '2025-2026', 'start_date' => '2026-02-01', 'end_date' => '2026-06-30']);
+        Semester::create(['name' => ['en' => 'Semester 1', 'km' => 'ឆមាស ១', 'zh' => '第一学期'], 'academic_year' => '2025-2026', 'start_date' => '2025-09-01', 'end_date' => '2026-01-31']);
+        Semester::create(['name' => ['en' => 'Semester 2', 'km' => 'ឆមាស ២', 'zh' => '第二学期'], 'academic_year' => '2025-2026', 'start_date' => '2026-02-01', 'end_date' => '2026-06-30']);
 
         // Admin
         User::create([
@@ -66,23 +66,35 @@ class DatabaseSeeder extends Seeder
         }
 
         // Courses
-        $cs = Course::create(['name' => 'Computer Science', 'code' => 'CS', 'description' => 'Computer Science Program']);
-        $math = Course::create(['name' => 'Mathematics', 'code' => 'MATH', 'description' => 'Mathematics Program']);
-        $eng = Course::create(['name' => 'English', 'code' => 'ENG', 'description' => 'English Language Program']);
+        $cs   = Course::create([
+            'name'        => ['en' => 'Computer Science', 'km' => 'វិទ្យាសាស្ត្រ​កុំព្យូទ័រ', 'zh' => '计算机科学'],
+            'code'        => 'CS',
+            'description' => ['en' => 'Computer Science Program', 'km' => 'កម្មវិធី​វិទ្យាសាស្ត្រ​កុំព្យូទ័រ', 'zh' => '计算机科学课程'],
+        ]);
+        $math = Course::create([
+            'name'        => ['en' => 'Mathematics', 'km' => 'គណិតវិទ្យា', 'zh' => '数学'],
+            'code'        => 'MATH',
+            'description' => ['en' => 'Mathematics Program', 'km' => 'កម្មវិធី​គណិតវិទ្យា', 'zh' => '数学课程'],
+        ]);
+        $eng  = Course::create([
+            'name'        => ['en' => 'English', 'km' => 'ភាសា​អង់គ្លេស', 'zh' => '英语'],
+            'code'        => 'ENG',
+            'description' => ['en' => 'English Language Program', 'km' => 'កម្មវិធី​ភាសា​អង់គ្លេស', 'zh' => '英语语言课程'],
+        ]);
 
         // Subjects
         $subjects = [
-            Subject::create(['course_id' => $cs->id, 'name' => 'Programming', 'code' => 'CS101']),
-            Subject::create(['course_id' => $cs->id, 'name' => 'Data Structures', 'code' => 'CS102']),
-            Subject::create(['course_id' => $math->id, 'name' => 'Calculus', 'code' => 'MATH101']),
-            Subject::create(['course_id' => $math->id, 'name' => 'Linear Algebra', 'code' => 'MATH102']),
-            Subject::create(['course_id' => $eng->id, 'name' => 'English Literature', 'code' => 'ENG101']),
+            Subject::create(['course_id' => $cs->id,   'name' => ['en' => 'Programming',         'km' => 'ការ​សរសេរ​កម្មវិធី',     'zh' => '编程'],     'code' => 'CS101']),
+            Subject::create(['course_id' => $cs->id,   'name' => ['en' => 'Data Structures',     'km' => 'រចនាសម្ព័ន្ធ​ទិន្នន័យ', 'zh' => '数据结构'], 'code' => 'CS102']),
+            Subject::create(['course_id' => $math->id, 'name' => ['en' => 'Calculus',            'km' => 'ដេរីវេ​និង​អាំងតេក្រាល', 'zh' => '微积分'],   'code' => 'MATH101']),
+            Subject::create(['course_id' => $math->id, 'name' => ['en' => 'Linear Algebra',      'km' => 'ពិជគណិត​លីនេអ៊ែរ',     'zh' => '线性代数'], 'code' => 'MATH102']),
+            Subject::create(['course_id' => $eng->id,  'name' => ['en' => 'English Literature',  'km' => 'អក្សរសិល្ប៍​អង់គ្លេស',  'zh' => '英语文学'], 'code' => 'ENG101']),
         ];
 
         // Classes
-        $year1A = SchoolClass::create(['name' => 'Year 1 - A', 'section' => 'A', 'academic_year' => '2025-2026']);
-        $year1B = SchoolClass::create(['name' => 'Year 1 - B', 'section' => 'B', 'academic_year' => '2025-2026']);
-        $year2A = SchoolClass::create(['name' => 'Year 2 - A', 'section' => 'A', 'academic_year' => '2025-2026']);
+        $year1A = SchoolClass::create(['name' => ['en' => 'Year 1 - A', 'km' => 'ឆ្នាំ​ទី​១ - A', 'zh' => '一年级 - A'], 'section' => 'A', 'academic_year' => '2025-2026']);
+        $year1B = SchoolClass::create(['name' => ['en' => 'Year 1 - B', 'km' => 'ឆ្នាំ​ទី​១ - B', 'zh' => '一年级 - B'], 'section' => 'B', 'academic_year' => '2025-2026']);
+        $year2A = SchoolClass::create(['name' => ['en' => 'Year 2 - A', 'km' => 'ឆ្នាំ​ទី​២ - A', 'zh' => '二年级 - A'], 'section' => 'A', 'academic_year' => '2025-2026']);
 
         // Assign teachers to class-subjects (one unique teacher per class-subject)
         $classSubjects = [

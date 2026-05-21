@@ -4,6 +4,7 @@
             :show="isOpen"
             title="Delete Semester"
             :message="`Delete '${semester.name}' (${semester.academic_year})?`"
+            :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
         />

@@ -6,34 +6,34 @@
                     <BookOpen class="w-4 h-4 text-slate-600" />
                 </div>
                 <div>
-                    <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? 'Edit Course' : 'Create Course' }}</h2>
-                    <p class="text-xs text-slate-500">{{ isEdit ? `Update ${course?.name}` : 'Add a new course' }}</p>
+                    <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? __('Edit Course') : __('Create Course') }}</h2>
+                    <p class="text-xs text-slate-500">{{ isEdit ? __('Update {name}', { name: course?.name }) : __('Add a new course') }}</p>
                 </div>
             </div>
         </template>
 
         <div class="space-y-4">
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Name <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.name" type="text" placeholder="e.g. Computer Science" @update:model-value="touch('name')" />
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
+                <Input v-model="form.name" type="text" :placeholder="__('e.g. Computer Science')" @update:model-value="touch('name')" />
                 <p v-if="error('name') || form.errors.name" class="text-[12px] text-rose-500 mt-1">{{ error('name') || form.errors.name }}</p>
             </div>
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Code <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.code" type="text" placeholder="e.g. CS" @update:model-value="touch('code')" />
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Code') }} <span class="text-rose-500">*</span></Label>
+                <Input v-model="form.code" type="text" :placeholder="__('e.g. CS')" @update:model-value="touch('code')" />
                 <p v-if="error('code') || form.errors.code" class="text-[12px] text-rose-500 mt-1">{{ error('code') || form.errors.code }}</p>
             </div>
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">Description</Label>
-                <RichTextEditor v-model="form.description" placeholder="Optional description…" />
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Description') }}</Label>
+                <RichTextEditor v-model="form.description" :placeholder="__('Optional description…')" />
             </div>
         </div>
 
         <template #footer>
-            <Button variant="outline" type="button" @click="close">Cancel</Button>
+            <Button variant="outline" type="button" @click="close">{{ __('Cancel') }}</Button>
             <Button type="button" :disabled="!canSubmit || form.processing" @click="submit">
                 <Loader2 v-if="form.processing" class="w-4 h-4 animate-spin" />
-                {{ isEdit ? 'Save Changes' : 'Create Course' }}
+                {{ isEdit ? __('Save Changes') : __('Create Course') }}
             </Button>
         </template>
     </ModalForm>
@@ -50,6 +50,7 @@ import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import RichTextEditor from '@/Components/RichTextEditor.vue'
 import { useFormValidation } from '@/Composables/useFormValidation'
+import { __ } from '@/Composables/useTranslate'
 
 const props = defineProps({
     open:   { type: Boolean, required: true },
@@ -62,11 +63,11 @@ const form = useForm({ name: '', code: '', description: '' })
 
 const { touch, markAllTouched, reset, error } = useFormValidation({
     name: () => {
-        if (!form.name?.trim()) return 'Name is required'
-        if (form.name.trim().length < 2) return 'At least 2 characters'
+        if (!form.name?.trim()) return __('Name is required')
+        if (form.name.trim().length < 2) return __('At least 2 characters')
         return null
     },
-    code: () => !form.code?.trim() ? 'Code is required' : null,
+    code: () => !form.code?.trim() ? __('Code is required') : null,
 })
 
 watch(() => props.course, (c) => {
@@ -84,14 +85,14 @@ const submit = () => {
     if (isEdit.value) {
         form.put(route('admin.courses.update', props.course.id), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success('Course updated successfully'); close() },
-            onError: () => { toast.error('Failed to update course') },
+            onSuccess: () => { toast.success(__('Course updated successfully')); close() },
+            onError: () => { toast.error(__('Failed to update course')) },
         })
     } else {
         form.post(route('admin.courses.store'), {
             preserveScroll: true, preserveState: true,
-            onSuccess: () => { toast.success('Course created successfully'); close(); form.reset() },
-            onError: () => { toast.error('Failed to create course') },
+            onSuccess: () => { toast.success(__('Course created successfully')); close(); form.reset() },
+            onError: () => { toast.error(__('Failed to create course')) },
         })
     }
 }

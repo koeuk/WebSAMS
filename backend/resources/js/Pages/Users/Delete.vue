@@ -4,6 +4,7 @@
             :show="isOpen"
             title="Delete User"
             :message="`Delete '${user.name}' (${user.email})? This action cannot be undone.`"
+            :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
         />

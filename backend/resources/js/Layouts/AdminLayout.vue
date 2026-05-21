@@ -8,8 +8,8 @@
                     <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
                 </div>
                 <div>
-                    <h1 class="text-[15px] font-bold text-white tracking-tight">{{ __('appName') }}</h1>
-                    <p class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">{{ __('adminPortal') }}</p>
+                    <h1 class="text-[15px] font-bold text-white tracking-tight">{{ __('WebSAMS') }}</h1>
+                    <p class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">{{ __('Admin Portal') }}</p>
                 </div>
             </div>
 
@@ -60,15 +60,15 @@
                         </div>
                         <div class="flex-1 min-w-0">
                             <p class="text-[13px] font-semibold text-white truncate">{{ user?.name }}</p>
-                            <p class="text-[11px] text-slate-500 truncate">{{ __('administrator') }}</p>
+                            <p class="text-[11px] text-slate-500 truncate">{{ __('Administrator') }}</p>
                         </div>
                     </Link>
                     <Link
                         href="/logout"
                         method="post"
                         as="button"
-                        :title="__('nav.signOut')"
-                        :aria-label="__('nav.signOut')"
+                        :title="__('Sign Out')"
+                        :aria-label="__('Sign Out')"
                         class="shrink-0 p-2 rounded-lg text-slate-500 hover:text-red-400 hover:bg-red-500/[0.08] transition-colors"
                     >
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -84,14 +84,42 @@
                 <div class="flex items-center gap-3">
                     <div class="h-8 w-1 rounded-full bg-gradient-to-b from-beltei-gold to-beltei"></div>
                     <div>
-                        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">BELTEI International University</p>
-                        <p class="text-[13px] font-medium text-slate-600">Student Attendance Management System</p>
+                        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">{{ __('BELTEI International University') }}</p>
+                        <p class="text-[13px] font-medium text-slate-600">{{ __('Student Attendance Management System') }}</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
+                    <!-- Language switcher -->
+                    <div class="relative" v-click-outside="() => (langOpen = false)">
+                        <button
+                            type="button"
+                            @click="langOpen = !langOpen"
+                            class="h-9 w-9 inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition-colors"
+                            :title="__('Language')"
+                            :aria-label="__('Language')"
+                        >
+                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+                        </button>
+                        <div
+                            v-if="langOpen"
+                            class="absolute right-0 mt-2 w-40 rounded-xl border border-slate-200 bg-white shadow-lg overflow-hidden z-50"
+                        >
+                            <button
+                                v-for="loc in locales"
+                                :key="loc.code"
+                                type="button"
+                                @click="setLocale(loc.code); langOpen = false"
+                                class="w-full flex items-center justify-between px-3 py-2 text-[13px] text-left transition-colors"
+                                :class="loc.code === locale ? 'bg-slate-100 text-slate-900 font-semibold' : 'text-slate-600 hover:bg-slate-50'"
+                            >
+                                {{ loc.name }}
+                                <svg v-if="loc.code === locale" class="w-3.5 h-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                            </button>
+                        </div>
+                    </div>
                     <div class="text-right mr-2">
                         <p class="text-[13px] font-semibold text-slate-700">{{ user?.name }}</p>
-                        <p class="text-[11px] text-slate-400">Admin</p>
+                        <p class="text-[11px] text-slate-400">{{ __('Admin') }}</p>
                     </div>
                     <Link :href="`/admin/users/${user.id}/edit`">
                         <img v-if="user?.profile_photo" :src="`/storage/${user.profile_photo}`" class="h-9 w-9 rounded-lg object-cover ring-2 ring-slate-100 hover:ring-beltei-gold/40 transition-all" />
@@ -114,27 +142,38 @@
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3';
 import Toaster from '@/Components/ui/sonner/Sonner.vue';
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
+import { __, useI18n } from '@/Composables/useTranslate';
 
 const page = usePage();
 const user = page.props.auth.user;
-const sidebarCollapsed = ref(false);
 
-const navigation = [
-    { name: 'Dashboard', href: '/admin/dashboard', icon: 'dashboard' },
-    { name: 'Users', href: '/admin/users', icon: 'users' },
-    { name: 'Courses', href: '/admin/courses', icon: 'courses' },
-    { name: 'Subjects', href: '/admin/subjects', icon: 'subjects' },
-    { name: 'Classes', href: '/admin/classes', icon: 'classes' },
-    { name: 'Semesters', href: '/admin/semesters', icon: 'semesters' },
-    { name: 'Attendance', href: '/admin/attendance', icon: 'attendance' },
-    { name: 'Time Slots', href: '/admin/time-slots', icon: 'timeslots' },
-    { name: 'Schedules', href: '/admin/schedules', icon: 'schedules' },
-    { name: 'Student Tracking', href: '/admin/student-tracking', icon: 'tracking' },
-    { name: 'Reports', href: '/admin/reports', icon: 'reports' },
-    { name: 'Notifications', href: '/admin/notifications', icon: 'notifications' },
-    { name: 'Settings', href: '/admin/settings', icon: 'settings' },
-];
+const { locale, locales, setLocale } = useI18n();
+const langOpen = ref(false);
+
+const navigation = computed(() => [
+    { name: __('Dashboard'),         href: '/admin/dashboard',        icon: 'dashboard' },
+    { name: __('Users'),             href: '/admin/users',            icon: 'users' },
+    { name: __('Courses'),           href: '/admin/courses',          icon: 'courses' },
+    { name: __('Subjects'),          href: '/admin/subjects',         icon: 'subjects' },
+    { name: __('Classes'),           href: '/admin/classes',          icon: 'classes' },
+    { name: __('Semesters'),         href: '/admin/semesters',        icon: 'semesters' },
+    { name: __('Attendance'),        href: '/admin/attendance',       icon: 'attendance' },
+    { name: __('Time Slots'),        href: '/admin/time-slots',       icon: 'timeslots' },
+    { name: __('Schedules'),         href: '/admin/schedules',        icon: 'schedules' },
+    { name: __('Student Tracking'), href: '/admin/student-tracking', icon: 'tracking' },
+    { name: __('Reports'),           href: '/admin/reports',          icon: 'reports' },
+    { name: __('Notifications'),     href: '/admin/notifications',    icon: 'notifications' },
+    { name: __('Settings'),          href: '/admin/settings',         icon: 'settings' },
+]);
 
 const isActive = (href) => page.url.startsWith(href);
+
+const vClickOutside = {
+    beforeMount(el, binding) {
+        el.__clickOutside = (e) => { if (!(el === e.target || el.contains(e.target))) binding.value(e); };
+        document.addEventListener('click', el.__clickOutside);
+    },
+    unmounted(el) { document.removeEventListener('click', el.__clickOutside); },
+};
 </script>

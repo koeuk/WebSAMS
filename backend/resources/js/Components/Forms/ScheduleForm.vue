@@ -6,18 +6,18 @@
                     <CalendarClock class="w-4 h-4 text-slate-600" />
                 </div>
                 <div>
-                    <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? 'Edit Schedule' : 'Create Schedule' }}</h2>
-                    <p class="text-xs text-slate-500">{{ isEdit ? 'Update schedule entry' : 'Add a new schedule entry' }}</p>
+                    <h2 class="text-base font-semibold text-slate-900">{{ isEdit ? __('Edit Schedule') : __('Create Schedule') }}</h2>
+                    <p class="text-xs text-slate-500">{{ isEdit ? __('Update schedule entry') : __('Add a new schedule entry') }}</p>
                 </div>
             </div>
         </template>
 
         <div class="space-y-4">
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Class – Subject <span class="text-rose-500">*</span></Label>
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">{{ __('Class – Subject') }} <span class="text-rose-500">*</span></Label>
                 <Select v-model="form.class_subject_id" @update:model-value="touch('class_subject_id')">
                     <SelectTrigger class="w-full">
-                        <SelectValue placeholder="Select class &amp; subject" />
+                        <SelectValue :placeholder="__('Select class & subject')" />
                     </SelectTrigger>
                     <SelectContent>
                         <SelectItem v-for="cs in classSubjects" :key="cs.id" :value="String(cs.id)">
@@ -29,10 +29,10 @@
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Time Slot <span class="text-rose-500">*</span></Label>
+                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">{{ __('Time Slot') }} <span class="text-rose-500">*</span></Label>
                     <Select v-model="form.time_slot_id" @update:model-value="touch('time_slot_id')">
                         <SelectTrigger class="w-full">
-                            <SelectValue placeholder="Select time slot" />
+                            <SelectValue :placeholder="__('Select time slot')" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem v-for="ts in timeSlots" :key="ts.id" :value="String(ts.id)">
@@ -43,10 +43,10 @@
                     <p v-if="error('time_slot_id') || form.errors.time_slot_id" class="text-[12px] text-rose-500 mt-1">{{ error('time_slot_id') || form.errors.time_slot_id }}</p>
                 </div>
                 <div>
-                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Day <span class="text-rose-500">*</span></Label>
+                    <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">{{ __('Day') }} <span class="text-rose-500">*</span></Label>
                     <Select v-model="form.day_of_week" @update:model-value="touch('day_of_week')">
                         <SelectTrigger class="w-full">
-                            <SelectValue placeholder="Select day" />
+                            <SelectValue :placeholder="__('Select day')" />
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem v-for="d in days" :key="d.value" :value="d.value">
@@ -58,16 +58,16 @@
                 </div>
             </div>
             <div>
-                <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">Room</Label>
-                <Input v-model="form.room" type="text" placeholder="e.g. Room 201" />
+                <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">{{ __('Room') }}</Label>
+                <Input v-model="form.room" type="text" :placeholder="__('e.g. Room 201')" />
             </div>
         </div>
 
         <template #footer>
-            <Button variant="outline" type="button" @click="close">Cancel</Button>
+            <Button variant="outline" type="button" @click="close">{{ __('Cancel') }}</Button>
             <Button type="button" :disabled="!canSubmit || form.processing" @click="submit">
                 <Loader2 v-if="form.processing" class="w-4 h-4 animate-spin" />
-                {{ isEdit ? 'Save Changes' : 'Create Schedule' }}
+                {{ isEdit ? __('Save Changes') : __('Create Schedule') }}
             </Button>
         </template>
     </ModalForm>
@@ -84,6 +84,7 @@ import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
 import { useFormValidation } from '@/Composables/useFormValidation'
+import { __ } from '@/Composables/useTranslate'
 
 const props = defineProps({
     open:          { type: Boolean, required: true },
@@ -98,9 +99,9 @@ const isEdit = computed(() => !!props.schedule)
 const form = useForm({ class_subject_id: '', time_slot_id: '', day_of_week: '', room: '' })
 
 const { touch, markAllTouched, reset, error } = useFormValidation({
-    class_subject_id: () => !form.class_subject_id ? 'Class – Subject is required' : null,
-    time_slot_id:     () => !form.time_slot_id ? 'Time slot is required' : null,
-    day_of_week:      () => !form.day_of_week ? 'Day is required' : null,
+    class_subject_id: () => !form.class_subject_id ? __('Class – Subject is required') : null,
+    time_slot_id:     () => !form.time_slot_id ? __('Time slot is required') : null,
+    day_of_week:      () => !form.day_of_week ? __('Day is required') : null,
 })
 
 watch(() => props.schedule, (s) => {

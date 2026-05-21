@@ -4,6 +4,7 @@
             :show="isOpen"
             title="Delete Subject"
             :message="`Delete '${subject.name}' (${subject.code})?`"
+            :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
         />

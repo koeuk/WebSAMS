@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('time_slots', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->json('name');
             $table->time('start_time');
             $table->time('end_time');
             $table->enum('type', ['morning', 'evening', 'afternoon']);

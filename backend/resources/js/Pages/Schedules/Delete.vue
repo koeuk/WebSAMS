@@ -4,6 +4,7 @@
             :show="isOpen"
             title="Delete Schedule"
             :message="`Delete schedule for '${schedule.class_subject?.subject?.name}' on ${dayLabel}?`"
+            :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
         />

@@ -4,6 +4,7 @@
             :show="isOpen"
             title="Delete Class"
             :message="`Delete '${schoolClass.name}'? All enrolled students and subjects will be unlinked.`"
+            :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
         />

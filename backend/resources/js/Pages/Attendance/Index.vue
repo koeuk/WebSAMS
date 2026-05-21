@@ -147,7 +147,7 @@
 
             <Pagination :pagination="attendance" />
 
-            <Modal :show="showDeleteModal" title="Delete Attendance" message="Are you sure you want to delete this attendance record?" @confirm="deleteRecord" @cancel="showDeleteModal = false" />
+            <Modal :show="showDeleteModal" title="Delete Attendance" message="Are you sure you want to delete this attendance record?" :loading="deleting" @confirm="deleteRecord" @cancel="showDeleteModal = false" />
         </div>
     </AdminLayout>
 </template>
@@ -236,10 +236,12 @@ const statusClass = (status) => ({
 
 const showDeleteModal = ref(false);
 const recordToDelete = ref(null);
+const deleting = ref(false);
 const confirmDelete = (record) => { recordToDelete.value = record; showDeleteModal.value = true; };
 const deleteRecord = () => {
+    deleting.value = true;
     router.delete(`/admin/attendance/${recordToDelete.value.id}`, {
-        onFinish: () => { showDeleteModal.value = false; recordToDelete.value = null; },
+        onFinish: () => { showDeleteModal.value = false; recordToDelete.value = null; deleting.value = false; },
     });
 };
 </script>

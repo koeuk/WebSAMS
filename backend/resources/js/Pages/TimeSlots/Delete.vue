@@ -4,6 +4,7 @@
             :show="isOpen"
             title="Delete Time Slot"
             :message="`Delete '${timeSlot.name}' (${timeSlot.start_time} – ${timeSlot.end_time})?`"
+            :loading="form.processing"
             @confirm="submit"
             @cancel="handleCancel"
         />
