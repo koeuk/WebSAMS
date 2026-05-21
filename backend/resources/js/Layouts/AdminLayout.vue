@@ -174,7 +174,14 @@
                 <slot />
             </main>
         </div>
-        <Toaster rich-colors position="top-right" />
+        <Toaster
+            rich-colors
+            close-button
+            theme="light"
+            position="bottom-right"
+            :duration="4000"
+            :offset="{ bottom: '24px', right: '24px' }"
+        />
     </div>
 </template>
 
