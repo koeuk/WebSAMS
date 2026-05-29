@@ -24,7 +24,8 @@
       </div>
     </div>
 
-    <template v-else-if="dashboard">
+    <div v-else>
+
 
       <!-- Top row: rate ring + stat cards -->
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-6">
@@ -186,7 +187,7 @@
           </TableBody>
         </Table>
       </div>
-    </template>
+    </div>
   </div>
 </template>
 

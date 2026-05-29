@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <template v-else>
+    <div v-else>
       <!-- Stats Cards -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8 stagger-children">
         <div class="card stat-card stat-card-blue p-6 animate-fade-in-up">
@@ -86,7 +86,9 @@
       <div v-else class="card p-12 text-center text-slate-400">
         {{ __('No classes scheduled for today.') }}
       </div>
-    </template>
+    </div>
+  </div>
+</template>
 
 <script setup lang="ts">
 definePageMeta({ middleware: 'auth' })
