@@ -13,27 +13,27 @@
       ></div>
 
       <!-- Decorative blobs -->
-      <div class="absolute -top-32 -right-32 w-80 h-80 rounded-full opacity-[0.06]" style="background: radial-gradient(circle, #d4a017, transparent 70%);"></div>
-      <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full opacity-[0.05]" style="background: radial-gradient(circle, #3b82f6, transparent 70%);"></div>
+      <div class="absolute -top-32 -right-32 w-80 h-80 rounded-full opacity-[0.10]" style="background: radial-gradient(circle, #d4a017, transparent 70%);"></div>
+      <div class="absolute -bottom-24 -left-24 w-72 h-72 rounded-full opacity-[0.06]" style="background: radial-gradient(circle, #2a4f8f, transparent 70%);"></div>
 
       <!-- Logo -->
       <div class="relative flex items-center gap-3">
-        <div class="w-11 h-11 rounded-xl overflow-hidden shadow-lg">
+        <div class="w-11 h-11 rounded-xl overflow-hidden shadow-lg ring-1 ring-[#c8a415]/30">
           <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
         </div>
         <div>
-          <h1 class="text-white font-bold text-base leading-tight tracking-tight">WebSAMS</h1>
-          <p class="text-[10px] text-white/40 uppercase tracking-widest">{{ __('Student Portal') }}</p>
+          <h1 class="font-display text-white font-semibold text-[19px] leading-none tracking-tight">WebSAMS</h1>
+          <p class="text-[9.5px] text-[#d8b53a]/80 uppercase tracking-[0.2em] font-semibold mt-1">{{ __('Student Portal') }}</p>
         </div>
       </div>
 
       <!-- Main copy -->
       <div class="relative">
         <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-semibold text-white/60 border border-white/10 bg-white/5 mb-6">
-          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <span class="w-1.5 h-1.5 rounded-full bg-[#d8b53a]"></span>
           {{ __('BELTEI International University') }}
         </div>
-        <h2 class="text-4xl font-bold text-white leading-[1.15] tracking-tight mb-4">
+        <h2 class="font-display text-[40px] font-medium text-white leading-[1.12] tracking-tight mb-4">
           {{ __('Track your attendance, stay on track.') }}
         </h2>
         <p class="text-slate-400 text-[15px] leading-relaxed max-w-xs">
@@ -63,7 +63,7 @@
     <!-- Right panel — form -->
     <div
       ref="pageRef"
-      class="login-page-wrapper flex-1 flex items-center justify-center p-8 bg-slate-50"
+      class="login-page-wrapper flex-1 flex items-center justify-center p-8 bg-[#f7f5f0]"
       :style="spotlightStyle"
     >
       <div class="login-atmosphere" aria-hidden="true"></div>
@@ -77,14 +77,15 @@
             <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
           </div>
           <div>
-            <h1 class="font-bold text-slate-900 text-base">WebSAMS</h1>
-            <p class="text-[11px] text-slate-400">{{ __('Student Portal') }}</p>
+            <h1 class="font-display font-semibold text-slate-900 text-[18px] leading-none">WebSAMS</h1>
+            <p class="text-[10px] text-beltei-gold uppercase tracking-[0.18em] font-semibold mt-1">{{ __('Student Portal') }}</p>
           </div>
         </div>
 
         <div class="mb-8 login-entrance login-entrance-delay-1">
-          <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Welcome back') }}</h2>
-          <p class="text-sm text-slate-500 mt-1">{{ __('Sign in to your student account') }}</p>
+          <h2 class="page-title text-[30px]">{{ __('Welcome back') }}</h2>
+          <div class="gold-rule mt-2.5"></div>
+          <p class="text-sm text-slate-500 mt-3">{{ __('Sign in to your student account') }}</p>
         </div>
 
         <div v-if="error" class="mb-5 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-rose-50 border border-rose-200 text-[13px] text-rose-700">
@@ -225,8 +226,8 @@ const features = computed(() => [
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(at top right, rgba(212, 160, 23, 0.20), transparent 55%),
-    radial-gradient(at bottom left, rgba(125, 175, 145, 0.16), transparent 55%);
+    radial-gradient(at top right, rgba(212, 160, 23, 0.22), transparent 55%),
+    radial-gradient(at bottom left, rgba(42, 79, 143, 0.14), transparent 55%);
 }
 
 .login-spotlight {

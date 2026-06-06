@@ -19,14 +19,31 @@ module.exports = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        serif: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+        display: ['Fraunces', 'ui-serif', 'Georgia', 'serif'],
+      },
       colors: {
         beltei: {
           DEFAULT: '#1e3a6e',
           dark: '#162d56',
+          deep: '#0b1424',
+          soft: '#2a4f8f',
         },
         'beltei-gold': {
           DEFAULT: '#c8a415',
-          dark: '#b08f12',
+          dark: '#a8870f',
+          soft: '#d8b53a',
+        },
+        paper: {
+          DEFAULT: '#f7f5f0',
+          card: '#ffffff',
+          inset: '#efece4',
+        },
+        line: {
+          DEFAULT: '#e7e2d8',
+          strong: '#d9d2c4',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

@@ -1,17 +1,22 @@
 <template>
   <div class="animate-fade-in">
-    <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('QR Attendance') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __("Scan your teacher's QR code or enter the token manually") }}</p>
+    <div class="mb-7 text-center">
+      <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-beltei-gold mb-1.5">{{ __('Check In') }}</p>
+      <h2 class="page-title text-[28px] sm:text-[32px]">{{ __('QR Attendance') }}</h2>
+      <div class="gold-rule mt-3 mx-auto" style="background: linear-gradient(90deg, rgba(200,164,21,0), #c8a415 50%, rgba(200,164,21,0));"></div>
+      <p class="text-sm text-slate-500 mt-3">{{ __("Scan your teacher's QR code or enter the token manually") }}</p>
     </div>
 
     <div class="max-w-md mx-auto">
-      <div class="card p-8 text-center animate-fade-in-up">
-        <div class="w-20 h-20 mx-auto mb-6 rounded-2xl flex items-center justify-center" style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
-          <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/>
-            <path d="M21 16h-3v2h-2v3h2v-2h3v-3zM21 21v-2M14 14h3v3h-3z"/><path d="M3 14h2v2H3z"/>
-          </svg>
+      <div class="card stat-card stat-card-navy p-8 text-center animate-fade-in-up">
+        <div class="relative w-20 h-20 mx-auto mb-6">
+          <div class="absolute -inset-1.5 rounded-3xl bg-[#c8a415]/10 ring-1 ring-[#c8a415]/20"></div>
+          <div class="relative w-20 h-20 rounded-2xl flex items-center justify-center ring-1 ring-[#c8a415]/30" style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
+            <svg class="w-10 h-10 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+              <rect x="3" y="3" width="5" height="5"/><rect x="16" y="3" width="5" height="5"/><rect x="3" y="16" width="5" height="5"/>
+              <path d="M21 16h-3v2h-2v3h2v-2h3v-3zM21 21v-2M14 14h3v3h-3z"/><path d="M3 14h2v2H3z"/>
+            </svg>
+          </div>
         </div>
 
         <div v-if="success" class="mb-5 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[13px] text-emerald-700 text-left">

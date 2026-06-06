@@ -1,42 +1,47 @@
 <template>
-  <div class="min-h-screen bg-slate-50">
+  <div class="min-h-screen bg-paper">
 
     <!-- Mobile overlay -->
     <Transition name="fade">
       <div
         v-if="sidebarOpen"
-        class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-30 lg:hidden"
+        class="fixed inset-0 bg-[#0b1424]/70 backdrop-blur-sm z-30 lg:hidden"
         @click="sidebarOpen = false"
       />
     </Transition>
 
     <!-- Sidebar -->
     <aside
-      class="fixed inset-y-0 left-0 w-[260px] bg-[#0c1629] flex flex-col z-40 transition-transform duration-300"
+      class="fixed inset-y-0 left-0 w-[264px] flex flex-col z-40 transition-transform duration-300"
+      style="background: linear-gradient(185deg, #0b1424 0%, #0d182c 55%, #101e38 100%);"
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
     >
-      <div class="flex items-center gap-3 h-[72px] px-6 border-b border-white/[0.06]">
-        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg">
+      <!-- gold hairline at very top -->
+      <div class="h-[3px] w-full" style="background: linear-gradient(90deg, transparent, #c8a415 35%, #d8b53a 50%, #c8a415 65%, transparent);"></div>
+
+      <div class="flex items-center gap-3 h-[72px] px-6 border-b border-white/[0.07]">
+        <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg ring-1 ring-[#c8a415]/30">
           <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
         </div>
         <div>
-          <h1 class="text-[15px] font-bold text-white tracking-tight">WebSAMS</h1>
-          <p class="text-[10px] text-slate-400 font-medium tracking-wider uppercase">{{ __('Student Portal') }}</p>
+          <h1 class="font-display text-[18px] font-semibold text-white leading-none tracking-tight">WebSAMS</h1>
+          <p class="text-[9.5px] text-[#c8a415]/80 font-semibold tracking-[0.2em] uppercase mt-1">{{ __('Student Portal') }}</p>
         </div>
         <button class="ml-auto cursor-pointer lg:hidden text-slate-400 hover:text-white" @click="sidebarOpen = false">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 18L18 6M6 6l12 12"/></svg>
         </button>
       </div>
 
-      <nav class="flex-1 px-3 py-4 space-y-0.5 overflow-y-auto">
+      <nav class="flex-1 px-3 py-5 space-y-1 overflow-y-auto">
+        <p class="px-3 pb-2 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-500">{{ __('Menu') }}</p>
         <NuxtLink
           v-for="item in navigation" :key="item.key" :to="item.href"
           class="group flex items-center gap-3 px-3 py-2.5 rounded-xl text-[13px] font-medium transition-all duration-200"
-          :class="isActive(item.href) ? 'bg-white/[0.1] text-white nav-active-glow' : 'text-slate-400 hover:bg-white/[0.05] hover:text-slate-200'"
+          :class="isActive(item.href) ? 'bg-white/[0.08] text-white nav-active-glow' : 'text-slate-400 hover:bg-white/[0.05] hover:text-slate-200'"
           @click="sidebarOpen = false"
         >
           <div class="w-8 h-8 rounded-lg flex items-center justify-center transition-colors shrink-0"
-               :class="isActive(item.href) ? 'bg-[#d4a017]/20 text-[#d4a017]' : 'bg-white/[0.04] text-slate-500 group-hover:text-slate-300'">
+               :class="isActive(item.href) ? 'bg-[#c8a415]/20 text-[#d8b53a] ring-1 ring-[#c8a415]/30' : 'bg-white/[0.04] text-slate-500 group-hover:text-slate-300'">
             <svg v-if="item.icon === 'dashboard'" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
             <svg v-else-if="item.icon === 'attendance'" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
             <svg v-else-if="item.icon === 'excuse'" class="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="2"/><path d="M9 12h6M9 16h4"/></svg>
@@ -70,27 +75,27 @@
       </div>
     </aside>
 
-    <div class="lg:pl-[260px]">
-      <header class="sticky top-0 z-20 flex items-center justify-between h-[72px] px-6 lg:px-8 bg-white/80 backdrop-blur-xl border-b border-slate-100">
-        <div class="flex items-center gap-3">
+    <div class="lg:pl-[264px]">
+      <header class="sticky top-0 z-20 flex items-center justify-between h-[72px] px-6 lg:px-8 bg-[#f7f5f0]/85 backdrop-blur-xl border-b border-line">
+        <div class="flex items-center gap-3.5">
           <button
-            class="lg:hidden w-9 h-9 flex cursor-pointer items-center justify-center rounded-lg text-slate-600 hover:bg-slate-100 transition-colors"
+            class="lg:hidden w-9 h-9 flex cursor-pointer items-center justify-center rounded-lg text-slate-600 hover:bg-black/5 transition-colors"
             @click="sidebarOpen = true"
           >
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
           </button>
-          <div class="h-8 w-1 rounded-full bg-gradient-to-b from-[#d4a017] to-beltei hidden lg:block"></div>
+          <div class="h-9 w-[3px] rounded-full bg-gradient-to-b from-[#d8b53a] via-[#c8a415] to-beltei hidden lg:block"></div>
           <div>
-            <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider hidden lg:block">{{ __('BELTEI International University') }}</p>
-            <p class="text-[13px] font-medium text-slate-600">{{ __('Student Portal') }}</p>
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.16em] hidden lg:block">{{ __('BELTEI International University') }}</p>
+            <p class="font-display text-[15px] font-semibold text-beltei leading-tight">{{ __('Student Portal') }}</p>
           </div>
         </div>
         <div class="flex items-center gap-3">
           <!-- Language switcher -->
           <Popover>
             <PopoverTrigger as-child>
-              <button class="flex cursor-pointer items-center gap-1.5 h-9 px-3 rounded-lg text-[12px] font-medium text-slate-600 hover:bg-slate-100 transition-colors">
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>
+              <button class="flex cursor-pointer items-center gap-1.5 h-9 px-3 rounded-lg text-[12px] font-semibold text-slate-600 border border-line hover:bg-white hover:border-line-strong transition-colors">
+                <svg class="w-4 h-4 text-beltei-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>
                 {{ currentLocaleName }}
                 <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
               </button>
@@ -101,24 +106,27 @@
                 :key="loc.code"
                 @click="setLocale(loc.code as any)"
                 class="w-full flex items-center justify-between gap-2 cursor-pointer px-3 py-2 text-[13px] rounded-md transition-colors"
-                :class="loc.code === locale ? 'bg-slate-100 text-slate-900 font-semibold' : 'text-slate-600 hover:bg-slate-50'"
+                :class="loc.code === locale ? 'bg-accent text-beltei font-semibold' : 'text-slate-600 hover:bg-paper'"
               >
                 {{ loc.name }}
-                <svg v-if="loc.code === locale" class="w-3.5 h-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                <svg v-if="loc.code === locale" class="w-3.5 h-3.5 text-beltei-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
               </button>
             </PopoverContent>
           </Popover>
 
-          <div class="text-right mr-2 hidden sm:block">
-            <p class="text-[13px] font-semibold text-slate-700">{{ user?.name }}</p>
-            <p class="text-[11px] text-slate-400">{{ __('Student') }}</p>
+          <div class="h-6 w-px bg-line hidden sm:block"></div>
+
+          <div class="text-right mr-1 hidden sm:block">
+            <p class="text-[13px] font-semibold text-slate-800">{{ user?.name }}</p>
+            <p class="text-[10px] text-beltei-gold font-semibold uppercase tracking-wider">{{ __('Student') }}</p>
           </div>
-          <div class="h-9 w-9 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-500 text-sm font-bold">
+          <div class="h-9 w-9 rounded-xl flex items-center justify-center text-white text-sm font-bold ring-1 ring-[#c8a415]/30"
+               style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
             {{ user?.name?.charAt(0) }}
           </div>
         </div>
       </header>
-      <main class="p-6 lg:p-8"><slot /></main>
+      <main class="p-6 lg:p-8 max-w-[1340px] mx-auto"><slot /></main>
     </div>
   </div>
 </template>

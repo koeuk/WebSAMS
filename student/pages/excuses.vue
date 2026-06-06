@@ -1,8 +1,10 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Excuse Requests') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __('Submit excuses for absent attendance records') }}</p>
+      <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-beltei-gold mb-1.5">{{ __('Requests') }}</p>
+      <h2 class="page-title text-[28px] sm:text-[32px]">{{ __('Excuse Requests') }}</h2>
+      <div class="gold-rule mt-3"></div>
+      <p class="text-sm text-slate-500 mt-3">{{ __('Submit excuses for absent attendance records') }}</p>
     </div>
 
     <div v-if="successMsg" class="mb-5 flex items-center gap-2.5 px-4 py-3 rounded-xl bg-emerald-50 border border-emerald-200 text-[13px] text-emerald-700 animate-fade-in">
@@ -15,9 +17,9 @@
     <template v-else>
       <!-- Absences to excuse -->
       <div class="card overflow-hidden mb-6">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
-          <span class="w-1.5 h-1.5 rounded-full bg-rose-400"></span>
-          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('Absent Records') }}</h3>
+        <div class="section-head">
+          <span class="inline-block w-2.5 h-2.5 rounded-[3px] shrink-0 bg-rose-500" style="box-shadow:0 0 0 3px rgba(239,68,68,0.12);"></span>
+          <h3 class="section-title">{{ __('Absent Records') }}</h3>
         </div>
         <Table>
           <TableHeader>
@@ -60,9 +62,9 @@
 
       <!-- Submitted requests -->
       <div class="card overflow-hidden">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
-          <span class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></span>
-          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('My Requests') }}</h3>
+        <div class="section-head">
+          <span class="section-tick"></span>
+          <h3 class="section-title">{{ __('My Requests') }}</h3>
         </div>
         <Table>
           <TableHeader>

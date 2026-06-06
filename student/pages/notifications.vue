@@ -1,27 +1,31 @@
 <template>
   <div class="animate-fade-in">
-    <div class="mb-8">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Notifications') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __('Stay updated with your attendance alerts') }}</p>
+    <div class="mb-7">
+      <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-beltei-gold mb-1.5">{{ __('Alerts') }}</p>
+      <h2 class="page-title text-[28px] sm:text-[32px]">{{ __('Notifications') }}</h2>
+      <div class="gold-rule mt-3"></div>
+      <p class="text-sm text-slate-500 mt-3">{{ __('Stay updated with your attendance alerts') }}</p>
     </div>
 
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
 
     <div v-else class="space-y-3 stagger-children">
       <div v-for="n in notifications.data" :key="n.id"
-        class="card p-5 animate-fade-in-up transition-opacity"
-        :class="n.is_read ? 'opacity-60' : ''"
+        class="card card-hover p-5 pl-6 animate-fade-in-up overflow-hidden"
+        :class="n.is_read ? 'opacity-65' : ''"
       >
-        <div class="flex items-start justify-between">
+        <span v-if="!n.is_read" class="absolute left-0 top-0 bottom-0 w-1" style="background: linear-gradient(180deg, #d8b53a, #a8870f);"></span>
+        <div class="flex items-start justify-between gap-3">
           <div>
             <div class="flex items-center gap-2 mb-1.5">
               <span class="badge" :class="typeBadgeClass(n.type)">{{ __(n.type) }}</span>
               <h3 class="text-[13px] font-semibold text-slate-900">{{ n.title }}</h3>
+              <span v-if="!n.is_read" class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></span>
             </div>
             <p class="text-[13px] text-slate-600">{{ n.message }}</p>
             <p class="text-[12px] text-slate-400 mt-1.5">{{ formatDate(n.created_at) }}</p>
           </div>
-          <button v-if="!n.is_read" @click="markAsRead(n.id)" class="cursor-pointer px-3 py-1.5 text-[12px] font-medium text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-lg transition-colors whitespace-nowrap">
+          <button v-if="!n.is_read" @click="markAsRead(n.id)" class="cursor-pointer px-3 py-1.5 text-[12px] font-semibold text-beltei hover:bg-accent rounded-lg transition-colors whitespace-nowrap">
             {{ __('Mark read') }}
           </button>
         </div>

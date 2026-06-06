@@ -1,8 +1,10 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('My Profile') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __('Your personal and academic information') }}</p>
+      <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-beltei-gold mb-1.5">{{ __('Account') }}</p>
+      <h2 class="page-title text-[28px] sm:text-[32px]">{{ __('My Profile') }}</h2>
+      <div class="gold-rule mt-3"></div>
+      <p class="text-sm text-slate-500 mt-3">{{ __('Your personal and academic information') }}</p>
     </div>
 
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
@@ -42,7 +44,7 @@
 
           <div class="flex-1 min-w-0">
             <div class="flex items-start gap-3 flex-wrap">
-              <h3 class="text-xl font-bold text-slate-900 leading-tight">{{ profile.name }}</h3>
+              <h3 class="font-display text-[22px] font-semibold text-slate-900 leading-tight">{{ profile.name }}</h3>
               <span class="badge" :class="status(profile.status || 'active').pill">
                 {{ __(({ active: 'Active', inactive: 'Inactive', graduated: 'Graduated', suspended: 'Suspended' } as Record<string, string>)[profile.status || 'active'] ?? 'Active') }}
               </span>
@@ -58,11 +60,11 @@
 
         <!-- Personal Info -->
         <div class="card p-6 animate-fade-in-up">
-          <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-beltei-gold"></span>
+          <h4 class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.14em] mb-4 flex items-center gap-2.5">
+            <span class="section-tick"></span>
             {{ __('Personal Information') }}
           </h4>
-          <dl class="space-y-0 divide-y divide-slate-50">
+          <dl class="space-y-0 divide-y divide-line">
             <div v-for="row in personalRows" :key="row.label" class="flex items-center justify-between py-3">
               <dt class="text-[13px] text-slate-500">{{ row.label }}</dt>
               <dd class="text-[13px] font-semibold text-slate-800 text-right max-w-[220px] truncate" :class="row.capitalize ? 'capitalize' : ''">
@@ -74,11 +76,11 @@
 
         <!-- Academic Info -->
         <div class="card p-6 animate-fade-in-up">
-          <h4 class="text-[11px] font-semibold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-            <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          <h4 class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.14em] mb-4 flex items-center gap-2.5">
+            <span class="inline-block w-2.5 h-2.5 rounded-[3px] shrink-0 bg-emerald-500" style="box-shadow:0 0 0 3px rgba(16,185,129,0.12);"></span>
             {{ __('Academic Information') }}
           </h4>
-          <dl class="space-y-0 divide-y divide-slate-50">
+          <dl class="space-y-0 divide-y divide-line">
             <div v-for="row in academicRows" :key="row.label" class="flex items-center justify-between py-3">
               <dt class="text-[13px] text-slate-500">{{ row.label }}</dt>
               <dd class="text-[13px] font-semibold text-slate-800 text-right max-w-[220px] truncate">
@@ -91,9 +93,9 @@
 
       <!-- Enrolled Classes -->
       <div class="card overflow-hidden animate-fade-in-up">
-        <div class="px-6 py-4 border-b border-slate-100 flex items-center gap-2">
-          <span class="w-1.5 h-1.5 rounded-full" style="background:#d4a017;"></span>
-          <h3 class="text-sm font-semibold text-slate-900 uppercase tracking-wider">{{ __('Enrolled Classes') }}</h3>
+        <div class="section-head">
+          <span class="section-tick"></span>
+          <h3 class="section-title">{{ __('Enrolled Classes') }}</h3>
         </div>
         <Table>
           <TableHeader>
@@ -108,7 +110,7 @@
               <TableCell class="font-semibold text-slate-900">{{ c.name }}</TableCell>
               <TableCell>{{ c.section || '-' }}</TableCell>
               <TableCell>
-                <span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">{{ c.academic_year }}</span>
+                <span class="badge badge-neutral">{{ c.academic_year }}</span>
               </TableCell>
             </TableRow>
             <TableRow v-if="!profile.enrolled_classes?.length">

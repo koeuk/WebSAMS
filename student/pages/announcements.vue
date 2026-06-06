@@ -1,8 +1,10 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Announcements') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __('Important updates from your teachers') }}</p>
+      <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-beltei-gold mb-1.5">{{ __('Bulletin') }}</p>
+      <h2 class="page-title text-[28px] sm:text-[32px]">{{ __('Announcements') }}</h2>
+      <div class="gold-rule mt-3"></div>
+      <p class="text-sm text-slate-500 mt-3">{{ __('Important updates from your teachers') }}</p>
     </div>
 
     <div v-if="loading" class="card p-12 text-center text-slate-400 text-sm">{{ __('Loading...') }}</div>
@@ -21,13 +23,14 @@
       <div class="space-y-4 stagger-children">
         <div
           v-for="a in announcements" :key="a.id"
-          class="card p-5 cursor-pointer hover:shadow-md transition-shadow animate-fade-in-up"
+          class="card card-hover p-5 pl-6 cursor-pointer animate-fade-in-up overflow-hidden"
           @click="expanded = expanded === a.id ? null : a.id"
         >
+          <span class="absolute left-0 top-0 bottom-0 w-1" style="background: linear-gradient(180deg, #d8b53a, #a8870f);"></span>
           <div class="flex items-start justify-between gap-4">
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-2 mb-1 flex-wrap">
-                <h3 class="font-semibold text-slate-900">{{ a.title }}</h3>
+                <h3 class="font-display text-[16px] font-semibold text-slate-900">{{ a.title }}</h3>
                 <span class="badge" :class="audienceConfig[a.audience] ?? ''">{{ __(a.audience) }}</span>
               </div>
               <p class="text-[12px] text-slate-400">

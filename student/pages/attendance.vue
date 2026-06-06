@@ -1,19 +1,21 @@
 <template>
   <div class="animate-fade-in">
     <div class="mb-7">
-      <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('My Attendance') }}</h2>
-      <p class="text-sm text-slate-500 mt-1">{{ __('View and filter your attendance records') }}</p>
+      <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-beltei-gold mb-1.5">{{ __('Records') }}</p>
+      <h2 class="page-title text-[28px] sm:text-[32px]">{{ __('My Attendance') }}</h2>
+      <div class="gold-rule mt-3"></div>
+      <p class="text-sm text-slate-500 mt-3">{{ __('View and filter your attendance records') }}</p>
     </div>
 
     <!-- Filters -->
     <div class="card p-4 mb-5">
       <div class="flex flex-wrap gap-3 items-end">
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('From') }}</label>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em] mb-1.5">{{ __('From') }}</label>
           <DatePicker v-model="dateFrom" :placeholder="__('Start date')" @update:model-value="loadAttendance" />
         </div>
         <div>
-          <label class="block text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-1.5">{{ __('To') }}</label>
+          <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-[0.1em] mb-1.5">{{ __('To') }}</label>
           <DatePicker v-model="dateTo" :placeholder="__('End date')" @update:model-value="loadAttendance" />
         </div>
         <Button
@@ -28,22 +30,22 @@
     </div>
 
     <!-- Mini stats (shown when data exists) -->
-    <div v-if="!loading && stats.total > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5 stagger-children">
-      <div class="card stat-card stat-card-blue px-4 py-3 animate-fade-in-up">
-        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">{{ __('Total') }}</p>
-        <p class="text-xl font-extrabold text-slate-900 mt-1">{{ stats.total }}</p>
+    <div v-if="!loading && stats.total > 0" class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5 stagger-children">
+      <div class="card stat-card stat-card-navy px-5 py-4 animate-fade-in-up">
+        <p class="stat-label">{{ __('Total') }}</p>
+        <p class="stat-value text-2xl mt-1.5">{{ stats.total }}</p>
       </div>
-      <div class="card stat-card stat-card-emerald px-4 py-3 animate-fade-in-up">
-        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">{{ __('Present') }}</p>
-        <p class="text-xl font-extrabold text-emerald-600 mt-1">{{ stats.present }}</p>
+      <div class="card stat-card stat-card-emerald px-5 py-4 animate-fade-in-up">
+        <p class="stat-label">{{ __('Present') }}</p>
+        <p class="stat-value text-2xl mt-1.5 text-emerald-700">{{ stats.present }}</p>
       </div>
-      <div class="card stat-card stat-card-rose px-4 py-3 animate-fade-in-up">
-        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">{{ __('Absent') }}</p>
-        <p class="text-xl font-extrabold text-rose-600 mt-1">{{ stats.absent }}</p>
+      <div class="card stat-card stat-card-rose px-5 py-4 animate-fade-in-up">
+        <p class="stat-label">{{ __('Absent') }}</p>
+        <p class="stat-value text-2xl mt-1.5 text-rose-700">{{ stats.absent }}</p>
       </div>
-      <div class="card stat-card stat-card-amber px-4 py-3 animate-fade-in-up">
-        <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wide">{{ __('Rate') }}</p>
-        <p class="text-xl font-extrabold mt-1" :class="stats.rate >= 80 ? 'text-emerald-600' : 'text-rose-600'">
+      <div class="card stat-card stat-card-gold px-5 py-4 animate-fade-in-up">
+        <p class="stat-label">{{ __('Rate') }}</p>
+        <p class="stat-value text-2xl mt-1.5" :class="stats.rate >= 80 ? 'text-emerald-700' : stats.rate >= 60 ? 'text-amber-700' : 'text-rose-700'">
           {{ stats.rate }}%
         </p>
       </div>
