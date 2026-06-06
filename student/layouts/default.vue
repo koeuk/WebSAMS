@@ -126,8 +126,33 @@
           </div>
         </div>
       </header>
-      <main class="p-3 sm:p-6 lg:p-8 max-w-[1340px] mx-auto"><slot /></main>
+      <main class="p-3 pb-24 sm:p-6 sm:pb-24 lg:p-8 lg:pb-8 max-w-[1340px] mx-auto"><slot /></main>
     </div>
+
+    <!-- Mobile bottom tab bar -->
+    <nav
+      class="fixed bottom-0 inset-x-0 z-20 lg:hidden border-t border-white/[0.07] pb-[env(safe-area-inset-bottom)]"
+      style="background: linear-gradient(0deg, #0b1424 0%, #0d182c 100%); box-shadow: 0 -8px 24px -10px rgba(11,20,36,0.55);"
+    >
+      <div class="grid grid-cols-4">
+        <NuxtLink
+          v-for="item in bottomNav" :key="item.key" :to="item.href"
+          class="relative flex flex-col items-center justify-center gap-1.5 py-2.5 transition-colors"
+          :class="isActive(item.href) ? 'text-[#d8b53a]' : 'text-slate-400 active:text-slate-200'"
+        >
+          <span
+            v-if="isActive(item.href)"
+            class="absolute top-0 left-1/2 -translate-x-1/2 h-[3px] w-9 rounded-full"
+            style="background: linear-gradient(90deg, #c8a415, #d8b53a);"
+          ></span>
+          <svg v-if="item.icon === 'dashboard'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+          <svg v-else-if="item.icon === 'attendance'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+          <svg v-else-if="item.icon === 'bell'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          <svg v-else-if="item.icon === 'profile'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span class="text-[10px] font-medium leading-none">{{ item.name }}</span>
+        </NuxtLink>
+      </div>
+    </nav>
   </div>
 </template>
 
@@ -147,6 +172,10 @@ const navigation = computed(() => [
   { key: 'notifications',  name: __('Notifications'),  href: '/notifications', icon: 'bell' },
   { key: 'profile',        name: __('Profile'),        href: '/profile',       icon: 'profile' },
 ])
+
+// Primary items surfaced as a bottom tab bar on mobile
+const bottomNavKeys = ['dashboard', 'myAttendance', 'notifications', 'profile']
+const bottomNav = computed(() => navigation.value.filter((i) => bottomNavKeys.includes(i.key)))
 
 const currentLocaleName = computed(() => {
   const found = (locales.value as any[]).find((l) => l.code === locale.value)
