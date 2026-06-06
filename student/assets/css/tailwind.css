@@ -79,12 +79,19 @@
 @keyframes ruleGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @keyframes shimmer  { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
 @keyframes popInUp  { from { opacity: 0; transform: translateY(26px) scale(0.9); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes enterRise { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 @layer utilities {
   .animate-fade-in-up { animation: fadeInUp 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
   .animate-fade-in    { animation: fadeIn 0.4s ease-out both; }
   /* Stronger spring entrance with a slight overshoot; `backwards` keeps hover transforms working after it finishes */
   .animate-pop-in     { animation: popInUp 0.62s cubic-bezier(0.34, 1.56, 0.64, 1) backwards; }
+
+  /* Page-load entrance — subtle 6px rise + fade. -1/-2/-3 stagger hero/tabs/panel */
+  .enter-rise   { animation: enterRise 600ms cubic-bezier(0.22, 1, 0.36, 1) both; }
+  .enter-rise-1 { animation: enterRise 600ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 80ms; }
+  .enter-rise-2 { animation: enterRise 600ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 160ms; }
+  .enter-rise-3 { animation: enterRise 600ms cubic-bezier(0.22, 1, 0.36, 1) both; animation-delay: 240ms; }
 
   /* Fraunces display family */
   .font-display { font-family: 'Fraunces', ui-serif, Georgia, serif; font-optical-sizing: auto; }
@@ -99,6 +106,10 @@
 .stagger-children > *:nth-child(4) { animation-delay: 270ms; }
 .stagger-children > *:nth-child(5) { animation-delay: 360ms; }
 .stagger-children > *:nth-child(6) { animation-delay: 450ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .enter-rise, .enter-rise-1, .enter-rise-2, .enter-rise-3 { animation: none; }
+}
 
 @layer components {
 

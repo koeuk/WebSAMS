@@ -23,7 +23,7 @@
           <!-- Nav pills -->
           <nav class="flex items-center justify-center gap-0.5 flex-1 min-w-0">
             <NuxtLink
-              v-for="item in navigation" :key="item.key" :to="item.href"
+              v-for="item in mainNav" :key="item.key" :to="item.href"
               :title="item.name"
               class="group flex items-center gap-2 px-2.5 xl:px-3 h-10 rounded-xl text-[13px] font-medium transition-all duration-200"
               :class="isActive(item.href) ? 'bg-accent text-beltei font-semibold shadow-sm ring-1 ring-[#e3d4a4]' : 'text-slate-500 hover:bg-paper-inset hover:text-beltei'"
@@ -61,22 +61,42 @@
               </PopoverContent>
             </Popover>
 
-            <div class="hidden xl:block text-right leading-tight mr-0.5">
-              <p class="text-[12.5px] font-semibold text-slate-800 truncate max-w-[130px]">{{ user?.name }}</p>
-              <p class="text-[9px] text-beltei-gold font-bold uppercase tracking-[0.14em]">{{ __('Student') }}</p>
-            </div>
-            <div class="h-9 w-9 rounded-xl flex items-center justify-center text-white text-sm font-bold ring-1 ring-[#c8a415]/30 shrink-0"
-                 style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
-              {{ user?.name?.charAt(0) }}
-            </div>
-            <button
-              @click="handleLogout"
-              :title="__('Sign Out')"
-              :aria-label="__('Sign Out')"
-              class="shrink-0 cursor-pointer flex items-center justify-center h-9 w-9 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 transition-colors"
-            >
-              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-            </button>
+            <!-- Account menu -->
+            <Popover :open="acctOpen" @update:open="(v) => acctOpen = v">
+              <PopoverTrigger as-child>
+                <button
+                  class="flex items-center gap-1.5 h-10 pl-1 pr-1.5 rounded-xl hover:bg-paper-inset transition-colors cursor-pointer"
+                  :class="route.path === '/profile' ? 'bg-accent' : ''"
+                >
+                  <div class="h-9 w-9 rounded-xl flex items-center justify-center text-white text-sm font-bold ring-1 ring-[#c8a415]/30 shrink-0"
+                       style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
+                    {{ user?.name?.charAt(0) }}
+                  </div>
+                  <svg class="w-3.5 h-3.5 text-slate-400 transition-transform" :class="acctOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+                </button>
+              </PopoverTrigger>
+              <PopoverContent class="w-56 p-1.5" align="end">
+                <div class="px-2.5 py-2">
+                  <p class="text-[13px] font-semibold text-slate-800 truncate">{{ user?.name }}</p>
+                  <p class="text-[11px] text-slate-400 truncate">{{ user?.email }}</p>
+                </div>
+                <div class="h-px bg-line my-1"></div>
+                <NuxtLink
+                  to="/profile" @click="acctOpen = false"
+                  class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] font-medium text-slate-600 hover:bg-paper hover:text-beltei transition-colors"
+                >
+                  <svg class="w-4 h-4 text-beltei-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                  {{ __('Profile') }}
+                </NuxtLink>
+                <button
+                  @click="acctOpen = false; handleLogout()"
+                  class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] font-medium text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                >
+                  <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                  {{ __('Sign Out') }}
+                </button>
+              </PopoverContent>
+            </Popover>
           </div>
         </div>
       </div>
@@ -116,16 +136,47 @@
               </button>
             </PopoverContent>
           </Popover>
-          <div class="h-9 w-9 rounded-xl flex items-center justify-center text-white text-sm font-bold ring-1 ring-[#c8a415]/30"
-               style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
-            {{ user?.name?.charAt(0) }}
-          </div>
+          <!-- Account menu -->
+          <Popover :open="acctOpenMobile" @update:open="(v) => acctOpenMobile = v">
+            <PopoverTrigger as-child>
+              <button class="h-9 w-9 rounded-xl flex items-center justify-center text-white text-sm font-bold ring-1 ring-[#c8a415]/30 cursor-pointer"
+                      style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
+                {{ user?.name?.charAt(0) }}
+              </button>
+            </PopoverTrigger>
+            <PopoverContent class="w-56 p-1.5" align="end">
+              <div class="px-2.5 py-2">
+                <p class="text-[13px] font-semibold text-slate-800 truncate">{{ user?.name }}</p>
+                <p class="text-[11px] text-slate-400 truncate">{{ user?.email }}</p>
+              </div>
+              <div class="h-px bg-line my-1"></div>
+              <NuxtLink
+                to="/profile" @click="acctOpenMobile = false"
+                class="flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] font-medium text-slate-600 hover:bg-paper hover:text-beltei transition-colors"
+              >
+                <svg class="w-4 h-4 text-beltei-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+                {{ __('Profile') }}
+              </NuxtLink>
+              <button
+                @click="acctOpenMobile = false; handleLogout()"
+                class="w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-[13px] font-medium text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+              >
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                {{ __('Sign Out') }}
+              </button>
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
       <div class="h-[2px] w-full" style="background: linear-gradient(90deg, transparent, #c8a415 25%, #d8b53a 50%, #c8a415 75%, transparent);"></div>
     </header>
 
-    <main class="p-3 pb-24 sm:p-6 sm:pb-24 lg:px-8 lg:pt-2 lg:pb-10 max-w-[1340px] mx-auto"><slot /></main>
+    <main class="relative isolate">
+      <PageAtmosphere />
+      <div :key="route.path" class="enter-rise p-3 pb-24 sm:p-6 sm:pb-24 lg:px-8 lg:pt-2 lg:pb-10 max-w-[1340px] mx-auto">
+        <slot />
+      </div>
+    </main>
 
     <!-- Mobile bottom tab bar -->
     <nav
@@ -155,7 +206,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 
 const { user, logout } = useAuth()
@@ -174,6 +225,11 @@ const navigation = computed(() => [
 // Primary items surfaced as a bottom tab bar on mobile
 const bottomNavKeys = ['dashboard', 'myAttendance', 'notifications', 'profile']
 const bottomNav = computed(() => navigation.value.filter((i) => bottomNavKeys.includes(i.key)))
+
+// Desktop bar shows the main sections; Profile + Sign Out live in the account menu
+const mainNav = computed(() => navigation.value.filter((i) => i.key !== 'profile'))
+const acctOpen = ref(false)
+const acctOpenMobile = ref(false)
 
 const currentLocaleName = computed(() => {
   const found = (locales.value as any[]).find((l) => l.code === locale.value)
