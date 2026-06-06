@@ -81,7 +81,7 @@
 
         <!-- 4 stat cards 2x2 -->
         <div class="lg:col-span-2 grid grid-cols-2 gap-4 stagger-children">
-          <div class="card card-hover stat-card stat-card-navy p-5 animate-fade-in-up">
+          <div class="card card-hover stat-card stat-card-navy p-5 animate-pop-in">
             <div class="flex items-center justify-between mb-3">
               <p class="stat-label">{{ __('Total') }}</p>
               <div class="w-9 h-9 rounded-xl bg-[#eef2f9] flex items-center justify-center ring-1 ring-[#dbe4f3]">
@@ -92,7 +92,7 @@
             <p class="text-[11px] text-slate-400 mt-1.5">{{ __('Recorded sessions') }}</p>
           </div>
 
-          <div class="card card-hover stat-card stat-card-emerald p-5 animate-fade-in-up">
+          <div class="card card-hover stat-card stat-card-emerald p-5 animate-pop-in">
             <div class="flex items-center justify-between mb-3">
               <p class="stat-label">{{ __('Present') }}</p>
               <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center ring-1 ring-emerald-100">
@@ -103,7 +103,7 @@
             <p class="text-[11px] text-slate-400 mt-1.5">{{ __('Days attended') }}</p>
           </div>
 
-          <div class="card card-hover stat-card stat-card-rose p-5 animate-fade-in-up">
+          <div class="card card-hover stat-card stat-card-rose p-5 animate-pop-in">
             <div class="flex items-center justify-between mb-3">
               <p class="stat-label">{{ __('Absent') }}</p>
               <div class="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center ring-1 ring-rose-100">
@@ -114,7 +114,7 @@
             <p class="text-[11px] text-slate-400 mt-1.5">{{ __('Days missed') }}</p>
           </div>
 
-          <div class="card card-hover stat-card stat-card-amber p-5 animate-fade-in-up">
+          <div class="card card-hover stat-card stat-card-amber p-5 animate-pop-in">
             <div class="flex items-center justify-between mb-3">
               <p class="stat-label">{{ __('Late') }}</p>
               <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center ring-1 ring-amber-100">
