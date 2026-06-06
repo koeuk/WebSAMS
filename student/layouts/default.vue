@@ -126,7 +126,7 @@
           </div>
         </div>
       </header>
-      <main class="p-6 lg:p-8 max-w-[1340px] mx-auto"><slot /></main>
+      <main class="p-3 sm:p-6 lg:p-8 max-w-[1340px] mx-auto"><slot /></main>
     </div>
   </div>
 </template>
