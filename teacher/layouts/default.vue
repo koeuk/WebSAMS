@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-slate-50">
+  <div class="min-h-screen aurora-bg">
 
     <!-- Mobile overlay -->
     <Transition name="fade">
@@ -12,7 +12,7 @@
 
     <!-- Sidebar -->
     <aside
-      class="fixed inset-y-0 left-0 w-[260px] bg-[#0c1629] flex flex-col z-40 transition-transform duration-300"
+      class="fixed inset-y-0 left-0 w-[260px] glass-sidebar flex flex-col z-40 transition-transform duration-300"
       :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
     >
       <!-- Brand -->
@@ -82,7 +82,7 @@
     <!-- Main content -->
     <div class="lg:pl-[260px]">
       <!-- Top bar -->
-      <header class="sticky top-0 z-20 flex items-center justify-between h-[72px] px-6 lg:px-8 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+      <header class="sticky top-0 z-20 flex items-center justify-between h-[72px] px-6 lg:px-8 glass-topbar">
         <div class="flex items-center gap-3">
           <!-- Hamburger (mobile) -->
           <button

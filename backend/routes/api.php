@@ -21,12 +21,14 @@ use Illuminate\Support\Facades\Route;
 // Public
 Route::post('/login', [AuthController::class, 'login']);
 
-// Branding (logo) for teacher/student portals — returns a path relative to the API host
+// Branding (logo + favicon) for teacher/student portals — paths relative to the API host
 Route::get('/branding', function () {
     $logo = \App\Models\Setting::get('university_logo');
+    $favicon = \App\Models\Setting::get('favicon') ?: $logo;
 
     return response()->json([
-        'logo' => $logo ? '/storage/'.ltrim($logo, '/') : null,
+        'logo'    => $logo ? '/storage/'.ltrim($logo, '/') : null,
+        'favicon' => $favicon ? '/storage/'.ltrim($favicon, '/') : null,
     ]);
 });
 
