@@ -3,10 +3,11 @@
         <div class="animate-fade-in">
             <div class="flex items-center justify-between mb-8">
                 <div>
-                    <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Dashboard') }}</h2>
-                    <p class="text-sm text-slate-500 mt-1">{{ __("Welcome back! Here's what's happening today.") }}</p>
+                    <h2 class="text-3xl font-bold tracking-tight bg-gradient-to-br from-slate-900 via-slate-800 to-beltei bg-clip-text text-transparent">{{ __('Dashboard') }}</h2>
+                    <p class="text-sm text-slate-500 mt-1.5">{{ __("Welcome back! Here's what's happening today.") }}</p>
                 </div>
-                <div class="text-sm text-slate-400 font-medium">
+                <div class="hidden sm:inline-flex items-center gap-2 glass-btn rounded-full px-4 py-2 text-[13px] font-medium text-slate-600">
+                    <svg class="w-4 h-4 text-beltei-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     {{ new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
                 </div>
             </div>
@@ -20,7 +21,7 @@
                                 <p class="text-[13px] font-medium text-slate-500">{{ __('Total Students') }}</p>
                                 <p class="text-3xl font-bold text-slate-900 mt-1.5 tracking-tight">{{ stats?.totalStudents ?? 0 }}</p>
                             </div>
-                            <div class="w-12 h-12 rounded-2xl bg-blue-50 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/40 ring-1 ring-inset ring-white/60 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
                                 <svg class="w-6 h-6 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
                             </div>
                         </div>
@@ -33,7 +34,7 @@
                                 <p class="text-[13px] font-medium text-slate-500">{{ __('Total Teachers') }}</p>
                                 <p class="text-3xl font-bold text-slate-900 mt-1.5 tracking-tight">{{ stats?.totalTeachers ?? 0 }}</p>
                             </div>
-                            <div class="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/40 ring-1 ring-inset ring-white/60 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
                                 <svg class="w-6 h-6 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
                             </div>
                         </div>
@@ -46,7 +47,7 @@
                                 <p class="text-[13px] font-medium text-slate-500">{{ __('Total Classes') }}</p>
                                 <p class="text-3xl font-bold text-slate-900 mt-1.5 tracking-tight">{{ stats?.totalClasses ?? 0 }}</p>
                             </div>
-                            <div class="w-12 h-12 rounded-2xl bg-amber-50 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/40 ring-1 ring-inset ring-white/60 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
                                 <svg class="w-6 h-6 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
                             </div>
                         </div>
@@ -59,7 +60,7 @@
                                 <p class="text-[13px] font-medium text-slate-500">{{ __("Today's Attendance") }}</p>
                                 <p class="text-3xl font-bold mt-1.5 tracking-tight" :class="(stats?.todayAttendance ?? 0) >= 80 ? 'text-emerald-600' : 'text-rose-600'">{{ stats?.todayAttendance ?? 0 }}%</p>
                             </div>
-                            <div class="w-12 h-12 rounded-2xl bg-violet-50 flex items-center justify-center">
+                            <div class="w-12 h-12 rounded-2xl flex items-center justify-center bg-white/40 ring-1 ring-inset ring-white/60 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]">
                                 <svg class="w-6 h-6 text-violet-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
                             </div>
                         </div>
@@ -84,7 +85,7 @@
 
             <!-- Recent Attendance -->
             <Card class="overflow-hidden animate-fade-in-up" style="animation-delay: 300ms;">
-                <div class="px-6 py-5 border-b border-slate-100">
+                <div class="px-6 py-5 border-b border-white/40">
                     <h3 class="text-base font-semibold text-slate-900">{{ __('Recent Attendance') }}</h3>
                     <p class="text-[13px] text-slate-500 mt-0.5">{{ __('Latest attendance records across all classes') }}</p>
                 </div>
@@ -137,12 +138,22 @@ const props = defineProps({
     recentAttendance: Array,
 });
 
+// Vertical gradient fill for bars — falls back to a solid color before the chart area exists
+const barGradient = (from, to) => (ctx) => {
+    const { ctx: g, chartArea } = ctx.chart;
+    if (!chartArea) return from;
+    const grad = g.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+    grad.addColorStop(0, from);
+    grad.addColorStop(1, to);
+    return grad;
+};
+
 const chartData = {
     labels: props.weeklyChart?.map(d => d.date) || [],
     datasets: [
-        { label: __('Present'), data: props.weeklyChart?.map(d => d.present) || [], backgroundColor: '#10b981', borderRadius: 6, borderSkipped: false },
-        { label: __('Absent'), data: props.weeklyChart?.map(d => d.absent) || [], backgroundColor: '#f43f5e', borderRadius: 6, borderSkipped: false },
-        { label: __('Late'), data: props.weeklyChart?.map(d => d.late) || [], backgroundColor: '#f59e0b', borderRadius: 6, borderSkipped: false },
+        { label: __('Present'), data: props.weeklyChart?.map(d => d.present) || [], backgroundColor: barGradient('rgba(5,150,105,0.85)', 'rgba(52,211,153,0.95)'), borderRadius: 8, borderSkipped: false, maxBarThickness: 26 },
+        { label: __('Absent'), data: props.weeklyChart?.map(d => d.absent) || [], backgroundColor: barGradient('rgba(225,29,72,0.85)', 'rgba(251,113,133,0.95)'), borderRadius: 8, borderSkipped: false, maxBarThickness: 26 },
+        { label: __('Late'), data: props.weeklyChart?.map(d => d.late) || [], backgroundColor: barGradient('rgba(217,119,6,0.85)', 'rgba(251,191,36,0.95)'), borderRadius: 8, borderSkipped: false, maxBarThickness: 26 },
     ],
 };
 
@@ -153,12 +164,21 @@ const chartOptions = {
         legend: {
             position: 'top',
             align: 'end',
-            labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { size: 12, family: 'Plus Jakarta Sans', weight: '500' } }
+            labels: { usePointStyle: true, pointStyle: 'circle', padding: 20, font: { size: 12, family: 'Plus Jakarta Sans', weight: '600' }, color: '#475569' }
+        },
+        tooltip: {
+            backgroundColor: 'rgba(15, 23, 42, 0.92)',
+            padding: 12,
+            cornerRadius: 12,
+            boxPadding: 6,
+            usePointStyle: true,
+            titleFont: { family: 'Plus Jakarta Sans', weight: '700', size: 13 },
+            bodyFont: { family: 'Plus Jakarta Sans', size: 12 },
         },
     },
     scales: {
-        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 11, family: 'Plus Jakarta Sans' } } },
-        y: { stacked: true, grid: { color: '#f1f5f9' }, border: { dash: [4, 4] }, ticks: { font: { size: 11, family: 'Plus Jakarta Sans' } } },
+        x: { stacked: true, grid: { display: false }, ticks: { font: { size: 11, family: 'Plus Jakarta Sans' }, color: '#94a3b8' } },
+        y: { stacked: true, grid: { color: 'rgba(148, 163, 184, 0.18)' }, border: { display: false, dash: [4, 4] }, ticks: { font: { size: 11, family: 'Plus Jakarta Sans' }, color: '#94a3b8' } },
     },
 };
 

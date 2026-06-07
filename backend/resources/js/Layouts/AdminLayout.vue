@@ -1,8 +1,8 @@
 <template>
-    <div class="min-h-screen bg-page-bg">
+    <div class="min-h-screen aurora-bg">
         <!-- Sidebar -->
         <aside
-            class="fixed inset-y-0 left-0 bg-sidebar flex flex-col z-30 transition-[width] duration-300 ease-in-out"
+            class="fixed inset-y-0 left-0 glass-sidebar flex flex-col z-30 transition-[width] duration-300 ease-in-out"
             :class="sidebarOpen ? 'w-[260px]' : 'w-[76px]'"
         >
             <!-- Brand -->
@@ -128,15 +128,15 @@
         </aside>
 
         <!-- Main content -->
-        <div class="transition-[padding] duration-300 ease-in-out" :class="sidebarOpen ? 'pl-[260px]' : 'pl-[76px]'">
+        <div class="relative z-10 transition-[padding] duration-300 ease-in-out" :class="sidebarOpen ? 'pl-[260px]' : 'pl-[76px]'">
             <!-- Top bar -->
-            <header class="sticky top-0 z-20 flex items-center justify-between h-[72px] px-8 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+            <header class="sticky top-0 z-20 flex items-center justify-between h-[72px] px-8 glass-topbar">
                 <div class="flex items-center gap-3">
                     <!-- Sidebar toggle -->
                     <button
                         type="button"
                         @click="toggleSidebar"
-                        class="h-9 w-9 inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors cursor-pointer"
+                        class="h-9 w-9 inline-flex items-center justify-center rounded-xl glass-btn text-slate-600 hover:text-slate-900 cursor-pointer"
                         :title="sidebarOpen ? __('Collapse sidebar') : __('Expand sidebar')"
                         :aria-label="__('Toggle sidebar')"
                     >
@@ -158,7 +158,7 @@
                         <button
                             type="button"
                             @click="langOpen = !langOpen"
-                            class="h-9 w-9 inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 transition-colors"
+                            class="h-9 w-9 inline-flex items-center justify-center rounded-xl glass-btn text-slate-600 hover:text-slate-900 cursor-pointer"
                             :title="__('Language')"
                             :aria-label="__('Language')"
                         >
@@ -166,7 +166,7 @@
                         </button>
                         <div
                             v-if="langOpen"
-                            class="absolute right-0 mt-2 w-40 rounded-xl border border-slate-200 bg-white shadow-lg overflow-hidden z-50"
+                            class="absolute right-0 mt-2 w-40 rounded-xl border border-white/60 bg-white/85 backdrop-blur-xl shadow-xl overflow-hidden z-50"
                         >
                             <button
                                 v-for="loc in locales"
