@@ -54,6 +54,13 @@
     scroll-behavior: smooth;
   }
 
+  html {
+    /* Always reserve the scrollbar gutter so the centered max-w columns
+       (floating command bar + page content) stay perfectly aligned and
+       don't shift left when a vertical scrollbar appears. */
+    scrollbar-gutter: stable;
+  }
+
   body {
     background-color: var(--paper);
     @apply text-foreground antialiased;

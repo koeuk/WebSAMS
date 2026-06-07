@@ -13,11 +13,9 @@
                             {{ __('Bulk Mark') }}
                         </Link>
                     </Button>
-                    <Button as-child>
-                        <Link href="/admin/attendance/create" class="flex items-center gap-2">
-                            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-                            {{ __('Create Attendance') }}
-                        </Link>
+                    <Button @click="openCreate" class="flex items-center gap-2">
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+                        {{ __('Create Attendance') }}
                     </Button>
                 </div>
             </div>
@@ -121,9 +119,7 @@
                                         <Button variant="ghost" size="sm" as-child>
                                             <Link :href="`/admin/attendance/${record.id}`">{{ __('View') }}</Link>
                                         </Button>
-                                        <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" as-child>
-                                            <Link :href="`/admin/attendance/${record.id}/edit`">{{ __('Edit') }}</Link>
-                                        </Button>
+                                        <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700 hover:bg-blue-50" @click="openEdit(record)">{{ __('Edit') }}</Button>
                                         <Button variant="ghost" size="sm" class="text-rose-500 hover:text-rose-700 hover:bg-rose-50" @click="confirmDelete(record)">{{ __('Delete') }}</Button>
                                     </div>
                                 </TableCell>
@@ -146,6 +142,16 @@
 
             <Pagination :pagination="attendance" />
 
+            <!-- Create / Edit Form -->
+            <AttendanceForm
+                v-model:open="showForm"
+                :record="editingRecord"
+                :class-subjects="classSubjects"
+                :students="students"
+                :time-slots="timeSlots"
+                :statuses="statuses"
+            />
+
             <Modal :show="showDeleteModal" :title="__('Delete Attendance')" :message="__('Are you sure you want to delete this attendance record?')" :loading="deleting" @confirm="deleteRecord" @cancel="showDeleteModal = false" />
         </div>
     </AdminLayout>
@@ -157,6 +163,7 @@ import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
 import Pagination from '@/Components/Pagination.vue';
 import Modal from '@/Components/Modal.vue';
+import AttendanceForm from '@/Components/Forms/AttendanceForm.vue';
 import FilterCombobox from '@/Components/FilterCombobox.vue';
 import DatePicker from '@/Components/DatePicker.vue';
 import { Button } from '@/Components/ui/button';
@@ -172,6 +179,8 @@ const props = defineProps({
     courses: Array,
     classes: Array,
     subjects: Array,
+    classSubjects: Array,
+    students: Array,
     timeSlots: Array,
     statuses: Array,
     filters: Object,
@@ -232,6 +241,12 @@ const statusClass = (status) => ({
     'bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-50': status === 'late',
     'bg-sky-50 text-sky-700 border-sky-200 hover:bg-sky-50': status === 'excused',
 });
+
+// ── Create / Edit modal ───────────────────────────────────────────────────────
+const showForm = ref(false);
+const editingRecord = ref(null);
+const openCreate = () => { editingRecord.value = null; showForm.value = true; };
+const openEdit = (record) => { editingRecord.value = record; showForm.value = true; };
 
 const showDeleteModal = ref(false);
 const recordToDelete = ref(null);

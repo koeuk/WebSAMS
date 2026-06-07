@@ -3,9 +3,8 @@
 
     <!-- ═══ Desktop · Floating command bar ═══════════════════════ -->
     <header class="hidden lg:block sticky top-0 z-40">
-      <div class="cmd-veil pointer-events-none absolute inset-x-0 top-0 h-[104px]"></div>
       <div class="relative max-w-[1340px] mx-auto px-8 pt-4 pb-2">
-        <div class="cmd-bar flex items-center h-[62px] pl-4 pr-3 gap-2 rounded-2xl border border-line bg-white/80 backdrop-blur-xl">
+        <div class="cmd-bar flex items-center h-[62px] px-2 gap-2 rounded-2xl border border-[#d4e6da] bg-[#e7f0ea]/85 backdrop-blur-xl">
 
           <!-- Brand -->
           <NuxtLink to="/" class="flex items-center gap-2.5 shrink-0">
@@ -248,10 +247,6 @@ const handleLogout = async () => {
 </script>
 
 <style scoped>
-.cmd-veil {
-  background: linear-gradient(to bottom, rgb(247, 245, 240) 32%, rgba(247, 245, 240, 0.82) 64%, rgba(247, 245, 240, 0));
-}
-
 .cmd-bar {
   box-shadow: 0 16px 48px -18px rgba(22, 41, 77, 0.30), 0 2px 8px rgba(22, 41, 77, 0.05);
   animation: barDrop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;

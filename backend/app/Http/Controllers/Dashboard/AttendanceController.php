@@ -42,13 +42,16 @@ class AttendanceController extends Controller
         }
 
         return Inertia::render('Attendance/Index', [
-            'attendance' => $attendance,
-            'courses'    => Course::all(['id', 'name', 'code']),
-            'classes'    => SchoolClass::all(['id', 'name']),
-            'subjects'   => $subjectsQuery->get(['id', 'name', 'code']),
-            'timeSlots'  => TimeSlot::all(),
-            'statuses'   => AttendanceStatus::options(),
-            'filters'    => $request->input('filter', []),
+            'attendance'    => $attendance,
+            'courses'       => Course::all(['id', 'name', 'code']),
+            'classes'       => SchoolClass::all(['id', 'name']),
+            'subjects'      => $subjectsQuery->get(['id', 'name', 'code']),
+            'timeSlots'     => TimeSlot::all(),
+            'statuses'      => AttendanceStatus::options(),
+            'filters'       => $request->input('filter', []),
+            // Dropdown data for the inline create/edit modal (AttendanceForm)
+            'classSubjects' => ClassSubject::with(['schoolClass', 'subject', 'teacher'])->get(),
+            'students'      => User::where('role', 'student')->get(['id', 'name', 'email']),
         ]);
     }
 

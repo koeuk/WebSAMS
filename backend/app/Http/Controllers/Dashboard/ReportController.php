@@ -38,7 +38,14 @@ class ReportController extends Controller
             $dateTo   = $semester->end_date->toDateString();
         }
 
-        $request->merge(['date_from' => $dateFrom, 'date_to' => $dateTo]);
+        // Resolve date range / semester ourselves, then remove those keys from the
+        // `filter` bag so Spatie's QueryBuilder doesn't reject them as invalid filters
+        // (it only allows course_id, class_id, subject_id, status below).
+        $request->merge([
+            'date_from' => $dateFrom,
+            'date_to'   => $dateTo,
+            'filter'    => collect($filters)->except(['semester_id', 'date_from', 'date_to'])->all(),
+        ]);
         $request->validate([
             'date_from' => 'required|date',
             'date_to'   => 'required|date|after_or_equal:date_from',
