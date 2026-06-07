@@ -37,6 +37,12 @@
     --glass-edge:   rgba(255, 255, 255, 0.65);
     --glass-shadow: rgba(6, 78, 59, 0.22);
 
+    /* Themeable nav accent (flips to caffeine in dark) */
+    --nav-pill-bg:   rgba(16, 185, 129, 0.15);
+    --nav-pill-ring: rgba(16, 185, 129, 0.42);
+    --nav-pill-glow: rgba(6, 120, 87, 0.30);
+    --nav-grad: linear-gradient(135deg, #047857, #10b981);
+
     /* ── shadcn semantic tokens (emerald-recolored) ── */
     --background: 150 28% 95%;
     --foreground: 200 40% 12%;
@@ -280,3 +286,128 @@
   /* ── Sidebar nav active state ──────────────────────── */
   .nav-active-glow { box-shadow: inset 2px 0 0 var(--brand-gold); }
 }
+
+/* ══════════════════════════════════════════════════════════════
+   DARK MODE · "Caffeine" — warm cream accent (#ffe0c2) on near-black
+   Unlayered so these win over @layer utilities/components.
+   ══════════════════════════════════════════════════════════════ */
+.dark {
+  /* canvas + glass material */
+  --paper:   #111111;
+  --paper-2: #191919;
+  --line:    #2a2a2a;
+  --line-strong: #3a3a38;
+  --glass-fill:   rgba(25, 25, 25, 0.62);
+  --glass-fill-2: rgba(34, 34, 34, 0.76);
+  --glass-edge:   rgba(255, 255, 255, 0.08);
+  --glass-shadow: rgba(0, 0, 0, 0.60);
+
+  /* accent vars flipped to caffeine cream → rule/tick auto-convert */
+  --brand-emerald:      #ffe0c2;
+  --brand-emerald-soft: #ffe9d4;
+  --brand-emerald-deep: #d9a877;
+  --brand-emerald-glow: rgba(255, 224, 194, 0.40);
+
+  /* nav accent → caffeine */
+  --nav-pill-bg:   rgba(255, 224, 194, 0.14);
+  --nav-pill-ring: rgba(255, 224, 194, 0.42);
+  --nav-pill-glow: rgba(255, 224, 194, 0.18);
+  --nav-grad: linear-gradient(135deg, #ffe0c2, #f0c79e);
+
+  /* shadcn semantic tokens (Caffeine) */
+  --background: 0 0% 7%;
+  --foreground: 0 0% 93%;
+  --card: 0 0% 10%;
+  --card-foreground: 0 0% 93%;
+  --popover: 0 0% 10%;
+  --popover-foreground: 0 0% 93%;
+  --primary: 30 100% 88%;
+  --primary-foreground: 183 54% 7%;
+  --secondary: 28 18% 19%;
+  --secondary-foreground: 30 100% 88%;
+  --muted: 0 0% 13%;
+  --muted-foreground: 0 0% 71%;
+  --accent: 0 0% 16%;
+  --accent-foreground: 0 0% 93%;
+  --destructive: 10 78% 54%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 45 14% 11%;
+  --input: 0 0% 28%;
+  --ring: 30 100% 88%;
+}
+
+/* Subtle warm glow on the near-black canvas */
+.dark body {
+  background-image:
+    radial-gradient(58% 50% at 10% -4%,  rgba(255, 224, 194, 0.06), transparent 60%),
+    radial-gradient(54% 48% at 102% 6%,  rgba(255, 210, 170, 0.05), transparent 58%),
+    radial-gradient(52% 46% at 88% 104%, rgba(217, 168, 119, 0.05), transparent 60%),
+    radial-gradient(46% 42% at -4% 96%,  rgba(255, 224, 194, 0.04), transparent 60%);
+}
+
+/* Flip the hardcoded slate text scale to warm-neutral light */
+.dark .text-slate-900 { color: #f2f2f2; }
+.dark .text-slate-800 { color: #e8e8e8; }
+.dark .text-slate-700 { color: #d6d6d6; }
+.dark .text-slate-600 { color: #bcbcbc; }
+.dark .text-slate-500 { color: #9a9a9a; }
+.dark .text-slate-400 { color: #7c7c7c; }
+.dark .text-slate-300 { color: #686868; }
+.dark .text-beltei    { color: #f0e9e2; }
+
+/* Accent text → caffeine cream */
+.dark .text-emerald-500,
+.dark .text-emerald-600,
+.dark .text-emerald-700,
+.dark .text-emerald-800 { color: #ffe0c2; }
+
+/* Colours baked into component classes via @apply */
+.dark .page-title     { color: #f4f4f4; }
+.dark .stat-value     { color: #f6f6f6; }
+.dark .stat-label     { color: #8f8f8f; }
+.dark .section-title  { color: #cccccc; }
+.dark .modern-table thead th     { color: #8f8f8f; background: rgba(255, 255, 255, 0.03); }
+.dark .modern-table tbody td     { color: #bcbcbc; }
+.dark .modern-table tbody tr:hover { background: rgba(255, 224, 194, 0.06); }
+
+/* Glass depth in the dark */
+.dark .card {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 16px 40px -16px rgba(0, 0, 0, 0.65),
+    0 2px 8px -3px rgba(0, 0, 0, 0.45);
+}
+.dark .card-hover:hover {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    0 26px 56px -20px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 224, 194, 0.15);
+}
+
+/* Primary button → cream fill with dark ink */
+.dark .btn-primary {
+  background: linear-gradient(135deg, #ffe0c2, #ffd0a4);
+  color: #1c1206;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+.dark .btn-primary:hover { background: linear-gradient(135deg, #ffd6b0, #f3c193); box-shadow: 0 8px 22px -6px rgba(255, 224, 194, 0.30); }
+
+/* Surfaces / inputs */
+.dark .input-modern,
+.dark .select-modern { background: rgba(255, 255, 255, 0.05); color: #eeeeee; border-color: var(--line-strong); }
+.dark .bg-white { background-color: #191919; }
+.dark .btn-secondary { background: rgba(255, 255, 255, 0.05); color: #d6d6d6; }
+.dark .btn-secondary:hover { background: rgba(255, 255, 255, 0.09); }
+
+/* Hardcoded light backgrounds used across pages (table header rows, icon chips, soft alerts) */
+.dark .bg-\[\#faf8f3\] { background-color: rgba(255, 255, 255, 0.04); }
+.dark .bg-\[\#eef2f9\] { background-color: rgba(255, 224, 194, 0.12); }
+.dark .bg-\[\#f1ede3\] { background-color: rgba(255, 255, 255, 0.05); }
+.dark .bg-emerald-50  { background-color: rgba(255, 224, 194, 0.12); }
+.dark .bg-emerald-100 { background-color: rgba(255, 224, 194, 0.16); }
+.dark .ring-emerald-100 { --tw-ring-color: rgba(255, 224, 194, 0.22); }
+.dark .ring-emerald-400\/40 { --tw-ring-color: rgba(255, 224, 194, 0.40); }
+.dark .bg-emerald-500\/15 { background-color: rgba(255, 224, 194, 0.14); }
+.dark .bg-rose-50    { background-color: rgba(229, 77, 46, 0.16); }
+.dark .bg-amber-50   { background-color: rgba(245, 158, 11, 0.14); }
+.dark .bg-sky-50     { background-color: rgba(120, 170, 210, 0.14); }

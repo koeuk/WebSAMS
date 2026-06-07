@@ -7,7 +7,7 @@
     <!-- ═══ Desktop · Floating command bar ═══════════════════════ -->
     <header class="hidden lg:block sticky top-0 z-40">
       <div class="relative max-w-[1340px] mx-auto px-8 pt-4 pb-2">
-        <div class="cmd-bar flex items-center h-[62px] px-2 gap-2 rounded-2xl border border-white/60 bg-white/45 backdrop-blur-2xl">
+        <div class="cmd-bar flex items-center h-[62px] px-2 gap-2 rounded-2xl border border-white/60 dark:border-white/10 bg-white/45 dark:bg-[#0e1f18]/55 backdrop-blur-2xl">
 
           <!-- Brand -->
           <NuxtLink to="/" class="flex items-center gap-2.5 shrink-0">
@@ -46,6 +46,18 @@
 
           <!-- Right cluster -->
           <div class="flex items-center gap-2 shrink-0">
+            <!-- Theme toggle -->
+            <button
+              @click="toggleDark"
+              :title="__('Toggle theme')" :aria-label="__('Toggle theme')"
+              class="flex cursor-pointer items-center justify-center h-9 w-9 rounded-lg text-slate-500 hover:bg-white/50 dark:hover:bg-white/10 hover:text-emerald-600 transition-colors"
+            >
+              <!-- moon (light mode → click for dark) -->
+              <svg class="w-[18px] h-[18px] dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+              <!-- sun (dark mode → click for light) -->
+              <svg class="w-[18px] h-[18px] hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+            </button>
+
             <!-- Language switcher -->
             <Popover>
               <PopoverTrigger as-child>
@@ -111,7 +123,7 @@
     </header>
 
     <!-- ═══ Mobile · slim top bar ════════════════════════════════ -->
-    <header class="lg:hidden sticky top-0 z-30 bg-white/55 backdrop-blur-2xl border-b border-white/50">
+    <header class="lg:hidden sticky top-0 z-30 bg-white/55 dark:bg-[#0e1f18]/60 backdrop-blur-2xl border-b border-white/50 dark:border-white/10">
       <div class="flex items-center justify-between h-14 px-4">
         <NuxtLink to="/" class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg overflow-hidden shadow ring-1 ring-[#c8a415]/30">
@@ -123,6 +135,16 @@
           </div>
         </NuxtLink>
         <div class="flex items-center gap-2">
+          <!-- Theme toggle -->
+          <button
+            @click="toggleDark"
+            :title="__('Toggle theme')" :aria-label="__('Toggle theme')"
+            class="flex cursor-pointer items-center justify-center h-9 w-9 rounded-lg text-slate-500 hover:text-emerald-600 transition-colors"
+          >
+            <svg class="w-[18px] h-[18px] dark:hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
+            <svg class="w-[18px] h-[18px] hidden dark:block" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M2 12h2.5M19.5 12H22M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+          </button>
+
           <!-- Language switcher -->
           <Popover>
             <PopoverTrigger as-child>
@@ -187,7 +209,7 @@
 
     <!-- Mobile bottom tab bar -->
     <nav
-      class="fixed bottom-0 inset-x-0 z-20 lg:hidden border-t border-white/50 bg-white/65 backdrop-blur-2xl pb-[env(safe-area-inset-bottom)]"
+      class="fixed bottom-0 inset-x-0 z-20 lg:hidden border-t border-white/50 dark:border-white/10 bg-white/65 dark:bg-[#0e1f18]/70 backdrop-blur-2xl pb-[env(safe-area-inset-bottom)]"
       style="box-shadow: 0 -10px 30px -12px rgba(6,78,59,0.25);"
     >
       <div class="grid grid-cols-4">
@@ -200,7 +222,7 @@
             :class="isActive(item.href)
               ? 'text-white ring-1 ring-emerald-300/50 shadow-[0_8px_20px_-6px_rgba(6,120,87,0.6)]'
               : 'text-slate-500 active:text-emerald-700'"
-            :style="isActive(item.href) ? 'background: linear-gradient(135deg, #047857, #10b981);' : ''"
+            :style="isActive(item.href) ? 'background: var(--nav-grad);' : ''"
           >
             <svg v-if="item.icon === 'dashboard'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
             <svg v-else-if="item.icon === 'attendance'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
@@ -219,6 +241,12 @@ import { computed, ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 
 const { user, logout } = useAuth()
+
+// Light / dark theme (persisted by @nuxtjs/color-mode)
+const colorMode = useColorMode()
+const toggleDark = () => {
+  colorMode.preference = colorMode.value === 'dark' ? 'light' : 'dark'
+}
 const { locale, locales, setLocale } = useI18n()
 
 const navigation = computed(() => [
@@ -284,10 +312,10 @@ const handleLogout = async () => {
   left: 0;
   height: 2.5rem;            /* matches h-10 nav links */
   border-radius: 0.75rem;    /* rounded-xl */
-  background: rgba(16, 185, 129, 0.15);
+  background: var(--nav-pill-bg);
   box-shadow:
-    inset 0 0 0 1px rgba(16, 185, 129, 0.42),
-    0 4px 14px -4px rgba(6, 120, 87, 0.30);
+    inset 0 0 0 1px var(--nav-pill-ring),
+    0 4px 14px -4px var(--nav-pill-glow);
   transition:
     transform 0.42s cubic-bezier(0.34, 1.18, 0.4, 1),
     width 0.42s cubic-bezier(0.34, 1.18, 0.4, 1),

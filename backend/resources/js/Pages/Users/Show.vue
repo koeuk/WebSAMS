@@ -65,7 +65,7 @@
                             </div>
                             <div class="flex items-center justify-between py-2">
                                 <p class="text-[13px] text-slate-500">{{ __('Address') }}</p>
-                                <p class="text-[13px] font-semibold text-slate-900 text-right max-w-[200px]">{{ user.address || '-' }}</p>
+                                <p class="text-[13px] font-semibold text-slate-900 text-right max-w-[200px]">{{ stripHtml(user.address) || '-' }}</p>
                             </div>
                         </div>
                     </CardContent>
@@ -145,6 +145,7 @@ import { Button } from '@/Components/ui/button';
 import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
 import { __ } from '@/Composables/useTranslate';
+import { stripHtml } from '@/lib/utils';
 
 const props = defineProps({ user: Object });
 

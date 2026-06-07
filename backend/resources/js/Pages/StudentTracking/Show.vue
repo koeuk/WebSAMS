@@ -158,7 +158,7 @@
                                 <TableCell>
                                     <Badge variant="outline" :class="statusClass(r.status)">{{ r.status }}</Badge>
                                 </TableCell>
-                                <TableCell>{{ r.remarks || '-' }}</TableCell>
+                                <TableCell>{{ stripHtml(r.remarks) || '-' }}</TableCell>
                             </TableRow>
                             <TableRow v-if="!recentRecords?.length">
                                 <TableCell colspan="9" class="text-center py-8 text-slate-400">{{ __('No records.') }}</TableCell>
@@ -180,6 +180,7 @@ import { Badge } from '@/Components/ui/badge';
 import { Card, CardContent } from '@/Components/ui/card';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { __ } from '@/Composables/useTranslate';
+import { stripHtml } from '@/lib/utils';
 
 const props = defineProps({ student: Object, bySubject: Array, overall: Object, recentRecords: Array, semester: Object, semesters: Array, filters: Object });
 

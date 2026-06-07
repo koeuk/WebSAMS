@@ -46,7 +46,7 @@
                                 <Badge variant="secondary" class="font-mono">{{ course.code }}</Badge>
                             </TableCell>
                             <TableCell class="font-mono text-[13px]">{{ course.subjects_count }}</TableCell>
-                            <TableCell class="max-w-[200px] truncate">{{ course.description || '-' }}</TableCell>
+                            <TableCell class="max-w-[200px] truncate">{{ stripHtml(course.description) || '-' }}</TableCell>
                             <TableCell class="text-right">
                                 <div class="flex items-center justify-end gap-1">
                                     <Button variant="ghost" size="sm" class="text-blue-600 hover:text-blue-700" @click="openEdit(course)">{{ __('Edit') }}</Button>
@@ -90,6 +90,7 @@ import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from '@/Components/ui/empty';
 import { BookOpen } from 'lucide-vue-next';
 import { __ } from '@/Composables/useTranslate';
+import { stripHtml } from '@/lib/utils';
 
 const props = defineProps({ courses: Object, filters: Object });
 const search = ref(props.filters?.search || '');
