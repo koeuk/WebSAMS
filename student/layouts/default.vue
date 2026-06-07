@@ -1,5 +1,5 @@
 <template>
-  <div class="relative isolate min-h-screen bg-paper">
+  <div class="relative isolate min-h-screen">
 
     <!-- Dotted atmosphere + cursor spotlight — spans the very top of the page (behind the header) -->
     <PageAtmosphere />
@@ -7,7 +7,7 @@
     <!-- ═══ Desktop · Floating command bar ═══════════════════════ -->
     <header class="hidden lg:block sticky top-0 z-40">
       <div class="relative max-w-[1340px] mx-auto px-8 pt-4 pb-2">
-        <div class="cmd-bar flex items-center h-[62px] px-2 gap-2 rounded-2xl border border-[#d4e6da] bg-[#e7f0ea]/85 backdrop-blur-xl">
+        <div class="cmd-bar flex items-center h-[62px] px-2 gap-2 rounded-2xl border border-white/60 bg-white/45 backdrop-blur-2xl">
 
           <!-- Brand -->
           <NuxtLink to="/" class="flex items-center gap-2.5 shrink-0">
@@ -28,10 +28,10 @@
               v-for="item in mainNav" :key="item.key" :to="item.href"
               :title="item.name"
               class="group flex items-center gap-2 px-2.5 xl:px-3 h-10 rounded-xl text-[13px] font-medium transition-all duration-200"
-              :class="isActive(item.href) ? 'bg-accent text-beltei font-semibold shadow-sm ring-1 ring-[#e3d4a4]' : 'text-slate-500 hover:bg-paper-inset hover:text-beltei'"
+              :class="isActive(item.href) ? 'bg-emerald-500/15 text-emerald-800 font-semibold shadow-sm ring-1 ring-emerald-400/40' : 'text-slate-500 hover:bg-white/55 hover:text-emerald-800'"
             >
               <NavIcon :name="item.icon" class="w-[17px] h-[17px] shrink-0 transition-colors"
-                       :class="isActive(item.href) ? 'text-beltei-gold' : 'text-slate-400 group-hover:text-beltei-gold'" />
+                       :class="isActive(item.href) ? 'text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600'" />
               <span class="hidden xl:inline whitespace-nowrap">{{ item.name }}</span>
             </NuxtLink>
           </nav>
@@ -43,7 +43,7 @@
             <!-- Language switcher -->
             <Popover>
               <PopoverTrigger as-child>
-                <button class="flex cursor-pointer items-center gap-1.5 h-9 px-2.5 rounded-lg text-[12px] font-semibold text-slate-600 hover:bg-paper-inset transition-colors">
+                <button class="flex cursor-pointer items-center gap-1.5 h-9 px-2.5 rounded-lg text-[12px] font-semibold text-slate-600 hover:bg-white/50 transition-colors">
                   <svg class="w-4 h-4 text-beltei-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15 15 0 010 20M12 2a15 15 0 000 20"/></svg>
                   <span class="hidden xl:inline">{{ currentLocaleName }}</span>
                   <svg class="w-3 h-3 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
@@ -55,10 +55,10 @@
                   :key="loc.code"
                   @click="setLocale(loc.code as any)"
                   class="w-full flex items-center justify-between gap-2 cursor-pointer px-3 py-2 text-[13px] rounded-md transition-colors"
-                  :class="loc.code === locale ? 'bg-accent text-beltei font-semibold' : 'text-slate-600 hover:bg-paper'"
+                  :class="loc.code === locale ? 'bg-accent text-emerald-800 font-semibold' : 'text-slate-600 hover:bg-paper'"
                 >
                   {{ loc.name }}
-                  <svg v-if="loc.code === locale" class="w-3.5 h-3.5 text-beltei-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                  <svg v-if="loc.code === locale" class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
                 </button>
               </PopoverContent>
             </Popover>
@@ -67,7 +67,7 @@
             <Popover :open="acctOpen" @update:open="(v) => acctOpen = v">
               <PopoverTrigger as-child>
                 <button
-                  class="flex items-center gap-1.5 h-10 pl-1 pr-1.5 rounded-xl hover:bg-paper-inset transition-colors cursor-pointer"
+                  class="flex items-center gap-1.5 h-10 pl-1 pr-1.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer"
                   :class="route.path === '/profile' ? 'bg-accent' : ''"
                 >
                   <div class="h-9 w-9 rounded-xl flex items-center justify-center text-white text-sm font-bold ring-1 ring-[#c8a415]/30 shrink-0"
@@ -105,7 +105,7 @@
     </header>
 
     <!-- ═══ Mobile · slim top bar ════════════════════════════════ -->
-    <header class="lg:hidden sticky top-0 z-30 bg-[#f7f5f0]/90 backdrop-blur-xl border-b border-line">
+    <header class="lg:hidden sticky top-0 z-30 bg-white/55 backdrop-blur-2xl border-b border-white/50">
       <div class="flex items-center justify-between h-14 px-4">
         <NuxtLink to="/" class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg overflow-hidden shadow ring-1 ring-[#c8a415]/30">
@@ -131,10 +131,10 @@
                 :key="loc.code"
                 @click="setLocale(loc.code as any)"
                 class="w-full flex items-center justify-between gap-2 cursor-pointer px-3 py-2 text-[13px] rounded-md transition-colors"
-                :class="loc.code === locale ? 'bg-accent text-beltei font-semibold' : 'text-slate-600 hover:bg-paper'"
+                :class="loc.code === locale ? 'bg-accent text-emerald-800 font-semibold' : 'text-slate-600 hover:bg-paper'"
               >
                 {{ loc.name }}
-                <svg v-if="loc.code === locale" class="w-3.5 h-3.5 text-beltei-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+                <svg v-if="loc.code === locale" class="w-3.5 h-3.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
               </button>
             </PopoverContent>
           </Popover>
@@ -181,8 +181,8 @@
 
     <!-- Mobile bottom tab bar -->
     <nav
-      class="fixed bottom-0 inset-x-0 z-20 lg:hidden border-t border-white/[0.07] pb-[env(safe-area-inset-bottom)]"
-      style="background: linear-gradient(0deg, #0b1424 0%, #0d182c 100%); box-shadow: 0 -8px 24px -10px rgba(11,20,36,0.55);"
+      class="fixed bottom-0 inset-x-0 z-20 lg:hidden border-t border-white/50 bg-white/65 backdrop-blur-2xl pb-[env(safe-area-inset-bottom)]"
+      style="box-shadow: 0 -10px 30px -12px rgba(6,78,59,0.25);"
     >
       <div class="grid grid-cols-4">
         <NuxtLink
@@ -192,9 +192,9 @@
           <span
             class="flex flex-col items-center justify-center gap-1 rounded-2xl px-2.5 py-1.5 transition-all duration-200"
             :class="isActive(item.href)
-              ? 'text-white ring-1 ring-[#c8a415]/30 shadow-[0_6px_16px_-6px_rgba(30,58,110,0.9)]'
-              : 'text-slate-400 active:text-slate-200'"
-            :style="isActive(item.href) ? 'background: linear-gradient(135deg, #1e3a6e, #2a4f8f);' : ''"
+              ? 'text-white ring-1 ring-emerald-300/50 shadow-[0_8px_20px_-6px_rgba(6,120,87,0.6)]'
+              : 'text-slate-500 active:text-emerald-700'"
+            :style="isActive(item.href) ? 'background: linear-gradient(135deg, #047857, #10b981);' : ''"
           >
             <svg v-if="item.icon === 'dashboard'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
             <svg v-else-if="item.icon === 'attendance'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
@@ -250,7 +250,12 @@ const handleLogout = async () => {
 
 <style scoped>
 .cmd-bar {
-  box-shadow: 0 16px 48px -18px rgba(22, 41, 77, 0.30), 0 2px 8px rgba(22, 41, 77, 0.05);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.85),          /* specular top edge */
+    0 18px 50px -20px rgba(6, 78, 59, 0.35),           /* emerald-tinted glass shadow */
+    0 2px 8px -3px rgba(6, 78, 59, 0.10);
   animation: barDrop 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 

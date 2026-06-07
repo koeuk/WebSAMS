@@ -297,6 +297,8 @@
 .stat-card-amber   { --accent: #f59e0b; --accent-glow: rgba(245, 158, 11, 0.42); }
 .stat-card-rose    { --accent: #f43f5e; --accent-glow: rgba(244, 63, 94, 0.38); }
 .stat-card-violet  { --accent: #8b5cf6; --accent-glow: rgba(139, 92, 246, 0.40); }
+.stat-card-sky     { --accent: #0ea5e9; --accent-glow: rgba(14, 165, 233, 0.38); }
+.stat-card-slate   { --accent: #64748b; --accent-glow: rgba(100, 116, 139, 0.30); }
 
 @media (prefers-reduced-motion: reduce) {
     .aurora-bg::before { animation: none; }

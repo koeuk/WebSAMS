@@ -12,41 +12,52 @@
 @layer base {
   :root {
     /* ── Brand palette ──────────────────────────────── */
-    --brand-ink:       #0b1424;   /* deepest navy (sidebar)   */
+    --brand-ink:       #0b1424;   /* deepest navy (ink / text) */
     --brand-navy-deep: #16294d;
-    --brand-navy:      #1e3a6e;    /* primary navy            */
+    --brand-navy:      #1e3a6e;
     --brand-navy-soft: #2a4f8f;
-    --brand-gold:      #c8a415;    /* primary gold            */
+    --brand-gold:      #c8a415;
     --brand-gold-soft: #d8b53a;
     --brand-gold-deep: #a8870f;
+    /* Emerald — the hero accent (Liquid Glass) */
+    --brand-emerald:      #047857;
+    --brand-emerald-soft: #10b981;
+    --brand-emerald-deep: #065f46;
+    --brand-emerald-glow: rgba(16, 185, 129, 0.45);
 
-    /* ── Warm paper canvas ──────────────────────────── */
-    --paper:   #f7f5f0;            /* page background         */
-    --paper-2: #efece4;            /* inset / subtle fill     */
-    --line:    #e7e2d8;            /* hairline border         */
-    --line-strong: #d9d2c4;
+    /* ── Cool glass canvas ──────────────────────────── */
+    --paper:   #e9f1ed;           /* page background (cool mint) */
+    --paper-2: #dfe9e3;           /* inset / subtle fill        */
+    --line:    #d8e4dd;           /* hairline border            */
+    --line-strong: #c4d4cb;
 
-    /* ── shadcn semantic tokens (recolored to brand) ── */
-    --background: 40 33% 97%;
-    --foreground: 222 45% 11%;
+    /* ── Glass material tokens ──────────────────────── */
+    --glass-fill:   rgba(255, 255, 255, 0.55);
+    --glass-fill-2: rgba(255, 255, 255, 0.66);
+    --glass-edge:   rgba(255, 255, 255, 0.65);
+    --glass-shadow: rgba(6, 78, 59, 0.22);
+
+    /* ── shadcn semantic tokens (emerald-recolored) ── */
+    --background: 150 28% 95%;
+    --foreground: 200 40% 12%;
     --card: 0 0% 100%;
-    --card-foreground: 222 45% 11%;
+    --card-foreground: 200 40% 12%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222 45% 11%;
-    --primary: 219 57% 27%;             /* navy */
-    --primary-foreground: 40 40% 98%;
-    --secondary: 40 22% 92%;
-    --secondary-foreground: 219 57% 27%;
-    --muted: 40 20% 94%;
-    --muted-foreground: 220 14% 46%;
-    --accent: 44 36% 90%;               /* warm gold tint */
-    --accent-foreground: 219 57% 24%;
+    --popover-foreground: 200 40% 12%;
+    --primary: 162 92% 24%;             /* emerald */
+    --primary-foreground: 150 40% 98%;
+    --secondary: 152 22% 91%;
+    --secondary-foreground: 162 70% 20%;
+    --muted: 150 18% 93%;
+    --muted-foreground: 200 12% 44%;
+    --accent: 152 48% 89%;              /* emerald tint */
+    --accent-foreground: 162 84% 18%;
     --destructive: 0 64% 47%;
     --destructive-foreground: 40 40% 98%;
-    --border: 40 22% 87%;
-    --input: 40 22% 87%;
-    --ring: 219 57% 32%;
-    --radius: 0.75rem;
+    --border: 150 18% 85%;
+    --input: 150 18% 85%;
+    --ring: 162 76% 30%;
+    --radius: 1rem;
   }
 
   * {
@@ -63,6 +74,13 @@
 
   body {
     background-color: var(--paper);
+    /* Aurora light-blooms behind the glass — fixed so surfaces refract a stable backdrop */
+    background-image:
+      radial-gradient(58% 50% at 10% -4%,  rgba(16, 185, 129, 0.22), transparent 60%),
+      radial-gradient(54% 48% at 102% 6%,  rgba(45, 212, 191, 0.20), transparent 58%),
+      radial-gradient(52% 46% at 88% 104%, rgba(5, 150, 105, 0.16), transparent 60%),
+      radial-gradient(46% 42% at -4% 96%,  rgba(56, 189, 248, 0.12), transparent 60%);
+    background-attachment: fixed;
     @apply text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: 'cv11', 'ss01';
@@ -122,14 +140,24 @@
 
   /* ── Card ──────────────────────────────────────────── */
   .card {
-    @apply relative bg-white rounded-2xl transition-all duration-300;
-    border: 1px solid var(--line);
-    box-shadow: 0 1px 2px rgba(27, 33, 48, 0.04);
+    @apply relative rounded-[20px] transition-all duration-300;
+    background: var(--glass-fill);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid var(--glass-edge);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.7),
+      0 12px 32px -14px var(--glass-shadow),
+      0 2px 6px -3px rgba(6, 78, 59, 0.10);
   }
   .card-hover:hover {
-    border-color: var(--line-strong);
-    box-shadow: 0 10px 30px -12px rgba(22, 41, 77, 0.18), 0 2px 6px rgba(27, 33, 48, 0.05);
-    transform: translateY(-2px);
+    background: var(--glass-fill-2);
+    border-color: rgba(255, 255, 255, 0.85);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.85),
+      0 22px 50px -18px rgba(6, 78, 59, 0.34),
+      0 0 0 1px rgba(16, 185, 129, 0.10);
+    transform: translateY(-3px);
   }
 
   /* ── Page header ───────────────────────────────────── */
@@ -144,7 +172,7 @@
     height: 2px;
     width: 52px;
     border-radius: 2px;
-    background: linear-gradient(90deg, var(--brand-gold), rgba(200, 164, 21, 0));
+    background: linear-gradient(90deg, var(--brand-emerald-soft), rgba(16, 185, 129, 0));
     transform-origin: left center;
     animation: ruleGrow 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
     animation-delay: 120ms;
@@ -157,8 +185,8 @@
   }
   .section-tick {
     @apply inline-block w-2.5 h-2.5 rounded-[3px] shrink-0;
-    background: linear-gradient(135deg, var(--brand-gold), var(--brand-gold-deep));
-    box-shadow: 0 0 0 3px rgba(200, 164, 21, 0.12);
+    background: linear-gradient(135deg, var(--brand-emerald-soft), var(--brand-emerald-deep));
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
   }
   .section-title {
     @apply text-[12px] font-bold uppercase text-slate-700;
@@ -192,7 +220,7 @@
   .badge-absent  { @apply bg-rose-50 text-rose-700 ring-1 ring-rose-200; }
   .badge-late    { @apply bg-amber-50 text-amber-700 ring-1 ring-amber-200; }
   .badge-excused { @apply bg-sky-50 text-sky-700 ring-1 ring-sky-200; }
-  .badge-neutral { @apply bg-[#f1ede3] text-slate-600 ring-1 ring-[#e0d9c8]; }
+  .badge-neutral { @apply bg-[#e3efe8] text-slate-600 ring-1 ring-[#cfe0d6]; }
   .badge-gold    { @apply bg-[#faf3dc] text-[#8a6d0a] ring-1 ring-[#ecd99a]; }
   .badge-navy    { @apply bg-[#eef2f9] text-[#1e3a6e] ring-1 ring-[#c9d6ec]; }
 
@@ -201,11 +229,11 @@
   .modern-table thead th {
     @apply px-6 py-3.5 text-[11px] font-bold uppercase text-slate-400;
     letter-spacing: 0.1em;
-    background: #faf8f3;
+    background: rgba(255, 255, 255, 0.35);
     border-bottom: 1px solid var(--line);
   }
   .modern-table tbody tr { @apply transition-colors; }
-  .modern-table tbody tr:hover { background: #faf8f3; }
+  .modern-table tbody tr:hover { background: rgba(16, 185, 129, 0.06); }
   .modern-table tbody td { @apply px-6 py-3.5 text-sm text-slate-600; border-bottom: 1px solid var(--line); }
 
   /* ── Inputs ────────────────────────────────────────── */
@@ -213,7 +241,7 @@
     @apply w-full px-3.5 py-2.5 text-sm rounded-xl bg-white text-slate-900 outline-none transition-all;
     border: 1.5px solid var(--line-strong);
   }
-  .input-modern:focus { border-color: var(--brand-navy); box-shadow: 0 0 0 3px rgba(30, 58, 110, 0.12); }
+  .input-modern:focus { border-color: var(--brand-emerald); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18); }
   .input-modern::placeholder { @apply text-slate-400; }
 
   .select-modern {
@@ -223,15 +251,15 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 5.5L8 9l3.5-3.5'/%3E%3C/svg%3E");
     background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px;
   }
-  .select-modern:focus { border-color: var(--brand-navy); box-shadow: 0 0 0 3px rgba(30, 58, 110, 0.12); }
+  .select-modern:focus { border-color: var(--brand-emerald); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.18); }
 
   /* ── Buttons ───────────────────────────────────────── */
   .btn-primary {
     @apply inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white rounded-xl border-none cursor-pointer transition-all;
-    background: linear-gradient(135deg, #1e3a6e, #2a4f8f);
-    box-shadow: 0 1px 2px rgba(30, 58, 110, 0.3), inset 0 1px 0 rgba(255,255,255,0.12);
+    background: linear-gradient(135deg, #047857, #10b981);
+    box-shadow: 0 1px 2px rgba(6, 78, 59, 0.3), inset 0 1px 0 rgba(255,255,255,0.20);
   }
-  .btn-primary:hover { background: linear-gradient(135deg, #16294d, #1e3a6e); box-shadow: 0 8px 20px -6px rgba(30, 58, 110, 0.45); transform: translateY(-1px); }
+  .btn-primary:hover { background: linear-gradient(135deg, #065f46, #059669); box-shadow: 0 8px 22px -6px rgba(6, 120, 87, 0.5); transform: translateY(-1px); }
   .btn-primary:disabled { @apply opacity-60 cursor-not-allowed; transform: none; box-shadow: none; }
 
   .btn-secondary {

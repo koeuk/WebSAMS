@@ -54,12 +54,12 @@ const mouseOpacity = computed(() => (isOutside.value ? '0' : '1'))
           mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 100%);
 }
 
-/* ── Static atmosphere: dotted grid + warm/sage corner tints ── */
+/* ── Static atmosphere: dotted grid + emerald/teal corner tints ── */
 .page-atmosphere__static {
   background:
-    radial-gradient(130% 90% at 0% 0%,   rgba(200, 164, 21, 0.10), transparent 50%), /* warm gold (top-left) */
-    radial-gradient(130% 90% at 100% 0%, rgba(94, 140, 108, 0.10), transparent 52%), /* cool sage (top-right) */
-    radial-gradient(circle, rgba(27, 33, 48, 0.06) 1px, transparent 1.6px);          /* dotted grid */
+    radial-gradient(130% 90% at 0% 0%,   rgba(16, 185, 129, 0.12), transparent 50%), /* emerald (top-left) */
+    radial-gradient(130% 90% at 100% 0%, rgba(45, 212, 191, 0.12), transparent 52%), /* teal (top-right)    */
+    radial-gradient(circle, rgba(6, 78, 59, 0.06) 1px, transparent 1.6px);           /* dotted grid        */
   background-size: 100% 100%, 100% 100%, 18px 18px;
   background-repeat: no-repeat, no-repeat, repeat;
 }
@@ -68,8 +68,8 @@ const mouseOpacity = computed(() => (isOutside.value ? '0' : '1'))
 .page-atmosphere__spotlight {
   background: radial-gradient(
     560px circle at var(--mouse-x, 50%) var(--mouse-y, -200px),
-    rgba(200, 164, 21, 0.14),
-    rgba(200, 164, 21, 0.05) 30%,
+    rgba(16, 185, 129, 0.16),
+    rgba(16, 185, 129, 0.06) 30%,
     transparent 66%
   );
   /* Only opacity is transitioned — gradients can't interpolate cross-browser */
