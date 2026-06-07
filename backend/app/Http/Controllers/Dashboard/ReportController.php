@@ -89,7 +89,9 @@ class ReportController extends Controller
 
         $semester = $semesterId ? Semester::find($semesterId) : null;
 
-        return Inertia::render('Reports/Show', [
+        // Render the report results inline on the same Reports/Index page
+        // (filter card on top, generated data below) instead of a separate page.
+        return Inertia::render('Reports/Index', [
             'studentSummary' => $studentSummary,
             'overall'        => $overall,
             'semester'       => $semester,

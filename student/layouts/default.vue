@@ -23,12 +23,18 @@
           <div class="h-7 w-px bg-line mx-1 shrink-0"></div>
 
           <!-- Nav pills -->
-          <nav class="flex items-center justify-center gap-0.5 flex-1 min-w-0">
+          <nav ref="navRef" class="relative flex items-center justify-center gap-0.5 flex-1 min-w-0">
+            <!-- Sliding active indicator (glides to the current route) -->
+            <span
+              class="nav-indicator"
+              :style="{ transform: `translateX(${indicator.x}px)`, width: indicator.w + 'px', opacity: indicator.show ? 1 : 0 }"
+            ></span>
             <NuxtLink
               v-for="item in mainNav" :key="item.key" :to="item.href"
               :title="item.name"
-              class="group flex items-center gap-2 px-2.5 xl:px-3 h-10 rounded-xl text-[13px] font-medium transition-all duration-200"
-              :class="isActive(item.href) ? 'bg-emerald-500/15 text-emerald-800 font-semibold shadow-sm ring-1 ring-emerald-400/40' : 'text-slate-500 hover:bg-white/55 hover:text-emerald-800'"
+              :data-active="isActive(item.href)"
+              class="group relative z-[1] flex items-center gap-2 px-2.5 xl:px-3 h-10 rounded-xl text-[13px] font-medium transition-colors duration-200"
+              :class="isActive(item.href) ? 'text-emerald-800 font-semibold' : 'text-slate-500 hover:text-emerald-700'"
             >
               <NavIcon :name="item.icon" class="w-[17px] h-[17px] shrink-0 transition-colors"
                        :class="isActive(item.href) ? 'text-emerald-600' : 'text-slate-400 group-hover:text-emerald-600'" />
@@ -209,7 +215,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 
 const { user, logout } = useAuth()
@@ -242,6 +248,28 @@ const currentLocaleName = computed(() => {
 const route = useRoute()
 const isActive = (href: string) => route.path === href || (href !== '/' && route.path.startsWith(href))
 
+// Sliding active indicator for the desktop command-bar nav
+const navRef = ref<HTMLElement | null>(null)
+const indicator = ref({ x: 0, w: 0, show: false })
+const moveIndicator = () => {
+  const nav = navRef.value
+  if (!nav) return
+  const active = nav.querySelector<HTMLElement>('[data-active="true"]')
+  if (!active) { indicator.value = { ...indicator.value, show: false }; return }
+  const navRect = nav.getBoundingClientRect()
+  const r = active.getBoundingClientRect()
+  indicator.value = { x: r.left - navRect.left, w: r.width, show: true }
+}
+onMounted(() => {
+  nextTick(moveIndicator)
+  window.addEventListener('resize', moveIndicator)
+  // Re-measure once web fonts settle (label widths can shift on load)
+  ;(document as any).fonts?.ready?.then(() => moveIndicator())
+})
+onBeforeUnmount(() => window.removeEventListener('resize', moveIndicator))
+// Re-measure on navigation and on language change (label widths shift)
+watch([() => route.path, locale], () => nextTick(moveIndicator))
+
 const handleLogout = async () => {
   await logout()
   navigateTo('/auth/login')
@@ -249,6 +277,27 @@ const handleLogout = async () => {
 </script>
 
 <style scoped>
+/* Sliding active pill — glides between nav items with a soft "liquid" overshoot */
+.nav-indicator {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2.5rem;            /* matches h-10 nav links */
+  border-radius: 0.75rem;    /* rounded-xl */
+  background: rgba(16, 185, 129, 0.15);
+  box-shadow:
+    inset 0 0 0 1px rgba(16, 185, 129, 0.42),
+    0 4px 14px -4px rgba(6, 120, 87, 0.30);
+  transition:
+    transform 0.42s cubic-bezier(0.34, 1.18, 0.4, 1),
+    width 0.42s cubic-bezier(0.34, 1.18, 0.4, 1),
+    opacity 0.25s ease;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nav-indicator { transition: opacity 0.2s ease; }
+}
+
 .cmd-bar {
   -webkit-backdrop-filter: blur(24px) saturate(180%);
   backdrop-filter: blur(24px) saturate(180%);
