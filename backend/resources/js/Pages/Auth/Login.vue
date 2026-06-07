@@ -12,7 +12,7 @@
                 <CardContent class="p-10">
                     <div class="text-center mb-8">
                         <div class="w-20 h-20 rounded-2xl overflow-hidden shadow-lg mb-4 inline-block">
-                            <img src="/logo1.png" alt="BELTEI International University" class="w-full h-full object-cover" />
+                            <img :src="logoSrc" @error="logoError = true" alt="BELTEI International University" class="w-full h-full object-cover" />
                         </div>
                         <h1 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('WebSAMS') }}</h1>
                         <p class="text-[13px] text-slate-500 mt-1">{{ __('Student Attendance Management System') }}</p>
@@ -52,7 +52,7 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useForm } from '@inertiajs/vue3';
+import { useForm, usePage } from '@inertiajs/vue3';
 import { useMouseInElement } from '@vueuse/core';
 import { __ } from '@/Composables/useTranslate';
 import { Input } from '@/Components/ui/input';
@@ -68,6 +68,10 @@ const spotlightStyle = computed(() => ({
     '--mouse-y': `${elementY.value}px`,
     '--mouse-opacity': isOutside.value ? 0 : 1,
 }));
+
+const page = usePage();
+const logoError = ref(false);
+const logoSrc = computed(() => (!logoError.value && page.props.university_logo) ? page.props.university_logo : '/logo1.png');
 
 const form = useForm({ email: '', password: '' });
 

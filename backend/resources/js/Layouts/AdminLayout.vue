@@ -11,7 +11,7 @@
                 :class="sidebarOpen ? 'px-6' : 'px-0 justify-center'"
             >
                 <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shrink-0">
-                    <img :src="universityLogo || '/logo1.png'" alt="BELTEI" class="w-full h-full object-cover" />
+                    <img :src="logoSrc" @error="logoError = true" alt="BELTEI" class="w-full h-full object-cover" />
                 </div>
                 <div v-show="sidebarOpen" class="min-w-0">
                     <h1 class="text-[15px] font-bold text-white tracking-tight whitespace-nowrap">{{ __('WebSAMS') }}</h1>
@@ -215,12 +215,15 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import Toaster from '@/Components/ui/sonner/Sonner.vue';
 import FlashMessage from '@/Components/FlashMessage.vue';
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { __, useI18n } from '@/Composables/useTranslate';
 
 const page = usePage();
 const user = page.props.auth.user;
 const universityLogo = computed(() => page.props.university_logo || null);
+const logoError = ref(false);
+watch(universityLogo, () => { logoError.value = false; });
+const logoSrc = computed(() => (!logoError.value && universityLogo.value) ? universityLogo.value : '/logo1.png');
 
 const { locale, locales, setLocale } = useI18n();
 const langOpen = ref(false);
