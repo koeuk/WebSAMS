@@ -1,5 +1,8 @@
 <template>
-  <div class="min-h-screen bg-paper">
+  <div class="relative isolate min-h-screen bg-paper">
+
+    <!-- Dotted atmosphere + cursor spotlight — spans the very top of the page (behind the header) -->
+    <PageAtmosphere />
 
     <!-- ═══ Desktop · Floating command bar ═══════════════════════ -->
     <header class="hidden lg:block sticky top-0 z-40">
@@ -171,7 +174,6 @@
     </header>
 
     <main class="relative isolate">
-      <PageAtmosphere />
       <div :key="route.path" class="enter-rise p-3 pb-24 sm:p-6 sm:pb-24 lg:px-8 lg:pt-2 lg:pb-10 max-w-[1340px] mx-auto">
         <slot />
       </div>
