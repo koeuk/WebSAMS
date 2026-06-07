@@ -57,9 +57,9 @@ const mouseOpacity = computed(() => (isOutside.value ? '0' : '1'))
 /* ── Static atmosphere: dotted grid + emerald/teal corner tints ── */
 .page-atmosphere__static {
   background:
-    radial-gradient(130% 90% at 0% 0%,   rgba(16, 185, 129, 0.12), transparent 50%), /* emerald (top-left) */
-    radial-gradient(130% 90% at 100% 0%, rgba(45, 212, 191, 0.12), transparent 52%), /* teal (top-right)    */
-    radial-gradient(circle, rgba(6, 78, 59, 0.06) 1px, transparent 1.6px);           /* dotted grid        */
+    radial-gradient(130% 90% at 0% 0%,   var(--atmo-tint-1), transparent 50%), /* corner glow (top-left)  */
+    radial-gradient(130% 90% at 100% 0%, var(--atmo-tint-2), transparent 52%), /* corner glow (top-right) */
+    radial-gradient(circle, var(--atmo-dot) 1px, transparent 1.6px);          /* dotted grid             */
   background-size: 100% 100%, 100% 100%, 18px 18px;
   background-repeat: no-repeat, no-repeat, repeat;
 }
@@ -68,9 +68,8 @@ const mouseOpacity = computed(() => (isOutside.value ? '0' : '1'))
 .page-atmosphere__spotlight {
   background: radial-gradient(
     560px circle at var(--mouse-x, 50%) var(--mouse-y, -200px),
-    rgba(16, 185, 129, 0.16),
-    rgba(16, 185, 129, 0.06) 30%,
-    transparent 66%
+    var(--atmo-spot),
+    transparent 62%
   );
   /* Only opacity is transitioned — gradients can't interpolate cross-browser */
   opacity: var(--mouse-opacity, 0);

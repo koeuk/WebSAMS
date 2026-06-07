@@ -43,6 +43,12 @@
     --nav-pill-glow: rgba(6, 120, 87, 0.30);
     --nav-grad: linear-gradient(135deg, #047857, #10b981);
 
+    /* Atmosphere (dotted grid + corner glow + cursor spotlight) */
+    --atmo-tint-1: rgba(16, 185, 129, 0.12);
+    --atmo-tint-2: rgba(45, 212, 191, 0.12);
+    --atmo-dot:    rgba(6, 78, 59, 0.06);
+    --atmo-spot:   rgba(16, 185, 129, 0.16);
+
     /* ── shadcn semantic tokens (emerald-recolored) ── */
     --background: 150 28% 95%;
     --foreground: 200 40% 12%;
@@ -313,6 +319,12 @@
   --nav-pill-ring: rgba(255, 224, 194, 0.42);
   --nav-pill-glow: rgba(255, 224, 194, 0.18);
   --nav-grad: linear-gradient(135deg, #ffe0c2, #f0c79e);
+
+  /* warm atmosphere on the night canvas */
+  --atmo-tint-1: rgba(255, 224, 194, 0.07);
+  --atmo-tint-2: rgba(217, 168, 119, 0.06);
+  --atmo-dot:    rgba(255, 255, 255, 0.035);
+  --atmo-spot:   rgba(255, 224, 194, 0.10);
 
   /* shadcn semantic tokens (Caffeine) */
   --background: 0 0% 7%;

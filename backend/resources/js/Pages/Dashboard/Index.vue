@@ -71,10 +71,20 @@
             <!-- Weekly Chart -->
             <Card class="mb-8 animate-fade-in-up" style="animation-delay: 200ms;">
                 <CardContent class="p-6">
-                    <div class="flex items-center justify-between mb-6">
+                    <div class="flex items-start justify-between mb-6 gap-4">
                         <div>
-                            <h3 class="text-base font-semibold text-slate-900">{{ __('Weekly Attendance') }}</h3>
-                            <p class="text-[13px] text-slate-500 mt-0.5">{{ __('Attendance overview for the past week') }}</p>
+                            <h3 class="text-base font-semibold text-slate-900">{{ __('Attendance Overview') }}</h3>
+                            <p class="text-[13px] text-slate-500 mt-0.5">{{ __('Showing') }}: {{ rangeLabel }}</p>
+                        </div>
+                        <div class="relative shrink-0">
+                            <select
+                                v-model="range"
+                                class="appearance-none glass-btn rounded-full pl-4 pr-9 py-2 text-[13px] font-medium text-slate-700 cursor-pointer focus:outline-none"
+                                :aria-label="__('Select range')"
+                            >
+                                <option v-for="o in rangeOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
+                            </select>
+                            <svg class="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
                         </div>
                     </div>
                     <div style="height: 280px;">
@@ -123,6 +133,8 @@
 
 <script setup>
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import { computed, ref, watch } from 'vue';
+import { router } from '@inertiajs/vue3';
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Card, CardContent } from '@/Components/ui/card';
@@ -135,6 +147,7 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 const props = defineProps({
     stats: Object,
     weeklyChart: Array,
+    chartRange: String,
     recentAttendance: Array,
 });
 
@@ -148,14 +161,34 @@ const barGradient = (from, to) => (ctx) => {
     return grad;
 };
 
-const chartData = {
+const chartData = computed(() => ({
     labels: props.weeklyChart?.map(d => d.date) || [],
     datasets: [
         { label: __('Present'), data: props.weeklyChart?.map(d => d.present) || [], backgroundColor: barGradient('rgba(5,150,105,0.85)', 'rgba(52,211,153,0.95)'), borderRadius: 8, borderSkipped: false, maxBarThickness: 26 },
         { label: __('Absent'), data: props.weeklyChart?.map(d => d.absent) || [], backgroundColor: barGradient('rgba(225,29,72,0.85)', 'rgba(251,113,133,0.95)'), borderRadius: 8, borderSkipped: false, maxBarThickness: 26 },
         { label: __('Late'), data: props.weeklyChart?.map(d => d.late) || [], backgroundColor: barGradient('rgba(217,119,6,0.85)', 'rgba(251,191,36,0.95)'), borderRadius: 8, borderSkipped: false, maxBarThickness: 26 },
     ],
-};
+}));
+
+// Chart range selector
+const rangeOptions = [
+    { value: 'this_week', label: __('This Week') },
+    { value: 'last_week', label: __('Last Week') },
+    { value: 'this_month', label: __('This Month') },
+    { value: 'last_month', label: __('Last Month') },
+    { value: 'this_year', label: __('This Year') },
+    { value: 'last_year', label: __('Last Year') },
+    { value: 'all', label: __('All') },
+];
+const range = ref(props.chartRange || 'this_week');
+const rangeLabel = computed(() => rangeOptions.find(o => o.value === range.value)?.label || '');
+watch(range, (val) => {
+    router.get('/admin/dashboard', { range: val }, {
+        preserveScroll: true,
+        preserveState: true,
+        only: ['weeklyChart', 'chartRange'],
+    });
+});
 
 const chartOptions = {
     responsive: true,
