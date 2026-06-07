@@ -76,16 +76,14 @@
                             <h3 class="text-base font-semibold text-slate-900">{{ __('Attendance Overview') }}</h3>
                             <p class="text-[13px] text-slate-500 mt-0.5">{{ __('Showing') }}: {{ rangeLabel }}</p>
                         </div>
-                        <div class="relative shrink-0">
-                            <select
-                                v-model="range"
-                                class="appearance-none glass-btn rounded-full pl-4 pr-9 py-2 text-[13px] font-medium text-slate-700 cursor-pointer focus:outline-none"
-                                :aria-label="__('Select range')"
-                            >
-                                <option v-for="o in rangeOptions" :key="o.value" :value="o.value">{{ o.label }}</option>
-                            </select>
-                            <svg class="w-4 h-4 text-slate-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
-                        </div>
+                        <Select v-model="range">
+                            <SelectTrigger class="w-40 shrink-0">
+                                <SelectValue :placeholder="__('Select range')" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem v-for="o in rangeOptions" :key="o.value" :value="o.value">{{ o.label }}</SelectItem>
+                            </SelectContent>
+                        </Select>
                     </div>
                     <div style="height: 280px;">
                         <Bar :data="chartData" :options="chartOptions" />
@@ -138,6 +136,7 @@ import { router } from '@inertiajs/vue3';
 import { Bar } from 'vue-chartjs';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Card, CardContent } from '@/Components/ui/card';
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select';
 import { Badge } from '@/Components/ui/badge';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '@/Components/ui/table';
 import { __ } from '@/Composables/useTranslate';
