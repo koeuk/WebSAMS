@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\SchoolClassController;
 use App\Http\Controllers\Dashboard\SubjectController;
 use App\Http\Controllers\Dashboard\AttendanceController;
+use App\Http\Controllers\Dashboard\BulkAttendanceController;
 use App\Http\Controllers\Dashboard\ReportController;
 use App\Http\Controllers\Dashboard\ScheduleController;
 use App\Http\Controllers\Dashboard\SemesterController;
@@ -43,6 +44,9 @@ Route::prefix('admin')->middleware(['auth', 'role:admin'])->name('admin.')->grou
     Route::post('/class-students', [ClassStudentController::class, 'store'])->name('class-students.store');
     Route::delete('/class-students/{classStudent}', [ClassStudentController::class, 'destroy'])->name('class-students.destroy');
     Route::resource('attendance', AttendanceController::class);
+    Route::get('/bulk-attendance/students', [BulkAttendanceController::class, 'loadStudents'])->name('bulk-attendance.students');
+    Route::get('/bulk-attendance', [BulkAttendanceController::class, 'create'])->name('bulk-attendance.create');
+    Route::post('/bulk-attendance', [BulkAttendanceController::class, 'store'])->name('bulk-attendance.store');
     Route::resource('semesters', SemesterController::class)->except(['show']);
     Route::get('/semesters/{semester}/delete', [SemesterController::class, 'delete'])->name('semesters.delete');
     Route::resource('schedules', ScheduleController::class);

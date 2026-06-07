@@ -13,7 +13,7 @@
                 </div>
             </div>
 
-            <Card class="max-w-xl">
+            <Card>
                 <CardContent class="p-8">
                     <form @submit.prevent="submit" class="space-y-5">
                         <div>

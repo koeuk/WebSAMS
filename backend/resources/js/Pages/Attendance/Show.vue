@@ -21,7 +21,7 @@
                 </Button>
             </div>
 
-            <Card class="max-w-xl">
+            <Card>
                 <CardContent class="p-6">
                     <div class="space-y-4">
                         <div class="flex items-center justify-between py-2.5 border-b border-slate-50">
