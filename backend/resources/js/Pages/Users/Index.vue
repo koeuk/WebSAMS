@@ -57,7 +57,6 @@
                         <TableRow>
                             <TableHead class="text-left">{{ __('ID') }}</TableHead>
                             <TableHead class="text-left">{{ __('Name') }}</TableHead>
-                            <TableHead class="text-left">{{ __('Email') }}</TableHead>
                             <TableHead class="text-left">{{ __('Role') }}</TableHead>
                             <TableHead class="text-left">{{ __('Gender') }}</TableHead>
                             <TableHead class="text-left">{{ __('Status') }}</TableHead>
@@ -67,10 +66,18 @@
                     <TableBody>
                         <TableRow v-for="user in users.data" :key="user.id">
                             <TableCell class="text-slate-400 font-mono text-[13px]">{{ user.id_number || '-' }}</TableCell>
-                            <TableCell class="font-semibold text-slate-900">
-                                <Link :href="`/admin/users/${user.id}`" class="hover:text-beltei transition-colors">{{ user.name }}</Link>
+                            <TableCell>
+                                <div class="flex items-center gap-3">
+                                    <div class="w-9 h-9 rounded-full overflow-hidden ring-1 ring-slate-200 bg-slate-100 flex items-center justify-center shrink-0">
+                                        <img v-if="user.profile_photo" :src="`/storage/${user.profile_photo}`" alt="" class="w-full h-full object-cover" />
+                                        <span v-else class="text-[12px] font-bold text-slate-400">{{ initials(user.name) }}</span>
+                                    </div>
+                                    <div class="min-w-0">
+                                        <Link :href="`/admin/users/${user.id}`" class="block font-semibold text-slate-900 hover:text-beltei transition-colors truncate">{{ user.name }}</Link>
+                                        <p class="text-[12px] text-slate-400 truncate">{{ user.email }}</p>
+                                    </div>
+                                </div>
                             </TableCell>
-                            <TableCell>{{ user.email }}</TableCell>
                             <TableCell>
                                 <Badge :variant="roleBadgeVariant(user.role)" class="capitalize">{{ user.role }}</Badge>
                             </TableCell>
@@ -89,7 +96,7 @@
                             </TableCell>
                         </TableRow>
                         <TableRow v-if="!users.data?.length">
-                            <TableCell colspan="7" class="p-0">
+                            <TableCell colspan="6" class="p-0">
                                 <Empty class="border-0 rounded-none">
                                     <EmptyHeader>
                                         <EmptyMedia variant="icon"><Users class="w-6 h-6" /></EmptyMedia>
@@ -177,6 +184,9 @@ const openEdit = (user) => {
     editingUser.value = user;
     showForm.value = true;
 };
+
+// ── Avatar fallback initials ─────────────────────────────────────────────────
+const initials = (name) => (name || '?').trim().split(/\s+/).slice(0, 2).map(w => w[0]).join('').toUpperCase();
 
 // ── Badges ───────────────────────────────────────────────────────────────────
 const roleBadgeVariant = (role) => {

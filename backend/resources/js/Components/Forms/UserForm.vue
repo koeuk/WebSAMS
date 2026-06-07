@@ -20,6 +20,25 @@
                     {{ __('Basic Info') }}
                 </h3>
                 <div class="space-y-4">
+                    <!-- Profile photo -->
+                    <div class="flex items-center gap-4">
+                        <div class="relative w-16 h-16 rounded-full overflow-hidden ring-2 ring-slate-200 bg-slate-100 flex items-center justify-center shrink-0">
+                            <img v-if="photoPreview" :src="photoPreview" alt="" class="w-full h-full object-cover" />
+                            <UserRound v-else class="w-7 h-7 text-slate-300" />
+                        </div>
+                        <div>
+                            <input ref="photoInput" type="file" accept="image/*" class="hidden" @change="onPhotoChange" />
+                            <div class="flex items-center gap-2">
+                                <Button variant="outline" type="button" class="h-8 px-3 text-xs gap-1.5" @click="photoInput?.click()">
+                                    <Upload class="w-3.5 h-3.5" /> {{ __('Upload photo') }}
+                                </Button>
+                                <Button v-if="form.profile_photo" variant="ghost" type="button" class="h-8 px-2.5 text-xs text-slate-500" @click="clearPhoto">{{ __('Remove') }}</Button>
+                            </div>
+                            <p class="text-[11px] text-slate-400 mt-1.5">{{ __('JPG or PNG, up to 2MB.') }}</p>
+                            <p v-if="form.errors.profile_photo" class="text-[12px] text-rose-500 mt-1">{{ form.errors.profile_photo }}</p>
+                        </div>
+                    </div>
+
                     <div class="grid grid-cols-2 gap-4">
                         <div>
                             <Label class="block text-[13px] font-medium text-slate-600 mb-1.5">{{ __('Name') }} <span class="text-rose-500">*</span></Label>
@@ -175,9 +194,9 @@
 </template>
 
 <script setup>
-import { computed, watch } from 'vue'
+import { computed, watch, ref } from 'vue'
 import { useForm } from '@inertiajs/vue3'
-import { UserRound, Loader2 } from 'lucide-vue-next'
+import { UserRound, Loader2, Upload } from 'lucide-vue-next'
 import { toast } from 'vue-sonner'
 import ModalForm from '@/Components/ModalForm.vue'
 import DatePicker from '@/Components/DatePicker.vue'
@@ -205,7 +224,24 @@ const form = useForm({
     phone: '', id_number: '', gender: '', date_of_birth: '', address: '', status: 'active',
     guardian_name: '', guardian_phone: '', enrollment_date: '',
     department: '', qualification: '', hire_date: '',
+    profile_photo: null,
 })
+
+// Profile photo upload (preview = newly chosen file, else the existing stored photo)
+const photoInput = ref(null)
+const photoPreview = ref(null)
+const existingPhotoUrl = () => props.user?.profile_photo ? `/storage/${props.user.profile_photo}` : null
+const onPhotoChange = (e) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    form.profile_photo = file
+    photoPreview.value = URL.createObjectURL(file)
+}
+const clearPhoto = () => {
+    form.profile_photo = null
+    photoPreview.value = existingPhotoUrl()
+    if (photoInput.value) photoInput.value.value = ''
+}
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -235,6 +271,8 @@ watch(() => props.user, (u) => {
     } else {
         form.reset(); form.role = 'student'; form.status = 'active'
     }
+    form.profile_photo = null
+    photoPreview.value = existingPhotoUrl()
 }, { immediate: true })
 
 const canSubmit = computed(() => {
@@ -249,14 +287,15 @@ const close = () => emit('update:open', false)
 const submit = () => {
     if (!markAllTouched()) return
     if (isEdit.value) {
-        form.put(route('admin.users.update', props.user.id), {
-            preserveScroll: true, preserveState: true,
+        // POST + method spoofing so the file upload survives (PHP can't parse multipart PUT)
+        form.transform((data) => ({ ...data, _method: 'put' })).post(route('admin.users.update', props.user.id), {
+            preserveScroll: true, preserveState: true, forceFormData: true,
             onSuccess: () => { close() },
             onError: () => { toast.error(__('Failed to update user')) },
         })
     } else {
-        form.post(route('admin.users.store'), {
-            preserveScroll: true, preserveState: true,
+        form.transform((data) => data).post(route('admin.users.store'), {
+            preserveScroll: true, preserveState: true, forceFormData: true,
             onSuccess: () => { close(); form.reset(); form.role = 'student'; form.status = 'active' },
             onError: () => { toast.error(__('Failed to create user')) },
         })

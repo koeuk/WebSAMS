@@ -11,7 +11,7 @@
                 :class="sidebarOpen ? 'px-6' : 'px-0 justify-center'"
             >
                 <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg shrink-0">
-                    <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
+                    <img :src="universityLogo || '/logo1.png'" alt="BELTEI" class="w-full h-full object-cover" />
                 </div>
                 <div v-show="sidebarOpen" class="min-w-0">
                     <h1 class="text-[15px] font-bold text-white tracking-tight whitespace-nowrap">{{ __('WebSAMS') }}</h1>
@@ -220,6 +220,7 @@ import { __, useI18n } from '@/Composables/useTranslate';
 
 const page = usePage();
 const user = page.props.auth.user;
+const universityLogo = computed(() => page.props.university_logo || null);
 
 const { locale, locales, setLocale } = useI18n();
 const langOpen = ref(false);
