@@ -186,19 +186,21 @@
       <div class="grid grid-cols-4">
         <NuxtLink
           v-for="item in bottomNav" :key="item.key" :to="item.href"
-          class="relative flex flex-col items-center justify-center gap-1.5 py-2.5 transition-colors"
-          :class="isActive(item.href) ? 'text-[#d8b53a]' : 'text-slate-400 active:text-slate-200'"
+          class="flex flex-col items-center justify-center py-2"
         >
           <span
-            v-if="isActive(item.href)"
-            class="absolute top-0 left-1/2 -translate-x-1/2 h-[3px] w-9 rounded-full"
-            style="background: linear-gradient(90deg, #c8a415, #d8b53a);"
-          ></span>
-          <svg v-if="item.icon === 'dashboard'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-          <svg v-else-if="item.icon === 'attendance'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
-          <svg v-else-if="item.icon === 'bell'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
-          <svg v-else-if="item.icon === 'profile'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-          <span class="text-[10px] font-medium leading-none">{{ item.name }}</span>
+            class="flex flex-col items-center justify-center gap-1 rounded-2xl px-2.5 py-1.5 transition-all duration-200"
+            :class="isActive(item.href)
+              ? 'text-white ring-1 ring-[#c8a415]/30 shadow-[0_6px_16px_-6px_rgba(30,58,110,0.9)]'
+              : 'text-slate-400 active:text-slate-200'"
+            :style="isActive(item.href) ? 'background: linear-gradient(135deg, #1e3a6e, #2a4f8f);' : ''"
+          >
+            <svg v-if="item.icon === 'dashboard'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            <svg v-else-if="item.icon === 'attendance'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
+            <svg v-else-if="item.icon === 'bell'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+            <svg v-else-if="item.icon === 'profile'" class="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            <span class="text-[10px] font-medium leading-none whitespace-nowrap">{{ item.name }}</span>
+          </span>
         </NuxtLink>
       </div>
     </nav>
