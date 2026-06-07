@@ -18,7 +18,7 @@
       <!-- Brand -->
       <div class="flex items-center gap-3 h-[72px] px-6 border-b border-white/[0.06]">
         <div class="w-10 h-10 rounded-xl overflow-hidden shadow-lg">
-          <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
+          <img :src="logoUrl" @error="onLogoError" alt="BELTEI" class="w-full h-full object-cover" />
         </div>
         <div>
           <h1 class="text-[15px] font-bold text-white tracking-tight">WebSAMS</h1>
@@ -139,11 +139,13 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 
 const { user, logout } = useAuth()
 const { locale, locales, setLocale } = useI18n()
+const { logoUrl, loadBranding, onLogoError } = useBranding()
+onMounted(loadBranding)
 
 const navigation = computed(() => [
   { key: 'dashboard',      name: __('Dashboard'),      href: '/',                icon: 'dashboard', exact: true },

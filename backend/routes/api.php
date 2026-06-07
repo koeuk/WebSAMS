@@ -21,6 +21,15 @@ use Illuminate\Support\Facades\Route;
 // Public
 Route::post('/login', [AuthController::class, 'login']);
 
+// Branding (logo) for teacher/student portals — returns a path relative to the API host
+Route::get('/branding', function () {
+    $logo = \App\Models\Setting::get('university_logo');
+
+    return response()->json([
+        'logo' => $logo ? '/storage/'.ltrim($logo, '/') : null,
+    ]);
+});
+
 $buildLocaleResponse = function (array $enabled, string $default): array {
     return [
         'enabled_languages' => $enabled,

@@ -12,7 +12,7 @@
           <!-- Brand -->
           <NuxtLink to="/" class="flex items-center gap-2.5 shrink-0">
             <div class="w-9 h-9 rounded-xl overflow-hidden shadow-md ring-1 ring-[#c8a415]/30">
-              <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
+              <img :src="logoUrl" @error="onLogoError" alt="BELTEI" class="w-full h-full object-cover" />
             </div>
             <div class="leading-none">
               <h1 class="font-display text-[16px] font-semibold text-beltei tracking-tight">WebSAMS</h1>
@@ -127,7 +127,7 @@
       <div class="flex items-center justify-between h-14 px-4">
         <NuxtLink to="/" class="flex items-center gap-2.5">
           <div class="w-8 h-8 rounded-lg overflow-hidden shadow ring-1 ring-[#c8a415]/30">
-            <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
+            <img :src="logoUrl" @error="onLogoError" alt="BELTEI" class="w-full h-full object-cover" />
           </div>
           <div class="leading-none">
             <h1 class="font-display text-[15px] font-semibold text-beltei">WebSAMS</h1>
@@ -241,6 +241,8 @@ import { computed, ref, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
 
 const { user, logout } = useAuth()
+const { logoUrl, loadBranding, onLogoError } = useBranding()
+onMounted(loadBranding)
 
 // Light / dark theme (persisted by @nuxtjs/color-mode)
 const colorMode = useColorMode()

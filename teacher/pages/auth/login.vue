@@ -16,7 +16,7 @@
       <!-- Logo -->
       <div class="relative flex items-center gap-3">
         <div class="w-11 h-11 rounded-xl overflow-hidden shadow-lg">
-          <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
+          <img :src="logoUrl" @error="onLogoError" alt="BELTEI" class="w-full h-full object-cover" />
         </div>
         <div>
           <h1 class="text-white font-bold text-base leading-tight tracking-tight">WebSAMS</h1>
@@ -71,7 +71,7 @@
         <!-- Mobile logo -->
         <div class="flex lg:hidden items-center justify-center gap-3 mb-8 login-entrance login-entrance-delay-1">
           <div class="w-10 h-10 rounded-xl overflow-hidden">
-            <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
+            <img :src="logoUrl" @error="onLogoError" alt="BELTEI" class="w-full h-full object-cover" />
           </div>
           <div>
             <h1 class="font-bold text-slate-900 text-base">WebSAMS</h1>
@@ -150,7 +150,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useMouseInElement } from '@vueuse/core'
 
 definePageMeta({ layout: false, middleware: 'auth' })
@@ -171,6 +171,8 @@ const spotlightStyle = computed(() => ({
 }))
 
 const { login } = useAuth()
+const { logoUrl, loadBranding, onLogoError } = useBranding()
+onMounted(loadBranding)
 
 const submit = async () => {
   error.value = ''

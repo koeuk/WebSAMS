@@ -19,7 +19,7 @@
       <!-- Logo -->
       <div class="relative flex items-center gap-3">
         <div class="w-11 h-11 rounded-xl overflow-hidden shadow-lg ring-1 ring-[#c8a415]/30">
-          <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
+          <img :src="logoUrl" @error="onLogoError" alt="BELTEI" class="w-full h-full object-cover" />
         </div>
         <div>
           <h1 class="font-display text-white font-semibold text-[19px] leading-none tracking-tight">WebSAMS</h1>
@@ -74,7 +74,7 @@
         <!-- Mobile logo -->
         <div class="flex lg:hidden items-center justify-center gap-3 mb-8 login-entrance login-entrance-delay-1">
           <div class="w-10 h-10 rounded-xl overflow-hidden">
-            <img src="/logo1.png" alt="BELTEI" class="w-full h-full object-cover" />
+            <img :src="logoUrl" @error="onLogoError" alt="BELTEI" class="w-full h-full object-cover" />
           </div>
           <div>
             <h1 class="font-display font-semibold text-slate-900 text-[18px] leading-none">WebSAMS</h1>
@@ -154,7 +154,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useMouseInElement } from '@vueuse/core'
 
 definePageMeta({ layout: false, middleware: 'auth' })
@@ -173,6 +173,9 @@ const spotlightStyle = computed(() => ({
   '--mouse-y': `${elementY.value}px`,
   '--mouse-opacity': isOutside.value ? 0 : 1,
 }))
+
+const { logoUrl, loadBranding, onLogoError } = useBranding()
+onMounted(loadBranding)
 
 const { login } = useAuth()
 
