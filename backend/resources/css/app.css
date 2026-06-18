@@ -159,29 +159,10 @@
     isolation: isolate;
 }
 .aurora-bg::before {
-    content: '';
-    position: fixed;
-    inset: -25%;
-    z-index: -2;
-    pointer-events: none;
-    background:
-        radial-gradient(32% 36% at 16% 20%, rgba(212, 160, 23, 0.30), transparent 62%),
-        radial-gradient(42% 44% at 84% 12%, rgba(43, 79, 143, 0.34), transparent 60%),
-        radial-gradient(44% 46% at 80% 84%, rgba(124, 99, 241, 0.26), transparent 62%),
-        radial-gradient(40% 42% at 14% 88%, rgba(16, 185, 166, 0.22), transparent 62%);
-    filter: blur(44px) saturate(135%);
-    animation: aurora-drift 26s ease-in-out infinite alternate;
-    will-change: transform;
+    content: none;
 }
 .aurora-bg::after {
-    content: '';
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    opacity: 0.45;
-    mix-blend-mode: soft-light;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    content: none;
 }
 @keyframes aurora-drift {
     0%   { transform: translate3d(0, 0, 0) scale(1) rotate(0deg); }
