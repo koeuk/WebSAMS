@@ -29,7 +29,16 @@
             </div>
             <div>
                 <Label class="text-[13px] font-medium text-slate-600 mb-1.5 block">{{ __('Academic Year') }} <span class="text-rose-500">*</span></Label>
-                <Input v-model="form.academic_year" type="text" :placeholder="__('e.g. 2025-2026')" @update:model-value="touch('academic_year')" />
+                <Select v-model="form.academic_year" @update:model-value="touch('academic_year')">
+                    <SelectTrigger class="w-full">
+                        <SelectValue :placeholder="__('Select academic year')" />
+                    </SelectTrigger>
+                    <SelectContent>
+                        <SelectItem v-for="year in academicYearOptions" :key="year" :value="year">
+                            {{ year }}
+                        </SelectItem>
+                    </SelectContent>
+                </Select>
                 <p v-if="error('academic_year') || form.errors.academic_year" class="text-[12px] text-rose-500 mt-1">{{ error('academic_year') || form.errors.academic_year }}</p>
             </div>
         </div>
@@ -53,6 +62,7 @@ import ModalForm from '@/Components/ModalForm.vue'
 import { Input } from '@/Components/ui/input'
 import { Label } from '@/Components/ui/label'
 import { Button } from '@/Components/ui/button'
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from '@/Components/ui/select'
 import TranslatableInput from '@/Components/Forms/TranslatableInput.vue'
 import { useFormValidation } from '@/Composables/useFormValidation'
 import { __ } from '@/Composables/useTranslate'
@@ -67,6 +77,18 @@ const isEdit = computed(() => !!props.schoolClass)
 const emptyTranslations = () => ({ en: '', km: '', zh: '' })
 
 const form = useForm({ name: emptyTranslations(), section: '', academic_year: '' })
+
+const academicYearOptions = computed(() => {
+    const currentYear = new Date().getFullYear()
+    const years = Array.from({ length: 7 }, (_, index) => {
+        const startYear = currentYear - 2 + index
+        return `${startYear}-${startYear + 1}`
+    })
+
+    return form.academic_year && !years.includes(form.academic_year)
+        ? [form.academic_year, ...years]
+        : years
+})
 
 const nameError = computed(() => {
     const en = (form.name?.en ?? '').trim()
