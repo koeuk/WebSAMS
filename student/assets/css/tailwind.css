@@ -44,10 +44,10 @@
     --nav-grad: linear-gradient(135deg, #047857, #10b981);
 
     /* Atmosphere (dotted grid + corner glow + cursor spotlight) */
-    --atmo-tint-1: rgba(16, 185, 129, 0.12);
-    --atmo-tint-2: rgba(45, 212, 191, 0.12);
+    --atmo-tint-1: transparent;
+    --atmo-tint-2: transparent;
     --atmo-dot:    rgba(6, 78, 59, 0.06);
-    --atmo-spot:   rgba(16, 185, 129, 0.16);
+    --atmo-spot:   transparent;
 
     /* ── shadcn semantic tokens (emerald-recolored) ── */
     --background: 150 28% 95%;
@@ -86,13 +86,6 @@
 
   body {
     background-color: var(--paper);
-    /* Aurora light-blooms behind the glass — fixed so surfaces refract a stable backdrop */
-    background-image:
-      radial-gradient(58% 50% at 10% -4%,  rgba(16, 185, 129, 0.22), transparent 60%),
-      radial-gradient(54% 48% at 102% 6%,  rgba(45, 212, 191, 0.20), transparent 58%),
-      radial-gradient(52% 46% at 88% 104%, rgba(5, 150, 105, 0.16), transparent 60%),
-      radial-gradient(46% 42% at -4% 96%,  rgba(56, 189, 248, 0.12), transparent 60%);
-    background-attachment: fixed;
     @apply text-foreground antialiased;
     font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
     font-feature-settings: 'cv11', 'ss01';
@@ -346,15 +339,6 @@
   --border: 45 14% 11%;
   --input: 0 0% 28%;
   --ring: 30 100% 88%;
-}
-
-/* Subtle warm glow on the near-black canvas */
-.dark body {
-  background-image:
-    radial-gradient(58% 50% at 10% -4%,  rgba(255, 224, 194, 0.06), transparent 60%),
-    radial-gradient(54% 48% at 102% 6%,  rgba(255, 210, 170, 0.05), transparent 58%),
-    radial-gradient(52% 46% at 88% 104%, rgba(217, 168, 119, 0.05), transparent 60%),
-    radial-gradient(46% 42% at -4% 96%,  rgba(255, 224, 194, 0.04), transparent 60%);
 }
 
 /* Flip the hardcoded slate text scale to warm-neutral light */
