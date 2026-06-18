@@ -24,7 +24,7 @@
             </div>
             <img
               v-if="profile.profile_photo"
-              :src="`http://127.0.0.1:8001/storage/${profile.profile_photo}`"
+              :src="`${storageBase}/${profile.profile_photo}`"
               class="relative h-20 w-20 rounded-2xl object-cover"
               style="border-radius: 16px;"
             />
@@ -127,6 +127,9 @@
 import { ref, computed, onMounted } from 'vue'
 
 definePageMeta({ middleware: 'auth' })
+
+const config = useRuntimeConfig()
+const storageBase = (config.public.apiBase as string).replace(/\/api\/?$/, '/storage')
 
 const { apiFetch } = useApi()
 const profile = ref<any>(null)
