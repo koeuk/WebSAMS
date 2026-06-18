@@ -220,7 +220,7 @@
           <span
             class="flex flex-col items-center justify-center gap-1 rounded-2xl px-2.5 py-1.5 transition-all duration-200"
             :class="isActive(item.href)
-              ? 'text-white ring-1 ring-emerald-300/50 shadow-[0_8px_20px_-6px_rgba(6,120,87,0.6)]'
+              ? 'text-white shadow-[0_8px_20px_-6px_rgba(6,120,87,0.6)]'
               : 'text-slate-500 active:text-emerald-700'"
             :style="isActive(item.href) ? 'background: var(--nav-grad);' : ''"
           >
@@ -263,7 +263,11 @@ const navigation = computed(() => [
 
 // Primary items surfaced as a bottom tab bar on mobile
 const bottomNavKeys = ['dashboard', 'myAttendance', 'notifications', 'profile']
-const bottomNav = computed(() => navigation.value.filter((i) => bottomNavKeys.includes(i.key)))
+const bottomNav = computed(() =>
+  navigation.value
+    .filter((i) => bottomNavKeys.includes(i.key))
+    .map((i) => (i.key === 'dashboard' ? { ...i, name: __('Home') } : i)),
+)
 
 // Desktop bar shows the main sections; Profile + Sign Out live in the account menu
 const mainNav = computed(() => navigation.value.filter((i) => i.key !== 'profile'))
