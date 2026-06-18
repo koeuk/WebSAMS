@@ -1,37 +1,37 @@
 export default defineNuxtConfig({
-  compatibilityDate: '2024-11-01',
+  compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
   devServer: { port: 3002 },
   app: {
     head: {
-      title: 'BELTEI - WebSAMS Student',
+      title: "BELTEI - WebSAMS Student",
       link: [
-        { rel: 'icon', type: 'image/png', href: '/logo1.png' },
-        { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css' },
+        { rel: "icon", type: "image/png", href: "/logo1.png" },
+        {
+          rel: "stylesheet",
+          href: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css",
+        },
       ],
     },
   },
-  modules: [
-    '@nuxtjs/tailwindcss',
-    'shadcn-nuxt',
-  ],
+  modules: ["@nuxtjs/tailwindcss", "shadcn-nuxt"],
   components: {
     dirs: [
       {
-        path: '~/components',
+        path: "~/components",
         pathPrefix: false,
-        extensions: ['vue'],
-        ignore: ['**/ui/**'],
+        extensions: ["vue"],
+        ignore: ["**/ui/**"],
       },
     ],
   },
   shadcn: {
-    prefix: '',
-    componentDir: './components/ui',
+    prefix: "",
+    componentDir: "./components/ui",
   },
   runtimeConfig: {
     public: {
-      apiBase: 'http://127.0.0.1:8000/api',
+      apiBase: "http://127.0.0.1:8001/api",
     },
   },
-})
+});
