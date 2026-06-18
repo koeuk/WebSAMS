@@ -37,13 +37,13 @@ module.exports = {
           soft: '#d8b53a',
         },
         paper: {
-          DEFAULT: '#f7f5f0',
+          DEFAULT: 'var(--paper)',
           card: '#ffffff',
-          inset: '#efece4',
+          inset: 'var(--paper-2)',
         },
         line: {
-          DEFAULT: '#e7e2d8',
-          strong: '#d9d2c4',
+          DEFAULT: 'var(--line)',
+          strong: 'var(--line-strong)',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

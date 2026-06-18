@@ -423,3 +423,13 @@
 .dark .bg-rose-50    { background-color: rgba(229, 77, 46, 0.16); }
 .dark .bg-amber-50   { background-color: rgba(245, 158, 11, 0.14); }
 .dark .bg-sky-50     { background-color: rgba(120, 170, 210, 0.14); }
+
+/* Badge dark overrides */
+.dark .badge-neutral { background-color: rgba(255, 255, 255, 0.08); color: #bcbcbc; --tw-ring-color: rgba(255, 255, 255, 0.12); }
+.dark .badge-gold    { background-color: rgba(255, 224, 194, 0.12); color: #ffe0c2; --tw-ring-color: rgba(255, 224, 194, 0.22); }
+.dark .badge-navy    { background-color: rgba(100, 140, 200, 0.14); color: #a8c4e8; --tw-ring-color: rgba(100, 140, 200, 0.22); }
+.dark .badge-present { background-color: rgba(16, 185, 129, 0.14); color: #6ee7b7; --tw-ring-color: rgba(16, 185, 129, 0.25); }
+.dark .badge-absent  { background-color: rgba(229, 77, 46, 0.14);  color: #fca5a5; --tw-ring-color: rgba(229, 77, 46, 0.25); }
+.dark .badge-late    { background-color: rgba(245, 158, 11, 0.14); color: #fcd34d; --tw-ring-color: rgba(245, 158, 11, 0.25); }
+.dark .badge-excused { background-color: rgba(120, 170, 210, 0.14); color: #93c5fd; --tw-ring-color: rgba(120, 170, 210, 0.25); }
+.dark .bg-\\[\\#e3efe8\\] { background-color: rgba(255, 255, 255, 0.06); }
