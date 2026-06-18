@@ -84,7 +84,7 @@
           <div class="card card-hover stat-card stat-card-navy p-5 animate-pop-in">
             <div class="flex items-center justify-between mb-3">
               <p class="stat-label">{{ __('Total') }}</p>
-              <div class="w-9 h-9 rounded-xl bg-[#eef2f9] flex items-center justify-center ring-1 ring-[#dbe4f3]">
+              <div class="w-9 h-9 rounded-xl bg-[#eef2f9] flex items-center justify-center">
                 <svg class="w-4.5 h-4.5 text-beltei" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>
               </div>
             </div>
@@ -95,7 +95,7 @@
           <div class="card card-hover stat-card stat-card-emerald p-5 animate-pop-in">
             <div class="flex items-center justify-between mb-3">
               <p class="stat-label">{{ __('Present') }}</p>
-              <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center ring-1 ring-emerald-100">
+              <div class="w-9 h-9 rounded-xl bg-emerald-50 flex items-center justify-center">
                 <svg class="w-4.5 h-4.5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path d="M20 6L9 17l-5-5"/></svg>
               </div>
             </div>
@@ -106,7 +106,7 @@
           <div class="card card-hover stat-card stat-card-rose p-5 animate-pop-in">
             <div class="flex items-center justify-between mb-3">
               <p class="stat-label">{{ __('Absent') }}</p>
-              <div class="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center ring-1 ring-rose-100">
+              <div class="w-9 h-9 rounded-xl bg-rose-50 flex items-center justify-center">
                 <svg class="w-4.5 h-4.5 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
               </div>
             </div>
@@ -117,7 +117,7 @@
           <div class="card card-hover stat-card stat-card-amber p-5 animate-pop-in">
             <div class="flex items-center justify-between mb-3">
               <p class="stat-label">{{ __('Late') }}</p>
-              <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center ring-1 ring-amber-100">
+              <div class="w-9 h-9 rounded-xl bg-amber-50 flex items-center justify-center">
                 <svg class="w-4.5 h-4.5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               </div>
             </div>
