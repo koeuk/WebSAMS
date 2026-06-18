@@ -140,7 +140,7 @@ class KhmerAcademicDatasetSeeder extends Seeder
             foreach ($sections as $sectionIndex => $section) {
                 $yearLevel = ($sectionIndex % 4) + 1;
 
-                $classes[] = SchoolClass::updateOrCreate(
+                $class = SchoolClass::updateOrCreate(
                     [
                         'academic_year' => $academicYear,
                         'section' => $section,
@@ -153,6 +153,8 @@ class KhmerAcademicDatasetSeeder extends Seeder
                         ),
                     ],
                 );
+                $class->temp_year_level = $yearLevel;
+                $classes[] = $class;
             }
         }
 
@@ -170,7 +172,7 @@ class KhmerAcademicDatasetSeeder extends Seeder
             foreach ($givenNames as $givenName) {
                 $academicStartYear = 2023 + (($index - 1) % 4);
 
-                $students[] = User::updateOrCreate(
+                $student = User::updateOrCreate(
                     ['email' => 'student' . $index . '@gmail.com'],
                     [
                         'name' => $familyName . ' ' . $givenName,
@@ -186,6 +188,7 @@ class KhmerAcademicDatasetSeeder extends Seeder
                         'enrollment_date' => $academicStartYear . '-09-01',
                     ],
                 );
+                $students[] = $student;
 
                 $index++;
             }
@@ -212,16 +215,39 @@ class KhmerAcademicDatasetSeeder extends Seeder
 
     private function enrollStudents(array $classes, array $students): void
     {
-        foreach ($students as $studentIndex => $student) {
-            $class = $classes[$studentIndex % count($classes)];
+        // Group classes by temp_year_level
+        $classesByYear = [];
+        foreach ($classes as $class) {
+            $classesByYear[$class->temp_year_level][] = $class;
+        }
 
-            ClassStudent::updateOrCreate(
-                [
-                    'school_class_id' => $class->id,
-                    'student_id' => $student->id,
-                ],
-                [],
-            );
+        // Group students by year_level
+        $studentsByYear = [];
+        foreach ($students as $student) {
+            $studentsByYear[$student->year_level][] = $student;
+        }
+
+        // Enroll students in classes of the matching year level
+        for ($year = 1; $year <= 4; $year++) {
+            $yearStudents = $studentsByYear[$year] ?? [];
+            $yearClasses = $classesByYear[$year] ?? [];
+
+            if (empty($yearClasses) || empty($yearStudents)) {
+                continue;
+            }
+
+            foreach ($yearStudents as $studentIndex => $student) {
+                // Distribute students cyclically among the classes of this year level
+                $class = $yearClasses[$studentIndex % count($yearClasses)];
+
+                ClassStudent::updateOrCreate(
+                    [
+                        'school_class_id' => $class->id,
+                        'student_id' => $student->id,
+                    ],
+                    [],
+                );
+            }
         }
     }
 

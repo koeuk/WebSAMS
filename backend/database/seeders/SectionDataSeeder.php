@@ -34,28 +34,20 @@ class SectionDataSeeder extends Seeder
                 return;
             }
 
-            $firstSlot = $timeSlots[$index % $timeSlots->count()];
-            $secondSlot = $timeSlots[($index + 1) % $timeSlots->count()];
-            $day = $days[$index % count($days)];
-            $secondDay = $days[($index + 2) % count($days)];
+            // Group section determines the daily cohort slot
+            $sectionIndex = $index % 5;
+            $slot = $timeSlots[$sectionIndex % $timeSlots->count()];
 
-            Schedule::updateOrCreate(
-                [
-                    'class_subject_id' => $classSubject->id,
-                    'time_slot_id' => $firstSlot->id,
-                    'day_of_week' => $day,
-                ],
-                ['room' => 'Room ' . (201 + $index)],
-            );
-
-            Schedule::updateOrCreate(
-                [
-                    'class_subject_id' => $classSubject->id,
-                    'time_slot_id' => $secondSlot->id,
-                    'day_of_week' => $secondDay,
-                ],
-                ['room' => 'Room ' . (301 + $index)],
-            );
+            foreach ($days as $dayIndex => $day) {
+                Schedule::updateOrCreate(
+                    [
+                        'class_subject_id' => $classSubject->id,
+                        'time_slot_id' => $slot->id,
+                        'day_of_week' => $day,
+                    ],
+                    ['room' => 'Room ' . (201 + $index)],
+                );
+            }
         });
     }
 
@@ -83,9 +75,10 @@ class SectionDataSeeder extends Seeder
     private function seedAttendances(): void
     {
         $semesters = \App\Models\Semester::all();
+        $attendancesToInsert = [];
 
         ClassSubject::with(['schoolClass.students', 'schedules'])->orderBy('id')->get()->each(
-            function (ClassSubject $classSubject, int $classIndex) use ($semesters) {
+            function (ClassSubject $classSubject) use ($semesters, &$attendancesToInsert) {
                 $schoolClass = $classSubject->schoolClass;
                 if (!$schoolClass) {
                     return;
@@ -116,25 +109,34 @@ class SectionDataSeeder extends Seeder
                                     $status = $rand <= 90 ? 'present' : ($rand <= 94 ? 'late' : ($rand <= 98 ? 'absent' : 'excused'));
                                 }
 
-                                Attendance::updateOrCreate(
-                                    [
-                                        'class_subject_id' => $classSubject->id,
-                                        'student_id' => $student->id,
-                                        'date' => $date,
-                                        'time_slot_id' => $schedule->time_slot_id,
-                                    ],
-                                    [
-                                        'status' => $status,
-                                        'remarks' => null,
-                                        'recorded_by' => $classSubject->teacher_id,
-                                    ],
-                                );
+                                $attendancesToInsert[] = [
+                                    'class_subject_id' => $classSubject->id,
+                                    'student_id' => $student->id,
+                                    'date' => $date,
+                                    'time_slot_id' => $schedule->time_slot_id,
+                                    'status' => $status,
+                                    'remarks' => null,
+                                    'recorded_by' => $classSubject->teacher_id,
+                                    'created_at' => now(),
+                                    'updated_at' => now(),
+                                ];
+
+                                // Insert in chunks of 2000 to prevent memory limits
+                                if (count($attendancesToInsert) >= 2000) {
+                                    Attendance::insert($attendancesToInsert);
+                                    $attendancesToInsert = [];
+                                }
                             }
                         }
                     }
                 }
             }
         );
+
+        // Insert remaining
+        if (!empty($attendancesToInsert)) {
+            Attendance::insert($attendancesToInsert);
+        }
     }
 
     private function seedAnnouncements(): void
