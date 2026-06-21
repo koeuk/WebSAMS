@@ -165,20 +165,7 @@
   /* Stat cards: frosted glass + colored glow blob + gradient hairline */
   .stat-card { position: relative; overflow: hidden; }
   .stat-card > * { position: relative; z-index: 1; }
-  .stat-card::before {
-    content: '';
-    position: absolute;
-    top: -45%;
-    right: -18%;
-    width: 62%;
-    height: 160%;
-    border-radius: 50%;
-    background: radial-gradient(circle at center, var(--accent-glow, rgba(59, 130, 246, 0.30)), transparent 68%);
-    pointer-events: none;
-    transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-    z-index: 0;
-  }
-  .stat-card:hover::before { transform: scale(1.18) translateY(6px); }
+  .stat-card::before { display: none; }
   .stat-card::after {
     content: '';
     position: absolute;

@@ -85,7 +85,7 @@ class AttendanceController extends Controller
                 AllowedFilter::callback('date_from', fn ($q, $v) => $q->where('date', '>=', $v)),
                 AllowedFilter::callback('date_to',   fn ($q, $v) => $q->where('date', '<=', $v)),
             )
-            ->allowedSorts(['date', 'id'])
+            ->allowedSorts('date', 'id')
             ->with(['student', 'classSubject.subject', 'classSubject.schoolClass', 'timeSlot'])
             ->whereHas('classSubject', fn ($q) => $q->where('teacher_id', $request->user()->id))
             ->latest('date')
