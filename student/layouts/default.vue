@@ -88,9 +88,12 @@
                   class="flex items-center gap-1.5 h-10 pl-1 pr-1.5 rounded-xl hover:bg-white/50 transition-colors cursor-pointer"
                   :class="route.path === '/profile' ? 'bg-accent' : ''"
                 >
-                  <div class="h-9 w-9 rounded-xl flex items-center justify-center text-white text-sm font-bold ring-1 ring-[#c8a415]/30 shrink-0"
-                       style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
-                    {{ user?.name?.charAt(0) }}
+                  <div class="h-9 w-9 rounded-xl overflow-hidden ring-1 ring-[#c8a415]/30 shrink-0">
+                    <img v-if="photoUrl" :src="photoUrl" alt="" class="h-full w-full object-cover" />
+                    <div v-else class="h-full w-full flex items-center justify-center text-white text-sm font-bold"
+                         style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
+                      {{ user?.name?.charAt(0) }}
+                    </div>
                   </div>
                   <svg class="w-3.5 h-3.5 text-slate-400 transition-transform" :class="acctOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
                 </button>
@@ -169,9 +172,12 @@
           <!-- Account menu -->
           <Popover :open="acctOpenMobile" @update:open="(v) => acctOpenMobile = v">
             <PopoverTrigger as-child>
-              <button class="h-9 w-9 rounded-xl flex items-center justify-center text-white text-sm font-bold ring-1 ring-[#c8a415]/30 cursor-pointer"
-                      style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
-                {{ user?.name?.charAt(0) }}
+              <button class="h-9 w-9 rounded-xl overflow-hidden ring-1 ring-[#c8a415]/30 cursor-pointer">
+                <img v-if="photoUrl" :src="photoUrl" alt="" class="h-full w-full object-cover" />
+                <div v-else class="h-full w-full flex items-center justify-center text-white text-sm font-bold"
+                     style="background: linear-gradient(135deg, #1e3a6e, #2a4f8f);">
+                  {{ user?.name?.charAt(0) }}
+                </div>
               </button>
             </PopoverTrigger>
             <PopoverContent class="w-56 p-1.5" align="end">
@@ -243,6 +249,14 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 const { user, logout } = useAuth()
 const { logoUrl, loadBranding, onLogoError } = useBranding()
 onMounted(loadBranding)
+
+// Resolve the user's profile photo to a full storage URL (same scheme as the
+// profile page). Falls back to the name initial when there's no photo.
+const config = useRuntimeConfig()
+const storageBase = (config.public.apiBase as string).replace(/\/api\/?$/, '/storage')
+const photoUrl = computed(() =>
+  user.value?.profile_photo ? `${storageBase}/${user.value.profile_photo}` : null,
+)
 
 // Light / dark theme (persisted by @nuxtjs/color-mode)
 const colorMode = useColorMode()

@@ -3,6 +3,7 @@ interface User {
   name: string
   email: string
   role: string
+  profile_photo?: string | null
 }
 
 const user = ref<User | null>(null)
