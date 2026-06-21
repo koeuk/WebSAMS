@@ -23,7 +23,9 @@ class ClassController extends Controller
             abort(403, 'Unauthorized.');
         }
 
-        $students = $classSubject->schoolClass->students()->get(['users.id', 'name', 'email']);
+        $students = $classSubject->schoolClass->students()->get([
+            'users.id', 'name', 'email', 'id_number', 'year_level', 'gender',
+        ]);
 
         return response()->json($students);
     }

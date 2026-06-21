@@ -60,8 +60,11 @@
       <!-- User section -->
       <div class="px-3 pb-4 pt-2 border-t border-white/[0.06]">
         <div class="flex items-center gap-3 px-3 py-3">
-          <div class="h-9 w-9 rounded-lg bg-gradient-to-br from-[#d4a017] to-[#b08f12] flex items-center justify-center text-white text-xs font-bold ring-2 ring-white/10 shrink-0">
-            {{ user?.name?.charAt(0) }}
+          <div class="h-9 w-9 rounded-lg overflow-hidden ring-2 ring-white/10 shrink-0">
+            <img v-if="photoUrl" :src="photoUrl" alt="" class="h-full w-full object-cover" />
+            <div v-else class="h-full w-full bg-gradient-to-br from-[#d4a017] to-[#b08f12] flex items-center justify-center text-white text-xs font-bold">
+              {{ user?.name?.charAt(0) }}
+            </div>
           </div>
           <div class="flex-1 min-w-0">
             <p class="text-[13px] font-semibold text-white truncate">{{ user?.name }}</p>
@@ -125,8 +128,11 @@
             <p class="text-[13px] font-semibold text-slate-700">{{ user?.name }}</p>
             <p class="text-[11px] text-slate-400">{{ __('Teacher') }}</p>
           </div>
-          <div class="h-9 w-9 rounded-lg bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-500 text-sm font-bold">
-            {{ user?.name?.charAt(0) }}
+          <div class="h-9 w-9 rounded-lg overflow-hidden shrink-0">
+            <img v-if="photoUrl" :src="photoUrl" alt="" class="h-full w-full object-cover" />
+            <div v-else class="h-full w-full bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center text-slate-500 text-sm font-bold">
+              {{ user?.name?.charAt(0) }}
+            </div>
           </div>
         </div>
       </header>
@@ -146,6 +152,14 @@ const { user, logout } = useAuth()
 const { locale, locales, setLocale } = useI18n()
 const { logoUrl, loadBranding, onLogoError } = useBranding()
 onMounted(loadBranding)
+
+// Resolve the user's profile photo to a full storage URL (same scheme as the
+// profile page). Falls back to the name initial when there's no photo.
+const config = useRuntimeConfig()
+const storageBase = (config.public.apiBase as string).replace(/\/api\/?$/, '/storage')
+const photoUrl = computed(() =>
+  user.value?.profile_photo ? `${storageBase}/${user.value.profile_photo}` : null,
+)
 
 const navigation = computed(() => [
   { key: 'dashboard',      name: __('Dashboard'),      href: '/',                icon: 'dashboard', exact: true },

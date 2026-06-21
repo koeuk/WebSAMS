@@ -53,7 +53,7 @@
         </TableHeader>
         <TableBody>
           <TableRow v-for="record in attendance.data" :key="record.id">
-            <TableCell class="font-medium text-slate-900">{{ record.date }}</TableCell>
+            <TableCell class="font-medium text-slate-900">{{ formatDate(record.date) }}</TableCell>
             <TableCell>{{ record.time_slot?.name || '-' }}</TableCell>
             <TableCell class="font-semibold text-slate-900">{{ record.student?.name }}</TableCell>
             <TableCell>{{ record.class_subject?.school_class?.name }}</TableCell>
@@ -84,6 +84,9 @@ import { ClipboardList } from 'lucide-vue-next'
 definePageMeta({ middleware: 'auth' })
 
 const { apiFetch } = useApi()
+const { locale } = useI18n()
+const dateLocale = computed(() => ({ en: 'en-US', km: 'km-KH', zh: 'zh-CN' } as Record<string, string>)[locale.value] ?? 'en-US')
+const formatDate = (d: string) => d ? new Date(d).toLocaleDateString(dateLocale.value, { year: 'numeric', month: 'short', day: 'numeric' }) : '-'
 
 const classes = ref<any[]>([])
 const attendance = ref<any>({ data: [] })
