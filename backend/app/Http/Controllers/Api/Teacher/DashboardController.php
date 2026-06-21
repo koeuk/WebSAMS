@@ -18,11 +18,18 @@ class DashboardController extends Controller
         $dayMap = ['Mon' => 'mon', 'Tue' => 'tue', 'Wed' => 'wed', 'Thu' => 'thu', 'Fri' => 'fri', 'Sat' => 'sat', 'Sun' => 'sun'];
         $today = $dayMap[now()->format('D')] ?? null;
 
+        // Schedule can be filtered by a chosen weekday; defaults to today.
+        $validDays = array_values($dayMap);
+        $selectedDay = $request->query('day');
+        if (! in_array($selectedDay, $validDays, true)) {
+            $selectedDay = $today;
+        }
+
         $schedule = [];
-        if ($today) {
+        if ($selectedDay) {
             $schedule = Schedule::with(['classSubject.schoolClass', 'classSubject.subject', 'timeSlot'])
                 ->whereHas('classSubject', fn ($q) => $q->where('teacher_id', $teacherId))
-                ->where('day_of_week', $today)
+                ->where('day_of_week', $selectedDay)
                 ->get()
                 ->sortBy(fn ($s) => $s->timeSlot?->start_time)
                 ->values();
@@ -41,6 +48,7 @@ class DashboardController extends Controller
 
         return response()->json([
             'today' => $today,
+            'selectedDay' => $selectedDay,
             'schedule' => $schedule,
             'stats' => [
                 'totalClasses' => $myClasses->count(),

@@ -12,7 +12,7 @@
         <ChevronsUpDown class="h-4 w-4 shrink-0 text-slate-400" />
       </button>
     </PopoverTrigger>
-    <PopoverContent class="p-0 w-[var(--reka-popover-trigger-width)]" align="start" :side-offset="6">
+    <PopoverContent class="p-0 w-auto min-w-[var(--reka-popover-trigger-width)] max-w-[calc(100vw-2rem)]" align="start" :side-offset="6">
       <Command>
         <CommandInput :placeholder="searchPlaceholder" class="h-9" />
         <CommandList>
@@ -22,7 +22,7 @@
               v-for="option in options"
               :key="option.value"
               :value="option.label"
-              class="cursor-pointer"
+              class="cursor-pointer whitespace-nowrap"
               @select="select(option.value)"
             >
               <Check

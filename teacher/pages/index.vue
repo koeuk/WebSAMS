@@ -5,9 +5,31 @@
         <h2 class="text-2xl font-bold text-slate-900 tracking-tight">{{ __('Dashboard') }}</h2>
         <p class="text-sm text-slate-500 mt-1">{{ __("Welcome back! Here's your overview for today.") }}</p>
       </div>
-      <div class="text-sm text-slate-400 font-medium">
-        {{ new Date().toLocaleDateString(dateLocale, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) }}
-      </div>
+      <Popover :open="dayOpen" @update:open="(v: boolean) => dayOpen = v">
+        <PopoverTrigger as-child>
+          <button
+            class="flex items-center gap-2 h-10 pl-3.5 pr-3 rounded-xl border border-slate-200 bg-white text-sm font-medium text-slate-700 hover:border-beltei/40 hover:bg-slate-50 transition-colors cursor-pointer"
+          >
+            <svg class="w-4 h-4 text-beltei" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.7"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
+            <span>{{ __(dayName(selectedDay)) }}</span>
+            <svg class="w-3.5 h-3.5 text-slate-400 transition-transform" :class="dayOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M19 9l-7 7-7-7"/></svg>
+          </button>
+        </PopoverTrigger>
+        <PopoverContent class="w-44 p-1" align="end">
+          <button
+            v-for="d in days" :key="d"
+            @click="selectDay(d)"
+            class="w-full flex items-center justify-between gap-2 cursor-pointer px-3 py-2 text-sm rounded-md transition-colors"
+            :class="d === selectedDay ? 'bg-beltei/5 text-beltei font-semibold' : 'text-slate-600 hover:bg-slate-50'"
+          >
+            <span class="flex items-center gap-2">
+              {{ __(dayName(d)) }}
+              <span v-if="d === today" class="text-[10px] font-bold uppercase tracking-wide text-emerald-600">{{ __('Today') }}</span>
+            </span>
+            <svg v-if="d === selectedDay" class="w-3.5 h-3.5 text-beltei" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>
+          </button>
+        </PopoverContent>
+      </Popover>
     </div>
 
     <div v-if="loading" class="card p-12 text-center">
@@ -58,8 +80,11 @@
       </div>
 
       <div class="flex items-center gap-3 mb-4">
-        <h3 class="text-base font-semibold text-slate-900">{{ __("Today's Schedule") }}</h3>
-        <span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">{{ dashboard?.today ? __(dayName(dashboard.today)) : __('No classes today') }}</span>
+        <h3 class="text-base font-semibold text-slate-900">
+          {{ selectedDay === today ? __("Today's Schedule") : __('Schedule') }}
+        </h3>
+        <span class="badge bg-slate-100 text-slate-600 ring-1 ring-slate-200">{{ __(dayName(selectedDay)) }}</span>
+        <svg v-if="scheduleLoading" class="w-4 h-4 animate-spin text-slate-300" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
       </div>
 
       <div v-if="dashboard?.schedule?.length" class="grid gap-4 stagger-children">
@@ -84,34 +109,53 @@
       </div>
 
       <div v-else class="card p-12 text-center text-slate-400">
-        {{ __('No classes scheduled for today.') }}
+        {{ selectedDay === today ? __('No classes scheduled for today.') : __('No classes scheduled on {day}.', { day: __(dayName(selectedDay)) }) }}
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover'
+
 definePageMeta({ middleware: 'auth' })
 
 const { apiFetch } = useApi()
 const { fetchUser } = useAuth()
-const { locale } = useI18n()
 
 const dashboard = ref<any>(null)
 const loading = ref(true)
+const scheduleLoading = ref(false)
 
-const dateLocale = computed(() => ({ en: 'en-US', km: 'km-KH', zh: 'zh-CN' } as Record<string, string>)[locale.value] ?? 'en-US')
+const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+const dayCodeMap: Record<number, string> = { 0: 'sun', 1: 'mon', 2: 'tue', 3: 'wed', 4: 'thu', 5: 'fri', 6: 'sat' }
+const today = dayCodeMap[new Date().getDay()]
+const selectedDay = ref(today)
+const dayOpen = ref(false)
 
 const dayName = (code: string) => ({
   mon: 'Monday', tue: 'Tuesday', wed: 'Wednesday', thu: 'Thursday',
   fri: 'Friday', sat: 'Saturday', sun: 'Sunday',
 } as Record<string, string>)[code] ?? code
 
+const loadDashboard = async () => {
+  try {
+    dashboard.value = await apiFetch(`/teacher/dashboard?day=${selectedDay.value}`)
+  } catch {}
+}
+
+const selectDay = async (code: string) => {
+  dayOpen.value = false
+  if (code === selectedDay.value) return
+  selectedDay.value = code
+  scheduleLoading.value = true
+  await loadDashboard()
+  scheduleLoading.value = false
+}
+
 onMounted(async () => {
   await fetchUser()
-  try {
-    dashboard.value = await apiFetch('/teacher/dashboard')
-  } catch {}
+  await loadDashboard()
   loading.value = false
 })
 </script>
